@@ -1,10 +1,11 @@
 resource "aws_cloudwatch_log_metric_filter" "user_alarm" {
-  name           = "${var.account_name}_login"
-  pattern        = "{ $.eventName = \"ConsoleLogin\" && $.userIdentity.userName = \"${var.account_name}\" }"
+  for_each       = var.account_names
+  name           = "${each.value}_ConsoleLogin"
+  pattern        = "{ $.eventName = \"ConsoleLogin\" && $.userIdentity.userName = \"${each.value}\" }"
   log_group_name = var.log_group_name
 
   metric_transformation {
-    name      = "${var.account_name}_alarm"
+    name      = "${each.value}_alarm"
     namespace = var.namespace
     value     = 1
   }
@@ -12,11 +13,12 @@ resource "aws_cloudwatch_log_metric_filter" "user_alarm" {
 }
 
 resource "aws_cloudwatch_metric_alarm" "alarm" {
-  alarm_name          = "${aws_cloudwatch_log_metric_filter.user_alarm.name}_alarm"
+  for_each            = aws_cloudwatch_log_metric_filter.user_alarm
+  alarm_name          = "${each.value.name}_alarm"
   comparison_operator = "GreaterThanOrEqualToThreshold"
   evaluation_periods  = "1"
   period              = 10
-  metric_name         = aws_cloudwatch_log_metric_filter.user_alarm.name
+  metric_name         = each.value.name
   namespace           = var.namespace
   statistic           = "Maximum"
   threshold           = 1

@@ -1,0 +1,25 @@
+name: "Lint Terraform files"
+
+on:
+  pull_request:
+    paths:
+      - "**/*.tf"
+
+env:
+  TERRAFORM_VERSION: 0.14.2
+
+jobs:
+  lint:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2
+
+      - name: Setup Terraform
+        uses: hashicorp/setup-terraform@v1.2.1
+        with:
+          terraform_version: ${{ env.TERRAFORM_VERSION }}
+          terraform_wrapper: true
+
+      - name: Lint TF files
+        run: terraform fmt -check -no-color -diff -recursive
