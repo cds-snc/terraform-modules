@@ -15,7 +15,7 @@ resource "aws_cloudwatch_log_metric_filter" "user_alarm_success" {
 }
 
 resource "aws_cloudwatch_metric_alarm" "alarm_success" {
-  for_each            = aws_cloudwatch_log_metric_filter.user_alarm
+  for_each            = aws_cloudwatch_log_metric_filter.user_alarm_success
   alarm_name          = "${each.value.name}_alarm_success"
   comparison_operator = "GreaterThanOrEqualToThreshold"
   evaluation_periods  = "1"
@@ -45,7 +45,7 @@ resource "aws_cloudwatch_log_metric_filter" "user_alarm_failure" {
 }
 
 resource "aws_cloudwatch_metric_alarm" "alarm_failure" {
-  for_each            = aws_cloudwatch_log_metric_filter.user_alarm
+  for_each            = aws_cloudwatch_log_metric_filter.user_alarm_failure
   alarm_name          = "${each.value.name}_alarm_failure"
   comparison_operator = "GreaterThanOrEqualToThreshold"
   evaluation_periods  = "1"
