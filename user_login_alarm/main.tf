@@ -31,7 +31,7 @@ resource "aws_cloudwatch_metric_alarm" "alarm_success" {
 resource "aws_cloudwatch_log_metric_filter" "user_alarm_failure" {
   for_each       = var.account_names
   name           = "${each.value}_ConsoleLogin_Failure"
-  pattern        = "{ $.eventName = \"ConsoleLogin\" && $.userIdentity.userName = \"${each.value}\" && $.responseElements.ConsoleLogin = \"Success\" }"
+  pattern        = "{ $.eventName = \"ConsoleLogin\" && $.userIdentity.userName = \"${each.value}\" && $.responseElements.ConsoleLogin = \"Failure\" }"
   log_group_name = var.log_group_name
 
   metric_transformation {
