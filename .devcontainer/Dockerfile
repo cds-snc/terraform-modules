@@ -3,6 +3,8 @@ FROM mcr.microsoft.com/vscode/devcontainers/base:buster
 ARG USERNAME=vscode
 
 # Set these in devcontainer.json
+ARG GO_VERSION
+ARG GO_CHECKSUM
 ARG SHELLCHECK_VERSION
 ARG SHELLCHECK_CHECKSUM
 ARG TERRAFORM_VERSION
@@ -40,6 +42,12 @@ RUN curl -Lo shellcheck.tar.xz "https://github.com/koalaman/shellcheck/releases/
 # Install Checkov
 RUN pip3 install --upgrade requests setuptools \
     && pip3 install --upgrade botocore checkov
+
+# Install Go
+RUN curl -Lo go.tar.gz "https://golang.org/dl/go${GO_VERSION}.linux-amd64.tar.gz" \
+    && echo "${GO_CHECKSUM} go.tar.gz" | sha256sum --check \
+    && tar -C /usr/local -xf go.tar.gz \
+    && rm go.tar.gz
 
 # Setup aliases and autocomplete
 RUN echo "\n\

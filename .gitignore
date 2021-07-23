@@ -1,5 +1,6 @@
 # I use these as part of local testing
 
 .tool-versions
-.terraform
+.terraform*
 test.tf
+*.tfstate*
