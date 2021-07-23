@@ -1,9 +1,12 @@
 #!/bin/bash
+set -euo pipefail
+IFS=$'\n\t'
 
+SCRIPT_DIR="$(dirname "${BASH_SOURCE[0]}")"
 
 function generate_docs  {
   echo "📝 Generating docs for module $1"
-  docker run -v "$PWD/$1":/tmp/terraform quay.io/terraform-docs/terraform-docs:latest /tmp/terraform -c /tmp/terraform/.terraform-docs.yml > "$1/README.md"
+  terraform-docs markdown "$SCRIPT_DIR/../$1" > "$SCRIPT_DIR/../$1/README.md"
 }
 
 generate_docs "user_login_alarm"
