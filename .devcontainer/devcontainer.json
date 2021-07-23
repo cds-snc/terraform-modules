@@ -3,7 +3,9 @@
 	"build": {
 		"dockerfile": "Dockerfile",
 		"context": "..",
-		"args": {	
+		"args": {
+			"GO_VERSION": "1.16.6",
+			"GO_CHECKSUM": "be333ef18b3016e9d7cb7b1ff1fdb0cac800ca0be4cf2290fe613b3d069dfe0d",		
 			"SHELLCHECK_VERSION": "0.7.2",
 			"SHELLCHECK_CHECKSUM": "70423609f27b504d6c0c47e340f33652aea975e45f312324f2dbf91c95a3b188",
 			"TERRAFORM_VERSION": "1.0.3",
@@ -17,7 +19,16 @@
 		"SHELL": "/bin/zsh"
 	},
 
+	"remoteEnv": {
+		"CGO_ENABLED": "0",
+		"GO111MODULE": "on",
+		"PATH": "${containerEnv:PATH}:/usr/local/go/bin"
+	},
+
 	"settings": {
+		"[go]": {
+			"editor.formatOnSave": true
+		},
 		"[terraform]": {
 			"editor.formatOnSave": true
 		}
@@ -25,6 +36,7 @@
 
 	// Add the IDs of extensions you want installed when the container is created.
 	"extensions": [
+		"golang.go",
 		"hashicorp.terraform",
 		"redhat.vscode-yaml"
 	],
