@@ -1,12 +1,20 @@
+# User Login Alarm
+
+This module will create two metric filters and two alarms per account passed in through the `account_names` input variable.
+The success alarm will trigger whenever a user successfully logs in through the console.
+The failure alarm will trigger whenever `num_attempts` failed login attempts occur through the console.
+
 ## Requirements
 
-No requirements.
+| Name | Version |
+|------|---------|
+| <a name="requirement_aws"></a> [aws](#requirement\_aws) | >= 3.46.0 |
 
 ## Providers
 
 | Name | Version |
 |------|---------|
-| <a name="provider_aws"></a> [aws](#provider\_aws) | n/a |
+| <a name="provider_aws"></a> [aws](#provider\_aws) | >= 3.46.0 |
 
 ## Modules
 

@@ -1,3 +1,22 @@
+/**
+* # User Login Alarm
+*
+* This module will create two metric filters and two alarms per account passed in through the `account_names` input variable.
+* The success alarm will trigger whenever a user successfully logs in through the console. 
+* The failure alarm will trigger whenever `num_attempts` failed login attempts occur through the console.
+*
+*/
+
+
+terraform {
+  required_providers {
+    aws = {
+      source  = "hashicorp/aws"
+      version = ">= 3.46.0"
+    }
+  }
+}
+
 resource "aws_cloudwatch_log_metric_filter" "user_alarm_success" {
   for_each       = var.account_names
   name           = "${each.value}_ConsoleLogin_Success"
