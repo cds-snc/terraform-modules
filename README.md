@@ -6,6 +6,7 @@
   - [How to use modules in this repo](#how-to-use-modules-in-this-repo)
 ## Module List
 - [User Login Alarm](user_login_alarm)
+- [Public/Private VPC](pub_priv_vpc)
 
 ## How to use modules in this repo
 
