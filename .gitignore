@@ -4,3 +4,5 @@
 .terraform*
 test.tf
 *.tfstate*
+
+.DS_Store
