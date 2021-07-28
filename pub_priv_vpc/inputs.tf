@@ -13,3 +13,15 @@ variable "billing_tag_value" {
   description = "(required) The value of the billing tag"
   type        = string
 }
+
+variable "high_availability" {
+  description = "Create either one set of subnets or as many as there are VPCs"
+  type        = bool
+  default     = false
+}
+
+variable "enable_flow_log" {
+  description = "Whether or not to enable VPC Flow Logs"
+  type        = bool
+  default     = false
+}

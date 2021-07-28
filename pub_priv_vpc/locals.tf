@@ -3,4 +3,11 @@ locals {
     (var.billing_tag_key) = var.billing_tag_value
     Terraform             = "true"
   }
+  zone_names        = var.high_availability ? data.aws_availability_zones.available.names : [data.aws_availability_zones.available.names[0]]
+  max_subnet_length = length(local.zone_names)
+  nat_gateway_ips   = aws_eip.nat.*.id
+}
+
+data "aws_availability_zones" "available" {
+  state = "available"
 }
