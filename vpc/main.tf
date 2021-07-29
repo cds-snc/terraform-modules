@@ -9,12 +9,12 @@
 * ### High Availability Mode
 * *Please Note:* This might not work outside of ca-central-1
 *
-* ![Diagram of the High Availiablity Zone architecture](https://raw.githubusercontent.com/cds-snc/terraform-modules/feat/vpc_diagram/vpc/arch/high_availaiblity_zone.png)
+* ![Diagram of the High Availiablity Zone architecture](./arch/high_availablity_zone.png)
 * 
 * ### Single Zone mode
 * *Please Note:* You probably don't want to use this for production grade stuff.
 *
-* ![Diagram of the Single Zone architecture](https://raw.githubusercontent.com/cds-snc/terraform-modules/feat/vpc_diagram/vpc/arch/single_zone.png)
+* ![Diagram of the Single Zone architecture](./arch/single_zone.png)
 * 
 */
 
