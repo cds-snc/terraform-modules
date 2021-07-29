@@ -9,7 +9,7 @@
 * ### High Availability Mode
 * *Please Note:* This might not work outside of ca-central-1
 *
-* ![Diagram of the High Availiablity Zone architecture](./arch/high_availablity_zone.png)
+* ![Diagram of the High Availiablity Zone architecture](./arch/high_availability_zone.png)
 * 
 * ### Single Zone mode
 * *Please Note:* You probably don't want to use this for production grade stuff.
