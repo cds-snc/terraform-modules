@@ -12,4 +12,5 @@ function generate_docs  {
 generate_docs "user_login_alarm"
 #generate_docs "rds"
 generate_docs "vpc"
+generate_docs "rds"
 echo "✅ Done generating docs"
