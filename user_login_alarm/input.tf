@@ -25,6 +25,7 @@ variable "alarm_actions_failure" {
 }
 
 variable "num_attempts" {
-  description = "(required) The number of failed attempts to login before the alarm triggers"
+  description = "The number of failed attempts to login before the alarm triggers"
   type        = number
+  default     = 1
 }

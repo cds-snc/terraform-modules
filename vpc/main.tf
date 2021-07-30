@@ -1,4 +1,4 @@
-/* 
+/** 
 * # VPC
 *
 * This module creates a pre-configured vpc with a pair of subnets split over one or many availability zones. Each of the availability zones created has a public and private subnet. The public subnet has a public IP address attached and has a route to the internet. The private subnet has a route to the internet through a nat gateway.
@@ -12,14 +12,14 @@
 * **Please Note:** This might not work outside of ca-central-1
 *
 * High Availability mode deploys in each AZ in a region. This is what you should chose if you want to target PBMM.
-* ![Diagram of the High Availiablity Zone architecture](./arch/high_availability_zone.png)
+* ![Diagram of the High Availiablity Zone architecture](./docs/high_availability_zone.png)
 * 
 * ### Single Zone mode
 *
 * **Please Note:** This should not be used in a PBMM Production environment.
 *
 * Single Zone mode deployes in the first AZ in a region that is found by the availability lookup. This will work for if you want to save money in dev.
-* ![Diagram of the Single Zone architecture](./arch/single_zone.png)
+* ![Diagram of the Single Zone architecture](./docs/single_zone.png)
 * 
 */
 

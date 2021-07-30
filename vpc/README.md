@@ -11,14 +11,14 @@ This module allows you to deploy two types of architecture high availability and
 **Please Note:** This might not work outside of ca-central-1
 
 High Availability mode deploys in each AZ in a region. This is what you should chose if you want to target PBMM.
-![Diagram of the High Availiablity Zone architecture](./arch/high\_availability\_zone.png)
+![Diagram of the High Availiablity Zone architecture](./docs/high\_availability\_zone.png)
 
 ### Single Zone mode
 
 **Please Note:** This should not be used in a PBMM Production environment.
 
 Single Zone mode deployes in the first AZ in a region that is found by the availability lookup. This will work for if you want to save money in dev.
-![Diagram of the Single Zone architecture](./arch/single\_zone.png)
+![Diagram of the Single Zone architecture](./docs/single\_zone.png)
 
 ## Requirements
 
