@@ -4,7 +4,15 @@
 * This module will create two metric filters and two alarms per account passed in through the `account_names` input variable.
 * The success alarm will trigger whenever a user successfully logs in through the console. 
 * The failure alarm will trigger whenever `num_attempts` failed login attempts occur through the console.
+* 
+* ## Architecture
 *
+* ![Diagram of the User Login Alarm](./docs/alarm.png)
+*
+* ## Things to be aware of
+*
+* - Cloudtrail is behind by at least fifteen minutes. A lot of damage can be done in that amount of time.
+* - We recommend that you don't use Console logins but that you use your Single Sign on to access the AWS Console whenever possible.
 */
 
 

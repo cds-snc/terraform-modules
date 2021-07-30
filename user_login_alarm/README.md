@@ -4,6 +4,15 @@ This module will create two metric filters and two alarms per account passed in 
 The success alarm will trigger whenever a user successfully logs in through the console.
 The failure alarm will trigger whenever `num_attempts` failed login attempts occur through the console.
 
+## Architecture
+
+![Diagram of the User Login Alarm](./docs/alarm.png)
+
+## Things to be aware of
+
+- Cloudtrail is behind by at least fifteen minutes. A lot of damage can be done in that amount of time.
+- We recommend that you don't use Console logins but that you use your Single Sign on to access the AWS Console whenever possible.
+
 ## Requirements
 
 | Name | Version |
@@ -38,7 +47,7 @@ No modules.
 | <a name="input_alarm_actions_success"></a> [alarm\_actions\_success](#input\_alarm\_actions\_success) | (required) The list of actions to execute when this success alarm transitions to alarm state. Takes a set (array) of ARNs | `set(string)` | n/a | yes |
 | <a name="input_log_group_name"></a> [log\_group\_name](#input\_log\_group\_name) | (required) The log group to search for cloudtrail ConsoleLogin events in. | `string` | n/a | yes |
 | <a name="input_namespace"></a> [namespace](#input\_namespace) | The namespace for the metric | `string` | `"common-metrics"` | no |
-| <a name="input_num_attempts"></a> [num\_attempts](#input\_num\_attempts) | (required) The number of failed attempts to login before the alarm triggers | `number` | n/a | yes |
+| <a name="input_num_attempts"></a> [num\_attempts](#input\_num\_attempts) | The number of failed attempts to login before the alarm triggers | `number` | `1` | no |
 
 ## Outputs
 
