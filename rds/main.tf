@@ -55,8 +55,8 @@ resource "aws_rds_cluster" "cluster" {
   engine                    = "aurora-postgresql"
   database_name             = var.database_name
   final_snapshot_identifier = "${var.name}-${random_string.random.result}"
-  master_username           = var.master_uname
-  master_password           = var.master_pword
+  master_username           = var.username
+  master_password           = var.password
   backup_retention_period   = var.backup_retention_period
   preferred_backup_window   = var.preferred_backup_window
   db_subnet_group_name      = aws_db_subnet_group.rds.name

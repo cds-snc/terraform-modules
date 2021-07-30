@@ -43,14 +43,14 @@ No modules.
 | <a name="input_billing_tag_key"></a> [billing\_tag\_key](#input\_billing\_tag\_key) | The name of the billing tag | `string` | `"CostCentre"` | no |
 | <a name="input_billing_tag_value"></a> [billing\_tag\_value](#input\_billing\_tag\_value) | (required) The value of the billing tag | `string` | n/a | yes |
 | <a name="input_database_name"></a> [database\_name](#input\_database\_name) | (required) The name of the database to be created inside the cluster. | `string` | n/a | yes |
-| <a name="input_instance_class"></a> [instance\_class](#input\_instance\_class) | The type of EC2 instance to run this on. | `string` | `"db.t3.micro"` | no |
+| <a name="input_instance_class"></a> [instance\_class](#input\_instance\_class) | The type of EC2 instance to run this on. | `string` | `"db.t3.medium"` | no |
 | <a name="input_instances"></a> [instances](#input\_instances) | The number of RDS Cluster instances to create | `number` | `1` | no |
-| <a name="input_master_pword"></a> [master\_pword](#input\_master\_pword) | (required) The password for the admin user for the db | `string` | n/a | yes |
-| <a name="input_master_uname"></a> [master\_uname](#input\_master\_uname) | (required) The username for the admin user for the db | `string` | n/a | yes |
 | <a name="input_name"></a> [name](#input\_name) | (required) The name of the db also used for other identifiers | `string` | n/a | yes |
+| <a name="input_password"></a> [password](#input\_password) | (required) The password for the admin user for the db | `string` | n/a | yes |
 | <a name="input_preferred_backup_window"></a> [preferred\_backup\_window](#input\_preferred\_backup\_window) | (required) The time you want your DB to be backedup. Takes the format `"07:00-09:00"` | `string` | n/a | yes |
 | <a name="input_sg_ids"></a> [sg\_ids](#input\_sg\_ids) | (required) The security groups this DB is to be attached to | `set(string)` | n/a | yes |
 | <a name="input_subnet_ids"></a> [subnet\_ids](#input\_subnet\_ids) | (required) The name of the subnet the DB has to stay in | `set(string)` | n/a | yes |
+| <a name="input_username"></a> [username](#input\_username) | (required) The username for the admin user for the db | `string` | n/a | yes |
 | <a name="input_vpc_id"></a> [vpc\_id](#input\_vpc\_id) | (required) The vpc to run the cluster and related infrastructure in | `string` | n/a | yes |
 
 ## Outputs

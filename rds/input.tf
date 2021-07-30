@@ -72,12 +72,12 @@ variable "sg_ids" {
 # Database Admin User
 ###
 
-variable "master_uname" {
+variable "username" {
   description = "(required) The username for the admin user for the db"
   type        = string
 }
 
-variable "master_pword" {
+variable "password" {
   type        = string
   description = "(required) The password for the admin user for the db"
   sensitive   = true
