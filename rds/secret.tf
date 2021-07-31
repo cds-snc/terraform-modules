@@ -9,7 +9,7 @@ resource "aws_secretsmanager_secret_version" "connection_string" {
 }
 
 resource "aws_secretsmanager_secret" "proxy_connection_string" {
-  name = "${var.name}-${random_string.random.result}"
+  name = "${var.name}-${random_string.random.result}-proxy-connection-string"
   tags = local.common_tags
 }
 
