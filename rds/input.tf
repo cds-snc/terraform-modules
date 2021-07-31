@@ -82,3 +82,19 @@ variable "password" {
   description = "(required) The password for the admin user for the db"
   sensitive   = true
 }
+
+###
+# Proxy Configuration
+###
+
+variable "proxy_log_retention_in_days" {
+  type        = number
+  description = "The number of days to retain the proxy logs in cloudwatch"
+  default     = 14
+}
+
+variable "proxy_debug_logging" {
+  type        = bool
+  description = "Allows the proxy to log debug information. <br/> **Please Note:** This will include all sql commands and potential sensitive information"
+  default     = false
+}

@@ -7,6 +7,9 @@ resource "random_string" "random" {
   special = false
   upper   = false
 }
+###
+# RDS
+###
 
 resource "aws_rds_cluster_instance" "instances" {
   count                = var.instances
@@ -25,29 +28,6 @@ resource "aws_rds_cluster_instance" "instances" {
   lifecycle {
     prevent_destroy = true
   }
-}
-
-resource "aws_db_proxy" "proxy" {
-  name                = "${var.name}-proxy"
-  debug_logging       = false
-  engine_family       = "POSTGRESQL"
-  idle_client_timeout = 1800
-  require_tls         = true
-
-  role_arn               = aws_iam_role.rds_proxy.arn
-  vpc_security_group_ids = var.sg_ids
-  vpc_subnet_ids         = var.subnet_ids
-
-  auth {
-    auth_scheme = "SECRETS"
-    description = "The postgresql connection string"
-    iam_auth    = "DISABLED"
-    secret_arn  = aws_secretsmanager_secret.connection_string.arn
-  }
-
-  tags = merge(local.common_tags, {
-    Name = "${var.name}-rds-proxy"
-  })
 }
 
 resource "aws_rds_cluster" "cluster" {
@@ -81,6 +61,38 @@ resource "aws_db_subnet_group" "rds" {
   })
 }
 
+
+###
+# RDS Proxy
+###
+
+locals {
+  proxy_name = "${var.name}-proxy"
+}
+
+resource "aws_db_proxy" "proxy" {
+  name                = local.proxy_name
+  debug_logging       = var.proxy_debug_logging
+  engine_family       = "POSTGRESQL"
+  idle_client_timeout = 1800
+  require_tls         = true
+
+  role_arn               = aws_iam_role.rds_proxy.arn
+  vpc_security_group_ids = var.sg_ids
+  vpc_subnet_ids         = var.subnet_ids
+
+  auth {
+    auth_scheme = "SECRETS"
+    description = "The postgresql connection string"
+    iam_auth    = "DISABLED"
+    secret_arn  = aws_secretsmanager_secret.connection_string.arn
+  }
+
+  tags = merge(local.common_tags, {
+    Name = "${var.name}-rds-proxy"
+  })
+}
+
 resource "aws_security_group" "rds_to_proxy" {
   description = "Used by EFS"
   vpc_id      = var.vpc_id
@@ -94,3 +106,12 @@ resource "aws_security_group" "rds_to_proxy" {
   }
 }
 
+resource "aws_cloudwatch_log_group" "proxy" {
+
+  name              = "/aws/rds/proxy/${local.proxy_name}"
+  retention_in_days = var.proxy_log_retention_in_days
+
+  tags = merge(local.common_tags, {
+    Name = "${var.name}_proxy_logs"
+  })
+}
