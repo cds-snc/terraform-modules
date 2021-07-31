@@ -4,14 +4,16 @@
 - [CDS Common Terraform Modules](#cds-common-terraform-modules)
   - [Module List](#module-list)
   - [How to use modules in this repo](#how-to-use-modules-in-this-repo)
+
 ## Module List
+
 - [User Login Alarm](user_login_alarm)
 - [VPC](vpc)
+- [RDS](rds)
 
 ## How to use modules in this repo
 
-Instructions for Terraform Module usage can be found here: 
-https://www.terraform.io/docs/language/modules/syntax.html
+[Official instructions for Terraform module usage](https://www.terraform.io/docs/language/modules/syntax.html)
 
 To reference modules in this repo use the following `source` setting:
 

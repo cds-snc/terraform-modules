@@ -19,6 +19,7 @@ No modules.
 
 | Name | Type |
 |------|------|
+| [aws_cloudwatch_log_group.proxy](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/cloudwatch_log_group) | resource |
 | [aws_db_proxy.proxy](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/db_proxy) | resource |
 | [aws_db_subnet_group.rds](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/db_subnet_group) | resource |
 | [aws_iam_policy.read_connection_string](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/iam_policy) | resource |
@@ -27,7 +28,9 @@ No modules.
 | [aws_rds_cluster.cluster](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/rds_cluster) | resource |
 | [aws_rds_cluster_instance.instances](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/rds_cluster_instance) | resource |
 | [aws_secretsmanager_secret.connection_string](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/secretsmanager_secret) | resource |
+| [aws_secretsmanager_secret.proxy_connection_string](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/secretsmanager_secret) | resource |
 | [aws_secretsmanager_secret_version.connection_string](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/secretsmanager_secret_version) | resource |
+| [aws_secretsmanager_secret_version.proxy_connection_string](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/secretsmanager_secret_version) | resource |
 | [aws_security_group.proxy](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/security_group) | resource |
 | [aws_security_group.rds_to_proxy](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/security_group) | resource |
 | [aws_security_group_rule.rds](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/security_group_rule) | resource |
@@ -48,6 +51,8 @@ No modules.
 | <a name="input_name"></a> [name](#input\_name) | (required) The name of the db also used for other identifiers | `string` | n/a | yes |
 | <a name="input_password"></a> [password](#input\_password) | (required) The password for the admin user for the db | `string` | n/a | yes |
 | <a name="input_preferred_backup_window"></a> [preferred\_backup\_window](#input\_preferred\_backup\_window) | (required) The time you want your DB to be backedup. Takes the format `"07:00-09:00"` | `string` | n/a | yes |
+| <a name="input_proxy_debug_logging"></a> [proxy\_debug\_logging](#input\_proxy\_debug\_logging) | Allows the proxy to log debug information. <br/> **Please Note:** This will include all sql commands and potential sensitive information | `bool` | `false` | no |
+| <a name="input_proxy_log_retention_in_days"></a> [proxy\_log\_retention\_in\_days](#input\_proxy\_log\_retention\_in\_days) | The number of days to retain the proxy logs in cloudwatch | `number` | `14` | no |
 | <a name="input_sg_ids"></a> [sg\_ids](#input\_sg\_ids) | (required) The security groups this DB is to be attached to | `set(string)` | n/a | yes |
 | <a name="input_subnet_ids"></a> [subnet\_ids](#input\_subnet\_ids) | (required) The name of the subnet the DB has to stay in | `set(string)` | n/a | yes |
 | <a name="input_username"></a> [username](#input\_username) | (required) The username for the admin user for the db | `string` | n/a | yes |
@@ -55,4 +60,8 @@ No modules.
 
 ## Outputs
 
-No outputs.
+| Name | Description |
+|------|-------------|
+| <a name="output_proxy_connection_string_arn"></a> [proxy\_connection\_string\_arn](#output\_proxy\_connection\_string\_arn) | The arn for the connectionstring to the RDS proxy |
+| <a name="output_proxy_connection_string_value"></a> [proxy\_connection\_string\_value](#output\_proxy\_connection\_string\_value) | n/a |
+| <a name="output_proxy_endpoint"></a> [proxy\_endpoint](#output\_proxy\_endpoint) | n/a |
