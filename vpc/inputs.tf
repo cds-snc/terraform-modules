@@ -25,3 +25,16 @@ variable "enable_flow_log" {
   type        = bool
   default     = false
 }
+
+variable "block_ssh" {
+  description = "Whether or not to block Port 22"
+  type        = bool
+  default     = true
+
+}
+
+variable "block_rdp" {
+  description = "Whether or not to block Port 3389"
+  type        = bool
+  default     = true
+}
