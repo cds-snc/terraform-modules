@@ -7,42 +7,50 @@ resource "random_string" "random" {
   special = false
   upper   = false
 }
+
 ###
 # RDS
 ###
+
+locals {
+  engine = "aurora-postgresql"
+}
 
 resource "aws_rds_cluster_instance" "instances" {
   count                = var.instances
   identifier           = "${var.name}-instance-${count.index}"
   cluster_identifier   = aws_rds_cluster.cluster.id
   instance_class       = var.instance_class
+  engine               = local.engine
+  engine_version       = var.engine_version
   db_subnet_group_name = aws_db_subnet_group.rds.name
 
   performance_insights_enabled = true
 
   tags = merge(local.common_tags, {
-    Name = "${var.name}-instance"
+    Name = "${var.name}-instance-${count.index}"
     }
   )
 
-  lifecycle {
-    prevent_destroy = true
-  }
 }
 
-resource "aws_rds_cluster" "cluster" {
-  cluster_identifier        = "${var.name}-cluster"
-  engine                    = "aurora-postgresql"
-  database_name             = var.database_name
-  final_snapshot_identifier = "${var.name}-${random_string.random.result}"
-  master_username           = var.username
-  master_password           = var.password
-  backup_retention_period   = var.backup_retention_period
-  preferred_backup_window   = var.preferred_backup_window
-  db_subnet_group_name      = aws_db_subnet_group.rds.name
-  deletion_protection       = true
 
-  storage_encrypted = true
+resource "aws_rds_cluster" "cluster" {
+  cluster_identifier          = "${var.name}-cluster"
+  engine                      = local.engine
+  engine_version              = var.engine_version
+  database_name               = var.database_name
+  final_snapshot_identifier   = "${var.name}-${random_string.random.result}"
+  master_username             = var.username
+  master_password             = var.password
+  backup_retention_period     = var.backup_retention_period
+  preferred_backup_window     = var.preferred_backup_window
+  db_subnet_group_name        = aws_db_subnet_group.rds.name
+  deletion_protection         = var.prevent_cluster_deletion
+  allow_major_version_upgrade = var.allow_major_version_upgrade
+
+  # Ignore TFSEC rule as we are using managed KMS
+  storage_encrypted = true #tfsec:ignore:AWS051
 
 
   vpc_security_group_ids = var.sg_ids
@@ -93,7 +101,9 @@ resource "aws_db_proxy" "proxy" {
   })
 }
 
+
 resource "aws_security_group" "rds_to_proxy" {
+  name        = "${var.name}_rds_proxy_sg"
   description = "Used by EFS"
   vpc_id      = var.vpc_id
 
