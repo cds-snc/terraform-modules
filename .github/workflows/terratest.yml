@@ -1,0 +1,56 @@
+name: "Terratest modules"
+
+on:
+  push:
+    branches:
+    - main
+  pull_request:
+    branches:
+    - main
+
+env:
+  GO_VERSION: 1.16.6
+  TERRAFORM_VERSION: 1.0.3
+  AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
+  AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+
+jobs:
+  terratest:
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        module:
+          - user_login_alarm
+
+    steps:
+    - name: Checkout
+      uses: actions/checkout@v2
+
+    - uses: dorny/paths-filter@b2feaf19c27470162a626bd6fa8438ae5b263721 # v2.10.2
+      id: changes
+      with:
+        filters: |
+          module:
+            - "${{ matrix.module }}/**/*.tf"
+            - "${{ matrix.module }}/test/**"
+
+    - name: Setup Go
+      if: steps.changes.outputs.module == "true"
+      uses: actions/setup-go@v2
+      with:
+        go-version: ${{ env.GO_VERSION }}
+
+    - name: Setup Terraform
+      if: steps.changes.outputs.module == "true"
+      uses: hashicorp/setup-terraform@v1
+      with:
+        terraform_version: ${{ env.TERRAFORM_VERSION }}
+        terraform_wrapper: false
+
+    - name: Terratest
+      if: steps.changes.outputs.module == "true"
+      run: |
+        cd ${{ matrix.module }}/test
+        go mod tidy
+        go test -v
