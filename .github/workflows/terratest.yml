@@ -32,24 +32,24 @@ jobs:
       with:
         filters: |
           module:
-            - "${{ matrix.module }}/**/*.tf"
-            - "${{ matrix.module }}/test/**"
+            - '${{ matrix.module }}/**/*.tf'
+            - '${{ matrix.module }}/test/**'
 
     - name: Setup Go
-      if: steps.changes.outputs.module == "true"
+      if: steps.changes.outputs.module == 'true'
       uses: actions/setup-go@v2
       with:
         go-version: ${{ env.GO_VERSION }}
 
     - name: Setup Terraform
-      if: steps.changes.outputs.module == "true"
+      if: steps.changes.outputs.module == 'true'
       uses: hashicorp/setup-terraform@v1
       with:
         terraform_version: ${{ env.TERRAFORM_VERSION }}
         terraform_wrapper: false
 
     - name: Terratest
-      if: steps.changes.outputs.module == "true"
+      if: steps.changes.outputs.module == 'true'
       run: |
         cd ${{ matrix.module }}/test
         go mod tidy
