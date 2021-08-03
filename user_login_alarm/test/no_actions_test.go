@@ -3,19 +3,18 @@ package test
 import (
 	"testing"
 
-	awssdk "github.com/aws/aws-sdk-go/aws"
-	"github.com/aws/aws-sdk-go/service/cloudwatch"
-	"github.com/gruntwork-io/terratest/modules/aws"
 	"github.com/gruntwork-io/terratest/modules/terraform"
 	"github.com/stretchr/testify/assert"
 )
 
-func TestAlarmCreations(t *testing.T) {
+func TestNoActionAlarmCreations(t *testing.T) {
 	t.Parallel()
 
-	region := "ca-central-1"
-	metricNamespace := "terratest"
 	accountNames := [2]string{"ops1", "ops2"}
+	alarmFailThreshold := 3.0
+	alarmSuccessThreshold := 1.0
+	metricNamespace := "terratest"
+	region := "ca-central-1"
 
 	terraformOptions := &terraform.Options{
 		TerraformDir: "../examples/no_actions",
@@ -24,40 +23,27 @@ func TestAlarmCreations(t *testing.T) {
 		},
 	}
 
+	// Destroy resource once tests are finished
 	defer terraform.Destroy(t, terraformOptions)
+
+	// Create the resources
 	terraform.InitAndApply(t, terraformOptions)
 
+	// Check expected Success/Failure alarms were created with expected thresholds
 	client := NewCloudWatchClient(t, region)
-
-	// Check expected Success/Failure alarms were created
 	for _, account := range accountNames {
 		metricName := account + "_ConsoleLogin_Success"
-		alarmSuccess := GetMetricAlarm(t, client, metricName, metricNamespace)
-		assert.Equal(t, metricName+"_alarm_success", *alarmSuccess.MetricAlarms[0].AlarmName)
+		alarmSuccess := GetMetricAlarm(t, client, metricName, metricNamespace).MetricAlarms[0]
+
+		assert.Equal(t, metricName+"_alarm_success", *alarmSuccess.AlarmName)
+		assert.Equal(t, alarmSuccessThreshold, *alarmSuccess.Threshold)
+		assert.Equal(t, 0, len(alarmSuccess.AlarmActions))
 
 		metricName = account + "_ConsoleLogin_Failure"
-		alarmFail := GetMetricAlarm(t, client, metricName, metricNamespace)
-		assert.Equal(t, metricName+"_alarm_failure", *alarmFail.MetricAlarms[0].AlarmName)
-	}
-}
+		alarmFail := GetMetricAlarm(t, client, metricName, metricNamespace).MetricAlarms[0]
 
-// Retrieves the Alarms for a given metric and namespace
-func GetMetricAlarm(t *testing.T, client *cloudwatch.CloudWatch, metricName string, metricNamespace string) *cloudwatch.DescribeAlarmsForMetricOutput {
-	out, err := client.DescribeAlarmsForMetric(&cloudwatch.DescribeAlarmsForMetricInput{
-		MetricName: awssdk.String(metricName),
-		Namespace:  awssdk.String(metricNamespace),
-	})
-	if err != nil {
-		t.Fatal(err)
+		assert.Equal(t, metricName+"_alarm_failure", *alarmFail.AlarmName)
+		assert.Equal(t, alarmFailThreshold, *alarmFail.Threshold)
+		assert.Equal(t, 0, len(alarmFail.AlarmActions))
 	}
-	return out
-}
-
-// Creates a new CloudWatch client
-func NewCloudWatchClient(t *testing.T, region string) *cloudwatch.CloudWatch {
-	sess, err := aws.NewAuthenticatedSession(region)
-	if err != nil {
-		t.Fatal(err)
-	}
-	return cloudwatch.New(sess)
 }
