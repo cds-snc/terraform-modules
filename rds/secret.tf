@@ -3,9 +3,10 @@ resource "aws_secretsmanager_secret" "connection_string" {
   tags = local.common_tags
 }
 
+// Secret format grabbed from here: https://docs.aws.amazon.com/AmazonRDS/latest/AuroraUserGuide/rds-proxy.html#rds-proxy-secrets-arns
 resource "aws_secretsmanager_secret_version" "connection_string" {
   secret_id     = aws_secretsmanager_secret.connection_string.id
-  secret_string = "postgresql://${var.username}:${var.password}@${aws_rds_cluster.cluster.endpoint}/${var.database_name}"
+  secret_string = "{'username':'${var.username}','password':'${var.password}'}"
 }
 
 resource "aws_secretsmanager_secret" "proxy_connection_string" {
