@@ -36,6 +36,19 @@ data "aws_iam_policy_document" "read_connection_string" {
     actions   = ["secretsmanager:ListSecrets"]
     resources = ["*"]
   }
+  statement {
+    sid       = 2
+    effect    = "Allow"
+    actions   = ["kms:Decrypt"]
+    resources = ["*"]
+    condition {
+      test     = "StringEquals"
+      variable = "kms:ViaService"
+      values = [
+        "secretsmanager.ca-central-1.amazonaws.com"
+      ]
+    }
+  }
 }
 
 resource "aws_iam_policy" "read_connection_string" {
