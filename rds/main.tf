@@ -34,7 +34,6 @@ resource "aws_rds_cluster_instance" "instances" {
 
 }
 
-
 resource "aws_rds_cluster" "cluster" {
   cluster_identifier          = "${var.name}-cluster"
   engine                      = local.engine
@@ -53,7 +52,7 @@ resource "aws_rds_cluster" "cluster" {
   storage_encrypted = true #tfsec:ignore:AWS051
 
 
-  vpc_security_group_ids = var.sg_ids
+  vpc_security_group_ids = [aws_security_group.rds_proxy.id]
 
   tags = merge(local.common_tags, {
     Name = "${var.name}-cluster"
@@ -69,6 +68,26 @@ resource "aws_db_subnet_group" "rds" {
   })
 }
 
+
+resource "aws_security_group" "rds_proxy" {
+  name   = "${var.name}_rds_proxy_sg"
+  vpc_id = var.vpc_id
+
+  tags = merge(local.common_tags, {
+    Name = "${var.name}_rds_proxy_sg"
+  })
+
+  ingress {
+    from_port = 5432
+    to_port   = 5432
+    protocol  = "TCP"
+    self      = true
+  }
+
+  lifecycle {
+    create_before_destroy = true
+  }
+}
 
 ###
 # RDS Proxy
@@ -87,7 +106,7 @@ resource "aws_db_proxy" "proxy" {
 
   role_arn               = aws_iam_role.rds_proxy.arn
   vpc_security_group_ids = var.sg_ids
-  vpc_subnet_ids         = var.subnet_ids
+  vpc_subnet_ids         = concat(aws_security_group.rds_proxy.id, var.subnet_ids)
 
   auth {
     auth_scheme = "SECRETS"
@@ -101,20 +120,6 @@ resource "aws_db_proxy" "proxy" {
   })
 }
 
-
-resource "aws_security_group" "rds_to_proxy" {
-  name        = "${var.name}_rds_proxy_sg"
-  description = "Used by EFS"
-  vpc_id      = var.vpc_id
-
-  tags = merge(local.common_tags, {
-    Name = "${var.name}_rds_proxy_sg"
-  })
-
-  lifecycle {
-    create_before_destroy = true
-  }
-}
 
 resource "aws_cloudwatch_log_group" "proxy" {
 
