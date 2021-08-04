@@ -6,8 +6,8 @@ resource "aws_secretsmanager_secret" "connection_string" {
 
 variable "secret_credentials" {
   default = {
-    username = var.username
-    password = var.password
+    username = "${var.username}"
+    password = "${var.password}"
   }
 
   type = map(string)
