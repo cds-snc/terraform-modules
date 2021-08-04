@@ -3,10 +3,20 @@ resource "aws_secretsmanager_secret" "connection_string" {
   tags = local.common_tags
 }
 
+
+variable "secret_credentials" {
+  default = {
+    username = var.username
+    password = var.password
+  }
+
+  type = map(string)
+}
+
 // Secret format grabbed from here: https://docs.aws.amazon.com/AmazonRDS/latest/AuroraUserGuide/rds-proxy.html#rds-proxy-secrets-arns
 resource "aws_secretsmanager_secret_version" "connection_string" {
   secret_id     = aws_secretsmanager_secret.connection_string.id
-  secret_string = "{\"username\":\"${var.username}\",\"password\":\"${var.password}\"'}"
+  secret_string = jsonencode(var.secret_credentials)
 }
 
 resource "aws_secretsmanager_secret" "proxy_connection_string" {
