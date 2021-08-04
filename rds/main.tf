@@ -125,3 +125,9 @@ resource "aws_cloudwatch_log_group" "proxy" {
     Name = "${var.name}_proxy_logs"
   })
 }
+
+resource "aws_db_proxy_target" "target" {
+  db_proxy_name = aws_db_proxy.proxy.name
+  target_group_name = "${var.name}-proxy-target"
+  db_cluster_identifier = aws_rds_cluster.cluster.id
+}
