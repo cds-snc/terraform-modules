@@ -79,11 +79,6 @@ variable "subnet_ids" {
   type        = set(string)
 }
 
-variable "sg_ids" {
-  description = "(required) The security groups this DB is to be attached to"
-  type        = set(string)
-}
-
 ###
 # Database Admin User
 ###

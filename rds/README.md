@@ -57,7 +57,6 @@ No modules.
 | <a name="input_prevent_cluster_deletion"></a> [prevent\_cluster\_deletion](#input\_prevent\_cluster\_deletion) | This flag prevents deletion of the RDS cluster. <br/> **Please Note:** We cannot prevent deletion of RDS instances in the module, we recommend you add `lifecycle { prevent_deletion = true }` to the module to prevent instance deletion | `bool` | `true` | no |
 | <a name="input_proxy_debug_logging"></a> [proxy\_debug\_logging](#input\_proxy\_debug\_logging) | Allows the proxy to log debug information. <br/> **Please Note:** This will include all sql commands and potential sensitive information | `bool` | `false` | no |
 | <a name="input_proxy_log_retention_in_days"></a> [proxy\_log\_retention\_in\_days](#input\_proxy\_log\_retention\_in\_days) | The number of days to retain the proxy logs in cloudwatch | `number` | `14` | no |
-| <a name="input_sg_ids"></a> [sg\_ids](#input\_sg\_ids) | (required) The security groups this DB is to be attached to | `set(string)` | n/a | yes |
 | <a name="input_subnet_ids"></a> [subnet\_ids](#input\_subnet\_ids) | (required) The name of the subnet the DB has to stay in | `set(string)` | n/a | yes |
 | <a name="input_username"></a> [username](#input\_username) | (required) The username for the admin user for the db | `string` | n/a | yes |
 | <a name="input_vpc_id"></a> [vpc\_id](#input\_vpc\_id) | (required) The vpc to run the cluster and related infrastructure in | `string` | n/a | yes |
