@@ -69,25 +69,6 @@ resource "aws_db_subnet_group" "rds" {
 }
 
 
-resource "aws_security_group" "rds_proxy" {
-  name   = "${var.name}_rds_proxy_sg"
-  vpc_id = var.vpc_id
-
-  tags = merge(local.common_tags, {
-    Name = "${var.name}_rds_proxy_sg"
-  })
-
-  ingress {
-    from_port = 5432
-    to_port   = 5432
-    protocol  = "TCP"
-    self      = true
-  }
-
-  lifecycle {
-    create_before_destroy = true
-  }
-}
 
 ###
 # RDS Proxy
