@@ -13,9 +13,9 @@ output "proxy_endpoint" {
 }
 
 output "proxy_security_group_id" {
-  value = aws_security_group.proxy.id
+  value = aws_security_group.rds_proxy.id
 }
 
 output "proxy_security_group_arn" {
-  value = aws_security_group.proxy.arn
+  value = aws_security_group.rds_proxy.arn
 }
