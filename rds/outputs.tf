@@ -11,3 +11,11 @@ output "proxy_connection_string_value" {
 output "proxy_endpoint" {
   value = aws_db_proxy.proxy.endpoint
 }
+
+output "proxy_security_group_id" {
+  value = aws_security_group.proxy.id
+}
+
+output "proxy_security_group_arn" {
+  value = aws_security_group.proxy.arn
+}

@@ -35,8 +35,6 @@ No modules.
 | [aws_secretsmanager_secret_version.proxy_connection_string](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/secretsmanager_secret_version) | resource |
 | [aws_security_group.proxy](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/security_group) | resource |
 | [aws_security_group.rds_proxy](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/security_group) | resource |
-| [aws_security_group_rule.rds_egress](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/security_group_rule) | resource |
-| [aws_security_group_rule.rds_ingress](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/security_group_rule) | resource |
 | [random_string.random](https://registry.terraform.io/providers/hashicorp/random/latest/docs/resources/string) | resource |
 | [aws_iam_policy_document.assume_role](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/data-sources/iam_policy_document) | data source |
 | [aws_iam_policy_document.read_connection_string](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/data-sources/iam_policy_document) | data source |
@@ -71,3 +69,5 @@ No modules.
 | <a name="output_proxy_connection_string_arn"></a> [proxy\_connection\_string\_arn](#output\_proxy\_connection\_string\_arn) | The arn for the connectionstring to the RDS proxy |
 | <a name="output_proxy_connection_string_value"></a> [proxy\_connection\_string\_value](#output\_proxy\_connection\_string\_value) | n/a |
 | <a name="output_proxy_endpoint"></a> [proxy\_endpoint](#output\_proxy\_endpoint) | n/a |
+| <a name="output_proxy_security_group_arn"></a> [proxy\_security\_group\_arn](#output\_proxy\_security\_group\_arn) | n/a |
+| <a name="output_proxy_security_group_id"></a> [proxy\_security\_group\_id](#output\_proxy\_security\_group\_id) | n/a |
