@@ -105,8 +105,8 @@ resource "aws_db_proxy" "proxy" {
   require_tls         = true
 
   role_arn               = aws_iam_role.rds_proxy.arn
-  vpc_security_group_ids = var.sg_ids
-  vpc_subnet_ids         = concat(aws_security_group.rds_proxy.id, var.subnet_ids)
+  vpc_security_group_ids = [aws_security_group.rds_proxy.id, aws_security_group.proxy.id]
+  vpc_subnet_ids         = var.subnet_ids
 
   auth {
     auth_scheme = "SECRETS"
