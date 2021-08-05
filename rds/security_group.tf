@@ -18,6 +18,13 @@ resource "aws_security_group" "rds_proxy" {
     self      = true
   }
 
+  egress {
+    from_port = 5432
+    to_port   = 5432
+    protocol  = "TCP"
+    self      = true
+  }
+
   lifecycle {
     create_before_destroy = true
   }
