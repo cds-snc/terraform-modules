@@ -24,7 +24,7 @@ jobs:
 
       - name: Checkov security scan
         id: checkov
-        uses: bridgecrewio/checkov-action@00cc657f4d415593e5c8897bc87f490497ccb5f9 #v12.641.0
+        uses: bridgecrewio/checkov-action@453662aa990d2cadf9ff201d82c91c34b01c718b # latest as of Aug 10, 2021
         with:
           directory: ${{ matrix.module }}
           framework: terraform
