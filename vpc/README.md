@@ -1,6 +1,6 @@
-# VPC
+# Virtual Private Cloud (VPC)
 
-This module creates a pre-configured vpc with a pair of subnets split over one or many availability zones. Each of the availability zones created has a public and private subnet. The public subnet has a public IP address attached and has a route to the internet. The private subnet has a route to the internet through a nat gateway.
+This module creates a pre-configured VPC with a pair of subnets split over one or many availability zones (AZ). Each of the AZs created has a public and private subnet. The public subnet has a public IP address attached and has a route to the internet. The private subnet has a route to the internet through a nat gateway.
 
 ## Architecture
 
@@ -10,8 +10,8 @@ This module allows you to deploy two types of architecture high availability and
 
 **Please Note:** This might not work outside of ca-central-1
 
-High Availability mode deploys in each AZ in a region. This is what you should chose if you want to target PBMM.
-![Diagram of the High Availiablity Zone architecture](./docs/high\_availability\_zone.png)
+High Availability mode deploys in each AZ in a region. This is what you should chose if you want to target Protected B, Medium Integrity, Medium Availability (PBMM).
+![Diagram of the High Availiablity Zone architecture](./docs/high\\_availability\\_zone.png)
 
 ### Single Zone mode
 
