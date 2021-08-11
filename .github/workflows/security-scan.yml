@@ -1,0 +1,32 @@
+name: "Terraform security scan"
+
+on:
+  push:
+    branches:
+    - main
+  pull_request:
+    branches:
+    - main
+
+jobs:
+  terraform-security-scan:
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        module:
+          - user_login_alarm
+          - vpc
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2
+
+      - name: Checkov security scan
+        id: checkov
+        uses: bridgecrewio/checkov-action@ffb0926e337a96499d5d11d4b83733672f2fe3c3 # latest as of Aug 10, 2021
+        with:
+          directory: ${{ matrix.module }}
+          framework: terraform
+          output_format: cli
+          download_external_modules: true
