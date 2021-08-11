@@ -1,13 +1,12 @@
-# VPC for development work that creates one subnet 
-# in the region's first availability zone
-module "single_zone_vpc" {
+# VPC for production that creates a subnet in all of a region's availability zones
+module "high_availability_vpc" {
   source = "../../"
-  name   = "single_zone"
+  name   = "high_availability"
 
-  high_availability = false
-  enable_flow_log   = false
-  block_ssh         = true
-  block_rdp         = true
+  high_availability = true
+  enable_flow_log   = true
+  block_ssh         = false
+  block_rdp         = false
 
   billing_tag_key   = "Business Unit"
   billing_tag_value = "Operations"
