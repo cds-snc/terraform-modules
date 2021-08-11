@@ -22,6 +22,7 @@ jobs:
       matrix:
         module:
           - user_login_alarm
+          - vpc
 
     steps:
     - name: Checkout
