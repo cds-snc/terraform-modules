@@ -12,7 +12,7 @@
 * **Please Note:** This might not work outside of ca-central-1
 *
 * High Availability mode deploys in each AZ in a region. This is what you should chose if you want to target Protected B, Medium Integrity, Medium Availability (PBMM).
-* ![Diagram of the High Availiablity Zone architecture](./docs/high\_availability\_zone.png)
+* ![Diagram of the High Availiablity Zone architecture](./docs/high_availability_zone.png)
 * 
 * ### Single Zone mode
 *
