@@ -7,7 +7,9 @@
 resource "aws_s3_bucket" "this" {
   # checkov:skip=CKV_AWS_145:Encryption using AWS managed key is acceptable
   # checkov:skip=CKV_AWS_144:Cross region replication is not required by default and may be unwanted
-
+  # checkov:skip=CKV_AWS_18:Ths bucket is used for access logging for other buckets
+  # checkov:skip=CKV_AWS_21:Versioning is not required for access logs
+  # checkov:skip=CKV_AWS_6:Public access blocks are attached to policy which trickles down to this
   bucket        = var.bucket_name
   bucket_prefix = var.bucket_prefix
 
