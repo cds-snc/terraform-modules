@@ -2,7 +2,7 @@
 # Common tags
 ###
 variable "billing_tag_key" {
-  description = "(optional) The name of the billing tag"
+  description = "(Optional) The name of the billing tag"
   type        = string
   default     = "CostCentre"
 }
@@ -37,25 +37,25 @@ variable "force_destroy" {
 }
 
 variable "versioning" {
-  description = "Map containing versioning configuration."
+  description = "(Optional) Map containing versioning configuration."
   type        = map(string)
   default     = {}
 }
 
 variable "logging" {
-  description = "Map containing access bucket logging configuration. </br> **target_bucket**: name of the bucket to log to. </br> **target_prefix**: prefix to use when logging"
+  description = "(Optional) Map containing access bucket logging configuration. </br> **target_bucket**: name of the bucket to log to. </br> **target_prefix**: prefix to use when logging"
   type        = map(string)
   default     = {}
 }
 
 variable "lifecycle_rule" {
-  description = "List of maps containing configuration of object lifecycle management."
+  description = "(Optional) List of maps containing configuration of object lifecycle management."
   type        = any
   default     = []
 }
 
 variable "object_lock_configuration" {
-  description = "Map containing S3 object locking configuration."
+  description = "(Optional, Forces new resource) Map containing S3 object locking configuration."
   type        = any
   default     = {}
 }

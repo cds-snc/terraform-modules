@@ -14,6 +14,7 @@ module "log_bucket" {
   source            = "../../"
   billing_tag_value = "terratest"
   bucket_name       = "${var.name}-log"
+  force_destroy     = true
 }
 
 variable "name" {

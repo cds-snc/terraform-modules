@@ -10,7 +10,7 @@ resource "aws_s3_bucket" "this" {
   # checkov:skip=CKV_AWS_18:Ths bucket is used for access logging for other buckets
   # checkov:skip=CKV_AWS_21:Versioning is not required for access logs
   # checkov:skip=CKV2_AWS_6:Public access blocks are attached to policy which trickles down to this
-  # checkov:skip=CKV_AWS_143:Object lock configuration is configurable
+  # checkov:skip=CKV_AWS_143:Object lock configuration is not needed for log buckets
   bucket        = var.bucket_name
   bucket_prefix = var.bucket_prefix
 

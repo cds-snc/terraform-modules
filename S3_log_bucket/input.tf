@@ -2,7 +2,7 @@
 # Common tags
 ###
 variable "billing_tag_key" {
-  description = "(optional) The name of the billing tag"
+  description = "(Optional) The name of the billing tag"
   type        = string
   default     = "CostCentre"
 }
@@ -13,13 +13,13 @@ variable "billing_tag_value" {
 }
 
 variable "attach_elb_log_delivery_policy" {
-  description = "Controls if S3 bucket should have ELB log delivery policy attached"
+  description = "(Optional: default=false) Controls if S3 bucket should have ELB log delivery policy attached"
   type        = bool
   default     = false
 }
 
 variable "attach_lb_log_delivery_policy" {
-  description = "Controls if S3 bucket should have ALB/NLB log delivery policy attached"
+  description = "(Optional: default=false) Controls if S3 bucket should have ALB/NLB log delivery policy attached"
   type        = bool
   default     = false
 }
@@ -49,7 +49,7 @@ variable "force_destroy" {
 }
 
 variable "lifecycle_rule" {
-  description = "List of maps containing configuration of object lifecycle management."
+  description = "(Optional) List of maps containing configuration of object lifecycle management."
   type        = any
   default     = []
 }
