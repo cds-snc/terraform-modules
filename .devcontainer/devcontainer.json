@@ -41,6 +41,8 @@
 		"redhat.vscode-yaml"
 	],
 
+	"postCreateCommand": "go get -v golang.org/x/tools/gopls",
+
 	// Comment out connect as root instead. More info: https://aka.ms/vscode-remote/containers/non-root.
 	"remoteUser": "vscode"
 }
