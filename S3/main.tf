@@ -5,6 +5,8 @@
 */
 
 resource "aws_s3_bucket" "this" {
+  # checkov:skip=CKV_AWS_145:Encryption using AWS managed key is acceptable
+  # checkov:skip=CKV_AWS_144:Cross region replication is not required by default and may be unwanted
 
   bucket        = var.bucket_name
   bucket_prefix = var.bucket_prefix
