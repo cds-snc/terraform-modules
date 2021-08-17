@@ -76,7 +76,7 @@ data "aws_iam_policy_document" "elb_log_delivery" {
   count = var.attach_elb_log_delivery_policy ? 1 : 0
 
   statement {
-    sid = ""
+    sid = "AWSELBLogDeliveryWrite"
 
     principals {
       type        = "AWS"
