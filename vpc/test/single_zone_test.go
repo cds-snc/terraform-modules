@@ -49,16 +49,15 @@ func TestSingleZoneVpc(t *testing.T) {
 	assert.Equal(t, 1, len(internetGateway.InternetGateways))
 
 	// Check for NAT Gateway
-	natGatewayFilter := ec2.Filter{Name: awssdk.String("vpc-id"), Values: []*string{&vpcId}}
-	natGateway, errNat := client.DescribeNatGateways(&ec2.DescribeNatGatewaysInput{Filter: []*ec2.Filter{&natGatewayFilter}})
+	vpcFilter := ec2.Filter{Name: awssdk.String("vpc-id"), Values: []*string{&vpcId}}
+	natGateway, errNat := client.DescribeNatGateways(&ec2.DescribeNatGatewaysInput{Filter: []*ec2.Filter{&vpcFilter}})
 	require.NoError(t, errNat)
 	assert.Equal(t, 1, len(natGateway.NatGateways))
 
 	// Check NACL for rules blocking SSH and RDP
-	naclVpcFilter := ec2.Filter{Name: awssdk.String("vpc-id"), Values: []*string{&vpcId}}
 	naclPortSshFilter := ec2.Filter{Name: awssdk.String("entry.port-range.from"), Values: []*string{awssdk.String("22")}}
 	naclPortRdpFilter := ec2.Filter{Name: awssdk.String("entry.port-range.from"), Values: []*string{awssdk.String("3389")}}
-	nacls, errNacl := client.DescribeNetworkAcls(&ec2.DescribeNetworkAclsInput{Filters: []*ec2.Filter{&naclVpcFilter, &naclPortSshFilter, &naclPortRdpFilter}})
+	nacls, errNacl := client.DescribeNetworkAcls(&ec2.DescribeNetworkAclsInput{Filters: []*ec2.Filter{&vpcFilter, &naclPortSshFilter, &naclPortRdpFilter}})
 	require.NoError(t, errNacl)
 	assert.Equal(t, 1, len(nacls.NetworkAcls))
 
