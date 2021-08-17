@@ -10,7 +10,8 @@ function generate_docs  {
 }
 
 generate_docs "user_login_alarm"
-#generate_docs "rds"
 generate_docs "vpc"
 generate_docs "rds"
+generate_docs "S3"
+generate_docs "S3_log_bucket"
 echo "✅ Done generating docs"

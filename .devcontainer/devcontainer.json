@@ -38,7 +38,8 @@
 	"extensions": [
 		"golang.go",
 		"hashicorp.terraform",
-		"redhat.vscode-yaml"
+		"redhat.vscode-yaml",
+		"yzhang.markdown-all-in-one"
 	],
 
 	"postCreateCommand": "go get -v golang.org/x/tools/gopls",

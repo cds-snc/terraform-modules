@@ -23,6 +23,8 @@ jobs:
         module:
           - user_login_alarm
           - vpc
+          - S3
+          - S3_log_bucket
 
     steps:
     - name: Checkout
