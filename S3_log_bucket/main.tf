@@ -9,7 +9,7 @@ resource "aws_s3_bucket" "this" {
   # checkov:skip=CKV_AWS_144:Cross region replication is not required by default and may be unwanted
   # checkov:skip=CKV_AWS_18:Ths bucket is used for access logging for other buckets
   # checkov:skip=CKV_AWS_21:Versioning is not required for access logs
-  # checkov:skip=CKV_AWS_6:Public access blocks are attached to policy which trickles down to this
+  # checkov:skip=CKV2_AWS_6:Public access blocks are attached to policy which trickles down to this
   # checkov:skip=CKV_AWS_143:Object lock configuration is configurable
   bucket        = var.bucket_name
   bucket_prefix = var.bucket_prefix
