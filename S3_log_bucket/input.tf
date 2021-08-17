@@ -24,7 +24,6 @@ variable "attach_lb_log_delivery_policy" {
   default     = false
 }
 
-
 variable "bucket_name" {
   description = "(Optional, Forces new resource) The name of the bucket. If omitted, Terraform will assign a random, unique name."
   type        = string
