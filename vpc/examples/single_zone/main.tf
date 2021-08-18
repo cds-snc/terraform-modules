@@ -12,3 +12,7 @@ module "single_zone_vpc" {
   billing_tag_key   = "Business Unit"
   billing_tag_value = "Operations"
 }
+
+output "vpc_id" {
+  value = module.single_zone_vpc.vpc_id
+}

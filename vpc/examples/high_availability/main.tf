@@ -11,3 +11,7 @@ module "high_availability_vpc" {
   billing_tag_key   = "Business Unit"
   billing_tag_value = "Operations"
 }
+
+output "vpc_id" {
+  value = module.high_availability_vpc.vpc_id
+}
