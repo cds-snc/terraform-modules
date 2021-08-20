@@ -31,7 +31,6 @@ resource "aws_rds_cluster_instance" "instances" {
     Name = "${var.name}-instance-${count.index}"
     }
   )
-
 }
 
 resource "aws_rds_cluster" "cluster" {
@@ -48,9 +47,7 @@ resource "aws_rds_cluster" "cluster" {
   deletion_protection         = var.prevent_cluster_deletion
   allow_major_version_upgrade = var.allow_major_version_upgrade
 
-  # Ignore TFSEC rule as we are using managed KMS
-  storage_encrypted = true #tfsec:ignore:AWS051
-
+  storage_encrypted = true
 
   vpc_security_group_ids = [aws_security_group.rds_proxy.id]
 
@@ -67,8 +64,6 @@ resource "aws_db_subnet_group" "rds" {
     Name = "${var.name}-subnet-group"
   })
 }
-
-
 
 ###
 # RDS Proxy
@@ -101,9 +96,7 @@ resource "aws_db_proxy" "proxy" {
   })
 }
 
-
 resource "aws_cloudwatch_log_group" "proxy" {
-
   name              = "/aws/rds/proxy/${local.proxy_name}"
   retention_in_days = var.proxy_log_retention_in_days
 
