@@ -1,7 +1,7 @@
 # Database cluster with two instances
 module "two_instance_cluster" {
   source = "../../"
-  name   = "two-instance-cluster"
+  name   = "two-instance"
 
   database_name  = "terratest"
   engine_version = "11.9"
@@ -10,9 +10,10 @@ module "two_instance_cluster" {
   username       = "thebigcheese"
   password       = "pasword123"
 
-  # This is not recommended for prod, but required by our
-  # Terratests so they can cleanup after themselves
+  # These two settings are not recommended for prod, but required by our
+  # Terratests so they can properly destroy resources once finished.
   prevent_cluster_deletion = false
+  skip_final_snapshot      = true
 
   backup_retention_period = 1
   preferred_backup_window = "01:00-03:00"
@@ -27,7 +28,7 @@ module "two_instance_cluster" {
 # At least 2 subnets are required by the RDS proxy
 module "rds_cluster_vpc" {
   source = "../../../vpc/"
-  name   = "rds-cluster-vpc"
+  name   = "rds-cluster"
 
   high_availability = true
   enable_flow_log   = false

@@ -41,6 +41,12 @@ variable "prevent_cluster_deletion" {
   default     = true
 }
 
+variable "skip_final_snapshot" {
+  type        = bool
+  description = "(Optional, default 'false') This flag determines if a final database snapshot it taken before the cluster is deleted."
+  default     = false
+}
+
 ###
 # Common tags
 ###
