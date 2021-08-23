@@ -4,7 +4,6 @@ import (
 	"testing"
 	"time"
 
-	"github.com/gruntwork-io/terratest/modules/retry"
 	"github.com/gruntwork-io/terratest/modules/terraform"
 )
 
@@ -13,21 +12,27 @@ func TestTwoInstanceCluster(t *testing.T) {
 
 	region := "ca-central-1"
 
+	// The RDS proxy is flaky and will sometimes not attach properly due to the
+	// cluster being in an unexpected state.  These retries give things time to settle down.
+	maxRetries := 3
+	timeBetweenRetries := 10 * time.Second
+	retryableTerraformErrors := map[string]string{
+		".*error registering RDS DB Proxy.*": "Failed to register RDS DB proxy",
+	}
+
 	terraformOptions := &terraform.Options{
 		TerraformDir: "../examples/two_instance_cluster",
 		EnvVars: map[string]string{
 			"AWS_DEFAULT_REGION": region,
 		},
+		MaxRetries:               maxRetries,
+		TimeBetweenRetries:       timeBetweenRetries,
+		RetryableTerraformErrors: retryableTerraformErrors,
 	}
 
 	// Destroy resource once tests are finished
 	defer terraform.Destroy(t, terraformOptions)
 
 	// Create the resources
-	// Retries are used because RDS proxy will sometimes fail to attach to newly created clusters (timing issue)
-	maxRetries := 3
-	sleepBetweenRetries := 5 * time.Second
-	retry.DoWithRetry(t, "Create RDS resources", maxRetries, sleepBetweenRetries, func() (string, error) {
-		return terraform.InitAndApplyE(t, terraformOptions)
-	})
+	terraform.InitAndApply(t, terraformOptions)
 }
