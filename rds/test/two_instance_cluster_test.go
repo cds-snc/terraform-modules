@@ -2,7 +2,9 @@ package test
 
 import (
 	"testing"
+	"time"
 
+	"github.com/gruntwork-io/terratest/modules/retry"
 	"github.com/gruntwork-io/terratest/modules/terraform"
 )
 
@@ -22,5 +24,10 @@ func TestTwoInstanceCluster(t *testing.T) {
 	defer terraform.Destroy(t, terraformOptions)
 
 	// Create the resources
-	terraform.InitAndApply(t, terraformOptions)
+	// Retries are used because RDS proxy will sometimes fail to attach to newly created clusters (timing issue)
+	maxRetries := 3
+	sleepBetweenRetries := 5 * time.Second
+	retry.DoWithRetry(t, "Create RDS resources", maxRetries, sleepBetweenRetries, func() (string, error) {
+		return terraform.InitAndApplyE(t, terraformOptions)
+	})
 }
