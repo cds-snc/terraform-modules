@@ -21,10 +21,11 @@ jobs:
       fail-fast: false
       matrix:
         module:
+          - rds
+          - S3
+          - S3_log_bucket          
           - user_login_alarm
           - vpc
-          - S3
-          - S3_log_bucket
 
     steps:
     - name: Checkout
@@ -56,4 +57,4 @@ jobs:
       run: |
         cd ${{ matrix.module }}/test
         go mod tidy
-        go test -v
+        go test -v -timeout 1h
