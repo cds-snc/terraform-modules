@@ -1,0 +1,31 @@
+name: AWS nuke
+on:
+  workflow_dispatch:
+  schedule:
+    - cron: "0 5 * * *"
+
+env:
+  AWS_NUKE_VERSION: 2.15.0
+
+jobs:
+  aws-nuke:
+    runs-on: ubuntu-latest
+    steps:
+
+    - name: Checkout
+      uses: actions/checkout@v2
+
+    - name: Install AWS nuke
+      run: |
+        curl -Lo aws-nuke.tar.gz https://github.com/rebuy-de/aws-nuke/releases/download/v${{ env.AWS_NUKE_VERSION }}/aws-nuke-v${{ env.AWS_NUKE_VERSION }}-linux-amd64.tar.gz
+        tar -xzf aws-nuke.tar.gz -C bin
+        chmod +x bin/*
+        echo "$GITHUB_WORKSPACE/bin" >> $GITHUB_PATH
+
+    - name: AWS nuke
+      run: |
+        aws-nuke-v${{ env.AWS_NUKE_VERSION }}-linux-amd64 \
+          --config .github/workflows/assets/aws-nuke-config.yml \
+          --access-key-id ${{ secrets.AWS_ACCESS_KEY_ID }} \
+          --secret-access-key ${{ secrets.AWS_SECRET_ACCESS_KEY }} \
+          --force --force-sleep 3 --no-dry-run --quiet
