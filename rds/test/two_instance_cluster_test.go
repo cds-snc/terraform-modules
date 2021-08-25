@@ -6,6 +6,7 @@ import (
 	"testing"
 	"time"
 
+	"github.com/aws/aws-sdk-go/service/cloudwatchlogs"
 	"github.com/aws/aws-sdk-go/service/rds"
 	"github.com/gruntwork-io/terratest/modules/aws"
 	"github.com/gruntwork-io/terratest/modules/terraform"
@@ -16,9 +17,10 @@ import (
 func TestTwoInstanceCluster(t *testing.T) {
 	t.Parallel()
 
+	region := "ca-central-1"
 	clusterName := "two-instance-cluster"
 	proxyName := "two-instance-proxy"
-	region := "ca-central-1"
+	logGroupName := "/aws/rds/proxy/" + proxyName
 
 	// The RDS proxy is flaky and will sometimes not attach properly due to the
 	// cluster being in an unexpected state.  These retries give things time to settle down.
@@ -49,8 +51,9 @@ func TestTwoInstanceCluster(t *testing.T) {
 	rdsClusterId := terraform.Output(t, terraformOptions, "rds_cluster_id")
 	vpcId := terraform.Output(t, terraformOptions, "vpc_id")
 
-	// AWS RDS client to check the resources
+	// AWS clients to check the resources
 	rdsClient := aws.NewRdsClient(t, region)
+	cloudwatchClient := aws.NewCloudWatchLogsClient(t, region)
 
 	// Check the cluster
 	clusters, errClusters := rdsClient.DescribeDBClusters(&rds.DescribeDBClustersInput{DBClusterIdentifier: &rdsClusterId})
@@ -107,4 +110,10 @@ func TestTwoInstanceCluster(t *testing.T) {
 			assert.Equal(t, clusterName, *target.RdsResourceId)
 		}
 	}
+
+	// Check the CloudWatch log group
+	logGroups, errLogGroups := cloudwatchClient.DescribeLogGroups(&cloudwatchlogs.DescribeLogGroupsInput{LogGroupNamePrefix: &logGroupName})
+	require.NoError(t, errLogGroups)
+	assert.Equal(t, 1, len(logGroups.LogGroups))
+	assert.Equal(t, int64(14), *logGroups.LogGroups[0].RetentionInDays)
 }
