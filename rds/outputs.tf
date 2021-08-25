@@ -1,3 +1,8 @@
+output "rds_cluster_id" {
+  description = "The ID of the RDS cluster"
+  value       = aws_rds_cluster.cluster.id
+}
+
 output "proxy_connection_string_arn" {
   description = "The arn for the connectionstring to the RDS proxy"
   value       = aws_secretsmanager_secret.proxy_connection_string.arn

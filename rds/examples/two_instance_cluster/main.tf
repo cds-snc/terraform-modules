@@ -38,3 +38,15 @@ module "rds_cluster_vpc" {
   billing_tag_key   = "Business Unit"
   billing_tag_value = "Terratest"
 }
+
+output "rds_cluster_id" {
+  value = module.two_instance_cluster.rds_cluster_id
+}
+
+output "vpc_id" {
+  value = module.rds_cluster_vpc.vpc_id
+}
+
+output "private_subnet_ids" {
+  value = module.rds_cluster_vpc.private_subnet_ids
+}
