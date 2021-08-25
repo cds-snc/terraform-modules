@@ -1,0 +1,116 @@
+# Regions to remove resources from
+regions:
+- "global"
+- "us-east-1"
+- "ca-central-1"
+
+# Only delete resources from this account that do not match the filters
+accounts:
+  "124044056575":
+    filters:
+      CloudFormationStack:
+        - propery: Name
+          type: regex
+          value: ".*Landing-?Zone.*"
+      CloudTrailTrail:
+        - propery: Name
+          type: regex
+          value: ".*Landing-?Zone.*"
+      CloudWatchAlarm:
+        - propery: TargetId
+          type: regex
+          value: "(CloudTrail.*|IAMPolicyChanges|RootLogin)"
+      CloudWatchEventsTarget:
+        - propery: Name
+          type: regex
+          value: ".*Landing-?Zone.*"
+      CloudWatchLogsLogGroup:
+        - propery: ARN
+          type: regex
+          value: ".*Landing-?Zone.*"
+      IAMRole:
+        - propery: Name
+          type: regex
+          value: "(Landing-?Zone|AWSReservedSSO|CloudFormation)"
+      IAMRolePolicy:
+        - propery: RoleName
+          type: regex
+          value: "(Landing-?Zone|AWSReservedSSO|CloudFormation)"
+      IAMRolePolicyAttachment:
+        - propery: RoleName
+          type: regex
+          value: "(Landing-?Zone|AWSReservedSSO)"
+      LambdaFunction:
+        - propery: Name
+          type: regex
+          value: ".*Landing-?Zone.*"
+      SNSSubscription:
+        - propery: ARN
+          type: regex
+          value: ".*Landing-?Zone.*"
+      SNSTopic:
+        - propery: TopicARN
+          type: regex
+          value: ".*Landing-?Zone.*"
+      SSMParameter:
+        - propery: Name
+          type: regex
+          value: ".*local_sns_arn.*"
+
+# Do not delete any of the following resource types
+resource-types:
+  excludes:
+    - CloudWatchEventsRule
+    - ConfigServiceConfigRule
+    - ConfigServiceDeliveryChannel
+    - ConfigServiceConfigurationRecorder
+    - EC2DHCPOption
+    - ElasticacheCacheParameterGroup
+    - FMSPolicy
+    - FMSNotificationChannel
+    - IAMUserAccessKey
+    - IAMUserPolicyAttachment
+    - IAMLoginProfile
+    - IAMSAMLProvider
+    - IAMUser
+    - KMSAlias
+    - OpsWorksUserProfile
+    - SecurityHub
+
+# Accounts that will not have resources removed
+account-blocklist:
+- "595701125956"
+- "239043911459"
+- "977382588899"
+- "722713121070"
+- "009883649233"
+- "703399696403"
+- "276192857112"
+- "637287734259"
+- "339850311124"
+- "507252742351"
+- "820252213580"
+- "563894450011"
+- "160411545784"
+- "136676205420"
+- "894242006032"
+- "028051698106"
+- "773858180673"
+- "370045664819"
+- "005133826942"
+- "578240607488"
+- "537819865265"
+- "527289287223"
+- "687401027353"
+- "797698708703"
+- "349837941862"
+- "406214159830"
+- "591111259917"
+- "296255494825"
+- "414662622316"
+- "957818836222"
+- "515018049985"
+- "925306372402"
+- "283582579564"
+- "400061975867"
+- "059208818674"
