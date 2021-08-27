@@ -44,7 +44,7 @@ resource "aws_iam_policy" "vpc_metrics_flow_logs_write_policy" {
   name        = "VpcMetricsFlowLogsWrite"
   description = "IAM policy for writing flow logs in CloudWatch"
   path        = "/"
-  policy      = data.aws_iam_policy_document.vpc_metrics_flow_logs_write.json
+  policy      = data.aws_iam_policy_document.vpc_metrics_flow_logs_write[0].json
 }
 
 data "aws_iam_policy_document" "vpc_metrics_flow_logs_write" {
