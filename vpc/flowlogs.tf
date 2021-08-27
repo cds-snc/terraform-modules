@@ -33,6 +33,20 @@ data "aws_iam_policy_document" "vpc_flow_logs_service_principal" {
   }
 }
 
+resource "aws_iam_role_policy_attachment" "vpc_metrics_flow_logs_write_policy_attach" {
+  count      = var.enable_flow_log ? 1 : 0
+  role       = aws_iam_role.flow_logs[0].name
+  policy_arn = aws_iam_policy.vpc_metrics_flow_logs_write_policy[0].arn
+}
+
+resource "aws_iam_policy" "vpc_metrics_flow_logs_write_policy" {
+  count       = var.enable_flow_log ? 1 : 0
+  name        = "VpcMetricsFlowLogsWrite"
+  description = "IAM policy for writing flow logs in CloudWatch"
+  path        = "/"
+  policy      = data.aws_iam_policy_document.vpc_metrics_flow_logs_write[0].json
+}
+
 data "aws_iam_policy_document" "vpc_metrics_flow_logs_write" {
 
   count = var.enable_flow_log ? 1 : 0
