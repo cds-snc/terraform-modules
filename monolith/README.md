@@ -1,3 +1,6 @@
+# Usage
+
+<!--- BEGIN_TF_DOCS --->
 
 A lambda that runs a monolith.
 Examples https://github.com/cds-snc/scan-websites
@@ -10,7 +13,7 @@ No requirements.
 
 | Name | Version |
 |------|---------|
-| <a name="provider_aws"></a> [aws](#provider\_aws) | 3.56.0 |
+| <a name="provider_aws"></a> [aws](#provider\_aws) | n/a |
 
 ## Modules
 
@@ -41,3 +44,6 @@ No modules.
 ## Outputs
 
 No outputs.
+
+<!--- END_TF_DOCS --->
+
