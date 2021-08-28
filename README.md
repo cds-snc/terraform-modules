@@ -10,6 +10,9 @@
 - [User Login Alarm](user_login_alarm)
 - [VPC](vpc)
 - [RDS](rds)
+- [S3](s3)
+- [S3_log_bucket](S3_log_bucket)
+- [Monolith](Monolith)
 
 ## How to use modules in this repo
 
