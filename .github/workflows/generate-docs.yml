@@ -17,4 +17,5 @@ jobs:
         output-file: README.md
         output-method: replace
         config-file: .terraform-docs.yml
+        git-commit-message: "docs(terraform-docs): automated update"
         git-push: "true"
