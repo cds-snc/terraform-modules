@@ -54,7 +54,6 @@ data "aws_iam_policy_document" "vpc_metrics_flow_logs_write" {
     effect = "Allow"
 
     actions = [
-      "logs:CreateLogGroup",
       "logs:CreateLogStream",
       "logs:PutLogEvents",
       "logs:DescribeLogGroups",
