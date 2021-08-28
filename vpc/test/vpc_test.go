@@ -8,6 +8,12 @@ import (
 	"github.com/stretchr/testify/require"
 )
 
+type naclRule struct {
+	from   string
+	to     string
+	action string
+}
+
 // Gets a VPCs internet gateway
 func GetVpcInternetGateways(t *testing.T, client *ec2.EC2, vpcId string) *ec2.DescribeInternetGatewaysOutput {
 	igwFilter := ec2.Filter{Name: aws.String("attachment.vpc-id"), Values: []*string{&vpcId}}
@@ -28,14 +34,18 @@ func GetVpcNatGateways(t *testing.T, client *ec2.EC2, vpcId string) *ec2.Describ
 	return natGateways
 }
 
-// Gets the NACLs for a VPC that deny access to port 22 and 3389
-func GetVpcDenyNetworkAcls(t *testing.T, client *ec2.EC2, vpcId string) *ec2.DescribeNetworkAclsOutput {
-	vpcFilter := ec2.Filter{Name: aws.String("vpc-id"), Values: []*string{&vpcId}}
-	naclPortSshFilter := ec2.Filter{Name: aws.String("entry.port-range.from"), Values: []*string{aws.String("22")}}
-	naclPortRdpFilter := ec2.Filter{Name: aws.String("entry.port-range.from"), Values: []*string{aws.String("3389")}}
-	denyActionFilter := ec2.Filter{Name: aws.String("entry.rule-action"), Values: []*string{aws.String("deny")}}
+// Gets the NACLs for a VPC, filtered by rule
+func GetVpcNetworkAcls(t *testing.T, client *ec2.EC2, vpcId string, naclRules *[]naclRule) *ec2.DescribeNetworkAclsOutput {
+	filters := make([]*ec2.Filter, 0)
+	filters = append(filters, &ec2.Filter{Name: aws.String("vpc-id"), Values: []*string{&vpcId}})
 
-	networkAcls, err := client.DescribeNetworkAcls(&ec2.DescribeNetworkAclsInput{Filters: []*ec2.Filter{&vpcFilter, &naclPortSshFilter, &naclPortRdpFilter, &denyActionFilter}})
+	for _, rule := range *naclRules {
+		filters = append(filters, &ec2.Filter{Name: aws.String("entry.port-range.from"), Values: []*string{&rule.from}})
+		filters = append(filters, &ec2.Filter{Name: aws.String("entry.port-range.to"), Values: []*string{&rule.to}})
+		filters = append(filters, &ec2.Filter{Name: aws.String("entry.rule-action"), Values: []*string{&rule.action}})
+	}
+
+	networkAcls, err := client.DescribeNetworkAcls(&ec2.DescribeNetworkAclsInput{Filters: filters})
 	require.NoError(t, err)
 
 	return networkAcls

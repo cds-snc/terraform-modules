@@ -5,6 +5,7 @@ module "high_availability_vpc" {
 
   high_availability = true
   enable_flow_log   = true
+  allow_https_out   = true
   block_ssh         = false
   block_rdp         = false
 

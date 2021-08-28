@@ -44,12 +44,18 @@ No modules.
 | [aws_default_security_group.default](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/default_security_group) | resource |
 | [aws_eip.nat](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/eip) | resource |
 | [aws_flow_log.flow_logs](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/flow_log) | resource |
+| [aws_iam_policy.vpc_metrics_flow_logs_write_policy](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/iam_policy) | resource |
 | [aws_iam_role.flow_logs](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/iam_role) | resource |
+| [aws_iam_role_policy_attachment.vpc_metrics_flow_logs_write_policy_attach](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/iam_role_policy_attachment) | resource |
 | [aws_internet_gateway.gw](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/internet_gateway) | resource |
 | [aws_nat_gateway.nat_gw](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/nat_gateway) | resource |
 | [aws_network_acl.main](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/network_acl) | resource |
 | [aws_network_acl_rule.block_rdp](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/network_acl_rule) | resource |
 | [aws_network_acl_rule.block_ssh](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/network_acl_rule) | resource |
+| [aws_network_acl_rule.ephemeral_egress](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/network_acl_rule) | resource |
+| [aws_network_acl_rule.ephemeral_ingress](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/network_acl_rule) | resource |
+| [aws_network_acl_rule.https_egress](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/network_acl_rule) | resource |
+| [aws_network_acl_rule.https_ingress](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/network_acl_rule) | resource |
 | [aws_route.private_nat_gateway](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/route) | resource |
 | [aws_route.public_internet_gateway](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/route) | resource |
 | [aws_route_table.private](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/route_table) | resource |
@@ -67,13 +73,14 @@ No modules.
 
 | Name | Description | Type | Default | Required |
 |------|-------------|------|---------|:--------:|
-| <a name="input_billing_tag_key"></a> [billing\_tag\_key](#input\_billing\_tag\_key) | The name of the billing tag | `string` | `"CostCentre"` | no |
-| <a name="input_billing_tag_value"></a> [billing\_tag\_value](#input\_billing\_tag\_value) | (required) The value of the billing tag | `string` | n/a | yes |
-| <a name="input_block_rdp"></a> [block\_rdp](#input\_block\_rdp) | Whether or not to block Port 3389 | `bool` | `true` | no |
-| <a name="input_block_ssh"></a> [block\_ssh](#input\_block\_ssh) | Whether or not to block Port 22 | `bool` | `true` | no |
-| <a name="input_enable_flow_log"></a> [enable\_flow\_log](#input\_enable\_flow\_log) | Whether or not to enable VPC Flow Logs | `bool` | `false` | no |
-| <a name="input_high_availability"></a> [high\_availability](#input\_high\_availability) | Create either one set of subnets or as many as there are VPCs | `bool` | `false` | no |
-| <a name="input_name"></a> [name](#input\_name) | (required) the name of the vpc | `string` | n/a | yes |
+| <a name="input_allow_https_out"></a> [allow\_https\_out](#input\_allow\_https\_out) | (Optional, default 'true') Allow HTTPS connections out to the internet | `bool` | `true` | no |
+| <a name="input_billing_tag_key"></a> [billing\_tag\_key](#input\_billing\_tag\_key) | (Optional, default 'CostCentre') The name of the billing tag | `string` | `"CostCentre"` | no |
+| <a name="input_billing_tag_value"></a> [billing\_tag\_value](#input\_billing\_tag\_value) | (Required) The value of the billing tag | `string` | n/a | yes |
+| <a name="input_block_rdp"></a> [block\_rdp](#input\_block\_rdp) | (Optional, default 'true') Whether or not to block Port 3389 | `bool` | `true` | no |
+| <a name="input_block_ssh"></a> [block\_ssh](#input\_block\_ssh) | (Optional, default 'true') Whether or not to block Port 22 | `bool` | `true` | no |
+| <a name="input_enable_flow_log"></a> [enable\_flow\_log](#input\_enable\_flow\_log) | (Optional, default 'false') Whether or not to enable VPC Flow Logs | `bool` | `false` | no |
+| <a name="input_high_availability"></a> [high\_availability](#input\_high\_availability) | (Optional, default 'false') Create 3 public and 3 private subnets across 3 availability zones in the region. | `bool` | `false` | no |
+| <a name="input_name"></a> [name](#input\_name) | (Required) The name of the vpc | `string` | n/a | yes |
 
 ## Outputs
 
