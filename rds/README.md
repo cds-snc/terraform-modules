@@ -1,3 +1,6 @@
+# Usage
+
+<!--- BEGIN_TF_DOCS --->
 This module will create an RDS Postgresql Cluster behind an RDS Proxy to manage connections.
 
 ## Requirements
@@ -56,6 +59,7 @@ No modules.
 | <a name="input_prevent_cluster_deletion"></a> [prevent\_cluster\_deletion](#input\_prevent\_cluster\_deletion) | (Optional, default 'true') This flag prevents deletion of the RDS cluster. <br/> **Please Note:** We cannot prevent deletion of RDS instances in the module, we recommend you add `lifecycle { prevent_deletion = true }` to the module to prevent instance deletion | `bool` | `true` | no |
 | <a name="input_proxy_debug_logging"></a> [proxy\_debug\_logging](#input\_proxy\_debug\_logging) | (Optional, default 'false') Allows the proxy to log debug information. <br/> **Please Note:** This will include all sql commands and potential sensitive information | `bool` | `false` | no |
 | <a name="input_proxy_log_retention_in_days"></a> [proxy\_log\_retention\_in\_days](#input\_proxy\_log\_retention\_in\_days) | (Optional, default '14') The number of days to retain the proxy logs in cloudwatch | `number` | `14` | no |
+| <a name="input_skip_final_snapshot"></a> [skip\_final\_snapshot](#input\_skip\_final\_snapshot) | (Optional, default 'false') This flag determines if a final database snapshot it taken before the cluster is deleted. | `bool` | `false` | no |
 | <a name="input_subnet_ids"></a> [subnet\_ids](#input\_subnet\_ids) | (Required) The name of the subnet the DB has to stay in | `set(string)` | n/a | yes |
 | <a name="input_username"></a> [username](#input\_username) | (Required) The username for the admin user for the db | `string` | n/a | yes |
 | <a name="input_vpc_id"></a> [vpc\_id](#input\_vpc\_id) | (Required) The vpc to run the cluster and related infrastructure in | `string` | n/a | yes |
@@ -69,3 +73,7 @@ No modules.
 | <a name="output_proxy_endpoint"></a> [proxy\_endpoint](#output\_proxy\_endpoint) | n/a |
 | <a name="output_proxy_security_group_arn"></a> [proxy\_security\_group\_arn](#output\_proxy\_security\_group\_arn) | n/a |
 | <a name="output_proxy_security_group_id"></a> [proxy\_security\_group\_id](#output\_proxy\_security\_group\_id) | n/a |
+| <a name="output_rds_cluster_id"></a> [rds\_cluster\_id](#output\_rds\_cluster\_id) | The ID of the RDS cluster |
+
+<!--- END_TF_DOCS --->
+
