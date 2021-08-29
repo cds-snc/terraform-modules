@@ -1,4 +1,4 @@
-/* RDS Postgresql Cluster
+/* # RDS Postgresql Cluster
 * This module will create an RDS Postgresql Cluster behind an RDS Proxy to manage connections.
 */
 
