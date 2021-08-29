@@ -18,6 +18,4 @@ jobs:
         output-method: replace
         git-commit-message: "docs(terraform-docs): automated update"
         git-push: "true"
-        template: |
-          <!--- BEGIN\_TF\_DOCS --->
-          <!--- END\_TF\_DOCS --->
+        template: <!--- BEGIN\_TF\_DOCS ---><br/><!--- END\_TF\_DOCS ---><br/>
