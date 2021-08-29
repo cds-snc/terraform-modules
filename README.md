@@ -4,6 +4,7 @@
 - [CDS Common Terraform Modules](#cds-common-terraform-modules)
   - [Module List](#module-list)
   - [How to use modules in this repo](#how-to-use-modules-in-this-repo)
+  - [Documentation Generation](#documentation-generation)
 
 ## Module List
 
@@ -32,3 +33,11 @@ module "console_login_alarms" {
   alarm_actions_success  = ["alarm_arn"]
 }
 ```
+
+## Documentation Generation
+
+Documentation is automatically generated using the framework (terraform-docs)[https://terraform-docs.io/].
+
+At a bare minimum you need to add a header to the main.tf file https://terraform-docs.io/user-guide/how-to/#module-header. You also need to document your variables. Optionally you can document your outputs if they aren't descriptive enough.
+
+A github action will detect changes and update documentation in the PR.
