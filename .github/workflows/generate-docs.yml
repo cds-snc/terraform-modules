@@ -13,9 +13,9 @@ jobs:
     - name: Render terraform docs and push changes back to PR
       uses: terraform-docs/gh-actions@v0.10.0
       with:
-        working-dir: monolith,rds,S3,S3_log_bucket,vpc
+        working-dir: rds,S3,S3_log_bucket,vpc
         output-file: README.md
         output-method: replace
-        config-file: .terraform-docs.yml
+        config-file: ../.terraform-docs.yml
         git-commit-message: "docs(terraform-docs): automated update"
         git-push: "true"
