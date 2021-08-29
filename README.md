@@ -3,14 +3,34 @@
 
 - [CDS Common Terraform Modules](#cds-common-terraform-modules)
   - [Module List](#module-list)
+  - [What is this repo?](#what-is-this-repo)
+  - [Why would you use this repo](#why-would-you-use-this-repo)
   - [How to use modules in this repo](#how-to-use-modules-in-this-repo)
   - [Documentation Generation](#documentation-generation)
+  - [Scaffolding](#scaffolding)
 
 ## Module List
 
 - [User Login Alarm](user_login_alarm)
 - [VPC](vpc)
 - [RDS](rds)
+- [S3](S3)
+- [S3_log_bucket](S3_log_bucket)
+
+## What is this repo?
+
+This repo is a collection of modules made by folks at CDS. It is a collection of policies, best practices, and repeated patterns. You do not have to use these modules but it is recommended by the **SREs** at CDS that you do. If you have a reason for not using one of these modules we'd love to here about it so we can modify them to fit your need.
+
+
+## Why would you use this repo
+
+- This code is currently in use in several products
+- This code is tested by terratest
+- This code is fully documented
+- This code follows what CDS SREs consider best practices
+- The more people that use it the better it is.
+- The code is opinionated and so removes the need for discussion on certain topics.
+- There are only so many ways to put together infrastructure so it's probably going to end up looking pretty close to this anyways. You might as well not reinvent the wheel here.
 
 ## How to use modules in this repo
 
@@ -41,3 +61,15 @@ Documentation is automatically generated using the framework (terraform-docs)[ht
 At a bare minimum you need to add a header to the main.tf file https://terraform-docs.io/user-guide/how-to/#module-header. You also need to document your variables. Optionally you can document your outputs if they aren't descriptive enough.
 
 A github action will detect changes and update documentation in the PR.
+
+## Scaffolding
+
+When creating a module it's recommended you use a scaffold to create the minimum required files for a module. 
+
+You run the scaffold like so:
+
+```bash
+./bin/scaffold module_name
+```
+
+**Please Note**: `output.tf` is optional if you have no outputs, `locals.tf` is also optional if you don't have any taggable resources.
