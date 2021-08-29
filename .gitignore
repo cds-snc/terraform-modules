@@ -2,6 +2,7 @@
 
 .tool-versions
 .terraform*
+!.terraform-docs.yml
 test.tf
 *.tfstate*
 
