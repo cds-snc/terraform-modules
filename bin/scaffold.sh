@@ -2,12 +2,12 @@
 
 module=$1
 
-mkdir -p $module
+mkdir -p "$module"
 
 echo 🚧 Creating module
 
-echo 📝 Create $module/input.tf
-cat << EOF > $module/input.tf
+echo 📝 Create "$module/input.tf"
+cat << EOF > "$module/input.tf"
 
 variable "billing_tag_key" {
   description = "(Optional, default 'CostCentre') The name of the billing tag"
@@ -22,8 +22,8 @@ variable "billing_tag_value" {
 
 EOF
 
-echo 📝 Create $module/locals.tf
-cat << EOF > $module/locals.tf
+echo 📝 Create "$module/locals.tf"
+cat << EOF > "$module/locals.tf"
 
 locals {
   common_tags = {
@@ -34,8 +34,8 @@ locals {
 
 EOF
 
-echo 📝 Create $module/main.tf
-cat << EOF > $module/main.tf
+echo 📝 Create "$module/main.tf"
+cat << EOF > "$module/main.tf"
 /* # $module
 *
 */
@@ -44,8 +44,8 @@ EOF
 echo 👉 Touching output.tf
 touch output.tf
 
-[ -f $module/input.tf ] 
-[ -f $module/locals.tf ] 
-[ -f $module/main.tf ] 
-[ -f $module/output.tf ] 
+[ -f "$module/input.tf" ]
+[ -f "$module/locals.tf" ]
+[ -f "$module/main.tf" ]
+[ -f "$module/output.tf" ]
 echo ✅ Done
