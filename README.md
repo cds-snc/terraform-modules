@@ -69,7 +69,9 @@ When creating a module it's recommended you use a scaffold to create the minimum
 You run the scaffold like so:
 
 ```bash
-./bin/scaffold module_name
+make scaffold
 ```
+
+The script will prompt you for a scaffold name.
 
 **Please Note**: `output.tf` is optional if you have no outputs, `locals.tf` is also optional if you don't have any taggable resources.
