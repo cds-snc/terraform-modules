@@ -33,5 +33,5 @@ jobs:
         git config --local user.email "action@github.com"
         git config --local user.name "Auto"
         git add -A
-        git commit -m "Adding metrics on `date '+%Y-%m-%d'`" -a
-        git push https://${GITHUB_ACTOR}:${{ secrets.GITHUB_TOKEN }}@github.com/${GITHUB_REPOSITORY}.git HEAD:main
+        git commit -m "docs: auto-generating documentation" -a
+        git push
