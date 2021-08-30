@@ -33,5 +33,5 @@ jobs:
         git config --local user.email "action@github.com"
         git config --local user.name "Auto"
         git add -A
-        git commit -m "docs: auto-generating documentation" -a
+        git diff-index --quiet HEAD || git commit -m "docs: auto-generating documentation" -a
         git push
