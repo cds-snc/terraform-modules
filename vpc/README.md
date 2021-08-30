@@ -52,10 +52,14 @@ No modules.
 | [aws_network_acl.main](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/network_acl) | resource |
 | [aws_network_acl_rule.block_rdp](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/network_acl_rule) | resource |
 | [aws_network_acl_rule.block_ssh](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/network_acl_rule) | resource |
-| [aws_network_acl_rule.ephemeral_egress](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/network_acl_rule) | resource |
-| [aws_network_acl_rule.ephemeral_ingress](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/network_acl_rule) | resource |
-| [aws_network_acl_rule.https_egress](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/network_acl_rule) | resource |
-| [aws_network_acl_rule.https_ingress](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/network_acl_rule) | resource |
+| [aws_network_acl_rule.https_request_egress_443](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/network_acl_rule) | resource |
+| [aws_network_acl_rule.https_request_egress_ephemeral](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/network_acl_rule) | resource |
+| [aws_network_acl_rule.https_request_ingress_443](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/network_acl_rule) | resource |
+| [aws_network_acl_rule.https_request_ingress_ephemeral](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/network_acl_rule) | resource |
+| [aws_network_acl_rule.https_response_egress_443](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/network_acl_rule) | resource |
+| [aws_network_acl_rule.https_response_egress_ephemeral](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/network_acl_rule) | resource |
+| [aws_network_acl_rule.https_response_ingress_443](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/network_acl_rule) | resource |
+| [aws_network_acl_rule.https_response_ingress_ephemeral](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/network_acl_rule) | resource |
 | [aws_route.private_nat_gateway](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/route) | resource |
 | [aws_route.public_internet_gateway](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/route) | resource |
 | [aws_route_table.private](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/route_table) | resource |
@@ -73,10 +77,10 @@ No modules.
 
 | Name | Description | Type | Default | Required |
 |------|-------------|------|---------|:--------:|
-| <a name="input_allow_ephemeral_egress"></a> [allow\_ephemeral\_egress](#input\_allow\_ephemeral\_egress) | (Optional, default 'false') Allow connections on ports 1024 to 65535 out to the internet | `bool` | `false` | no |
-| <a name="input_allow_ephemeral_ingress"></a> [allow\_ephemeral\_ingress](#input\_allow\_ephemeral\_ingress) | (Optional, default 'false') Allow connections on ports 1024 to 65535 in from the internet | `bool` | `false` | no |
-| <a name="input_allow_https_egress"></a> [allow\_https\_egress](#input\_allow\_https\_egress) | (Optional, default 'false') Allow HTTPS connections on port 443 out to the internet | `bool` | `false` | no |
-| <a name="input_allow_https_ingress"></a> [allow\_https\_ingress](#input\_allow\_https\_ingress) | (Optional, default 'false') Allow HTTPS connections on port 443 in from the internet | `bool` | `false` | no |
+| <a name="input_allow_https_request_in"></a> [allow\_https\_request\_in](#input\_allow\_https\_request\_in) | (Optional, default 'false') Allow HTTPS connections on port 443 in from the internet | `bool` | `false` | no |
+| <a name="input_allow_https_request_in_response"></a> [allow\_https\_request\_in\_response](#input\_allow\_https\_request\_in\_response) | (Optional, default 'false') Allow a response back to the internet in reply to a request | `bool` | `false` | no |
+| <a name="input_allow_https_request_out"></a> [allow\_https\_request\_out](#input\_allow\_https\_request\_out) | (Optional, default 'false') Allow HTTPS connections on port 443 out to the internet | `bool` | `false` | no |
+| <a name="input_allow_https_request_out_response"></a> [allow\_https\_request\_out\_response](#input\_allow\_https\_request\_out\_response) | (Optional, default 'false') Allow a response back from the internet in reply to a request | `bool` | `false` | no |
 | <a name="input_billing_tag_key"></a> [billing\_tag\_key](#input\_billing\_tag\_key) | (Optional, default 'CostCentre') The name of the billing tag | `string` | `"CostCentre"` | no |
 | <a name="input_billing_tag_value"></a> [billing\_tag\_value](#input\_billing\_tag\_value) | (Required) The value of the billing tag | `string` | n/a | yes |
 | <a name="input_block_rdp"></a> [block\_rdp](#input\_block\_rdp) | (Optional, default 'true') Whether or not to block Port 3389 | `bool` | `true` | no |

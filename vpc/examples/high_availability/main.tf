@@ -6,10 +6,13 @@ module "high_availability_vpc" {
   high_availability = true
   enable_flow_log   = true
 
-  # Allow services to connect out to the internet
-  allow_https_egress      = true
-  allow_ephemeral_egress  = true
-  allow_ephemeral_ingress = true
+  # Allow VPC resources to send requests out to the internet and recieve a response
+  allow_https_request_out          = true
+  allow_https_request_out_response = true
+
+  # Allow users to send requests in from the internet and receive a response
+  allow_https_request_in          = true
+  allow_https_request_in_response = true  
 
   block_ssh = false
   block_rdp = false
