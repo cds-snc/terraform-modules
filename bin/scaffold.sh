@@ -1,10 +1,22 @@
 #!/bin/bash
 
-module=$1
+echo 🚧 Terraform Module Scaffold 🚧
+read -p "Scaffold Name: " module
 
 mkdir -p "$module"
 
 echo 🚧 Creating module
+
+echo 📝 Create "$module/Makefile"
+cat << EOF > "$module/Makefile"
+.PHONY: fmt docs
+
+fmt:
+	@terraform fmt -recursive
+
+docs:
+	@terraform-docs markdown -c ../.terraform-docs.yml . > README.md
+EOF
 
 echo 📝 Create "$module/input.tf"
 cat << EOF > "$module/input.tf"
@@ -41,9 +53,10 @@ cat << EOF > "$module/main.tf"
 */
 EOF
 
-echo 👉 Touching output.tf
-touch output.tf
+echo 👉 Touching "$module/output.tf"
+touch "$module/output.tf"
 
+[ -f "$module/Makefile" ]
 [ -f "$module/input.tf" ]
 [ -f "$module/locals.tf" ]
 [ -f "$module/main.tf" ]

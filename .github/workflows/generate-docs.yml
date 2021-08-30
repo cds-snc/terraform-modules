@@ -10,12 +10,28 @@ jobs:
       with:
         ref: ${{ github.event.pull_request.head.ref }}
 
-    - name: Render terraform docs and push changes back to PR
-      uses: terraform-docs/gh-actions@v0.10.0
-      with:
-        working-dir: rds,S3,S3_log_bucket,vpc
-        output-file: README.md
-        output-method: replace
-        git-commit-message: "docs(terraform-docs): automated update"
-        git-push: "true"
-        template: <!--- BEGIN\_TF\_DOCS ---><br/><!--- END\_TF\_DOCS ---><br/>
+    - name: Install TF Docs
+      env:
+        TERRAFORM_DOCS_VERSION: 0.15.0
+      run: |
+        wget -0 terraform-docs.tar.gz "https://github.com/terraform-docs/terraform-docs/releases/download/v${TERRAFORM_DOCS_VERSION}/terraform-docs-v${TERRAFORM_DOCS_VERSION}-linux-amd64.tar.gz"
+        tar -xzf terraform-docs.tar.gz
+        chmod +x terraform-docs
+        mv terraform-docs bin/terraform-docs
+        echo "$GITHUB_WORKSPACE/bin" >> $GITHUB_PATH 
+        
+    - name: Generate Docs
+      run: make docs
+    
+    - name: Clean up workspace
+      run: |
+        rm bin/terraform-docs
+        rm terraform-docs.tar.gz
+
+    - name: Commit changes
+      run: |
+        git config --local user.email "action@github.com"
+        git config --local user.name "Auto"
+        git add -A
+        git commit -m "Adding metrics on `date '+%Y-%m-%d'`" -a
+        git push https://${GITHUB_ACTOR}:${{ secrets.GITHUB_TOKEN }}@github.com/${GITHUB_REPOSITORY}.git HEAD:main
