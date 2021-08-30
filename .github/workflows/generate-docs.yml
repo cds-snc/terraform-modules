@@ -14,7 +14,7 @@ jobs:
       env:
         TERRAFORM_DOCS_VERSION: 0.15.0
       run: |
-        wget -0 terraform-docs.tar.gz "https://github.com/terraform-docs/terraform-docs/releases/download/v${TERRAFORM_DOCS_VERSION}/terraform-docs-v${TERRAFORM_DOCS_VERSION}-linux-amd64.tar.gz"
+        wget -O terraform-docs.tar.gz "https://github.com/terraform-docs/terraform-docs/releases/download/v${TERRAFORM_DOCS_VERSION}/terraform-docs-v${TERRAFORM_DOCS_VERSION}-linux-amd64.tar.gz"
         tar -xzf terraform-docs.tar.gz
         chmod +x terraform-docs
         mv terraform-docs bin/terraform-docs
