@@ -1,75 +1,117 @@
+# terraform-docs
 
-# CDS Common Terraform Modules
+[![Build Status](https://github.com/terraform-docs/terraform-docs/workflows/ci/badge.svg)](https://github.com/terraform-docs/terraform-docs/actions) [![GoDoc](https://pkg.go.dev/badge/github.com/terraform-docs/terraform-docs)](https://pkg.go.dev/github.com/terraform-docs/terraform-docs) [![Go Report Card](https://goreportcard.com/badge/github.com/terraform-docs/terraform-docs)](https://goreportcard.com/report/github.com/terraform-docs/terraform-docs) [![Codecov Report](https://codecov.io/gh/terraform-docs/terraform-docs/branch/master/graph/badge.svg)](https://codecov.io/gh/terraform-docs/terraform-docs) [![License](https://img.shields.io/github/license/terraform-docs/terraform-docs)](https://github.com/terraform-docs/terraform-docs/blob/master/LICENSE) [![Latest release](https://img.shields.io/github/v/release/terraform-docs/terraform-docs)](https://github.com/terraform-docs/terraform-docs/releases)
 
-- [CDS Common Terraform Modules](#cds-common-terraform-modules)
-  - [Module List](#module-list)
-  - [What is this repo?](#what-is-this-repo)
-  - [Why would you use this repo](#why-would-you-use-this-repo)
-  - [How to use modules in this repo](#how-to-use-modules-in-this-repo)
-  - [Documentation Generation](#documentation-generation)
-  - [Scaffolding](#scaffolding)
+![terraform-docs-teaser](./images/terraform-docs-teaser.png)
 
-## Module List
+Sponsored by [Scalr - Terraform Automation & Collaboration Software](https://scalr.com/?utm_source=terraform-docs)
 
-- [User Login Alarm](user_login_alarm)
-- [VPC](vpc)
-- [RDS](rds)
-- [S3](S3)
-- [S3_log_bucket](S3_log_bucket)
+<a href="https://www.scalr.com/?utm_source=terraform-docs" target="_blank"><img src="https://bit.ly/2T7Qm3U" alt="Scalr - Terraform Automation & Collaboration Software" width="175" height="40" /></a>
 
-## What is this repo?
+## What is terraform-docs
 
-This repo is a collection of modules made by folks at CDS. It is a collection of policies, best practices, and repeated patterns. You do not have to use these modules but it is recommended by the **SREs** at CDS that you do. If you have a reason for not using one of these modules we'd love to here about it so we can modify them to fit your need.
+A utility to generate documentation from Terraform modules in various output formats.
 
+## Documentation
 
-## Why would you use this repo
+- **Users**
+  - Read the [User Guide] to learn how to use terraform-docs
+  - Read the [Formats Guide] to learn about different output formats of terraform-docs
+  - Refer to [Config File Reference] for all the available configuration options
+- **Developers**
+  - Read [Contributing Guide] before submitting a pull request
 
-- This code is currently in use in several products
-- This code is tested by terratest
-- This code is fully documented
-- This code follows what CDS SREs consider best practices
-- The more people that use it the better it is.
-- The code is opinionated and so removes the need for discussion on certain topics.
-- There are only so many ways to put together infrastructure so it's probably going to end up looking pretty close to this anyways. You might as well not reinvent the wheel here.
+Visit [our website] for all documentation.
 
-## How to use modules in this repo
+## Installation
 
-[Official instructions for Terraform module usage](https://www.terraform.io/docs/language/modules/syntax.html)
-
-To reference modules in this repo use the following `source` setting:
-
-```hcl
-  source = "github.com/cds-snc/terraform-modules?ref=<<version>>//<<Module Name>>
-```
-
-for instance the user_login_alarm module resource v0.0.1 would look like the following:
-
-```hcl
-module "console_login_alarms" {
-  source                 = "github.com/cds-snc/terraform-modules?ref=v0.0.1//user_login_alarm
-  account_names          = ["account1", "account2"]
-  log_group_name         = "cloudtrailLogGroup"
-  alarm_actions_failures = ["alarm_arn"]
-  alarm_actions_success  = ["alarm_arn"]
-}
-```
-
-## Documentation Generation
-
-Documentation is automatically generated using the framework (terraform-docs)[https://terraform-docs.io/].
-
-At a bare minimum you need to add a header to the main.tf file https://terraform-docs.io/user-guide/how-to/#module-header. You also need to document your variables. Optionally you can document your outputs if they aren't descriptive enough.
-
-A github action will detect changes and update documentation in the PR.
-
-## Scaffolding
-
-When creating a module it's recommended you use a scaffold to create the minimum required files for a module. 
-
-You run the scaffold like so:
+The latest version can be installed using `go get`:
 
 ```bash
-./bin/scaffold module_name
+GO111MODULE="on" go get github.com/terraform-docs/terraform-docs@v0.15.0
 ```
 
-**Please Note**: `output.tf` is optional if you have no outputs, `locals.tf` is also optional if you don't have any taggable resources.
+**NOTE:** to download any version **before** `v0.9.1` (inclusive) you need to use to
+old module namespace (`segmentio`):
+
+```bash
+# only for v0.9.1 and before
+GO111MODULE="on" go get github.com/segmentio/terraform-docs@v0.9.1
+```
+
+**NOTE:** please use the latest Go to do this, minimum `go1.16` or greater.
+
+This will put `terraform-docs` in `$(go env GOPATH)/bin`. If you encounter the error
+`terraform-docs: command not found` after installation then you may need to either add
+that directory to your `$PATH` as shown [here] or do a manual installation by cloning
+the repo and run `make build` from the repository which will put `terraform-docs` in:
+
+```bash
+$(go env GOPATH)/src/github.com/terraform-docs/terraform-docs/bin/$(uname | tr '[:upper:]' '[:lower:]')-amd64/terraform-docs
+```
+
+Stable binaries are also available on the [releases] page. To install, download the
+binary for your platform from "Assets" and place this into your `$PATH`:
+
+```bash
+curl -Lo ./terraform-docs.tar.gz https://github.com/terraform-docs/terraform-docs/releases/download/v0.15.0/terraform-docs-v0.15.0-$(uname)-amd64.tar.gz
+tar -xzf terraform-docs.tar.gz
+chmod +x terraform-docs
+mv terraform-docs /some-dir-in-your-PATH/terraform-docs
+```
+
+**NOTE:** Windows releases are in `ZIP` format.
+
+If you are a Mac OS X user, you can use [Homebrew]:
+
+```bash
+brew install terraform-docs
+```
+
+or
+
+```bash
+brew install terraform-docs/tap/terraform-docs
+```
+
+Windows users can install using [Scoop]:
+
+```bash
+scoop bucket add terraform-docs https://github.com/terraform-docs/scoop-bucket
+scoop install terraform-docs
+```
+
+or [Chocolatey]:
+
+```bash
+choco install terraform-docs
+```
+
+Alternatively you also can run `terraform-docs` as a container:
+
+```bash
+docker run quay.io/terraform-docs/terraform-docs:0.15.0
+```
+
+**NOTE:** Docker tag `latest` refers to _latest_ stable released version and `edge`
+refers to HEAD of `master` at any given point in time.
+
+## Community
+
+- Discuss terraform-docs on [Slack]
+
+## License
+
+MIT License - Copyright (c) 2021 The terraform-docs Authors.
+
+[User Guide]: ./docs/user-guide/introduction.md
+[Formats Guide]: ./docs/reference/terraform-docs.md
+[Config File Reference]: ./docs/user-guide/configuration.md
+[Contributing Guide]: CONTRIBUTING.md
+[our website]: https://terraform-docs.io/
+[here]: https://golang.org/doc/code.html#GOPATH
+[releases]: https://github.com/terraform-docs/terraform-docs/releases
+[Homebrew]: https://brew.sh
+[Scoop]: https://scoop.sh/
+[Chocolatey]: https://www.chocolatey.org
+[Slack]: https://slack.terraform-docs.io/

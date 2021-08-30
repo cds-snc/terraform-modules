@@ -1,6 +1,3 @@
-# Usage
-
-<!--- BEGIN_TF_DOCS --->
 # Virtual Private Cloud (VPC)
 
 This module creates a pre-configured VPC with a pair of subnets split over one or many availability zones (AZ). Each of the AZs created has a public and private subnet. The public subnet has a public IP address attached and has a route to the internet. The private subnet has a route to the internet through a nat gateway.
@@ -90,6 +87,3 @@ No modules.
 | <a name="output_public_ips"></a> [public\_ips](#output\_public\_ips) | n/a |
 | <a name="output_public_subnet_ids"></a> [public\_subnet\_ids](#output\_public\_subnet\_ids) | n/a |
 | <a name="output_vpc_id"></a> [vpc\_id](#output\_vpc\_id) | n/a |
-
-<!--- END_TF_DOCS --->
-

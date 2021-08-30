@@ -1,6 +1,3 @@
-# Usage
-
-<!--- BEGIN_TF_DOCS --->
 
 This was adapted from the [terraform-aws-modules](https://github.com/terraform-aws-modules/terraform-aws-s3-bucket)
 The License file for this module can be found in this directory.
@@ -58,6 +55,3 @@ No modules.
 | <a name="output_s3_bucket_id"></a> [s3\_bucket\_id](#output\_s3\_bucket\_id) | The name of the bucket. |
 | <a name="output_s3_bucket_region"></a> [s3\_bucket\_region](#output\_s3\_bucket\_region) | The AWS region this bucket resides in. |
 | <a name="output_s3_bucket_regional_domain_name"></a> [s3\_bucket\_regional\_domain\_name](#output\_s3\_bucket\_regional\_domain\_name) | The bucket region-specific domain name. The bucket domain name including the region name, please refer here for format. Note: The AWS CloudFront allows specifying S3 region-specific endpoint when creating S3 origin, it will prevent redirect issues from CloudFront to S3 Origin URL. |
-
-<!--- END_TF_DOCS --->
-

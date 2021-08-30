@@ -1,6 +1,3 @@
-# Usage
-
-<!--- BEGIN_TF_DOCS --->
 This module will create an RDS Postgresql Cluster behind an RDS Proxy to manage connections.
 
 ## Requirements
@@ -74,6 +71,3 @@ No modules.
 | <a name="output_proxy_security_group_arn"></a> [proxy\_security\_group\_arn](#output\_proxy\_security\_group\_arn) | n/a |
 | <a name="output_proxy_security_group_id"></a> [proxy\_security\_group\_id](#output\_proxy\_security\_group\_id) | n/a |
 | <a name="output_rds_cluster_id"></a> [rds\_cluster\_id](#output\_rds\_cluster\_id) | The ID of the RDS cluster |
-
-<!--- END_TF_DOCS --->
-
