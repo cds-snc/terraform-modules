@@ -12,7 +12,7 @@ module "high_availability_vpc" {
 
   # Allow users to send requests in from the internet and receive a response
   allow_https_request_in          = true
-  allow_https_request_in_response = true  
+  allow_https_request_in_response = true
 
   block_ssh = false
   block_rdp = false
