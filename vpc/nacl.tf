@@ -32,19 +32,19 @@ resource "aws_network_acl_rule" "block_rdp" {
 }
 
 resource "aws_network_acl_rule" "https_ingress" {
-  count          = var.allow_https_out ? 1 : 0
+  count          = var.allow_https_ingress ? 1 : 0
   network_acl_id = aws_network_acl.main.id
   rule_number    = 60
   egress         = false
   protocol       = "tcp"
   rule_action    = "allow"
-  cidr_block     = aws_vpc.main.cidr_block
+  cidr_block     = "0.0.0.0/0"
   from_port      = 443
   to_port        = 443
 }
 
 resource "aws_network_acl_rule" "https_egress" {
-  count          = var.allow_https_out ? 1 : 0
+  count          = var.allow_https_egress ? 1 : 0
   network_acl_id = aws_network_acl.main.id
   rule_number    = 61
   egress         = true
@@ -58,7 +58,7 @@ resource "aws_network_acl_rule" "https_egress" {
 # NAT gateway uses ephemeral ports to translate the request and response
 # source/destination IP addresses (Port Address Translation)
 resource "aws_network_acl_rule" "ephemeral_ingress" {
-  count          = var.allow_https_out ? 1 : 0
+  count          = var.allow_ephemeral_ingress ? 1 : 0
   network_acl_id = aws_network_acl.main.id
   rule_number    = 62
   egress         = false
@@ -70,13 +70,13 @@ resource "aws_network_acl_rule" "ephemeral_ingress" {
 }
 
 resource "aws_network_acl_rule" "ephemeral_egress" {
-  count          = var.allow_https_out ? 1 : 0
+  count          = var.allow_ephemeral_egress ? 1 : 0
   network_acl_id = aws_network_acl.main.id
   rule_number    = 63
   egress         = true
   protocol       = "tcp"
   rule_action    = "allow"
-  cidr_block     = aws_vpc.main.cidr_block
+  cidr_block     = "0.0.0.0/0"
   from_port      = 1024
   to_port        = 65535
 }

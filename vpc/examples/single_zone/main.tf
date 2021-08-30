@@ -6,7 +6,6 @@ module "single_zone_vpc" {
 
   high_availability = false
   enable_flow_log   = false
-  allow_https_out   = false
   block_ssh         = true
   block_rdp         = true
 

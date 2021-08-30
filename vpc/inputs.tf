@@ -38,8 +38,26 @@ variable "block_rdp" {
   default     = true
 }
 
-variable "allow_https_out" {
-  description = "(Optional, default 'true') Allow HTTPS connections out to the internet"
+variable "allow_https_egress" {
+  description = "(Optional, default 'false') Allow HTTPS connections on port 443 out to the internet"
   type        = bool
-  default     = true
+  default     = false
+}
+
+variable "allow_https_ingress" {
+  description = "(Optional, default 'false') Allow HTTPS connections on port 443 in from the internet"
+  type        = bool
+  default     = false
+}
+
+variable "allow_ephemeral_egress" {
+  description = "(Optional, default 'false') Allow connections on ports 1024 to 65535 out to the internet"
+  type        = bool
+  default     = false
+}
+
+variable "allow_ephemeral_ingress" {
+  description = "(Optional, default 'false') Allow connections on ports 1024 to 65535 in from the internet"
+  type        = bool
+  default     = false
 }

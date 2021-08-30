@@ -73,7 +73,10 @@ No modules.
 
 | Name | Description | Type | Default | Required |
 |------|-------------|------|---------|:--------:|
-| <a name="input_allow_https_out"></a> [allow\_https\_out](#input\_allow\_https\_out) | (Optional, default 'true') Allow HTTPS connections out to the internet | `bool` | `true` | no |
+| <a name="input_allow_ephemeral_egress"></a> [allow\_ephemeral\_egress](#input\_allow\_ephemeral\_egress) | (Optional, default 'false') Allow connections on ports 1024 to 65535 out to the internet | `bool` | `false` | no |
+| <a name="input_allow_ephemeral_ingress"></a> [allow\_ephemeral\_ingress](#input\_allow\_ephemeral\_ingress) | (Optional, default 'false') Allow connections on ports 1024 to 65535 in from the internet | `bool` | `false` | no |
+| <a name="input_allow_https_egress"></a> [allow\_https\_egress](#input\_allow\_https\_egress) | (Optional, default 'false') Allow HTTPS connections on port 443 out to the internet | `bool` | `false` | no |
+| <a name="input_allow_https_ingress"></a> [allow\_https\_ingress](#input\_allow\_https\_ingress) | (Optional, default 'false') Allow HTTPS connections on port 443 in from the internet | `bool` | `false` | no |
 | <a name="input_billing_tag_key"></a> [billing\_tag\_key](#input\_billing\_tag\_key) | (Optional, default 'CostCentre') The name of the billing tag | `string` | `"CostCentre"` | no |
 | <a name="input_billing_tag_value"></a> [billing\_tag\_value](#input\_billing\_tag\_value) | (Required) The value of the billing tag | `string` | n/a | yes |
 | <a name="input_block_rdp"></a> [block\_rdp](#input\_block\_rdp) | (Optional, default 'true') Whether or not to block Port 3389 | `bool` | `true` | no |

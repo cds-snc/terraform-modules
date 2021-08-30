@@ -5,9 +5,14 @@ module "high_availability_vpc" {
 
   high_availability = true
   enable_flow_log   = true
-  allow_https_out   = true
-  block_ssh         = false
-  block_rdp         = false
+
+  # Allow services to connect out to the internet
+  allow_https_egress      = true
+  allow_ephemeral_egress  = true
+  allow_ephemeral_ingress = true
+
+  block_ssh = false
+  block_rdp = false
 
   billing_tag_key   = "Business Unit"
   billing_tag_value = "Operations"
