@@ -64,8 +64,8 @@ resource "aws_subnet" "private" {
 
   tags = merge(local.common_tags, {
     Name = "${var.name}_private_subnet_${element(local.zone_names, count.index)}"
+    Tier = "Private"
   })
-
 
   timeouts {
     delete = "40m"
@@ -80,6 +80,7 @@ resource "aws_subnet" "public" {
 
   tags = merge(local.common_tags, {
     Name = "${var.name}_public_subnet_${element(local.zone_names, count.index)}"
+    Tier = "Public"
   })
 }
 
@@ -90,6 +91,4 @@ resource "aws_internet_gateway" "gw" {
   tags = merge(local.common_tags, {
     Name = "${var.name}_internet_gateway"
   })
-
 }
-
