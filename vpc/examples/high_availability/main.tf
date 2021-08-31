@@ -16,7 +16,7 @@ module "high_availability_vpc" {
 
   block_ssh  = false
   block_rdp  = false
-  enable_eip = fals
+  enable_eip = false
 
   billing_tag_key   = "Business Unit"
   billing_tag_value = "Operations"
