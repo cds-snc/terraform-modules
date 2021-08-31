@@ -45,8 +45,37 @@ func TestSingleZoneVpc(t *testing.T) {
 	nats := GetVpcNatGateways(t, client, vpcId)
 	assert.Equal(t, 1, len(nats.NatGateways))
 
-	nacls := GetVpcDenyNetworkAcls(t, client, vpcId)
-	assert.Equal(t, 1, len(nacls.NetworkAcls))
+	// Expect NACL rules to exist for blocking SSH, RDP
+	naclRulesDeny := []naclRule{
+		{
+			from:   "22",
+			to:     "22",
+			action: "deny",
+		},
+		{
+			from:   "3389",
+			to:     "3389",
+			action: "deny",
+		},
+	}
+	naclsDeny := GetVpcNetworkAcls(t, client, vpcId, &naclRulesDeny)
+	assert.Equal(t, 1, len(naclsDeny.NetworkAcls))
+
+	// Expect NACL rules to not exist for allowing HTTPS traffic
+	naclRulesAllow := []naclRule{
+		{
+			from:   "443",
+			to:     "443",
+			action: "allow",
+		},
+		{
+			from:   "1024",
+			to:     "65535",
+			action: "allow",
+		},
+	}
+	naclsAllow := GetVpcNetworkAcls(t, client, vpcId, &naclRulesAllow)
+	assert.Equal(t, 0, len(naclsAllow.NetworkAcls))
 
 	flowLogs := GetVpcFlowLogs(t, client, "single_zone_flow_logs")
 	assert.Equal(t, 0, len(flowLogs.FlowLogs))

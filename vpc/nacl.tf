@@ -30,3 +30,103 @@ resource "aws_network_acl_rule" "block_rdp" {
   from_port      = 3389
   to_port        = 3389
 }
+
+# Allow an HTTPS request out of the VPC
+resource "aws_network_acl_rule" "https_request_egress_443" {
+  count          = var.allow_https_request_out ? 1 : 0
+  network_acl_id = aws_network_acl.main.id
+  rule_number    = 60
+  egress         = true
+  protocol       = "tcp"
+  rule_action    = "allow"
+  cidr_block     = "0.0.0.0/0"
+  from_port      = 443
+  to_port        = 443
+}
+
+resource "aws_network_acl_rule" "https_request_out_egress_ephemeral" {
+  count          = var.allow_https_request_out ? 1 : 0
+  network_acl_id = aws_network_acl.main.id
+  rule_number    = 61
+  egress         = true
+  protocol       = "tcp"
+  rule_action    = "allow"
+  cidr_block     = aws_vpc.main.cidr_block
+  from_port      = 1024
+  to_port        = 65535
+}
+
+# Allow an HTTPS response to a request that leaves the VPC
+resource "aws_network_acl_rule" "https_request_out_response_ingress_443" {
+  count          = var.allow_https_request_out_response ? 1 : 0
+  network_acl_id = aws_network_acl.main.id
+  rule_number    = 62
+  egress         = false
+  protocol       = "tcp"
+  rule_action    = "allow"
+  cidr_block     = aws_vpc.main.cidr_block
+  from_port      = 443
+  to_port        = 443
+}
+
+resource "aws_network_acl_rule" "https_request_out_response_ingress_ephemeral" {
+  count          = var.allow_https_request_out_response ? 1 : 0
+  network_acl_id = aws_network_acl.main.id
+  rule_number    = 63
+  egress         = false
+  protocol       = "tcp"
+  rule_action    = "allow"
+  cidr_block     = "0.0.0.0/0"
+  from_port      = 1024
+  to_port        = 65535
+}
+
+# Allow an HTTPS request into the VPC
+resource "aws_network_acl_rule" "https_request_in_ingress_443" {
+  count          = var.allow_https_request_in ? 1 : 0
+  network_acl_id = aws_network_acl.main.id
+  rule_number    = 70
+  egress         = false
+  protocol       = "tcp"
+  rule_action    = "allow"
+  cidr_block     = "0.0.0.0/0"
+  from_port      = 443
+  to_port        = 443
+}
+
+resource "aws_network_acl_rule" "https_request_in_ingress_ephemeral" {
+  count          = var.allow_https_request_in ? 1 : 0
+  network_acl_id = aws_network_acl.main.id
+  rule_number    = 71
+  egress         = false
+  protocol       = "tcp"
+  rule_action    = "allow"
+  cidr_block     = aws_vpc.main.cidr_block
+  from_port      = 1024
+  to_port        = 65535
+}
+
+# Allow an HTTPS response to a request into the VPC
+resource "aws_network_acl_rule" "https_request_in_response_egress_443" {
+  count          = var.allow_https_request_in_response ? 1 : 0
+  network_acl_id = aws_network_acl.main.id
+  rule_number    = 72
+  egress         = true
+  protocol       = "tcp"
+  rule_action    = "allow"
+  cidr_block     = aws_vpc.main.cidr_block
+  from_port      = 443
+  to_port        = 443
+}
+
+resource "aws_network_acl_rule" "https_request_in_response_egress_ephemeral" {
+  count          = var.allow_https_request_in_response ? 1 : 0
+  network_acl_id = aws_network_acl.main.id
+  rule_number    = 73
+  egress         = true
+  protocol       = "tcp"
+  rule_action    = "allow"
+  cidr_block     = "0.0.0.0/0"
+  from_port      = 1024
+  to_port        = 65535
+}

@@ -5,9 +5,18 @@ module "high_availability_vpc" {
 
   high_availability = true
   enable_flow_log   = true
-  block_ssh         = false
-  block_rdp         = false
-  enable_eip        = false
+
+  # Allow VPC resources to send requests out to the internet and recieve a response
+  allow_https_request_out          = true
+  allow_https_request_out_response = true
+
+  # Allow users to send requests in from the internet and receive a response
+  allow_https_request_in          = true
+  allow_https_request_in_response = true
+
+  block_ssh  = false
+  block_rdp  = false
+  enable_eip = fals
 
   billing_tag_key   = "Business Unit"
   billing_tag_value = "Operations"
