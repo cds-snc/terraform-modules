@@ -34,6 +34,7 @@ module "rds_cluster_vpc" {
   enable_flow_log   = false
   block_ssh         = true
   block_rdp         = true
+  enable_eip        = false
 
   billing_tag_key   = "Business Unit"
   billing_tag_value = "Terratest"

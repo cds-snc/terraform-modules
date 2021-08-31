@@ -35,7 +35,7 @@ resource "aws_vpc" "main" {
 }
 
 resource "aws_eip" "nat" {
-  count = local.max_subnet_length
+  count = var.enable_eip ? local.max_subnet_length : 0
   # checkov:skip=CKV2_AWS_19:EIP is used by NAT Gateway
   vpc = true
   tags = merge(local.common_tags, {
@@ -46,8 +46,9 @@ resource "aws_eip" "nat" {
 resource "aws_nat_gateway" "nat_gw" {
   count = local.max_subnet_length
 
-  allocation_id = element(local.nat_gateway_ips, count.index)
-  subnet_id     = element(aws_subnet.public.*.id, count.index)
+  allocation_id     = length(local.nat_gateway_ips) > 0 ? element(local.nat_gateway_ips, count.index) : null
+  subnet_id         = element(aws_subnet.public.*.id, count.index)
+  connectivity_type = var.enable_eip ? "public" : "private"
 
   tags = merge(local.common_tags, {
     Name = "${var.name}-natgw-${count.index}"
