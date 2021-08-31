@@ -38,6 +38,13 @@ variable "block_rdp" {
   default     = true
 }
 
+
+variable "enable_eip" {
+  description = "(Optional, default 'true') Enables Elastic IPs, disabling is mainly used for testing purposes"
+  type        = bool
+  default     = true
+}
+
 variable "allow_https_request_out" {
   description = "(Optional, default 'false') Allow HTTPS connections on port 443 out to the internet"
   type        = bool

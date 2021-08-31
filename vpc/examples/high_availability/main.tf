@@ -14,8 +14,9 @@ module "high_availability_vpc" {
   allow_https_request_in          = true
   allow_https_request_in_response = true
 
-  block_ssh = false
-  block_rdp = false
+  block_ssh  = false
+  block_rdp  = false
+  enable_eip = false
 
   billing_tag_key   = "Business Unit"
   billing_tag_value = "Operations"
