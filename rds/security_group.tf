@@ -12,15 +12,15 @@ resource "aws_security_group" "rds_proxy" {
   })
 
   ingress {
-    from_port = 5432
-    to_port   = 5432
+    from_port = local.database_port
+    to_port   = local.database_port
     protocol  = "TCP"
     self      = true
   }
 
   egress {
-    from_port = 5432
-    to_port   = 5432
+    from_port = local.database_port
+    to_port   = local.database_port
     protocol  = "TCP"
     self      = true
   }

@@ -25,9 +25,20 @@ variable "database_name" {
   }
 }
 
+variable "engine" {
+  type        = string
+  description = "(Optional, defaults 'aurora-postgresql') The database engine to use. Valid values are 'aurora-postgresql' and 'aurora-mysql'"
+  default     = "aurora-postgresql"
+
+  validation {
+    condition     = contains(["aurora-postgresql", "aurora-mysql"], var.engine)
+    error_message = "Database engine must be 'aurora-postgresql' or 'aurora-mysql'."
+  }
+}
+
 variable "engine_version" {
   type        = string
-  description = "(Required) The Postgresql database version to use. Engine version is contingent on instance_class see [this list of supported combinations](https://docs.amazonaws.cn/en_us/AmazonRDS/latest/AuroraUserGuide/Concepts.DBInstanceClass.html#Concepts.DBInstanceClass.SupportAurora)"
+  description = "(Required) The database version to use. Engine version is contingent on instance_class see [this list of supported combinations](https://docs.amazonaws.cn/en_us/AmazonRDS/latest/AuroraUserGuide/Concepts.DBInstanceClass.html#Concepts.DBInstanceClass.SupportAurora)"
 }
 variable "allow_major_version_upgrade" {
   type        = bool
