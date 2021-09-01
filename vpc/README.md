@@ -94,6 +94,7 @@ No modules.
 
 | Name | Description |
 |------|-------------|
+| <a name="output_cidr_block"></a> [cidr\_block](#output\_cidr\_block) | n/a |
 | <a name="output_main_nacl_id"></a> [main\_nacl\_id](#output\_main\_nacl\_id) | n/a |
 | <a name="output_private_route_table_ids"></a> [private\_route\_table\_ids](#output\_private\_route\_table\_ids) | n/a |
 | <a name="output_private_subnet_ids"></a> [private\_subnet\_ids](#output\_private\_subnet\_ids) | n/a |
