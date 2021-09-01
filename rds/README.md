@@ -1,4 +1,4 @@
-This module will create an RDS Postgresql Cluster behind an RDS Proxy to manage connections.
+This module will create an RDS Cluster behind an RDS Proxy to manage connections.
 
 ## Requirements
 
@@ -47,7 +47,8 @@ No modules.
 | <a name="input_billing_tag_key"></a> [billing\_tag\_key](#input\_billing\_tag\_key) | (Optional, default 'CostCentre') The name of the billing tag | `string` | `"CostCentre"` | no |
 | <a name="input_billing_tag_value"></a> [billing\_tag\_value](#input\_billing\_tag\_value) | (Required) The value of the billing tag | `string` | n/a | yes |
 | <a name="input_database_name"></a> [database\_name](#input\_database\_name) | (Required) The name of the database to be created inside the cluster. | `string` | n/a | yes |
-| <a name="input_engine_version"></a> [engine\_version](#input\_engine\_version) | (Required) The Postgresql database version to use. Engine version is contingent on instance\_class see [this list of supported combinations](https://docs.amazonaws.cn/en_us/AmazonRDS/latest/AuroraUserGuide/Concepts.DBInstanceClass.html#Concepts.DBInstanceClass.SupportAurora) | `string` | n/a | yes |
+| <a name="input_engine"></a> [engine](#input\_engine) | (Optional, defaults 'aurora-postgresql') The database engine to use. Valid values are 'aurora-postgresql' and 'aurora-mysql' | `string` | `"aurora-postgresql"` | no |
+| <a name="input_engine_version"></a> [engine\_version](#input\_engine\_version) | (Required) The database version to use. Engine version is contingent on instance\_class see [this list of supported combinations](https://docs.amazonaws.cn/en_us/AmazonRDS/latest/AuroraUserGuide/Concepts.DBInstanceClass.html#Concepts.DBInstanceClass.SupportAurora) | `string` | n/a | yes |
 | <a name="input_instance_class"></a> [instance\_class](#input\_instance\_class) | (Optional, default 'db.t3.medium') The type of EC2 instance to run this on. | `string` | `"db.t3.medium"` | no |
 | <a name="input_instances"></a> [instances](#input\_instances) | (Optional, default '3') The number of RDS Cluster instances to create, defaults to HA mode. | `number` | `3` | no |
 | <a name="input_name"></a> [name](#input\_name) | (Required) The name of the db also used for other identifiers | `string` | n/a | yes |

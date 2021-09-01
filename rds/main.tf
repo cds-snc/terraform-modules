@@ -1,5 +1,5 @@
-/* # RDS Postgresql Cluster
-* This module will create an RDS Postgresql Cluster behind an RDS Proxy to manage connections.
+/* # RDS Cluster
+* This module will create an RDS Cluster behind an RDS Proxy to manage connections.
 */
 
 resource "random_string" "random" {
@@ -12,16 +12,12 @@ resource "random_string" "random" {
 # RDS
 ###
 
-locals {
-  engine = "aurora-postgresql"
-}
-
 resource "aws_rds_cluster_instance" "instances" {
   count                = var.instances
   identifier           = "${var.name}-instance-${count.index}"
   cluster_identifier   = aws_rds_cluster.cluster.id
   instance_class       = var.instance_class
-  engine               = local.engine
+  engine               = var.engine
   engine_version       = var.engine_version
   db_subnet_group_name = aws_db_subnet_group.rds.name
 
@@ -35,7 +31,7 @@ resource "aws_rds_cluster_instance" "instances" {
 
 resource "aws_rds_cluster" "cluster" {
   cluster_identifier          = "${var.name}-cluster"
-  engine                      = local.engine
+  engine                      = var.engine
   engine_version              = var.engine_version
   database_name               = var.database_name
   final_snapshot_identifier   = "${var.name}-${random_string.random.result}"
@@ -77,7 +73,7 @@ locals {
 resource "aws_db_proxy" "proxy" {
   name                = local.proxy_name
   debug_logging       = var.proxy_debug_logging
-  engine_family       = "POSTGRESQL"
+  engine_family       = local.engine_family
   idle_client_timeout = 1800
   require_tls         = true
 
@@ -87,7 +83,7 @@ resource "aws_db_proxy" "proxy" {
 
   auth {
     auth_scheme = "SECRETS"
-    description = "The postgresql connection string"
+    description = "The database connection string"
     iam_auth    = "DISABLED"
     secret_arn  = aws_secretsmanager_secret.connection_string.arn
   }

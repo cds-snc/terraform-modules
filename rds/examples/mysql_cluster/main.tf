@@ -1,12 +1,13 @@
-# Database cluster with two instances
-module "two_instance_cluster" {
+# MySQL Database cluster with two instances
+module "mysql_cluster" {
   source = "../../"
-  name   = "two-instance"
+  name   = "mysql"
 
   database_name  = "terratest"
-  engine_version = "11.9"
+  engine         = "aurora-mysql"
+  engine_version = "5.7.mysql_aurora.2.10.0"
   instances      = 2
-  instance_class = "db.t3.medium"
+  instance_class = "db.r4.large"
   username       = "thebigcheese"
   password       = "pasword123"
 
@@ -18,17 +19,17 @@ module "two_instance_cluster" {
   backup_retention_period = 1
   preferred_backup_window = "01:00-03:00"
 
-  vpc_id     = module.rds_cluster_vpc.vpc_id
-  subnet_ids = module.rds_cluster_vpc.private_subnet_ids
+  vpc_id     = module.mysql_cluster_vpc.vpc_id
+  subnet_ids = module.mysql_cluster_vpc.private_subnet_ids
 
   billing_tag_key   = "Business Unit"
   billing_tag_value = "Terratest"
 }
 
 # At least 2 subnets are required by the RDS proxy
-module "rds_cluster_vpc" {
+module "mysql_cluster_vpc" {
   source = "../../../vpc/"
-  name   = "rds-cluster"
+  name   = "mysql-cluster"
 
   high_availability = true
   enable_flow_log   = false
@@ -41,13 +42,13 @@ module "rds_cluster_vpc" {
 }
 
 output "rds_cluster_id" {
-  value = module.two_instance_cluster.rds_cluster_id
+  value = module.mysql_cluster.rds_cluster_id
 }
 
 output "vpc_id" {
-  value = module.rds_cluster_vpc.vpc_id
+  value = module.mysql_cluster_vpc.vpc_id
 }
 
 output "private_subnet_ids" {
-  value = module.rds_cluster_vpc.private_subnet_ids
+  value = module.mysql_cluster_vpc.private_subnet_ids
 }

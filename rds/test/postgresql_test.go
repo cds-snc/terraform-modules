@@ -14,12 +14,12 @@ import (
 	"github.com/stretchr/testify/require"
 )
 
-func TestTwoInstanceCluster(t *testing.T) {
+func TestPostgresqlCluster(t *testing.T) {
 	t.Parallel()
 
 	region := "ca-central-1"
-	clusterName := "two-instance-cluster"
-	proxyName := "two-instance-proxy"
+	clusterName := "postgresql-cluster"
+	proxyName := "postgresql-proxy"
 	logGroupName := "/aws/rds/proxy/" + proxyName
 
 	// The RDS proxy is flaky and will sometimes not attach properly due to the
@@ -31,7 +31,7 @@ func TestTwoInstanceCluster(t *testing.T) {
 	}
 
 	terraformOptions := &terraform.Options{
-		TerraformDir: "../examples/two_instance_cluster",
+		TerraformDir: "../examples/postgresql_cluster",
 		EnvVars: map[string]string{
 			"AWS_DEFAULT_REGION": region,
 		},
