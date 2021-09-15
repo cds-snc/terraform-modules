@@ -42,7 +42,7 @@ jobs:
         module:
           - rds
           - S3
-          - S3_log_bucket          
+          - S3_log_bucket
           - user_login_alarm
           - vpc
 

@@ -55,6 +55,7 @@ resource "aws_iam_policy" "read_connection_string" {
   name   = "${var.name}ReadConnectionString"
   path   = "/"
   policy = data.aws_iam_policy_document.read_connection_string.json
+  tags   = local.common_tags
 }
 
 resource "aws_iam_role_policy_attachment" "read_connection_string" {
