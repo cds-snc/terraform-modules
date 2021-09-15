@@ -49,6 +49,14 @@ RUN curl -Lo go.tar.gz "https://golang.org/dl/go${GO_VERSION}.linux-amd64.tar.gz
     && tar -C /usr/local -xf go.tar.gz \
     && rm go.tar.gz
 
+ARG CONFTEST_VERSION
+RUN wget "https://github.com/open-policy-agent/conftest/releases/download/v${CONFTEST_VERSION}/conftest_${CONFTEST_VERSION}_Linux_x86_64.tar.gz" \
+    && wget "https://github.com/open-policy-agent/conftest/releases/download/v${CONFTEST_VERSION}/checksums.txt" \
+    && grep 'Linux_x86_64.tar.gz' < checksums.txt | sha256sum --check  --status \
+    && tar -zxvf "conftest_${CONFTEST_VERSION}_Linux_x86_64.tar.gz" conftest \
+    && mv conftest /usr/local/bin \
+    && rm "conftest_${CONFTEST_VERSION}_Linux_x86_64.tar.gz" checksums.txt
+
 # Setup aliases and autocomplete
 RUN echo "\n\
 complete -C /usr/bin/aws_completer aws\n\
