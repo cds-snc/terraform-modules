@@ -1,4 +1,4 @@
-name: "Terratest modules"
+name: "Test modules"
 
 on:
   push:
@@ -15,7 +15,16 @@ env:
   AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
 
 jobs:
+  conftest:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Run conftest
+        with:
+          entrypoint: .github/workflows/conftest
+        run: ../scripts/run-conftest.sh
+
   terratest:
+    needs: conftest
     runs-on: ubuntu-latest
     strategy:
       fail-fast: false
