@@ -19,9 +19,9 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Run conftest
-        with:
-          entrypoint: .github/workflows/conftest
-        run: ../scripts/run-conftest.sh
+        run: |
+          cd .github/workflows/conftest
+          ../scripts/run-conftest.sh
 
   terratest:
     needs: conftest
