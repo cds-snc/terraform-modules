@@ -18,11 +18,11 @@ jobs:
   conftest:
     runs-on: ubuntu-latest
     steps:
+      - name: Checkout
+        uses: actions/checkout@v2
       - name: Run conftest
-        run: |
-          pwd
-          cd .github/workflows/conftest
-          ../scripts/run-conftest.sh
+        working-directory: .github/workflows/conftest
+        run: ../scripts/run-conftest.sh
 
   terratest:
     needs: conftest
