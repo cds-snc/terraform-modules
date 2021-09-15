@@ -20,7 +20,8 @@ jobs:
     steps:
       - name: Run conftest
         run: |
-          cd conftest
+          pwd
+          cd .github/workflows/conftest
           ../scripts/run-conftest.sh
 
   terratest:
