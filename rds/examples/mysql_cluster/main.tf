@@ -3,7 +3,7 @@ module "mysql_cluster" {
   source = "../../"
   name   = "mysql"
 
-  database_name  = "terratest"
+  database_name  = "terratest_mysql"
   engine         = "aurora-mysql"
   engine_version = "5.7.mysql_aurora.2.10.0"
   instances      = 2

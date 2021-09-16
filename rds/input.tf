@@ -20,8 +20,8 @@ variable "database_name" {
   description = "(Required) The name of the database to be created inside the cluster."
 
   validation {
-    condition     = can(regex("^[[:alpha:]][[:alnum:]]+$", var.database_name))
-    error_message = "Database name must begin with a letter and contain only alphanumeric characters."
+    condition     = can(regex("^[A-Za-z][0-9A-Za-z_-]*$", var.database_name))
+    error_message = "Database name must begin with a letter and contain only alphanumeric, hyphen and underscore characters."
   }
 }
 
