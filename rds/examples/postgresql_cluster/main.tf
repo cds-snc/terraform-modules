@@ -3,7 +3,7 @@ module "postgresql_cluster" {
   source = "../../"
   name   = "postgresql"
 
-  database_name  = "terratest"
+  database_name  = "terratest_postgresql"
   engine         = "aurora-postgresql"
   engine_version = "11.9"
   instances      = 2
