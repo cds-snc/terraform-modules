@@ -28,7 +28,7 @@ module "rds" {
   billing_tag_value       = "cal"
   database_name           = "foo"
   engine_version          = "13.3"
-  password                = "foo"
+  password                = "12345678901234567"
   username                = "calvin"
   preferred_backup_window = "07:00-09:00"
   subnet_ids              = module.vpc.public_subnet_ids
