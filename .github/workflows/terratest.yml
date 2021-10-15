@@ -40,6 +40,7 @@ jobs:
       fail-fast: false
       matrix:
         module:
+          - notify_slack
           - rds
           - S3
           - S3_log_bucket
