@@ -24,7 +24,7 @@ resource "aws_lambda_function" "notify_slack" {
   handler     = "notify_slack.lambda_handler"
   runtime     = "python3.8"
   timeout     = 30
-  memory_size = 1024
+  memory_size = 128
 
   role             = aws_iam_role.notify_slack_lambda.arn
   source_code_hash = filebase64sha256(data.archive_file.notify_slack.output_path)
@@ -56,7 +56,7 @@ data "archive_file" "notify_slack" {
 resource "aws_lambda_permission" "notify_slack" {
   count = length(var.sns_topic_arns)
 
-  statement_id  = "AllowExecutionFromSNS-${count.index}"
+  statement_id  = "AllowExecutionFromSNS-${var.function_name}-${count.index}"
   action        = "lambda:InvokeFunction"
   function_name = aws_lambda_function.notify_slack.function_name
   principal     = "sns.amazonaws.com"
