@@ -1,0 +1,7 @@
+skip-check:
+  - CKV_AWS_50  # X-ray tracing not required for this function
+  - CKV_AWS_115 # Lambda does not need function-level concurrent execution limit
+  - CKV_AWS_116 # Lambda Dead Letter Queue not required
+  - CKV_AWS_117 # Lambda does not need to be in a VPC
+  - CKV_AWS_158 # CloudWatch encyption with default key is acceptable
+  - CKV_AWS_173 # Lambda env var encryption with default service key is acceptable
