@@ -18,8 +18,8 @@ module "notify_slack" {
 # SNS: topic & subscription
 #
 resource "aws_sns_topic" "warning" {
-  name              = "warning"
-  kms_master_key_id = "alias/aws/sns"
+  # checkov:skip=CKV_AWS_26: encryption not required for example
+  name = "warning"
 }
 
 resource "aws_sns_topic_subscription" "alert_warning" {
