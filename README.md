@@ -11,11 +11,12 @@
 
 ## Module List
 
-- [User Login Alarm](user_login_alarm)
-- [VPC](vpc)
+- [Notify Slack](notify_slack)
 - [RDS](rds)
 - [S3](S3)
-- [S3_log_bucket](S3_log_bucket)
+- [S3 Log Bucket](S3_log_bucket)
+- [User Login Alarm](user_login_alarm)
+- [VPC](vpc)
 
 ## What is this repo?
 
