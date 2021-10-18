@@ -1,5 +1,5 @@
 /** 
-* # CloudWatch Slack
+* # Notify Slack
 *
 * This module creates a Lambda function posts messages to a Slack channel when a CloudWatch alarm changes state.
 *

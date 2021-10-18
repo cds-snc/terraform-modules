@@ -46,3 +46,14 @@ resource "aws_cloudwatch_metric_alarm" "lambda_concurrent_executions" {
   alarm_actions = [aws_sns_topic.warning.arn]
   ok_actions    = [aws_sns_topic.warning.arn]
 }
+
+#
+# Outputs
+#
+output "lambda_arn" {
+  value = module.notify_slack.lambda_arn
+}
+
+output "sns_arn" {
+  value = aws_sns_topic.warning.arn
+}
