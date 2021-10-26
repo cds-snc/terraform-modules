@@ -28,3 +28,7 @@ output "regional_domain" {
 output "region" {
   value = module.bucket.s3_bucket_region
 }
+
+output "public_access_block_id" {
+  value = module.bucket.s3_bucket_public_access_block_id
+}

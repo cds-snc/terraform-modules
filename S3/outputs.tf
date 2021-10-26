@@ -18,8 +18,11 @@ output "s3_bucket_regional_domain_name" {
   value       = aws_s3_bucket.this.bucket_regional_domain_name
 }
 
-
 output "s3_bucket_region" {
   description = "The AWS region this bucket resides in."
   value       = aws_s3_bucket.this.region
+}
+
+output "s3_bucket_public_access_block_id" {
+  value = aws_s3_bucket_public_access_block.this.id
 }
