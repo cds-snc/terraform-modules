@@ -8,8 +8,32 @@ variable "billing_tag_key" {
 }
 
 variable "billing_tag_value" {
-  description = "(required) The value of the billing tag"
+  description = "(Rquired) The value of the billing tag"
   type        = string
+}
+
+variable "block_public_acls" {
+  description = "(Optional, default 'true') Reject requests to create public ACLs."
+  type        = bool
+  default     = true
+}
+
+variable "block_public_policy" {
+  description = "(Optional, default 'true') Reject requests to add Bucket policy if the specified bucket policy allows public access."
+  type        = bool
+  default     = true
+}
+
+variable "ignore_public_acls" {
+  description = "(Optional, default 'true') Ignore public ACLs on this bucket and any objects that it contains."
+  type        = bool
+  default     = true
+}
+
+variable "restrict_public_buckets" {
+  description = "(Optional, default 'true') Only the bucket owner and AWS Services can access this buckets if it has a public policy."
+  type        = bool
+  default     = true
 }
 
 variable "bucket_name" {

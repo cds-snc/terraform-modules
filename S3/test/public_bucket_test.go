@@ -11,14 +11,14 @@ import (
 	"github.com/stretchr/testify/require"
 )
 
-func TestBasicBucketCreation(t *testing.T) {
+func TestPublicBucketCreation(t *testing.T) {
 	t.Parallel()
 
 	region := "ca-central-1"
-	name := "totallyuniquecdstestbucket"
+	name := "yetanothertotallyuniquecdstestbucket"
 
 	terraformOptions := &terraform.Options{
-		TerraformDir: "../examples/basic_bucket",
+		TerraformDir: "../examples/public_bucket",
 		EnvVars: map[string]string{
 			"AWS_DEFAULT_REGION": region,
 		},
@@ -52,8 +52,7 @@ func TestBasicBucketCreation(t *testing.T) {
 	require.NoError(t, req.Send())
 
 	assert.Equal(t, true, *resp.PublicAccessBlockConfiguration.BlockPublicAcls)
-	assert.Equal(t, true, *resp.PublicAccessBlockConfiguration.BlockPublicPolicy)
+	assert.Equal(t, false, *resp.PublicAccessBlockConfiguration.BlockPublicPolicy)
 	assert.Equal(t, true, *resp.PublicAccessBlockConfiguration.IgnorePublicAcls)
-	assert.Equal(t, true, *resp.PublicAccessBlockConfiguration.RestrictPublicBuckets)
-
+	assert.Equal(t, false, *resp.PublicAccessBlockConfiguration.RestrictPublicBuckets)
 }
