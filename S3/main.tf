@@ -8,6 +8,7 @@ resource "aws_s3_bucket" "this" {
   # checkov:skip=CKV_AWS_145:Encryption using AWS managed key is acceptable
   # checkov:skip=CKV_AWS_144:Cross region replication is not required by default and may be unwanted
   # checkov:skip=CKV_AWS_143:Object lock configuration is configurable
+  # checkov:skip=CKV2_AWS_6:False-positive, a public access block is defined by `aws_s3_bucket_public_access_block.this`
 
   bucket        = var.bucket_name
   bucket_prefix = var.bucket_prefix
@@ -92,13 +93,15 @@ resource "aws_s3_bucket" "this" {
 }
 
 resource "aws_s3_bucket_public_access_block" "this" {
+  # checkov:skip=CKV_AWS_54: `block_public_policy` controlled by a variable (default `true`)
+  # checkov:skip=CKV_AWS_56: `restrict_public_bucket` controlled by a variable (default `true`)
 
   # Chain resources (s3_bucket -> s3_bucket_policy -> s3_bucket_public_access_block)
   # to prevent "A conflicting conditional operation is currently in progress against this resource."
   bucket = aws_s3_bucket.this.id
 
-  block_public_acls       = true
-  block_public_policy     = true
-  ignore_public_acls      = true
-  restrict_public_buckets = true
+  block_public_acls       = var.block_public_acls
+  block_public_policy     = var.block_public_policy
+  ignore_public_acls      = var.ignore_public_acls
+  restrict_public_buckets = var.restrict_public_buckets
 }
