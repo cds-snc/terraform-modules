@@ -37,6 +37,7 @@ func TestBasicBucketCreation(t *testing.T) {
 	bucket_arn := terraform.Output(t, terraformOptions, "arn")
 	bucket_id := terraform.Output(t, terraformOptions, "id")
 	bucket_region := terraform.Output(t, terraformOptions, "region")
+	public_access_block_id := terraform.Output(t, terraformOptions, "public_access_block_id")
 
 	assert.Equal(t, bucket_region, region)
 
@@ -45,6 +46,8 @@ func TestBasicBucketCreation(t *testing.T) {
 
 	assert.Equal(t, bucket_id, name)
 	assert.Equal(t, bucket_region, region)
+
+	assert.Equal(t, name, public_access_block_id)
 
 	// Test the public access block
 	s3Client := aws.NewS3Client(t, region)
