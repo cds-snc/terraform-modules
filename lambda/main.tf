@@ -41,6 +41,7 @@ resource "aws_lambda_function" "this" {
 }
 
 resource "aws_cloudwatch_log_group" "this" {
+  #checkov:skip=CKV_AWS_158:We trust the AWS provided keys
   name              = "/aws/lambda/${var.name}"
   retention_in_days = "14"
   tags              = local.common_tags

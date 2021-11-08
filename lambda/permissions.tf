@@ -16,6 +16,19 @@ resource "aws_lambda_permission" "s3_execution" {
   source_arn    = var.bucket.arn
 }
 
+resource "aws_s3_bucket_notification" "this" {
+  count  = var.allow_s3_execution ? 1 : 0
+  bucket = var.bucket.id
+
+  lambda_function {
+    lambda_function_arn = aws_lambda_function.this.arn
+    events              = ["s3:ObjectCreated:*"]
+    filter_suffix       = ".json"
+  }
+
+  depends_on = [aws_lambda_permission.s3_execution]
+}
+
 resource "aws_lambda_permission" "sns" {
   count = length(var.sns_topic_arns)
 
