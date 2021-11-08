@@ -24,8 +24,8 @@ data "aws_iam_policy" "lambda_insights" {
 
 resource "aws_iam_role_policy_attachment" "lambda_insights" {
   count      = var.enable_lambda_insights ? 1 : 0
-  role       = aws_iam_role.service_princiapl.name
-  policy_arn = data.aws_iam_policy.this.arn
+  role       = aws_iam_role.this.name
+  policy_arn = data.aws_iam_policy.lambda_insights[0].arn
 }
 
 ### Policies
@@ -36,7 +36,7 @@ resource "aws_iam_policy" "policies" {
   policy = var.policies[count.index]
 }
 
-resource "aws_iam_role_policy_attachment" "api" {
+resource "aws_iam_role_policy_attachment" "attachments" {
   count      = length(aws_iam_policy.policies.*.arn)
   role       = aws_iam_role.this.name
   policy_arn = aws_iam_policy.policies.*.arn

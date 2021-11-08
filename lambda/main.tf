@@ -9,13 +9,16 @@ resource "aws_lambda_function" "this" {
   package_type = "Image"
   image_uri    = var.image_uri
 
-  role    = aws_iam_role.api.arn
+  role    = aws_iam_role.this.arn
   timeout = var.timeout
 
   memory_size = var.memory
 
-  environment {
-    variables = locals.common_tags
+  dynamic "environment" {
+    for_each = length(keys(var.environment_variables)) == 0 ? [] : [true]
+    content {
+      variables = var.environment_variables
+    }
   }
 
   tracing_config {
@@ -33,10 +36,12 @@ resource "aws_lambda_function" "this" {
       image_uri,
     ]
   }
+
+  tags = local.common_tags
 }
 
 resource "aws_cloudwatch_log_group" "this" {
-  name              = "/aws/lambda/${var.function_name}"
+  name              = "/aws/lambda/${var.name}"
   retention_in_days = "14"
-  tags              = this.local_tags
+  tags              = local.common_tags
 }

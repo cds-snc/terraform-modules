@@ -13,7 +13,8 @@ variable "allow_s3_execution" {
 
 variable "api_gateway_source_arn" {
   type        = string
-  description = "(Optional) THe api gateway rest point that can call the lambda"
+  default     = ""
+  description = "(Optional) The api gateway rest point that can call the lambda"
 }
 
 variable "billing_tag_key" {
@@ -32,6 +33,10 @@ variable "bucket" {
     id  = string
     arn = string
   })
+  default = {
+    id  = ""
+    arn = ""
+  }
   description = "(Optional) S3 bucket that is triggering the lambda"
 }
 
@@ -39,6 +44,12 @@ variable "enable_lambda_insights" {
   type        = bool
   default     = true
   description = "(Optional) Enable Lambda Insights"
+}
+
+variable "environment_variables" {
+  type        = map(string)
+  default     = {}
+  description = "(Optional) Environment variables to pass to the lambda"
 }
 
 variable "image_uri" {
@@ -77,8 +88,12 @@ variable "timeout" {
 
 variable "vpc" {
   type = object({
-    security_group_ids = list(string)
     subnet_ids         = list(string)
+    security_group_ids = list(string)
   })
-  description = "(Optional) security groups and subnets to attach to"
+  default = {
+    subnet_ids         = []
+    security_group_ids = []
+  }
+  description = "(Optional) VPC to attach to the Lambda function"
 }
