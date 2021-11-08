@@ -1,13 +1,15 @@
 #!/bin/bash
 
 echo 🚧 Terraform Module Scaffold 🚧
+
+# shellcheck disable=SC2162
 read -p "Scaffold Name: " module
 
 mkdir -p "$module"
 
 echo 🚧 Creating module
 
-echo 📝 Create "$module/Makefile"
+echo 📝 Creating "$module/Makefile"
 cat << EOF > "$module/Makefile"
 .PHONY: fmt docs
 
@@ -18,7 +20,7 @@ docs:
 	@terraform-docs markdown -c ../.terraform-docs.yml . > README.md
 EOF
 
-echo 📝 Create "$module/input.tf"
+echo 📝 Creating "$module/input.tf"
 cat << EOF > "$module/input.tf"
 
 variable "billing_tag_key" {
@@ -34,7 +36,7 @@ variable "billing_tag_value" {
 
 EOF
 
-echo 📝 Create "$module/locals.tf"
+echo 📝 Creating "$module/locals.tf"
 cat << EOF > "$module/locals.tf"
 
 locals {
@@ -46,7 +48,7 @@ locals {
 
 EOF
 
-echo 📝 Create "$module/main.tf"
+echo 📝 Creating "$module/main.tf"
 cat << EOF > "$module/main.tf"
 /* # $module
 *
@@ -55,6 +57,9 @@ EOF
 
 echo 👉 Touching "$module/output.tf"
 touch "$module/output.tf"
+
+echo "📝 Appending to .modules file, (this adds it to the Makefile)"
+echo -n " $module" >> .modules
 
 [ -f "$module/Makefile" ]
 [ -f "$module/input.tf" ]
