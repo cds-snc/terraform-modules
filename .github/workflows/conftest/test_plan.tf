@@ -47,10 +47,24 @@ resource "aws_ecr_repository" "test" {
   }
 }
 
+data "aws_iam_policy_document" "test" {
+  statement {
+    effect = "Allow"
+    actions = [
+      "logs:CreateLogStream",
+      "logs:PutLogEvents"
+    ]
+    resources = [
+      "*"
+    ]
+  }
+}
+
 module "lambda" {
   source            = "../../../lambda"
   name              = "test-lambda"
   image_uri         = "${aws_ecr_repository.test.repository_url}:latest"
   billing_tag_value = "cal"
+  policies =  [data.aws_iam_policy_document.test.json]
 
 }
