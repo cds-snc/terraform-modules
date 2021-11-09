@@ -20,6 +20,7 @@ jobs:
           - vpc
           - S3
           - S3_log_bucket
+          - lambda
 
     steps:
       - name: Checkout

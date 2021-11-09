@@ -1,9 +1,6 @@
-RESOURCES = \
-	rds \
-	S3 \
-	S3_log_bucket \
-	user_login_alarm \
-	vpc
+FILE     := .modules
+RESOURCES :=$(file < $(FILE))
+
 
 .PHONY: help format fmt docs scaffold
 
