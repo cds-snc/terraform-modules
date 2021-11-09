@@ -40,6 +40,13 @@ variable "bucket" {
   description = "(Optional) S3 bucket that is triggering the lambda"
 }
 
+
+variable "dead_letter_queue_arn" {
+  type        = string
+  default     = ""
+  description = "(Optional) The arn of the dead letter queue"
+}
+
 variable "enable_lambda_insights" {
   type        = bool
   default     = true
@@ -72,6 +79,12 @@ variable "policies" {
   type        = list(string)
   description = "(Optional) List of policies to attach to the Lambda function"
   default     = []
+}
+
+variable "reserved_concurrent_executions" {
+  type        = number
+  default     = -1
+  description = "(Optional) Amount of reserved concurrent executions for this lambda function. A value of 0 disables lambda from being triggered and -1 removes any concurrency limitations. Defaults to Unreserved Concurrency Limits -1. See [Managing Concurrency](https://docs.aws.amazon.com/lambda/latest/dg/concurrent-executions.html)"
 }
 
 variable "sns_topic_arns" {

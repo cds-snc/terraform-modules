@@ -4,15 +4,13 @@
 *
 */
 resource "aws_lambda_function" "this" {
-  function_name = var.name
-
-  package_type = "Image"
-  image_uri    = var.image_uri
-
-  role    = aws_iam_role.this.arn
-  timeout = var.timeout
-
-  memory_size = var.memory
+  function_name                  = var.name
+  package_type                   = "Image"
+  image_uri                      = var.image_uri
+  role                           = aws_iam_role.this.arn
+  timeout                        = var.timeout
+  memory_size                    = var.memory
+  reserved_concurrent_executions = var.reserved_concurrent_executions
 
   dynamic "environment" {
     for_each = length(keys(var.environment_variables)) == 0 ? [] : [true]
@@ -35,6 +33,13 @@ resource "aws_lambda_function" "this" {
     ignore_changes = [
       image_uri,
     ]
+  }
+
+  dynamic "dead_letter_queue" {
+    for_each = length(var.dead_letter_queue_arn) == 0 ? [] : [true]
+    content {
+      target_arn = var.dead_letter_queue_arn
+    }
   }
 
   tags = local.common_tags
