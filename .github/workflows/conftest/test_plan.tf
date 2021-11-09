@@ -34,3 +34,23 @@ module "rds" {
   subnet_ids              = module.vpc.public_subnet_ids
   vpc_id                  = module.vpc.vpc_id
 }
+
+resource "aws_ecr_repository" "test" {
+  name = "hello-world"
+
+  image_scanning_configuration {
+    scan_on_push = true
+  }
+  tags = {
+    Terraform  = "true"
+    CostCentre = "cal"
+  }
+}
+
+module "lambda" {
+  source            = "../../../lambda"
+  name              = "test-lambda"
+  image_uri         = "${aws_ecr_repository.test.repository_url}:latest"
+  billing_tag_value = "cal"
+
+}
