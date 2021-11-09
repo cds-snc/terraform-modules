@@ -46,7 +46,6 @@ jobs:
           - S3_log_bucket
           - user_login_alarm
           - vpc
-          - lambda
 
     steps:
     - name: Checkout
