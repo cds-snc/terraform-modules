@@ -64,6 +64,7 @@ module "lambda" {
   source            = "../../../lambda"
   name              = "test-lambda"
   image_uri         = "${aws_ecr_repository.test.repository_url}:latest"
+  ecr_arn           = aws_ecr_repository.test.arn
   billing_tag_value = "cal"
   policies =  [data.aws_iam_policy_document.test.json]
 
@@ -78,7 +79,6 @@ resource "aws_security_group" "this" {
     Terraform = "true"
     CostCentre = "cal"
   }
-
   
 }
 
@@ -86,6 +86,7 @@ module "lambda_vpc" {
   source            = "../../../lambda"
   name              = "test-lambda"
   image_uri         = "${aws_ecr_repository.test.repository_url}:latest"
+  ecr_arn           = aws_ecr_repository.test.arn
   billing_tag_value = "cal"
   vpc = {
     subnet_ids = module.vpc.public_subnet_ids
