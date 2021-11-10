@@ -108,5 +108,5 @@ variable "vpc" {
     subnet_ids         = []
     security_group_ids = []
   }
-  description = "(Optional) VPC to attach to the Lambda function"
+  description = "(Optional) VPC to attach to the Lambda function <br/> **Please Note if this is set it will also attach the AWSLambdaVPCAccessExecutionRole to the lmabda this will enable creation of VPC ENI's as well as reading and writing to logfiles"
 }

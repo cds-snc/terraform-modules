@@ -68,3 +68,28 @@ module "lambda" {
   policies =  [data.aws_iam_policy_document.test.json]
 
 }
+
+
+resource "aws_security_group" "this" {
+  description = "foo"
+  vpc_id      = module.vpc.vpc_id
+
+  tags = {
+    Terraform = "true"
+    CostCentre = "cal"
+  }
+
+  
+}
+
+module "lambda_vpc" {
+  source            = "../../../lambda"
+  name              = "test-lambda"
+  image_uri         = "${aws_ecr_repository.test.repository_url}:latest"
+  billing_tag_value = "cal"
+  vpc = {
+    subnet_ids = module.vpc.public_subnet_ids
+    security_group_ids = [aws_security_group.this.id]
+  }
+
+}
