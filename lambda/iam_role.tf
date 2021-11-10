@@ -29,7 +29,7 @@ resource "aws_iam_role_policy_attachment" "lambda_insights" {
   policy_arn = data.aws_iam_policy.lambda_insights[0].arn
 }
 
-### Policies
+### Policies from consumer
 resource "aws_iam_policy" "policies" {
   count  = length(var.policies)
   name   = "${var.name}-${count.index}"
@@ -51,6 +51,7 @@ resource "aws_iam_role_policy_attachment" "attachments" {
 # interfaces and write permissions to CloudWatch Logs.
 ####
 resource "aws_iam_role_policy_attachment" "AWSLambdaVPCAccessExecutionRole" {
+  count      = length(var.vpc.subnet_ids) > 0 && length(var.vpc.security_group_ids) > 0 ? 1 : 0
   role       = aws_iam_role.this.name
   policy_arn = "arn:aws:iam::aws:policy/service-role/AWSLambdaVPCAccessExecutionRole"
 }
