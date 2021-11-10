@@ -32,7 +32,7 @@ resource "aws_s3_bucket_notification" "this" {
 resource "aws_lambda_permission" "sns" {
   count = length(var.sns_topic_arns)
 
-  statement_id  = "AllowExecutionFromSNS-${var.sns_topic_arns[count.index]}"
+  statement_id  = "AllowExecutionFromSNS${count.index}"
   action        = "lambda:InvokeFunction"
   function_name = aws_lambda_function.this.function_name
   principal     = "sns.amazonaws.com"
