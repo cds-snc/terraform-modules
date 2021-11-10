@@ -47,6 +47,11 @@ variable "dead_letter_queue_arn" {
   description = "(Optional) The arn of the dead letter queue"
 }
 
+variable "ecr_arn" {
+  type        = string
+  description = "(Optional) The arn of the ecr repository the image resides in the lambda will be given access to pull images and layers from this registry"
+}
+
 variable "enable_lambda_insights" {
   type        = bool
   default     = true
