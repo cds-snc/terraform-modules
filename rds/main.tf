@@ -12,6 +12,11 @@ resource "random_string" "random" {
 # RDS
 ###
 
+# Service role allowing AWS to manage resources required for RDS
+resource "aws_iam_service_linked_role" "rds_service" {
+  aws_service_name = "rds.amazonaws.com"
+}
+
 resource "aws_rds_cluster_instance" "instances" {
   count                = var.instances
   identifier           = "${var.name}-instance-${count.index}"
