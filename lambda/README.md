@@ -68,3 +68,4 @@ No modules.
 |------|-------------|
 | <a name="output_function_arn"></a> [function\_arn](#output\_function\_arn) | n/a |
 | <a name="output_function_name"></a> [function\_name](#output\_function\_name) | n/a |
+| <a name="output_invoke_arn"></a> [invoke\_arn](#output\_invoke\_arn) | n/a |
