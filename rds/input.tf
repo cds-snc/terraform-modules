@@ -46,6 +46,12 @@ variable "allow_major_version_upgrade" {
   default     = false
 }
 
+variable "performance_insights_enabled" {
+  type        = bool
+  description = "(Optional, default 'true') This flag enables performance insights for the RDS cluster instances."
+  default     = true
+}
+
 variable "prevent_cluster_deletion" {
   type        = bool
   description = "(Optional, default 'true') This flag prevents deletion of the RDS cluster. <br/> **Please Note:** We cannot prevent deletion of RDS instances in the module, we recommend you add `lifecycle { prevent_deletion = true }` to the module to prevent instance deletion"

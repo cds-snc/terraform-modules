@@ -21,7 +21,7 @@ resource "aws_rds_cluster_instance" "instances" {
   engine_version       = var.engine_version
   db_subnet_group_name = aws_db_subnet_group.rds.name
 
-  performance_insights_enabled = true
+  performance_insights_enabled = var.performance_insights_enabled
 
   tags = merge(local.common_tags, {
     Name = "${var.name}-instance-${count.index}"

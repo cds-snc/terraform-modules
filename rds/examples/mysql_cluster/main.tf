@@ -7,7 +7,7 @@ module "mysql_cluster" {
   engine         = "aurora-mysql"
   engine_version = "5.7.mysql_aurora.2.10.0"
   instances      = 2
-  instance_class = "db.r4.large"
+  instance_class = "db.t3.small"
   username       = "thebigcheese"
   password       = "pasword123"
 
@@ -15,6 +15,9 @@ module "mysql_cluster" {
   # Terratests so they can properly destroy resources once finished.
   prevent_cluster_deletion = false
   skip_final_snapshot      = true
+
+  # Required to use `db.t3.small` instances for MySQL
+  performance_insights_enabled = false
 
   backup_retention_period = 1
   preferred_backup_window = "01:00-03:00"
