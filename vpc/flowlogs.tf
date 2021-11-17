@@ -4,6 +4,7 @@ resource "aws_flow_log" "flow_logs" {
   log_destination = aws_cloudwatch_log_group.flow_logs[0].arn
   traffic_type    = "ALL"
   vpc_id          = aws_vpc.main.id
+  tags            = local.common_tags
 }
 
 resource "aws_cloudwatch_log_group" "flow_logs" {
@@ -11,12 +12,14 @@ resource "aws_cloudwatch_log_group" "flow_logs" {
   # checkov:skip=CKV_AWS_158:Encryption using default CloudWatch service key is acceptable
   name              = "${var.name}_flow_logs"
   retention_in_days = 30
+  tags              = local.common_tags
 }
 
 resource "aws_iam_role" "flow_logs" {
   count              = var.enable_flow_log ? 1 : 0
   name               = "${var.name}_flow_logs"
   assume_role_policy = data.aws_iam_policy_document.vpc_flow_logs_service_principal[0].json
+  tags               = local.common_tags
 }
 
 data "aws_iam_policy_document" "vpc_flow_logs_service_principal" {
@@ -45,6 +48,7 @@ resource "aws_iam_policy" "vpc_metrics_flow_logs_write_policy" {
   description = "IAM policy for writing flow logs in CloudWatch"
   path        = "/"
   policy      = data.aws_iam_policy_document.vpc_metrics_flow_logs_write[0].json
+  tags        = local.common_tags
 }
 
 data "aws_iam_policy_document" "vpc_metrics_flow_logs_write" {
