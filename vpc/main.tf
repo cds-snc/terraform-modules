@@ -30,11 +30,9 @@ resource "aws_vpc" "main" {
 
   tags = merge(local.common_tags, {
     Name = "${var.name}_vpc"
-  }, { for k, v in local.common_tags : k => v if lookup(data.aws_default_tags.common_tags.tags, k, "") != v })
+  })
 
 }
-
-data "aws_default_tags" "common_tags" {}
 
 resource "aws_eip" "nat" {
   count = var.enable_eip ? local.max_subnet_length : 0
