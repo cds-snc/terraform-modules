@@ -66,7 +66,7 @@ module "lambda" {
   image_uri         = "${aws_ecr_repository.test.repository_url}:latest"
   ecr_arn           = aws_ecr_repository.test.arn
   billing_tag_value = "cal"
-  policies =  [data.aws_iam_policy_document.test.json]
+  policies          = [data.aws_iam_policy_document.test.json]
 
 }
 
@@ -76,10 +76,10 @@ resource "aws_security_group" "this" {
   vpc_id      = module.vpc.vpc_id
 
   tags = {
-    Terraform = "true"
+    Terraform  = "true"
     CostCentre = "cal"
   }
-  
+
 }
 
 module "lambda_vpc" {
@@ -89,8 +89,15 @@ module "lambda_vpc" {
   ecr_arn           = aws_ecr_repository.test.arn
   billing_tag_value = "cal"
   vpc = {
-    subnet_ids = module.vpc.public_subnet_ids
+    subnet_ids         = module.vpc.public_subnet_ids
     security_group_ids = [aws_security_group.this.id]
   }
 
+}
+
+module "oicd_role" {
+  source            = "../../../gh_oicd_role"
+  role_name         = "test"
+  repo              = "foo"
+  billing_tag_value = "cal"
 }

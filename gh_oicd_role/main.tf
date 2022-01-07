@@ -11,28 +11,30 @@ data "tls_certificate" "thumprint" {
 }
 
 resource "aws_iam_role" "this" {
-  name               = "gh-oicd-aws"
+  name               = var.role_name
   assume_role_policy = data.aws_iam_policy_document.asume_role_saml.json
+  tags               = local.common_tags
 }
 
 data "aws_iam_policy_document" "asume_role_saml" {
   statement {
-    principal {
+    actions = ["sts:AssumeRoleWithWebIdentity"]
+    principals {
       type        = "Federated"
-      identifiers = ["arn:aws_iam::${data.aws_caller_identity.current.account_id}:oidc-provider/${local.gh_path}"]
+      identifiers = [aws_iam_openid_connect_provider.github.arn]
     }
-  }
-  actions = ["sts:AssumeRoleWithWebIdentity"]
-  condition {
-    test     = "ForAnyValue:StringLike"
-    variable = "vstoken.actions.githubusercontent.com:sub"
-    values   = "repo:<owner>/<repo>:*"
+    condition {
+      test     = "ForAnyValue:StringLike"
+      variable = "token.actions.githubusercontent.com:sub"
+      values   = ["repo:${var.org_name}/${var.repo}:${var.claim}"]
+    }
   }
 
 }
 
-resource "aws_iam_openid_connect_provider" "default" {
+resource "aws_iam_openid_connect_provider" "github" {
   url             = local.gh_url
-  client_id_list  = local.audiences
+  client_id_list  = ["sts.amazonaws.com"]
   thumbprint_list = [data.tls_certificate.thumprint.certificates.0.sha1_fingerprint]
+  tags            = local.common_tags
 }

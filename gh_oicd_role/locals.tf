@@ -7,6 +7,5 @@ locals {
   gh_url  = "https://${local.gh_path}"
   gh_path = "token.actions.githubusercontent.com"
 
-  audiences = ["https://github.com/cds-snc/${var.repo_name}"]
 }
 
