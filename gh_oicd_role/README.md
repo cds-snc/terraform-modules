@@ -1,3 +1,6 @@
+Creates an OpenID Connect Role that can be used for authenticating workflows in Github Actions
+This allows for a more secure way to connect to AWS as it doesn't rely on static credentials but uses temporary credentials created for each run.
+
 ## Requirements
 
 No requirements.
@@ -20,6 +23,7 @@ No modules.
 | [aws_iam_openid_connect_provider.default](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/iam_openid_connect_provider) | resource |
 | [aws_iam_role.this](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/iam_role) | resource |
 | [aws_caller_identity.current](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/data-sources/caller_identity) | data source |
+| [aws_iam_policy_document.asume_role_saml](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/data-sources/iam_policy_document) | data source |
 | [tls_certificate.thumprint](https://registry.terraform.io/providers/hashicorp/tls/latest/docs/data-sources/certificate) | data source |
 
 ## Inputs
@@ -33,4 +37,6 @@ No modules.
 
 ## Outputs
 
-No outputs.
+| Name | Description |
+|------|-------------|
+| <a name="output_arn"></a> [arn](#output\_arn) | This is the arn of the IAM Role that will be authenticated using OICD.<br>This is needed for assigning roles to that authenticated IAM Role |
