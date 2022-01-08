@@ -1,1 +1,1 @@
-rds S3 S3_log_bucket user_login_alarm vpc lambda
+rds S3 S3_log_bucket user_login_alarm vpc lambda gh_oicd_role
