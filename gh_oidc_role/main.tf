@@ -11,7 +11,7 @@ data "tls_certificate" "thumprint" {
 }
 
 resource "aws_iam_role" "this" {
-  for_each = { for r in var.roles: r.name => r}
+  for_each = { for r in var.roles : r.name => r }
 
   name = each.value.name
   assume_role_policy = jsonencode({
