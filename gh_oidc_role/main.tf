@@ -11,26 +11,29 @@ data "tls_certificate" "thumprint" {
 }
 
 resource "aws_iam_role" "this" {
-  name               = var.role_name
-  assume_role_policy = data.aws_iam_policy_document.asume_role_saml.json
-  tags               = local.common_tags
+  for_each = { for r in var.roles : r.name => r }
+
+  name = each.value.name
+  assume_role_policy = jsonencode({
+    Version = "2012-10-17"
+
+    Statement = {
+      Effect = "Allow"
+      Action = ["sts:AssumeRoleWithWebIdentity"]
+      Principal = {
+        Federated = aws_iam_openid_connect_provider.github.arn
+      }
+      Condition = {
+        StringLike = {
+          "token.actions.githubusercontent.com:sub" = "repo:${var.org_name}/${each.value.repo_name}:${each.value.claim}"
+        }
+      }
+
+    }
+  })
+  tags = local.common_tags
 }
 
-data "aws_iam_policy_document" "asume_role_saml" {
-  statement {
-    actions = ["sts:AssumeRoleWithWebIdentity"]
-    principals {
-      type        = "Federated"
-      identifiers = [aws_iam_openid_connect_provider.github.arn]
-    }
-    condition {
-      test     = "ForAnyValue:StringLike"
-      variable = "token.actions.githubusercontent.com:sub"
-      values   = ["repo:${var.org_name}/${var.repo}:${var.claim}"]
-    }
-  }
-
-}
 
 resource "aws_iam_openid_connect_provider" "github" {
   url             = local.gh_url
