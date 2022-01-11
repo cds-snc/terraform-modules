@@ -96,8 +96,12 @@ module "lambda_vpc" {
 }
 
 module "oicd_role" {
-  source            = "../../../gh_oicd_role"
-  role_name         = "test"
-  repo              = "foo"
+  source            = "../../../gh_oidc_role"
   billing_tag_value = "cal"
+  roles = {
+    name = "test"
+    repo_name = "foo"
+    claim = "*"
+
+  }
 }
