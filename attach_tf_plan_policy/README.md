@@ -1,3 +1,8 @@
+This creates a policy that allows access to dynamodb, s3 state bucket
+and gives the ability to read secrets.
+
+**Please Note:** This may too permissive for what you want to do so you might want to further lock it down.
+
 ## Requirements
 
 No requirements.
