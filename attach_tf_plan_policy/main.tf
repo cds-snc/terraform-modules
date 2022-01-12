@@ -7,7 +7,7 @@
 
 resource "aws_iam_role_policy_attachment" "this" {
   role       = var.role_name
-  policy_arn = resource.aws_iam_policy.this
+  policy_arn = resource.aws_iam_policy.this.arn
 }
 
 resource "aws_iam_policy" "this" {
