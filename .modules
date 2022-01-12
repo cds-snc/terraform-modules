@@ -1,1 +1,1 @@
-rds S3 S3_log_bucket user_login_alarm vpc lambda gh_oidc_role
+rds S3 S3_log_bucket user_login_alarm vpc lambda gh_oidc_role attach_tf_plan_policy
