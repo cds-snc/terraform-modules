@@ -5,6 +5,7 @@
 */
 
 resource "aws_s3_bucket" "this" {
+  # checkov:skip=CKV_AWS_19:False-positive, bucket objects are encrypted, either using a CMK or the default S3 service key
   # checkov:skip=CKV_AWS_145:Encryption using AWS managed key is acceptable
   # checkov:skip=CKV_AWS_144:Cross region replication is not required by default and may be unwanted
   # checkov:skip=CKV_AWS_143:Object lock configuration is configurable
