@@ -14,12 +14,12 @@ module "gh_oidc_roles" {
   ]
 }
 
-data "aws_iam_policy" "admin" {
+data "aws_iam_policy" "read_only" {
   name = "ReadOnlyAccess"
 }
 
-resource "aws_iam_role_policy_attachment" "admin" {
+resource "aws_iam_role_policy_attachment" "read_only" {
   role       = local.readonly_role
-  policy_arn = data.aws_iam_policy.admin.arn
+  policy_arn = data.aws_iam_policy.read_only.arn
   depends_on = [module.gh_oidc_roles]
 }

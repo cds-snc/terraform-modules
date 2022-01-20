@@ -20,12 +20,11 @@ resource "aws_iam_role" "this" {
 }
 
 data "aws_iam_policy_document" "assume_role_policy" {
-  count   = length(data.aws_iam_policy_document.oidc_assume_role_policy.*)
-  version = "2012-10-17"
+  count = length(data.aws_iam_policy_document.oidc_assume_role_policy.*)
 
   source_policy_documents = [
     data.aws_iam_policy_document.oidc_assume_role_policy[count.index].json,
-    var.policies,
+    var.assume_policy,
   ]
 
 }

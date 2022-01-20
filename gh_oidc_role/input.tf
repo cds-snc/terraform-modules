@@ -42,7 +42,7 @@ variable "roles" {
   }))
 }
 
-variable "policies" {
+variable "assume_policy" {
   type        = string
   description = "(Optional) Assume role JSON policy to attach to the oidc role"
   default     = "{}"
