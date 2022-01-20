@@ -82,16 +82,14 @@ resource "aws_s3_bucket" "this" {
         content {
           id                               = lookup(rules.value, "id", null)
           priority                         = lookup(rules.value, "priority", null)
-          prefix                           = lookup(rules.value, "prefix", null)
-          delete_marker_replication_status = lookup(rules.value, "delete_marker_replication_status", null)
-          status                           = rules.value.status
+          delete_marker_replication_status = "Enabled"
+          status                           = "Enabled"
 
           dynamic "destination" {
             for_each = length(keys(lookup(rules.value, "destination", {}))) == 0 ? [] : [lookup(rules.value, "destination", {})]
 
             content {
               bucket             = destination.value.bucket
-              storage_class      = lookup(destination.value, "storage_class", null)
               replica_kms_key_id = lookup(destination.value, "replica_kms_key_id", null)
               account_id         = lookup(destination.value, "account_id", null)
 
@@ -100,24 +98,6 @@ resource "aws_s3_bucket" "this" {
 
                 content {
                   owner = access_control_translation.value.owner
-                }
-              }
-
-              dynamic "replication_time" {
-                for_each = length(keys(lookup(destination.value, "replication_time", {}))) == 0 ? [] : [lookup(destination.value, "replication_time", {})]
-
-                content {
-                  status  = replication_time.value.status
-                  minutes = replication_time.value.minutes
-                }
-              }
-
-              dynamic "metrics" {
-                for_each = length(keys(lookup(destination.value, "metrics", {}))) == 0 ? [] : [lookup(destination.value, "metrics", {})]
-
-                content {
-                  status  = metrics.value.status
-                  minutes = metrics.value.minutes
                 }
               }
             }
@@ -139,21 +119,9 @@ resource "aws_s3_bucket" "this" {
             }
           }
 
-          # Send empty map if `filter` is an empty map or absent entirely
-          dynamic "filter" {
-            for_each = length(keys(lookup(rules.value, "filter", {}))) == 0 ? [{}] : []
-
-            content {}
-          }
-
-          # Send `filter` if it is present and has at least one field
-          dynamic "filter" {
-            for_each = length(keys(lookup(rules.value, "filter", {}))) != 0 ? [lookup(rules.value, "filter", {})] : []
-
-            content {
-              prefix = lookup(filter.value, "prefix", null)
-              tags   = lookup(filter.value, "tags", null)
-            }
+          # Replicate all objects in the source bucket
+          filter = {
+            prefix = ""
           }
 
         }

@@ -19,15 +19,9 @@ module "source_bucket" {
     rules = [
       {
         id       = "replicate-all-the-things"
-        status   = "Enabled"
         priority = 20
-
-        filter = {
-          prefix = ""
-        }
-
         destination = {
-          bucket = "arn:aws:s3:::${local.destination_bucket_name}"
+          bucket = module.destination_bucket.s3_bucket_arn
         }
       }
     ]
