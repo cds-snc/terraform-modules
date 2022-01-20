@@ -42,11 +42,16 @@ func TestPublicBucketCreation(t *testing.T) {
 
 	// Test the public access block
 	s3Client := aws.NewS3Client(t, region)
-	req, resp := s3Client.GetPublicAccessBlockRequest(&s3.GetPublicAccessBlockInput{Bucket: &bucket_id})
-	require.NoError(t, req.Send())
+	reqAccess, respAccess := s3Client.GetPublicAccessBlockRequest(&s3.GetPublicAccessBlockInput{Bucket: &bucket_id})
+	require.NoError(t, reqAccess.Send())
 
-	assert.Equal(t, true, *resp.PublicAccessBlockConfiguration.BlockPublicAcls)
-	assert.Equal(t, false, *resp.PublicAccessBlockConfiguration.BlockPublicPolicy)
-	assert.Equal(t, true, *resp.PublicAccessBlockConfiguration.IgnorePublicAcls)
-	assert.Equal(t, false, *resp.PublicAccessBlockConfiguration.RestrictPublicBuckets)
+	assert.Equal(t, true, *respAccess.PublicAccessBlockConfiguration.BlockPublicAcls)
+	assert.Equal(t, false, *respAccess.PublicAccessBlockConfiguration.BlockPublicPolicy)
+	assert.Equal(t, true, *respAccess.PublicAccessBlockConfiguration.IgnorePublicAcls)
+	assert.Equal(t, false, *respAccess.PublicAccessBlockConfiguration.RestrictPublicBuckets)
+
+	reqEnc, respEnc := s3Client.GetBucketEncryptionRequest(&s3.GetBucketEncryptionInput{Bucket: &bucket_id})
+	require.NoError(t, reqEnc.Send())
+
+	assert.Equal(t, "AES256", *respEnc.ServerSideEncryptionConfiguration.Rules[0].ApplyServerSideEncryptionByDefault.SSEAlgorithm)
 }
