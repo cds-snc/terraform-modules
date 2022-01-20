@@ -83,3 +83,9 @@ variable "object_lock_configuration" {
   type        = any
   default     = {}
 }
+
+variable "replication_configuration" {
+  description = "(Optional) Map containing cross-region replication configuration."
+  type        = any
+  default     = {}
+}
