@@ -15,15 +15,11 @@ func TestPublicBucketCreation(t *testing.T) {
 	t.Parallel()
 
 	region := "ca-central-1"
-	name := "yetanothertotallyuniquecdstestbucket"
 
 	terraformOptions := &terraform.Options{
 		TerraformDir: "../examples/public_bucket",
 		EnvVars: map[string]string{
 			"AWS_DEFAULT_REGION": region,
-		},
-		Vars: map[string]interface{}{
-			"name": name,
 		},
 	}
 
@@ -40,15 +36,13 @@ func TestPublicBucketCreation(t *testing.T) {
 
 	assert.Equal(t, bucket_region, region)
 
-	arn := fmt.Sprintf("arn:aws:s3:::%s", name)
+	arn := fmt.Sprintf("arn:aws:s3:::%s", bucket_id)
 	assert.Equal(t, bucket_arn, arn)
-
-	assert.Equal(t, bucket_id, name)
 	assert.Equal(t, bucket_region, region)
 
 	// Test the public access block
 	s3Client := aws.NewS3Client(t, region)
-	req, resp := s3Client.GetPublicAccessBlockRequest(&s3.GetPublicAccessBlockInput{Bucket: &name})
+	req, resp := s3Client.GetPublicAccessBlockRequest(&s3.GetPublicAccessBlockInput{Bucket: &bucket_id})
 	require.NoError(t, req.Send())
 
 	assert.Equal(t, true, *resp.PublicAccessBlockConfiguration.BlockPublicAcls)

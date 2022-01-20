@@ -2,7 +2,7 @@
 module "bucket" {
   source            = "../../"
   billing_tag_value = "terratest"
-  bucket_name       = var.name
+  bucket_name       = "cds-terraform-modules-public-bucket-${random_pet.this.id}"
 
   block_public_policy     = false
   restrict_public_buckets = false
@@ -12,8 +12,8 @@ module "bucket" {
   }
 }
 
-variable "name" {
-  type = string
+resource "random_pet" "this" {
+  length = 2
 }
 
 output "id" {
