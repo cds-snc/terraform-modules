@@ -11,29 +11,45 @@ data "tls_certificate" "thumprint" {
 }
 
 resource "aws_iam_role" "this" {
-  for_each = { for r in var.roles : r.name => r }
+  count = length(var.roles)
 
-  name = each.value.name
-  assume_role_policy = jsonencode({
-    Version = "2012-10-17"
 
-    Statement = {
-      Effect = "Allow"
-      Action = ["sts:AssumeRoleWithWebIdentity"]
-      Principal = {
-        Federated = aws_iam_openid_connect_provider.github.arn
-      }
-      Condition = {
-        StringLike = {
-          "token.actions.githubusercontent.com:sub" = "repo:${var.org_name}/${each.value.repo_name}:${each.value.claim}"
-        }
-      }
-
-    }
-  })
-  tags = local.common_tags
+  name               = tolist(var.roles)[count.index].name
+  assume_role_policy = data.aws_iam_policy_document.assume_role_policy[count.index].json
+  tags               = local.common_tags
 }
 
+data "aws_iam_policy_document" "assume_role_policy" {
+  count = length(data.aws_iam_policy_document.oidc_assume_role_policy.*)
+
+  source_policy_documents = [
+    data.aws_iam_policy_document.oidc_assume_role_policy[count.index].json,
+    var.assume_policy,
+  ]
+
+}
+
+data "aws_iam_policy_document" "oidc_assume_role_policy" {
+  count = length(var.roles)
+
+  statement {
+    effect = "Allow"
+
+    actions = ["sts:AssumeRoleWithWebIdentity"]
+
+    principals {
+      type        = "Federated"
+      identifiers = [aws_iam_openid_connect_provider.github.arn]
+    }
+
+    condition {
+      test     = "StringLike"
+      variable = "token.actions.githubusercontent.com:sub"
+      values   = ["repo:${var.org_name}/${tolist(var.roles)[count.index].repo_name}:${tolist(var.roles)[count.index].claim}"]
+
+    }
+  }
+}
 
 resource "aws_iam_openid_connect_provider" "github" {
   url             = local.gh_url
