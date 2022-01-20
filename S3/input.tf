@@ -89,3 +89,9 @@ variable "replication_configuration" {
   type        = any
   default     = {}
 }
+
+variable "kms_key_arn" {
+  description = "(Optional) KMS key ARN that will be used to encrypt S3 objects.  If not specified, default S3 service key is used for encryption."
+  type        = string
+  default     = null
+}
