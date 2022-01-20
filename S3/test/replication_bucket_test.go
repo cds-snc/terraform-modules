@@ -33,7 +33,7 @@ func TestReplicationBucketCreation(t *testing.T) {
 	destination_bucket_arn := terraform.Output(t, terraformOptions, "destination_bucket_arn")
 	replication_role_arn := terraform.Output(t, terraformOptions, "replication_role_arn")
 
-	// Test the public access block
+	// Test the replication rules
 	s3Client := aws.NewS3Client(t, region)
 	req, resp := s3Client.GetBucketReplicationRequest(&s3.GetBucketReplicationInput{Bucket: &source_bucket_id})
 	require.NoError(t, req.Send())
