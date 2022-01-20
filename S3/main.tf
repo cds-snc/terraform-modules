@@ -119,9 +119,11 @@ resource "aws_s3_bucket" "this" {
             }
           }
 
-          # Replicate all objects in the source bucket
-          filter = {
-            prefix = ""
+          dynamic "filter" {
+            for_each = length(keys(var.replication_configuration)) == 0 ? [] : [1]
+            content {
+              prefix = ""
+            }
           }
 
         }
