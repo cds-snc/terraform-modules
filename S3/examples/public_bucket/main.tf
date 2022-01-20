@@ -6,6 +6,10 @@ module "bucket" {
 
   block_public_policy     = false
   restrict_public_buckets = false
+
+  versioning = {
+    enabled = true
+  }
 }
 
 variable "name" {

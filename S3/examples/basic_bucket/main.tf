@@ -3,6 +3,10 @@ module "bucket" {
   source            = "../../"
   billing_tag_value = "terratest"
   bucket_name       = var.name
+
+  versioning = {
+    enabled = true
+  }
 }
 
 variable "name" {
