@@ -22,7 +22,7 @@ data "aws_iam_policy_document" "this" {
     effect  = "Allow"
     actions = ["dynamodb:*"]
     resources = [
-      "arn:aws:dynamodb:${var.region}:${var.account_id}:table/"
+      "arn:aws:dynamodb:${var.region}:${var.account_id}:table/*"
     ]
   }
 
