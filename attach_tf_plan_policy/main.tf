@@ -54,3 +54,12 @@ data "aws_iam_policy_document" "this" {
     resources = ["*"]
   }
 }
+
+data "aws_iam_policy" "readonly" {
+  name = "ReadOnlyAccess"
+}
+
+resource "aws_iam_role_policy_attachment" "readonly" {
+  role       = var.role_name
+  policy_arn = data.aws_iam_policy.readonly.arn
+}
