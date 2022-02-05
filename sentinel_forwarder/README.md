@@ -38,6 +38,7 @@ No modules.
 
 | Name | Type |
 |------|------|
+| [aws_cloudwatch_event_target.sentinel_forwarder](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/cloudwatch_event_target) | resource |
 | [aws_cloudwatch_log_group.sentinel_forwarder_lambda](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/cloudwatch_log_group) | resource |
 | [aws_iam_policy.sentinel_forwarder_lambda](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/iam_policy) | resource |
 | [aws_iam_policy.sentinel_forwarder_lambda_s3](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/iam_policy) | resource |
@@ -60,7 +61,7 @@ No modules.
 | <a name="input_billing_tag_key"></a> [billing\_tag\_key](#input\_billing\_tag\_key) | (Optional, default 'CostCentre') The name of the billing tag | `string` | `"CostCentre"` | no |
 | <a name="input_billing_tag_value"></a> [billing\_tag\_value](#input\_billing\_tag\_value) | (Required) The value of the billing tag | `string` | n/a | yes |
 | <a name="input_customer_id"></a> [customer\_id](#input\_customer\_id) | (Required) Azure log workspace customer ID | `string` | n/a | yes |
-| <a name="input_event_rule_arns"></a> [event\_rule\_arns](#input\_event\_rule\_arns) | (Optional) List of source ARNs for event rules to trigger the lambda | `list(string)` | `[]` | no |
+| <a name="input_event_rule_names"></a> [event\_rule\_names](#input\_event\_rule\_names) | (Optional) List of names for event rules to trigger the lambda | `list(string)` | `[]` | no |
 | <a name="input_function_name"></a> [function\_name](#input\_function\_name) | (Required) Name of the Lambda function. | `string` | n/a | yes |
 | <a name="input_layer_arn"></a> [layer\_arn](#input\_layer\_arn) | (Optional) ARN of the lambda layer to use | `string` | `"arn:aws:lambda:ca-central-1:283582579564:layer:aws-sentinel-connector-layer:5"` | no |
 | <a name="input_log_type"></a> [log\_type](#input\_log\_type) | (Optional) The namespace for logs. This only applies if you are sending application logs | `string` | `"ApplicationLog"` | no |

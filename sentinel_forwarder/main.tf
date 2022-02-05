@@ -71,14 +71,23 @@ data "archive_file" "sentinel_forwarder" {
 # Event triggers
 #
 resource "aws_lambda_permission" "sentinel_forwarder_events" {
-  count = length(var.event_rule_arns)
+  count = length(var.event_rule_names)
 
   statement_id  = "AllowExecutionFromEvents-${var.function_name}-${count.index}"
   action        = "lambda:InvokeFunction"
   function_name = aws_lambda_function.sentinel_forwarder.function_name
   principal     = "events.amazonaws.com"
-  source_arn    = var.event_rule_arns[count.index]
+  source_arn    = aws_cloudwatch_event_target.sentinel_forwarder[count.index]
 }
+
+resource "aws_cloudwatch_event_target" "sentinel_forwarder" {
+  count = length(var.event_rule_names)
+
+  target_id = "SentinelForwarderEventTarget-${count.index}"
+  rule      = aws_cloudwatch_event_rule.cds_sentinel_securityhub_rule_forwarded.name
+  arn       = aws_lambda_function.sentinel_forwarder.arn
+}
+
 
 #
 # S3 triggers

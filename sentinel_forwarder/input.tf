@@ -16,8 +16,8 @@ variable "customer_id" {
   type        = string
 }
 
-variable "event_rule_arns" {
-  description = "(Optional) List of source ARNs for event rules to trigger the lambda"
+variable "event_rule_names" {
+  description = "(Optional) List of names for event rules to trigger the lambda"
   type        = list(string)
   default     = []
 }
