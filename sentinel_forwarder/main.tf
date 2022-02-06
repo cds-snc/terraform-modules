@@ -84,7 +84,7 @@ resource "aws_cloudwatch_event_target" "sentinel_forwarder" {
   count = length(var.event_rule_names)
 
   target_id = "SentinelForwarderEventTarget-${count.index}"
-  rule      = aws_cloudwatch_event_rule.cds_sentinel_securityhub_rule_forwarded.name
+  rule      = var.event_rule_names[count.index].name
   arn       = aws_lambda_function.sentinel_forwarder.arn
 }
 

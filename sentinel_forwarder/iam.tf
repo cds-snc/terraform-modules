@@ -45,14 +45,14 @@ resource "aws_iam_policy" "sentinel_forwarder_lambda_s3" {
 
   name   = "SentinelForwarderLambdaS3-${var.function_name}"
   path   = "/"
-  policy = data.aws_iam_policy_document.sentinel_forwarder_lambda_s3.json
+  policy = data.aws_iam_policy_document.sentinel_forwarder_lambda_s3[0].json
 }
 
 resource "aws_iam_role_policy_attachment" "sentinel_forwarder_lambda_s3" {
   for_each = length(var.s3_sources) == 0 ? [] : [true]
 
   role       = aws_iam_role.sentinel_forwarder_lambda.name
-  policy_arn = aws_iam_policy.sentinel_forwarder_lambda_s3.arn
+  policy_arn = aws_iam_policy.sentinel_forwarder_lambda_s3[0].arn
 }
 
 data "aws_iam_policy_document" "sentinel_forwarder_lambda_s3" {
