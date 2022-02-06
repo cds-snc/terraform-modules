@@ -77,14 +77,14 @@ resource "aws_lambda_permission" "sentinel_forwarder_events" {
   action        = "lambda:InvokeFunction"
   function_name = aws_lambda_function.sentinel_forwarder.function_name
   principal     = "events.amazonaws.com"
-  source_arn    = aws_cloudwatch_event_target.sentinel_forwarder[count.index]
+  source_arn    = aws_cloudwatch_event_target.sentinel_forwarder[count.index].arn
 }
 
 resource "aws_cloudwatch_event_target" "sentinel_forwarder" {
   count = length(var.event_rule_names)
 
   target_id = "SentinelForwarderEventTarget-${count.index}"
-  rule      = var.event_rule_names[count.index].name
+  rule      = var.event_rule_names[count.index]
   arn       = aws_lambda_function.sentinel_forwarder.arn
 }
 
