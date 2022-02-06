@@ -17,8 +17,8 @@ variable "customer_id" {
 }
 
 variable "event_rule_names" {
-  description = "(Optional) List of names for event rules to trigger the lambda"
-  type        = list(string)
+  description = "(Optional) Set of names for event rules to trigger the lambda"
+  type        = set(string)
   default     = []
 }
 
@@ -49,8 +49,8 @@ variable "log_type" {
 }
 
 variable "s3_sources" {
-  description = "(Optional) List of s3 buckets to trigger the lambda"
-  type = list(object({
+  description = "(Optional) Set of s3 buckets to trigger the lambda"
+  type = set(object({
     bucket_arn    = string
     bucket_id     = string
     filter_prefix = string

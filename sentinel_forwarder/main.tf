@@ -63,7 +63,7 @@ resource "aws_lambda_function" "sentinel_forwarder" {
 
 data "archive_file" "sentinel_forwarder" {
   type        = "zip"
-  source_file = "${path.module}/sentinel_forwarder/sentinel_forwarder.py"
+  source_file = "${path.module}/wrapper/sentinel_forwarder.py"
   output_path = "/tmp/sentinel_forwarder.py.zip"
 }
 
