@@ -61,11 +61,11 @@ No modules.
 | <a name="input_billing_tag_key"></a> [billing\_tag\_key](#input\_billing\_tag\_key) | (Optional, default 'CostCentre') The name of the billing tag | `string` | `"CostCentre"` | no |
 | <a name="input_billing_tag_value"></a> [billing\_tag\_value](#input\_billing\_tag\_value) | (Required) The value of the billing tag | `string` | n/a | yes |
 | <a name="input_customer_id"></a> [customer\_id](#input\_customer\_id) | (Required) Azure log workspace customer ID | `string` | n/a | yes |
-| <a name="input_event_rule_names"></a> [event\_rule\_names](#input\_event\_rule\_names) | (Optional) Set of names for event rules to trigger the lambda | `set(string)` | `[]` | no |
+| <a name="input_event_rule_names"></a> [event\_rule\_names](#input\_event\_rule\_names) | (Optional) List of names for event rules to trigger the lambda | `list(string)` | `[]` | no |
 | <a name="input_function_name"></a> [function\_name](#input\_function\_name) | (Required) Name of the Lambda function. | `string` | n/a | yes |
 | <a name="input_layer_arn"></a> [layer\_arn](#input\_layer\_arn) | (Optional) ARN of the lambda layer to use | `string` | `"arn:aws:lambda:ca-central-1:283582579564:layer:aws-sentinel-connector-layer:5"` | no |
 | <a name="input_log_type"></a> [log\_type](#input\_log\_type) | (Optional) The namespace for logs. This only applies if you are sending application logs | `string` | `"ApplicationLog"` | no |
-| <a name="input_s3_sources"></a> [s3\_sources](#input\_s3\_sources) | (Optional) Set of s3 buckets to trigger the lambda | <pre>set(object({<br>    bucket_arn    = string<br>    bucket_id     = string<br>    filter_prefix = string<br>    kms_key_arn   = string<br>  }))</pre> | `[]` | no |
+| <a name="input_s3_sources"></a> [s3\_sources](#input\_s3\_sources) | (Optional) List of s3 buckets to trigger the lambda | <pre>list(object({<br>    bucket_arn    = string<br>    bucket_id     = string<br>    filter_prefix = string<br>    kms_key_arn   = string<br>  }))</pre> | `[]` | no |
 | <a name="input_shared_key"></a> [shared\_key](#input\_shared\_key) | (Required) Azure log workspace shared secret | `string` | n/a | yes |
 
 ## Outputs
