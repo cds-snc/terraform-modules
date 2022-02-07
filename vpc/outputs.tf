@@ -25,3 +25,7 @@ output "private_route_table_ids" {
 output "main_nacl_id" {
   value = aws_network_acl.main.id
 }
+
+output "main_route_table_id" {
+  value = aws_vpc.main.main_route_table_id
+}
