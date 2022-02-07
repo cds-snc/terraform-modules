@@ -38,6 +38,20 @@ data "aws_iam_policy_document" "sentinel_forwarder_lambda" {
       aws_cloudwatch_log_group.sentinel_forwarder_lambda.arn
     ]
   }
+
+  statement {
+    effect = "Allow"
+    actions = [
+      "xray:PutTraceSegments",
+      "xray:PutTelemetryRecords",
+      "xray:GetSamplingRules",
+      "xray:GetSamplingTargets",
+      "xray:GetSamplingStatisticSummaries"
+    ]
+    resources = [
+      "*"
+    ]
+  }
 }
 
 resource "aws_iam_policy" "sentinel_forwarder_lambda_s3" {

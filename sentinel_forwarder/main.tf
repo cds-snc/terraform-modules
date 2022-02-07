@@ -49,7 +49,9 @@ resource "aws_lambda_function" "sentinel_forwarder" {
     }
   }
 
-  tracing_config = "Active"
+  tracing_config {
+    mode = "Active"
+  }
 
   layers = [var.layer_arn]
 
