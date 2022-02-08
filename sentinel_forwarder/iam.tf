@@ -35,7 +35,7 @@ data "aws_iam_policy_document" "sentinel_forwarder_lambda" {
       "logs:PutLogEvents"
     ]
     resources = [
-      aws_cloudwatch_log_group.sentinel_forwarder_lambda.arn
+      "${aws_cloudwatch_log_group.sentinel_forwarder_lambda.arn}:*"
     ]
   }
 
