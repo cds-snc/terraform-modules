@@ -84,7 +84,7 @@ resource "aws_s3_bucket" "this" {
         content {
           id                               = lookup(rules.value, "id", null)
           priority                         = lookup(rules.value, "priority", null)
-          delete_marker_replication_status = "Enabled"
+          delete_marker_replication_status = lookup(rules.value, "delete_marker_replication_status", null)
           status                           = "Enabled"
 
           dynamic "destination" {
