@@ -15,6 +15,7 @@
 - [RDS](rds)
 - [S3](S3)
 - [S3 Log Bucket](S3_log_bucket)
+- [Sentinel forwarder](sentinel_forwarder)
 - [User Login Alarm](user_login_alarm)
 - [VPC](vpc)
 
