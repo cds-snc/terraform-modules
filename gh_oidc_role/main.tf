@@ -39,7 +39,7 @@ data "aws_iam_policy_document" "oidc_assume_role_policy" {
 
     principals {
       type        = "Federated"
-      identifiers = [aws_iam_openid_connect_provider.github.arn]
+      identifiers = [var.oidc_exists ? aws_iam_openid_connect_provider.github.arn : "arn:aws:iam::${data.aws_caller_identity.account_id}:oidc-provider/token.actions.githubusercontent.com"]
     }
 
     condition {
@@ -52,6 +52,7 @@ data "aws_iam_policy_document" "oidc_assume_role_policy" {
 }
 
 resource "aws_iam_openid_connect_provider" "github" {
+  count           = var.oidc_exists ? 0 : 1
   url             = local.gh_url
   client_id_list  = ["sts.amazonaws.com"]
   thumbprint_list = [data.tls_certificate.thumprint.certificates.0.sha1_fingerprint]

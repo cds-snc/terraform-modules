@@ -10,6 +10,12 @@ variable "billing_tag_value" {
   type        = string
 }
 
+variable "oidc_exists" {
+  description = "(Optional, default false) If false, the OIDC provider will be created"
+  type        = boolean
+  default     = false
+}
+
 variable "org_name" {
   description = <<EOF
     (Optional)  The name of the org the workflow will be called from.
