@@ -12,7 +12,7 @@ variable "billing_tag_value" {
 
 variable "oidc_exists" {
   description = "(Optional, default false) If false, the OIDC provider will be created"
-  type        = boolean
+  type        = bool
   default     = false
 }
 
