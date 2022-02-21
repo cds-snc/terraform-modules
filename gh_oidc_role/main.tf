@@ -39,7 +39,7 @@ data "aws_iam_policy_document" "oidc_assume_role_policy" {
 
     principals {
       type        = "Federated"
-      identifiers = [var.oidc_exists ? "arn:aws:iam::${data.aws_caller_identity.account_id}:oidc-provider/token.actions.githubusercontent.com" : aws_iam_openid_connect_provider.github[0].arn ]
+      identifiers = [var.oidc_exists ? "arn:aws:iam::${data.aws_caller_identity.current.account_id}:oidc-provider/token.actions.githubusercontent.com" : aws_iam_openid_connect_provider.github[0].arn]
     }
 
     condition {
