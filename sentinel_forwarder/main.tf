@@ -28,6 +28,8 @@ terraform {
   }
 }
 
+data "aws_caller_identity" "current" {}
+
 resource "aws_lambda_function" "sentinel_forwarder" {
   function_name = var.function_name
   description   = "Lambda function to forward AWS logs to Azure Sentinel"
@@ -77,11 +79,12 @@ data "archive_file" "sentinel_forwarder" {
 resource "aws_lambda_permission" "sentinel_forwarder_events" {
   count = length(var.event_rule_names)
 
-  statement_id  = "AllowExecutionFromEvents-${var.function_name}-${count.index}"
-  action        = "lambda:InvokeFunction"
-  function_name = aws_lambda_function.sentinel_forwarder.function_name
-  principal     = "events.amazonaws.com"
-  source_arn    = aws_cloudwatch_event_target.sentinel_forwarder[count.index].arn
+  statement_id   = "AllowExecutionFromEvents-${var.function_name}-${count.index}"
+  action         = "lambda:InvokeFunction"
+  function_name  = aws_lambda_function.sentinel_forwarder.function_name
+  principal      = "events.amazonaws.com"
+  source_arn     = aws_cloudwatch_event_target.sentinel_forwarder[count.index].arn
+  source_account = data.aws_caller_identity.current.account_id
 }
 
 resource "aws_cloudwatch_event_target" "sentinel_forwarder" {
@@ -99,11 +102,12 @@ resource "aws_cloudwatch_event_target" "sentinel_forwarder" {
 resource "aws_lambda_permission" "sentinel_forwarder_s3_triggers" {
   count = length(var.s3_sources)
 
-  statement_id  = "AllowExecutionFromS3-${var.function_name}-${count.index}"
-  action        = "lambda:InvokeFunction"
-  function_name = aws_lambda_function.sentinel_forwarder.function_name
-  principal     = "s3.amazonaws.com"
-  source_arn    = var.s3_sources[count.index].bucket_arn
+  statement_id   = "AllowExecutionFromS3-${var.function_name}-${count.index}"
+  action         = "lambda:InvokeFunction"
+  function_name  = aws_lambda_function.sentinel_forwarder.function_name
+  principal      = "s3.amazonaws.com"
+  source_arn     = var.s3_sources[count.index].bucket_arn
+  source_account = data.aws_caller_identity.current.account_id
 }
 
 resource "aws_s3_bucket_notification" "sentinel_forwarder_trigger_notification" {
