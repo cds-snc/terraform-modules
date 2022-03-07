@@ -11,6 +11,8 @@
 
 ## Module List
 
+- [AWS Government of Canada Password Policy](aws_goc_password_policy)
+- [Github Open ID Connect](gh_oidc_role)
 - [Notify Slack](notify_slack)
 - [RDS](rds)
 - [S3](S3)

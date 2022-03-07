@@ -1,4 +1,5 @@
-/* # gh_oicd_role
+/* 
+* # gh_oicd_role
 * Creates an OpenID Connect Role that can be used for authenticating workflows in Github Actions
 * This allows for a more secure way to connect to AWS as it doesn't rely on static credentials but uses temporary credentials created for each run.
 */
