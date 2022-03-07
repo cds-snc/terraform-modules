@@ -1,4 +1,5 @@
-/* # S3 Bucket
+/* 
+* # S3 Bucket
 * 
 * This was adapted from the [terraform-aws-modules](https://github.com/terraform-aws-modules/terraform-aws-s3-bucket)
 * The License file for this module can be found in this directory
