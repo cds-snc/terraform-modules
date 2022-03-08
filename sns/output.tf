@@ -10,5 +10,5 @@ output "sns_arn" {
 
 output "kms_key_arn" {
   description = "KMS Key ARN used for SNS"
-  value       = aws_sns_topic.kms_master_key_id
+  value       = aws_sns_topic.this.kms_master_key_id
 }
