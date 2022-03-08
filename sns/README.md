@@ -45,7 +45,7 @@ No modules.
 | <a name="input_http_success_feedback_sample_rate"></a> [http\_success\_feedback\_sample\_rate](#input\_http\_success\_feedback\_sample\_rate) | (Optional) Percentage of success to sample | `number` | `null` | no |
 | <a name="input_kms_event_sources"></a> [kms\_event\_sources](#input\_kms\_event\_sources) | (Optional) List of AWS services that can access the topic. | `list(string)` | `[]` | no |
 | <a name="input_kms_iam_sources"></a> [kms\_iam\_sources](#input\_kms\_iam\_sources) | (Optional) List of AWS IAM role sources that can access the topic. | `list(string)` | `[]` | no |
-| <a name="input_kms_master_key_id"></a> [kms\_master\_key\_id](#input\_kms\_master\_key\_id) | (Optional) The ID of an AWS-managed customer master key (CMK) for Amazon SNS or a custom CMK. For more information, see Key Terms | `string` | `null` | no |
+| <a name="input_kms_master_key_id"></a> [kms\_master\_key\_id](#input\_kms\_master\_key\_id) | (Optional) The ARN of an AWS-managed customer master key (CMK) for Amazon SNS or a custom CMK. For more information, see Key Terms | `string` | `null` | no |
 | <a name="input_lambda_failure_feedback_role_arn"></a> [lambda\_failure\_feedback\_role\_arn](#input\_lambda\_failure\_feedback\_role\_arn) | (Optional) IAM role for failure feedback | `string` | `null` | no |
 | <a name="input_lambda_success_feedback_role_arn"></a> [lambda\_success\_feedback\_role\_arn](#input\_lambda\_success\_feedback\_role\_arn) | (Optional) The IAM role permitted to receive success feedback for this topic | `string` | `null` | no |
 | <a name="input_lambda_success_feedback_sample_rate"></a> [lambda\_success\_feedback\_sample\_rate](#input\_lambda\_success\_feedback\_sample\_rate) | (Optional) Percentage of success to sample | `number` | `null` | no |
@@ -61,6 +61,6 @@ No modules.
 
 | Name | Description |
 |------|-------------|
-| <a name="output_kms_key_id"></a> [kms\_key\_id](#output\_kms\_key\_id) | KMS Key ID used for SNS |
+| <a name="output_kms_key_arn"></a> [kms\_key\_arn](#output\_kms\_key\_arn) | KMS Key ARN used for SNS |
 | <a name="output_sns_arn"></a> [sns\_arn](#output\_sns\_arn) | The ARN of the SNS topic. |
 | <a name="output_sns_id"></a> [sns\_id](#output\_sns\_id) | The name of the SNS topic. |

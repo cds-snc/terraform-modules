@@ -8,7 +8,7 @@ output "sns_arn" {
   value       = aws_sns_topic.this.arn
 }
 
-output "kms_key_id" {
-  description = "KMS Key ID used for SNS"
+output "kms_key_arn" {
+  description = "KMS Key ARN used for SNS"
   value       = aws_sns_topic.kms_master_key_id
 }

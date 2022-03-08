@@ -18,7 +18,7 @@ resource "aws_sns_topic" "this" {
   http_success_feedback_role_arn           = var.http_success_feedback_role_arn
   http_success_feedback_sample_rate        = var.http_success_feedback_sample_rate
   http_failure_feedback_role_arn           = var.http_failure_feedback_role_arn
-  kms_master_key_id                        = var.kms_master_key_id == null ? null : var.kms_master_key_id
+  kms_master_key_id                        = var.kms_master_key_id == null ? aws_kms_key.sns_key.arn : var.kms_master_key_id
   fifo_topic                               = var.fifo_topic
   content_based_deduplication              = var.content_based_deduplication
   lambda_success_feedback_role_arn         = var.lambda_success_feedback_role_arn
@@ -60,9 +60,9 @@ data "aws_iam_policy_document" "kms_policies" {
     ]
 
     condition {
-      StringEquals = {
-        "AWS:SourceAccount" = data.aws_caller_identity.current.account_id
-      }
+      test = "StringLike"
+      variable = "AWS:SourceArn"
+      values = [data.aws_caller_identity.current.account_id]
     }
   }
 }
