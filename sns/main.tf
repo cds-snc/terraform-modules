@@ -47,7 +47,7 @@ data "aws_iam_policy_document" "kms_policies" {
 
     principals {
       type        = "AWS"
-      identifiers = [var.kms_iam_sources]
+      identifiers = var.kms_iam_sources
     }
 
     actions = [
@@ -59,7 +59,7 @@ data "aws_iam_policy_document" "kms_policies" {
       "*"
     ]
 
-    conditions {
+    condition {
       StringEquals = {
         "AWS:SourceAccount" = data.aws_caller_identity.current.account_id
       }
