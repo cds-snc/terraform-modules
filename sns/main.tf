@@ -97,5 +97,5 @@ data "aws_iam_policy_document" "kms_policies" {
 resource "aws_kms_key" "sns_key" {
   count       = var.kms_master_key_id == null ? 1 : 0
   description = "SNS Key for ${var.name}"
-  policy      = data.aws_iam_policy_document.kms_policies.json
+  policy      = data.aws_iam_policy_document.kms_policies.statement == null ? null : data.aws_iam_policy_document.kms_policies.statement.json
 }
