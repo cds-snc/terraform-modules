@@ -36,35 +36,62 @@ resource "aws_sns_topic" "this" {
 
 
 data "aws_iam_policy_document" "kms_policies" {
-  statement {
+  dynamic "statement" {
+    for_each = var.kms_event_sources
 
-    effect = "Allow"
+    content {
+      effect = "Allow"
 
-    principals {
-      type        = "Service"
-      identifiers = var.kms_event_sources
-    }
+      principals {
+        type        = "Service"
+        identifiers = statement.value
+      }
 
-    principals {
-      type        = "AWS"
-      identifiers = var.kms_iam_sources
-    }
+      actions = [
+        "kms:Decrypt*",
+        "kms:GenerateDataKey*",
+      ]
 
-    actions = [
-      "kms:Decrypt*",
-      "kms:GenerateDataKey*",
-    ]
+      resources = [
+        "*"
+      ]
 
-    resources = [
-      "*"
-    ]
-
-    condition {
-      test     = "StringLike"
-      variable = "AWS:SourceArn"
-      values   = [data.aws_caller_identity.current.account_id]
+      condition {
+        test     = "StringLike"
+        variable = "AWS:SourceArn"
+        values   = [data.aws_caller_identity.current.account_id]
+      }
     }
   }
+
+  dynamic "statement" {
+    for_each = var.kms_iam_sources
+
+    content {
+      effect = "Allow"
+
+      principals {
+        type        = "AWS"
+        identifiers = statement.value
+      }
+
+      actions = [
+        "kms:Decrypt*",
+        "kms:GenerateDataKey*",
+      ]
+
+      resources = [
+        "*"
+      ]
+
+      condition {
+        test     = "StringLike"
+        variable = "AWS:SourceArn"
+        values   = [data.aws_caller_identity.current.account_id]
+      }
+    }
+  }
+
 }
 
 resource "aws_kms_key" "sns_key" {
