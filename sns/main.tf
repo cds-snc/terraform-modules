@@ -36,6 +36,25 @@ resource "aws_sns_topic" "this" {
 
 
 data "aws_iam_policy_document" "kms_policies" {
+
+  statement {
+
+    effect = "Allow"
+
+    actions = [
+      "kms:*"
+    ]
+
+    resources = [
+      "*"
+    ]
+
+    principals {
+      type        = "AWS"
+      identifiers = ["arn:aws:iam::${data.aws_caller_identity.current.account_id}:root"]
+    }
+  }
+
   dynamic "statement" {
     for_each = var.kms_event_sources
 
@@ -97,5 +116,5 @@ data "aws_iam_policy_document" "kms_policies" {
 resource "aws_kms_key" "sns_key" {
   count       = var.kms_master_key_id == null ? 1 : 0
   description = "SNS Key for ${var.name}"
-  policy      = data.aws_iam_policy_document.kms_policies.statement == null ? null : data.aws_iam_policy_document.kms_policies.json
+  policy      = data.aws_iam_policy_document.kms_policies.json
 }
