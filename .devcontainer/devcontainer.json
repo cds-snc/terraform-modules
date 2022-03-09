@@ -5,7 +5,7 @@
 		"context": "..",
 		"args": {
 			"GO_VERSION": "1.16.6",
-			"GO_CHECKSUM": "be333ef18b3016e9d7cb7b1ff1fdb0cac800ca0be4cf2290fe613b3d069dfe0d",		
+			"GO_CHECKSUM": "be333ef18b3016e9d7cb7b1ff1fdb0cac800ca0be4cf2290fe613b3d069dfe0d",
 			"SHELLCHECK_VERSION": "0.7.2",
 			"SHELLCHECK_CHECKSUM": "70423609f27b504d6c0c47e340f33652aea975e45f312324f2dbf91c95a3b188",
 			"TERRAFORM_VERSION": "1.0.3",
@@ -15,17 +15,14 @@
 			"CONFTEST_VERSION": "0.27.0"
 		}
 	},
-
 	"containerEnv": {
 		"SHELL": "/bin/zsh"
 	},
-
 	"remoteEnv": {
 		"CGO_ENABLED": "0",
 		"GO111MODULE": "on",
 		"PATH": "${containerEnv:PATH}:/usr/local/go/bin"
 	},
-
 	"settings": {
 		"[go]": {
 			"editor.formatOnSave": true
@@ -34,17 +31,15 @@
 			"editor.formatOnSave": true
 		}
 	},
-
 	// Add the IDs of extensions you want installed when the container is created.
 	"extensions": [
 		"golang.go",
 		"hashicorp.terraform",
 		"redhat.vscode-yaml",
-		"yzhang.markdown-all-in-one"
+		"yzhang.markdown-all-in-one",
+		"github.copilot"
 	],
-
 	"postCreateCommand": "go get -v golang.org/x/tools/gopls",
-
 	// Comment out connect as root instead. More info: https://aka.ms/vscode-remote/containers/non-root.
 	"remoteUser": "vscode"
 }
