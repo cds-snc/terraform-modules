@@ -1,5 +1,10 @@
 
- A wrapper on the SNS module that enfores a customer managed KMS key
+A wrapper on the SNS module that enfores a customer managed KMS key. You can either supply
+your own KMS ARN as `kms_master_key_id` or let the module create their own key. If you choose
+to let the module create a KMS key it will also include an IAM policy that allows access from the
+root user of the account. You can also supply service like `s3.amazonaws.com` or `sns.amazonaws.com`
+in the `kms_event_sources` list, as well as IAM roles in the `kms_iam_sources` list who will then have
+`kms:Decrypt*` and `kms:GenerateDataKey*` permissions on the key.
 
 ## Requirements
 
