@@ -60,14 +60,14 @@ data "aws_iam_policy_document" "kms_policies" {
   }
 
   dynamic "statement" {
-    for_each = [var.kms_event_sources]
+    for_each = length(var.kms_event_sources) > 0 ? [true] : []
 
     content {
       effect = "Allow"
 
       principals {
         type        = "Service"
-        identifiers = statement.value
+        identifiers = var.kms_event_sources
       }
 
       actions = [
@@ -88,14 +88,14 @@ data "aws_iam_policy_document" "kms_policies" {
   }
 
   dynamic "statement" {
-    for_each = [var.kms_iam_sources]
+    for_each = length(var.kms_iam_sources) > 0 ? [true] : []
 
     content {
       effect = "Allow"
 
       principals {
         type        = "AWS"
-        identifiers = statement.value
+        identifiers = var.kms_iam_sources
       }
 
       actions = [
