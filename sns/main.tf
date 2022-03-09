@@ -55,19 +55,19 @@ data "aws_iam_policy_document" "kms_policies" {
 
     principals {
       type        = "AWS"
-      identifiers = ["arn:aws:iam::${data.aws_caller_identity.current.account_id}:root"]
+      identifiers = [data.aws_caller_identity.current.account_id]
     }
   }
 
   dynamic "statement" {
-    for_each = var.kms_event_sources
+    for_each = [var.kms_event_sources]
 
     content {
       effect = "Allow"
 
       principals {
         type        = "Service"
-        identifiers = [statement.value]
+        identifiers = statement.value
       }
 
       actions = [
@@ -88,14 +88,14 @@ data "aws_iam_policy_document" "kms_policies" {
   }
 
   dynamic "statement" {
-    for_each = var.kms_iam_sources
+    for_each = [var.kms_iam_sources]
 
     content {
       effect = "Allow"
 
       principals {
         type        = "AWS"
-        identifiers = [statement.value]
+        identifiers = statement.value
       }
 
       actions = [
