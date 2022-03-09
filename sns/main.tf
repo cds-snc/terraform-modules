@@ -63,7 +63,7 @@ data "aws_iam_policy_document" "kms_policies" {
 
       principals {
         type        = "Service"
-        identifiers = statement.value
+        identifiers = [statement.value]
       }
 
       actions = [
@@ -91,7 +91,7 @@ data "aws_iam_policy_document" "kms_policies" {
 
       principals {
         type        = "AWS"
-        identifiers = statement.value
+        identifiers = [statement.value]
       }
 
       actions = [
