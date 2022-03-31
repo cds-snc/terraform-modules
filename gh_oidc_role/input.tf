@@ -11,9 +11,13 @@ variable "billing_tag_value" {
 }
 
 variable "oidc_exists" {
-  description = "(Optional, default false) If false, the OIDC provider will be created"
-  type        = bool
-  default     = false
+  description = <<EOF
+    (Optional, default true) If false, the OIDC provider will be created.
+    If you are not on the new Control Tower Landing zone you may need to set this to false as your account may not have an OIDC Github Identity Provider configured.
+  EOF
+
+  type    = bool
+  default = true
 }
 
 variable "org_name" {
@@ -27,7 +31,7 @@ variable "org_name" {
 
 variable "roles" {
   description = <<EOF
-  (Required) The list of roles to create for GH OIDC
+  (Optional) The list of roles to create for GH OIDC
 
   name: The name of the role to create
 
@@ -37,8 +41,6 @@ variable "roles" {
   claim: The claim that the token is allowed to be authorized from. 
   This allows you to further restrict where this role is allowed to be used.
   If you wanted to restrict to the main branch you could use a value like `ref:refs/heads/main`, if you don't want to restrict you can use `*`
-
-  **Please Note:** You need to provide at least one role for this module to work.
   EOF
 
   type = set(object({
@@ -46,6 +48,7 @@ variable "roles" {
     repo_name : string,
     claim : string
   }))
+  default = []
 }
 
 variable "assume_policy" {
