@@ -68,3 +68,21 @@ variable "allow_https_request_in_response" {
   type        = bool
   default     = false
 }
+
+variable "cidr" {
+  description = "(Optional, default '10.0.0.0/16') The CIDR block for the VPC"
+  type        = string
+  default     = "10.0.0.0/16"
+}
+
+variable "public_subnets" {
+  description = "(Optional, default []) A list of public subnets inside the VPC"
+  type        = list(string)
+  default     = []
+}
+
+variable "private_subnets" {
+  description = "(Optional, default []) A list of private subnets inside the VPC"
+  type        = list(string)
+  default     = []
+}
