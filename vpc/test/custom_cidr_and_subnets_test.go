@@ -12,7 +12,6 @@ func TestCustomCIDRandSubnetsVpc(t *testing.T) {
 	t.Parallel()
 
 	region := "ca-central-1"
-	availabilityZone := region + "a"
 
 	terraformOptions := &terraform.Options{
 		TerraformDir: "../examples/custom_cidr_and_subnets",
