@@ -31,5 +31,5 @@ func TestCustomCIDRandSubnetsVpc(t *testing.T) {
 	vpc := aws.GetVpcById(t, vpcId, region)
 
 	// 3 private + 3 public subnet
-	assert.Equal(t, 6, len(vpc.Subnets)
+	assert.Equal(t, 6, len(vpc.Subnets))
 }
