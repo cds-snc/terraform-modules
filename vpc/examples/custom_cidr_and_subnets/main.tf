@@ -1,5 +1,4 @@
-# VPC for development work that creates one subnet 
-# in the region's first availability zone
+# VPC for work that requires custom cidr and private/subnet ranges
 module "custom_cidr_and_subnets_vpc" {
   source = "../../"
   name   = "custom_cidr_and_subnets"
