@@ -24,7 +24,7 @@
 */
 
 resource "aws_vpc" "main" {
-  cidr_block           = "10.0.0.0/16"
+  cidr_block           = var.cidr
   enable_dns_support   = true
   enable_dns_hostnames = true
 
@@ -61,7 +61,7 @@ resource "aws_subnet" "private" {
   count             = local.max_subnet_length
   vpc_id            = aws_vpc.main.id
   availability_zone = element(local.zone_names, count.index)
-  cidr_block        = var.high_availability ? cidrsubnet(aws_vpc.main.cidr_block, 8, count.index) : cidrsubnet(aws_vpc.main.cidr_block, 10, 0)
+  cidr_block        = length(var.private_subnets) == 0 ? var.high_availability ? cidrsubnet(aws_vpc.main.cidr_block, 8, count.index) : cidrsubnet(aws_vpc.main.cidr_block, 10, 0) : var.private_subnets
 
   tags = merge(local.common_tags, {
     Name = "${var.name}_private_subnet_${element(local.zone_names, count.index)}"
@@ -77,7 +77,7 @@ resource "aws_subnet" "public" {
   count             = local.max_subnet_length
   vpc_id            = aws_vpc.main.id
   availability_zone = element(local.zone_names, count.index)
-  cidr_block        = var.high_availability ? cidrsubnet(aws_vpc.main.cidr_block, 8, count.index + local.max_subnet_length) : cidrsubnet(aws_vpc.main.cidr_block, 10, 1)
+  cidr_block        = length(var.public_subnets) == 0 ? var.high_availability ? cidrsubnet(aws_vpc.main.cidr_block, 8, count.index + local.max_subnet_length) : cidrsubnet(aws_vpc.main.cidr_block, 10, 1) : var.public_subnets
 
   tags = merge(local.common_tags, {
     Name = "${var.name}_public_subnet_${element(local.zone_names, count.index)}"
