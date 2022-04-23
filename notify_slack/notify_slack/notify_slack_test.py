@@ -122,7 +122,8 @@ def test_notify_slack(MockRequest, MockUrlopen, event):
     MockUrlopen.return_value = MockResult
     MockResult.getcode.return_value = 200
     MockResult.info.return_value.as_string.return_value = "Muffins"
-    MockRequest.return_value = "https://bar.com"
+    TestRequest = MagicMock()
+    MockRequest.return_value = TestRequest
 
     icon = event['Records'][0]['Icon']
     message = json.loads(event['Records'][0]['Sns']['Message'])
@@ -133,10 +134,12 @@ def test_notify_slack(MockRequest, MockUrlopen, event):
         "text": f"{icon} *{message['NewStateValue']}* foo",
     }
 
-    data = urllib.parse.urlencode({"payload": json.dumps(payload)}).encode("utf-8")
+    data = json.dumps(payload).encode("utf-8")
     response = notify_slack.notify_slack(subject, message, region)
 
-    MockUrlopen.assert_called_with("https://bar.com", data)
+    MockRequest.assert_called_with("https://bar.com")
+    MockUrlopen.assert_called_with(TestRequest, data)
+    TestRequest.add_header.assert_called_with("Content-Type", "application/json")
 
 
 @patch("notify_slack.notify_slack")
