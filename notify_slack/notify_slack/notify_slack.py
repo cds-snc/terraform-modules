@@ -83,8 +83,9 @@ def notify_slack(subject, message, region):
     payload['text'] = "AWS notification"
     payload['attachments'].append(default_notification(subject, message))
 
-  data = urllib.parse.urlencode({"payload": json.dumps(payload)}).encode("utf-8")
+  data = json.dumps(payload).encode("utf-8")
   req = urllib.request.Request(slack_url)
+  req.add_header("Content-Type", "application/json")
 
   try:
     result = urllib.request.urlopen(req, data)
