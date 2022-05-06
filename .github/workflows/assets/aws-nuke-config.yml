@@ -11,15 +11,15 @@ accounts:
       CloudFormationStack:
         - propery: Name
           type: regex
-          value: ".*Landing-?Zone.*"
+          value: ".*(Landing-?Zone|cloud-based-sensor).*"
       CloudTrailTrail:
         - propery: Name
           type: regex
-          value: ".*Landing-?Zone.*"
+          value: "(.*Landing-?Zone.*|CbsSatelliteTrail)"
       CloudWatchAlarm:
         - propery: TargetId
           type: regex
-          value: "(CloudTrail.*|IAMPolicyChanges|RootLogin)"
+          value: "(CloudTrail.*|IAMPolicyChanges|RootLogin|Cbs.*|cbs-.*|secops.*)"
       CloudWatchEventsTarget:
         - propery: Name
           type: regex
@@ -27,35 +27,47 @@ accounts:
       CloudWatchLogsLogGroup:
         - propery: ARN
           type: regex
-          value: ".*Landing-?Zone.*"
+          value: "(.*Landing-?Zone|Cbs|cbs-|secops).*"
+      IAMPolicy:
+        - propery: PolicyName
+          type: regex
+          value: "(cbs-|Cbs|ConfigTerraform|secops).*"
       IAMRole:
         - propery: Name
           type: regex
-          value: "(Landing-?Zone|AWSReservedSSO|CloudFormation)"
+          value: "(Landing-?Zone|AWSReservedSSO|CloudFormation|Cbs.*|cbs-.*|ConfigTerraform.*|secops.*)"
       IAMRolePolicy:
         - propery: RoleName
           type: regex
-          value: "(Landing-?Zone|AWSReservedSSO|CloudFormation)"
+          value: "(Landing-?Zone|AWSReservedSSO|CloudFormation|Cbs.*|cbs-.*|secops.*)"
       IAMRolePolicyAttachment:
         - propery: RoleName
           type: regex
-          value: "(Landing-?Zone|AWSReservedSSO)"
+          value: "(Landing-?Zone|AWSReservedSSO|Cbs.*|cbs-.*|ConfigTerraform.*|secops.*)"
       LambdaFunction:
         - propery: Name
           type: regex
-          value: ".*Landing-?Zone.*"
+          value: "(.*Landing-?Zone|Cbs|cbs-|secops).*"
+      S3Bucket:
+        - propery: BucketName
+          type: regex
+          value: "(cbs-|secops).*"
+      S3Object:
+        - propery: BucketName
+          type: regex
+          value: "(cbs-|secops).*"
       SNSSubscription:
         - propery: ARN
           type: regex
-          value: ".*Landing-?Zone.*"
+          value: ".*(Landing-?Zone|Cbs|cbs-|secops).*"
       SNSTopic:
         - propery: TopicARN
           type: regex
-          value: ".*Landing-?Zone.*"
+          value: ".*(Landing-?Zone|Cbs|cbs-|secops).*"
       SSMParameter:
         - propery: Name
           type: regex
-          value: ".*local_sns_arn.*"
+          value: "(.*local_sns_arn|secops).*"
 
 # Do not delete any of the following resource types
 resource-types:
@@ -68,49 +80,50 @@ resource-types:
     - ElasticacheCacheParameterGroup
     - FMSPolicy
     - FMSNotificationChannel
+    - GuardDutyDetector
     - IAMUserAccessKey
     - IAMUserPolicyAttachment
     - IAMLoginProfile
+    - IAMOpenIDConnectProvider
     - IAMSAMLProvider
     - IAMUser
     - KMSAlias
+    - KMSKey
     - OpsWorksUserProfile
     - SecurityHub
 
 # Accounts that will not have resources removed
 account-blocklist:
-- "595701125956"
-- "239043911459"
-- "977382588899"
-- "722713121070"
-- "009883649233"
-- "703399696403"
-- "276192857112"
-- "637287734259"
-- "339850311124"
-- "507252742351"
-- "820252213580"
-- "563894450011"
-- "160411545784"
-- "136676205420"
-- "894242006032"
-- "028051698106"
-- "773858180673"
-- "370045664819"
 - "005133826942"
-- "578240607488"
-- "537819865265"
-- "527289287223"
-- "687401027353"
-- "797698708703"
-- "349837941862"
-- "406214159830"
-- "591111259917"
-- "296255494825"
-- "414662622316"
-- "957818836222"
-- "515018049985"
-- "925306372402"
+- "124044056575"
+- "136676205420"
+- "239043911459"
+- "276192857112"
 - "283582579564"
+- "296255494825"
+- "339850311124"
+- "349837941862"
+- "370045664819"
 - "400061975867"
-- "059208818674"
+- "406214159830"
+- "414662622316"
+- "472286471787"
+- "507252742351"
+- "537819865265"
+- "563894450011"
+- "591111259917"
+- "595701125956"
+- "637287734259"
+- "687401027353"
+- "703399696403"
+- "729164266357"
+- "773858180673"
+- "794722365809"
+- "797698708703"
+- "806545929748"
+- "820252213580"
+- "843973686572"
+- "871282759583"
+- "925306372402"
+- "957818836222"
+- "977382588899"
