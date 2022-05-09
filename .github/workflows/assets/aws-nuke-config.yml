@@ -95,7 +95,6 @@ resource-types:
 # Accounts that will not have resources removed
 account-blocklist:
 - "005133826942"
-- "124044056575"
 - "136676205420"
 - "239043911459"
 - "276192857112"
