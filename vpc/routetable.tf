@@ -2,7 +2,7 @@
 # Private route table resources
 ###
 resource "aws_route_table" "private" {
-  count  = local.nat_gateway_count
+  count  = local.max_subnet_length > 0 ? local.nat_gateway_count : 0
   vpc_id = aws_vpc.main.id
 
   tags = merge(local.common_tags, {
