@@ -60,3 +60,13 @@ func GetVpcFlowLogs(t *testing.T, client *ec2.EC2, logGroupName string) *ec2.Des
 
 	return flowLogs
 }
+
+// Gets a VPCs Route tables
+func GetVpcRouteTables(t *testing.T, client *ec2.EC2, vpcId string) *ec2.DescribeRouteTablesOutput {
+	vpcFilter := ec2.Filter{Name: aws.String("vpc-id"), Values: []*string{&vpcId}}
+
+	routeTables, err := client.DescribeRouteTables(&ec2.DescribeRouteTablesInput{Filter: []*ec2.Filter{&vpcFilter}})
+	require.NoError(t, err)
+
+	return routeTables
+}
