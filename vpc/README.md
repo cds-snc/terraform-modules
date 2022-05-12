@@ -92,6 +92,7 @@ No modules.
 | <a name="input_name"></a> [name](#input\_name) | (Required) The name of the vpc | `string` | n/a | yes |
 | <a name="input_private_subnets"></a> [private\_subnets](#input\_private\_subnets) | (Optional, default []) A list of private subnets inside the VPC | `list(string)` | `[]` | no |
 | <a name="input_public_subnets"></a> [public\_subnets](#input\_public\_subnets) | (Optional, default []) A list of public subnets inside the VPC | `list(string)` | `[]` | no |
+| <a name="input_single_nat_gateway"></a> [single\_nat\_gateway](#input\_single\_nat\_gateway) | Should be true if you want to provision a single shared NAT Gateway across all of your private networks | `bool` | `false` | no |
 
 ## Outputs
 
