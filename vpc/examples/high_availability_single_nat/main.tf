@@ -1,10 +1,12 @@
 # VPC for production that creates a subnet in all of a region's availability zones
-module "high_availability_vpc" {
+module "high_availability_single_nat_vpc" {
   source = "../../"
-  name   = "high_availability"
+  name   = "high_availability_single_nat"
 
-  high_availability  = true
-  enable_flow_log    = true
+  high_availability = true
+  enable_flow_log   = true
+
+  # Only provision one NAT gateway to be shared by all your private subnets
   single_nat_gateway = true
 
   # Allow VPC resources to send requests out to the internet and recieve a response
@@ -24,5 +26,5 @@ module "high_availability_vpc" {
 }
 
 output "vpc_id" {
-  value = module.high_availability_vpc.vpc_id
+  value = module.high_availability_single_nat_vpc.vpc_id
 }
