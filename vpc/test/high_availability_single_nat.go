@@ -8,7 +8,7 @@ import (
 	"github.com/stretchr/testify/assert"
 )
 
-func TestHighAvailabilityVpc(t *testing.T) {
+func TestHighAvailabilityVpcSingleNat(t *testing.T) {
 	t.Parallel()
 
 	region := "ca-central-1"
