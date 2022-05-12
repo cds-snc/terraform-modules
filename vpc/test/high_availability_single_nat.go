@@ -51,7 +51,7 @@ func TestHighAvailabilityVpc(t *testing.T) {
 	assert.Equal(t, 1, len(nats.NatGateways))
 
 	routes := GetVpcRouteTables(t, client, vpcId)
-	assert.Equal(t, 4, len(routes.routeTables))
+	assert.Equal(t, 4, len(routes.RouteTables))
 
 	// Expect NACL rules to not exist for blocking SSH, RDP
 	naclRulesDeny := []naclRule{
