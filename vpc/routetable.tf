@@ -2,7 +2,7 @@
 # Private route table resources
 ###
 resource "aws_route_table" "private" {
-  count  = local.max_subnet_length
+  count  = local.max_subnet_length > 0 ? local.nat_gateway_count : 0
   vpc_id = aws_vpc.main.id
 
   tags = merge(local.common_tags, {
@@ -11,7 +11,7 @@ resource "aws_route_table" "private" {
 }
 
 resource "aws_route" "private_nat_gateway" {
-  count                  = local.max_subnet_length
+  count                  = local.nat_gateway_count
   route_table_id         = element(aws_route_table.private.*.id, count.index)
   destination_cidr_block = "0.0.0.0/0"
   nat_gateway_id         = element(aws_nat_gateway.nat_gw.*.id, count.index)
@@ -22,9 +22,12 @@ resource "aws_route" "private_nat_gateway" {
 }
 
 resource "aws_route_table_association" "private" {
-  count          = length(aws_subnet.private.*)
-  subnet_id      = element(aws_subnet.private.*.id, count.index)
-  route_table_id = element(aws_route_table.private.*.id, count.index)
+  count     = length(aws_subnet.private.*)
+  subnet_id = element(aws_subnet.private.*.id, count.index)
+  route_table_id = element(
+    aws_route_table.private.*.id,
+    var.single_nat_gateway ? 0 : count.index,
+  )
 }
 
 ###
