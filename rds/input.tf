@@ -147,3 +147,22 @@ variable "proxy_debug_logging" {
 # Database Configuration
 ###
 
+variable "serverless_min_capacity" {
+  type        = number
+  description = "(Optional) The minimum capacity of the Aurora serverless cluster (0.5 to 128 in increments of 0.5)"
+  default     = 0
+  validation {
+    condition     = var.serverless_min_capacity >= 0 && var.serverless_min_capacity <= 128 && var.serverless_min_capacity % 0.5 == 0
+    error_message = "Serverless_min_capacity must be between 0.5 and 128 in increments of 0.5."
+  }
+}
+
+variable "serverless_max_capacity" {
+  type        = number
+  description = "(Optional) The maximum capacity of the Aurora serverless cluster (0.5 to 128 in increments of 0.5)"
+  default     = 0
+  validation {
+    condition     = var.serverless_max_capacity >= 0 && var.serverless_max_capacity <= 128 && var.serverless_max_capacity % 0.5 == 0
+    error_message = "Serverless_max_capacity must be between 0.5 and 128 in increments of 0.5."
+  }
+}

@@ -48,6 +48,14 @@ resource "aws_rds_cluster" "cluster" {
 
   vpc_security_group_ids = [aws_security_group.rds_proxy.id]
 
+  dynamic "serverlessv2_scaling_configuration" {
+    for_each = var.serverless_min_capacity + var.serverless_max_capacity <= 1 ? [] : [1]
+    content {
+      min_capacity = var.serverless_min_capacity
+      max_capacity = var.serverless_max_capacity
+    }
+  }
+
   tags = merge(local.common_tags, {
     Name = "${var.name}-cluster"
   })
