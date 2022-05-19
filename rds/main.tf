@@ -23,14 +23,6 @@ resource "aws_rds_cluster_instance" "instances" {
 
   performance_insights_enabled = var.performance_insights_enabled
 
-  dynamic "serverlessv2_scaling_configuration" {
-    for_each = var.serverless_min_capacity + var.serverless_max_capacity <= 1 ? [] : [1]
-    content {
-      min_capacity = var.serverless_min_capacity
-      max_capacity = var.serverless_max_capacity
-    }
-  }
-
   tags = merge(local.common_tags, {
     Name = "${var.name}-instance-${count.index}"
     }
@@ -55,6 +47,14 @@ resource "aws_rds_cluster" "cluster" {
   skip_final_snapshot = var.skip_final_snapshot
 
   vpc_security_group_ids = [aws_security_group.rds_proxy.id]
+
+  dynamic "serverlessv2_scaling_configuration" {
+    for_each = var.serverless_min_capacity + var.serverless_max_capacity <= 1 ? [] : [1]
+    content {
+      min_capacity = var.serverless_min_capacity
+      max_capacity = var.serverless_max_capacity
+    }
+  }
 
   tags = merge(local.common_tags, {
     Name = "${var.name}-cluster"
