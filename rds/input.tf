@@ -153,7 +153,7 @@ variable "serverless_min_capacity" {
   default     = 0
   validation {
     condition     = var.serverless_min_capacity >= 0 && var.serverless_min_capacity <= 128 && var.serverless_min_capacity % 0.5 == 0
-    error_message = "serverless_min_capacity must be between 0.5 and 128 in increments of 0.5."
+    error_message = "Serverless_min_capacity must be between 0.5 and 128 in increments of 0.5."
   }
 }
 
@@ -163,6 +163,6 @@ variable "serverless_max_capacity" {
   default     = 0
   validation {
     condition     = var.serverless_max_capacity >= 0 && var.serverless_max_capacity <= 128 && var.serverless_max_capacity % 0.5 == 0
-    error_message = "serverless_max_capacity must be between 0.5 and 128 in increments of 0.5."
+    error_message = "Serverless_max_capacity must be between 0.5 and 128 in increments of 0.5."
   }
 }
