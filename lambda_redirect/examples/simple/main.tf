@@ -5,7 +5,7 @@ module "lambda_redirect" {
   source = "../../"
 
   domain_name_source = "lambda-redirect.cdssandbox.xyz"
-  domain_name_target = "digital.canada.ca"
+  redirect_url       = "https://digital.canada.ca"
 
   billing_tag_key   = "Business Unit"
   billing_tag_value = "Terratest"

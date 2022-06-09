@@ -30,17 +30,17 @@ variable "domain_name_source" {
   }
 }
 
-variable "domain_name_target" {
-  description = "(Required) Domain name that is the target of the redirect. It should be in the form 'example.com'."
-  type        = string
-  validation {
-    condition     = can(regex("^[a-z0-9]+([\\-\\.]{1}[a-z0-9]+)*\\.[a-z]{2,}$", lower(var.domain_name_target)))
-    error_message = "The domain name is not valid. It should be in the form 'example.com'."
-  }
-}
-
 variable "hosted_zone_id" {
   description = "(Optional, default '') Hosted zone ID used to create the domain name source ALIAS record pointing to Cloudfront.  If not specified, a new hosted zone will be created."
   type        = string
   default     = ""
+}
+
+variable "redirect_url" {
+  description = "(Required) URL to redirect the requests that get sent to 'var.domain_name_source'."
+  type        = string
+  validation {
+    condition     = can(regex("^https?:\\/\\/[a-z0-9]+([\\-\\.]{1}[a-z0-9]+)*\\.[a-z]{2,}([-a-z0-9()@:%_\\+.~#?&//=]*)$", lower(var.redirect_url)))
+    error_message = "The redirect url is not valid. It should be in the form 'https://example.com'."
+  }
 }

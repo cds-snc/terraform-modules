@@ -36,7 +36,7 @@ data "archive_file" "redirector_src" {
         return {
           statusCode: 301,
           headers: { 
-            Location: "https://${var.domain_name_target}"
+            Location: "${var.redirect_url}"
           }
         };
       };

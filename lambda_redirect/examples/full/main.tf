@@ -5,7 +5,7 @@ module "lambda_redirect" {
   source = "../../"
 
   domain_name_source = "lambda-redirect.cdssandbox.xyz"
-  domain_name_target = "digital.canada.ca"
+  redirect_url       = "https://digital.canada.ca"
 
   # Use an existing us-east-1 ACM certificate and hosted zone
   acm_certificate_arn    = "arn:aws:acm:us-east-1:123456789012:certificate/12345678-1234-1234-1234-123456789012"
