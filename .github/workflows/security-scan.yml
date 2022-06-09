@@ -21,7 +21,7 @@ jobs:
           - S3
           - S3_log_bucket
           - lambda
-          - lambda_redirect
+          - lambda_response
 
     steps:
       - name: Checkout

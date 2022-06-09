@@ -1,7 +1,7 @@
-# Lambda redirect
+# Lambda response
 
-Creates a 301 redirect from a source domain to a target domain using Cloudfront and a Lambda function.
-HTTP requests are automatically redirected to HTTPS by the CloudFront distribution.
+Creates a Lambda function that returns a configurable response code and HTTP headers to an HTTP request.
+This can be used to create 301 redirects or block access to a domain with a 403 response.
 
 ## Requirements
 
@@ -51,10 +51,9 @@ No modules.
 | <a name="input_cloudfront_price_class"></a> [cloudfront\_price\_class](#input\_cloudfront\_price\_class) | (Optional, default 'PriceClass\_100') The price class of the CloudFront distribution. | `string` | `"PriceClass_100"` | no |
 | <a name="input_domain_name_source"></a> [domain\_name\_source](#input\_domain\_name\_source) | (Required) Domain name that will be initially entered by the user. It should be in the form 'example.com'. | `string` | n/a | yes |
 | <a name="input_hosted_zone_id"></a> [hosted\_zone\_id](#input\_hosted\_zone\_id) | (Optional, default '') Hosted zone ID used to create the domain name source ALIAS record pointing to Cloudfront.  If not specified, a new hosted zone will be created. | `string` | `""` | no |
-| <a name="input_redirect_url"></a> [redirect\_url](#input\_redirect\_url) | (Required) URL to redirect the requests that get sent to 'var.domain\_name\_source'. | `string` | n/a | yes |
+| <a name="input_response_headers"></a> [response\_headers](#input\_response\_headers) | (Required) The response headers to add to the response. | `map(string)` | n/a | yes |
+| <a name="input_response_status_code"></a> [response\_status\_code](#input\_response\_status\_code) | (Required) The HTTP status code to return in the response. | `number` | n/a | yes |
 
 ## Outputs
 
-| Name | Description |
-|------|-------------|
-| <a name="output_hosted_zone_name_servers"></a> [hosted\_zone\_name\_servers](#output\_hosted\_zone\_name\_servers) | n/a |
+No outputs.

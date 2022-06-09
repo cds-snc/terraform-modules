@@ -1,11 +1,12 @@
 #
-# Lambda redirect using an existing Route53 hosted zone and ACM certificate
+# Lambda redirect that returns forbidden for a domain
 #
 module "lambda_redirect" {
   source = "../../"
 
-  domain_name_source = "lambda-redirect.cdssandbox.xyz"
-  redirect_url       = "https://digital.canada.ca"
+  domain_name_source   = "lambda-redirect.cdssandbox.xyz"
+  response_status_code = 403
+  response_headers     = {}
 
   # Use an existing us-east-1 ACM certificate and hosted zone
   acm_certificate_arn    = "arn:aws:acm:us-east-1:123456789012:certificate/12345678-1234-1234-1234-123456789012"

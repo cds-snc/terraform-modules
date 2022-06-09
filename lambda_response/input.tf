@@ -36,11 +36,12 @@ variable "hosted_zone_id" {
   default     = ""
 }
 
-variable "redirect_url" {
-  description = "(Required) URL to redirect the requests that get sent to 'var.domain_name_source'."
-  type        = string
-  validation {
-    condition     = can(regex("^https?:\\/\\/[a-z0-9]+([\\-\\.]{1}[a-z0-9]+)*\\.[a-z]{2,}([-a-z0-9()@:%_\\+.~#?&//=]*)$", lower(var.redirect_url)))
-    error_message = "The redirect url is not valid. It should be in the form 'https://example.com'."
-  }
+variable "response_headers" {
+  description = "(Required) The response headers to add to the response."
+  type        = map(string)
+}
+
+variable "response_status_code" {
+  description = "(Required) The HTTP status code to return in the response."
+  type        = number
 }

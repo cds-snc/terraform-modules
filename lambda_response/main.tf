@@ -1,8 +1,8 @@
 /* 
-* # Lambda redirect
+* # Lambda response
 * 
-* Creates a 301 redirect from a source domain to a target domain using Cloudfront and a Lambda function.
-* HTTP requests are automatically redirected to HTTPS by the CloudFront distribution.
+* Creates a Lambda function that returns a configurable response code and HTTP headers to an HTTP request.
+* This can be used to create 301 redirects or block access to a domain with a 403 response.
 */
 
 #
@@ -34,10 +34,8 @@ data "archive_file" "redirector_src" {
     content  = <<-EOF
       exports.handler = async (event) => {
         return {
-          statusCode: 301,
-          headers: { 
-            Location: "${var.redirect_url}"
-          }
+          statusCode: ${var.response_status_code},
+          headers: ${jsonencode(var.response_headers)},
         };
       };
     EOF
