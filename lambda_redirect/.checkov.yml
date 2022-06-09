@@ -1,0 +1,8 @@
+skip-check:
+  - CKV_AWS_68  # Cloudfront WAF not required
+  - CKV_AWS_86  # Cloudfront access logging not required
+  - CKV_AWS_116 # Lambda Dead Letter Queue not required
+  - CKV_AWS_117 # Lambda does not need to be in a VPC
+  - CKV_AWS_158 # CloudWatch service encryption key is acceptable
+  - CKV_AWS_258 # Lambda function URLs AuthType must be "NONE"
+  - CKV2_AWS_32 # CloudFront distribution response headers policy not required
