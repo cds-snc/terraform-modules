@@ -1,0 +1,3 @@
+skip-check:
+  - CKV_AWS_109 # KMS/SNS IAM resource key policy '*' refers to self
+  - CKV_AWS_111 # KMS/SNS IAM resource key policy '*' refers to self

@@ -59,9 +59,10 @@ data "aws_iam_policy_document" "scan_complete" {
 # KMS: SNS topic encryption keys
 # A CMK is required so we can apply a policy that allows Lambda to use it
 resource "aws_kms_key" "sns_lambda" {
-  description = "S3 scan objects KMS key for Lambda SNS topic"
-  policy      = data.aws_iam_policy_document.sns_lambda.json
-  tags        = local.common_tags
+  description         = "S3 scan objects KMS key for Lambda SNS topic"
+  policy              = data.aws_iam_policy_document.sns_lambda.json
+  enable_key_rotation = true
+  tags                = local.common_tags
 }
 
 data "aws_iam_policy_document" "sns_lambda" {
