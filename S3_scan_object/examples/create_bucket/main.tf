@@ -7,7 +7,6 @@ module "create_bucket" {
 
   product_name          = "create-bucket"
   s3_upload_bucket_name = "your-upload-bucket-name-${random_id.upload_bucket.hex}"
-  scan_files_api_key    = "YouShouldDefinitelyKeepThisSecret"
 
   billing_tag_value = "terratest"
 }

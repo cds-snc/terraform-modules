@@ -23,7 +23,7 @@ module "s3_scan_object" {
   environment_variables = {
     AWS_ACCOUNT_ID                = local.account_id
     SCAN_FILES_URL                = var.scan_files_url
-    SCAN_FILES_API_KEY_PARAM_NAME = aws_ssm_parameter.scan_files_api_key.name
+    SCAN_FILES_API_KEY_SECRET_ARN = var.scan_files_api_key_secret_arn
     SNS_SCAN_COMPLETE_TOPIC_ARN   = aws_sns_topic.scan_complete.arn
   }
 
@@ -41,18 +41,20 @@ data "aws_iam_policy_document" "s3_scan_object" {
   statement {
     effect = "Allow"
     actions = [
-      "ssm:DescribeParameters"
+      "secretsmanager:GetSecretValue"
     ]
-    resources = ["*"]
+    resources = [
+      var.scan_files_api_key_secret_arn
+    ]
   }
 
   statement {
     effect = "Allow"
     actions = [
-      "ssm:GetParameter"
+      "kms:Decrypt"
     ]
     resources = [
-      aws_ssm_parameter.scan_files_api_key.arn,
+      var.scan_files_api_key_kms_arn
     ]
   }
 

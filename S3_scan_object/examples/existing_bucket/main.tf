@@ -7,8 +7,7 @@ module "existing_bucket" {
   s3_upload_bucket_create        = false
   s3_upload_bucket_policy_create = false
 
-  scan_files_api_key = "YouShouldDefinitelyKeepThisSecret"
-  billing_tag_value  = "terratest"
+  billing_tag_value = "terratest"
 }
 
 #

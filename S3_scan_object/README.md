@@ -39,7 +39,6 @@ No requirements.
 | [aws_sns_topic.scan_complete](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/sns_topic) | resource |
 | [aws_sns_topic_policy.scan_complete](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/sns_topic_policy) | resource |
 | [aws_sns_topic_subscription.scan_complete](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/sns_topic_subscription) | resource |
-| [aws_ssm_parameter.scan_files_api_key](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/ssm_parameter) | resource |
 | [aws_caller_identity.current](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/data-sources/caller_identity) | data source |
 | [aws_iam_policy_document.limit_tagging](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/data-sources/iam_policy_document) | data source |
 | [aws_iam_policy_document.s3_scan_object](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/data-sources/iam_policy_document) | data source |
@@ -58,15 +57,16 @@ No requirements.
 | <a name="input_billing_tag_key"></a> [billing\_tag\_key](#input\_billing\_tag\_key) | (Optional, default 'CostCentre') The name of the billing tag | `string` | `"CostCentre"` | no |
 | <a name="input_billing_tag_value"></a> [billing\_tag\_value](#input\_billing\_tag\_value) | (Required) The value of the billing tag | `string` | n/a | yes |
 | <a name="input_lambda_ecr_arn"></a> [lambda\_ecr\_arn](#input\_lambda\_ecr\_arn) | (Optional, default Scan Files ECR) ARN of the ECR used to pull the Lambda image | `string` | `"arn:aws:ecr:ca-central-1:806545929748:scan-files/module/s3-scan-object"` | no |
-| <a name="input_lambda_image_uri"></a> [lambda\_image\_uri](#input\_lambda\_image\_uri) | (Optional, default Scan Files ECR latest Docker image) The URI of the Lambda image | `string` | `"806545929748.dkr.ecr.ca-central-1.amazonaws.com/scan-files/module/s3-scan-object:7951f8348856c5712ec3ec4ef071717742062709"` | no |
+| <a name="input_lambda_image_uri"></a> [lambda\_image\_uri](#input\_lambda\_image\_uri) | (Optional, default Scan Files ECR latest Docker image) The URI of the Lambda image | `string` | `"806545929748.dkr.ecr.ca-central-1.amazonaws.com/scan-files/module/s3-scan-object:6944b6fc5ab1127480cdb59e3ca1f94ca3395610"` | no |
 | <a name="input_product_name"></a> [product\_name](#input\_product\_name) | (Required) Name of the product using the module | `string` | n/a | yes |
 | <a name="input_s3_upload_bucket_create"></a> [s3\_upload\_bucket\_create](#input\_s3\_upload\_bucket\_create) | (Optional, default 'true') Create an S3 bucket to upload files to. | `bool` | `true` | no |
 | <a name="input_s3_upload_bucket_name"></a> [s3\_upload\_bucket\_name](#input\_s3\_upload\_bucket\_name) | (Optional, default null) Name of the S3 upload bucket to scan objects in.  If `s3_upload_bucket_create` is `false` this must be an existing bucket in the account. | `string` | `null` | no |
 | <a name="input_s3_upload_bucket_policy_create"></a> [s3\_upload\_bucket\_policy\_create](#input\_s3\_upload\_bucket\_policy\_create) | (Optional, defaut 'true') Create the S3 upload bucket policy to allow Scan Files access. | `bool` | `true` | no |
-| <a name="input_scan_files_api_key"></a> [scan\_files\_api\_key](#input\_scan\_files\_api\_key) | (Required) Scan Files API key | `string` | n/a | yes |
+| <a name="input_scan_files_api_key_kms_arn"></a> [scan\_files\_api\_key\_kms\_arn](#input\_scan\_files\_api\_key\_kms\_arn) | (Optional, default Scan Files KMS key arn) ARN of the KMS key used to encrypt the scan\_files\_api\_key\_secret\_arn | `string` | `"arn:aws:kms:ca-central-1:806545929748:key/*"` | no |
+| <a name="input_scan_files_api_key_secret_arn"></a> [scan\_files\_api\_key\_secret\_arn](#input\_scan\_files\_api\_key\_secret\_arn) | (Optional, default Scan Files secret arn) ARN of the SecretsManager secret that contains the Scan Files API key | `string` | `"arn:aws:secretsmanager:ca-central-1:806545929748:secret:/scan-files/*"` | no |
 | <a name="input_scan_files_assume_role_create"></a> [scan\_files\_assume\_role\_create](#input\_scan\_files\_assume\_role\_create) | (Optional, default 'true') Create the IAM role that Scan Files assumes.  Defaults to `true`.  If this is set to `false`, it is assumed that the role already exists in the account. | `bool` | `true` | no |
-| <a name="input_scan_files_role_arn"></a> [scan\_files\_role\_arn](#input\_scan\_files\_role\_arn) | (Optional, Scan Files API role) Scan Files lambda execution role ARN | `string` | `"arn:aws:iam::806545929748:role/scan-files-api"` | no |
-| <a name="input_scan_files_url"></a> [scan\_files\_url](#input\_scan\_files\_url) | (Optional, Scan Files production URL) Scan Files URL | `string` | `"https://scan-files.alpha.canada.ca"` | no |
+| <a name="input_scan_files_role_arn"></a> [scan\_files\_role\_arn](#input\_scan\_files\_role\_arn) | (Optional, default Scan Files API role) Scan Files lambda execution role ARN | `string` | `"arn:aws:iam::806545929748:role/scan-files-api"` | no |
+| <a name="input_scan_files_url"></a> [scan\_files\_url](#input\_scan\_files\_url) | (Optional, default Scan Files production URL) Scan Files URL | `string` | `"https://scan-files.alpha.canada.ca"` | no |
 
 ## Outputs
 
