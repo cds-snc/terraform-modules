@@ -1,1 +1,1 @@
-rds S3 S3_log_bucket user_login_alarm vpc lambda gh_oidc_role attach_tf_plan_policy sentinel_forwarder aws_goc_password_policy sns guardduty guardduty_member lambda_response
+rds S3 S3_log_bucket user_login_alarm vpc lambda gh_oidc_role attach_tf_plan_policy sentinel_forwarder aws_goc_password_policy sns guardduty guardduty_member lambda_response S3_scan_object

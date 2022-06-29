@@ -11,14 +11,20 @@
 
 ## Module List
 
-- [AWS Government of Canada Password Policy](aws_goc_password_policy)
+- [Attach TF plan policy](attach_tf_plan_policy)
+- [AWS Government of Canada password policy](aws_goc_password_policy)
+- [GuardDuty](guardduty)
+- [GuardDuty member](guardduty_member)
 - [Github Open ID Connect](gh_oidc_role)
+- [Lambda](lambda)
+- [Lambda response](lambda_response)
 - [Notify Slack](notify_slack)
 - [RDS](rds)
 - [S3](S3)
-- [S3 Log Bucket](S3_log_bucket)
+- [S3 log bucket](S3_log_bucket)
+- [S3 scan object](S3_scan_object)
 - [Sentinel forwarder](sentinel_forwarder)
-- [User Login Alarm](user_login_alarm)
+- [User login alarm](user_login_alarm)
 - [VPC](vpc)
 
 ## What is this repo?
