@@ -54,7 +54,7 @@ data "aws_iam_policy_document" "limit_tagging" {
     condition {
       test     = "StringNotLike"
       variable = "aws:PrincipalArn"
-      values   = [local.lambda_role_arn]
+      values   = [module.s3_scan_object.function_role_arn]
     }
   }
 
@@ -62,7 +62,7 @@ data "aws_iam_policy_document" "limit_tagging" {
     effect = "Allow"
     principals {
       type        = "AWS"
-      identifiers = [local.lambda_role_arn]
+      identifiers = [module.s3_scan_object.function_role_arn]
     }
     actions = [
       "s3:PutObjectTagging",

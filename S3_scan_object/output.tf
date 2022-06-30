@@ -1,6 +1,6 @@
 output "lambda_role_arn" {
   description = "ARN of the S3 scan object lambda role"
-  value       = local.lambda_role_arn
+  value       = module.s3_scan_object.function_role_arn
 }
 
 output "s3_upload_bucket_arn" {
