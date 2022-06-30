@@ -1,8 +1,7 @@
 data "aws_caller_identity" "current" {}
 
 locals {
-  account_id      = data.aws_caller_identity.current.account_id
-  lambda_role_arn = "arn:aws:iam::${local.account_id}:role/${module.s3_scan_object.function_name}"
+  account_id = data.aws_caller_identity.current.account_id
 
   scan_files_assume_role_arn = var.scan_files_assume_role_create ? aws_iam_role.scan_files[0].arn : data.aws_iam_role.scan_files[0].arn
 
