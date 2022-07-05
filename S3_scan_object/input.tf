@@ -18,7 +18,7 @@ variable "lambda_ecr_arn" {
 
 variable "lambda_image_uri" {
   description = "(Optional, default Scan Files ECR latest Docker image) The URI of the Lambda image"
-  default     = "806545929748.dkr.ecr.ca-central-1.amazonaws.com/scan-files/module/s3-scan-object:17644e2436b233e25b3b4630fc65e7e46c04a031"
+  default     = "806545929748.dkr.ecr.ca-central-1.amazonaws.com/scan-files/module/s3-scan-object:577be5f7a30423539c1d5775a574e7fc5f82da31"
   type        = string
 }
 
