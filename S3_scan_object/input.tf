@@ -10,18 +10,6 @@ variable "billing_tag_value" {
   type        = string
 }
 
-variable "lambda_ecr_arn" {
-  description = "(Optional, default Scan Files ECR) ARN of the ECR used to pull the Lambda image"
-  default     = "arn:aws:ecr:ca-central-1:806545929748:scan-files/module/s3-scan-object"
-  type        = string
-}
-
-variable "lambda_image_uri" {
-  description = "(Optional, default Scan Files ECR latest Docker image) The URI of the Lambda image"
-  default     = "806545929748.dkr.ecr.ca-central-1.amazonaws.com/scan-files/module/s3-scan-object:7bc2010a3619fedf600e8c2f5157557fd88efaec"
-  type        = string
-}
-
 variable "product_name" {
   description = "(Required) Name of the product using the module"
   type        = string
@@ -61,21 +49,21 @@ variable "scan_files_assume_role_create" {
   default     = true
 }
 
-variable "scan_files_api_key_secret_arn" {
-  description = "(Optional, default Scan Files secret arn) ARN of the SecretsManager secret that contains the Scan Files API key"
-  type        = string
-  default     = "arn:aws:secretsmanager:ca-central-1:806545929748:secret:/scan-files/api_auth_token-1tLf9T"
-}
-
-variable "scan_files_api_key_kms_arn" {
-  description = "(Optional, default Scan Files KMS key arn) ARN of the KMS key used to encrypt the scan_files_api_key_secret_arn"
-  type        = string
-  default     = "arn:aws:kms:ca-central-1:806545929748:key/*"
-}
-
 variable "scan_files_role_arn" {
   description = "(Optional, default Scan Files API role) Scan Files lambda execution role ARN"
   default     = "arn:aws:iam::806545929748:role/scan-files-api"
+  type        = string
+}
+
+variable "s3_scan_object_function_arn" {
+  description = "(Optional, default S3 Scan Object function ARN) S3 scan object lambda function ARN"
+  default     = "arn:aws:lambda:ca-central-1:806545929748:function:s3-scan-object"
+  type        = string
+}
+
+variable "s3_scan_object_role_arn" {
+  description = "(Optional, default S3 Scan Object role) S3 scan object lambda execution role ARN"
+  default     = "arn:aws:iam::806545929748:role/s3-scan-object"
   type        = string
 }
 
