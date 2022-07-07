@@ -6,11 +6,11 @@ import (
 	"github.com/gruntwork-io/terratest/modules/terraform"
 )
 
-func TestCreateBucket(t *testing.T) {
+func TestSimple(t *testing.T) {
 	region := "ca-central-1"
 
 	terraformOptions := &terraform.Options{
-		TerraformDir: "../examples/create_bucket",
+		TerraformDir: "../examples/simple",
 		EnvVars: map[string]string{
 			"AWS_DEFAULT_REGION": region,
 		},

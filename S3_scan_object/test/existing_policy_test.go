@@ -6,11 +6,11 @@ import (
 	"github.com/gruntwork-io/terratest/modules/terraform"
 )
 
-func TestExistingBucket(t *testing.T) {
+func TestExistingPolicy(t *testing.T) {
 	region := "ca-central-1"
 
 	terraformOptions := &terraform.Options{
-		TerraformDir: "../examples/existing_bucket",
+		TerraformDir: "../examples/existing_policy",
 		EnvVars: map[string]string{
 			"AWS_DEFAULT_REGION": region,
 		},

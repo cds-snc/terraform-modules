@@ -1,18 +1,4 @@
 #
-# Upload bucket
-#
-module "upload_bucket" {
-  count             = var.s3_upload_bucket_create ? 1 : 0
-  source            = "github.com/cds-snc/terraform-modules?ref=v2.0.5//S3"
-  bucket_name       = var.s3_upload_bucket_name != null ? var.s3_upload_bucket_name : "s3-scan-object-${var.product_name}"
-  billing_tag_value = var.billing_tag_value
-
-  versioning = {
-    enabled = true
-  }
-}
-
-#
 # Bucket policy
 #
 resource "aws_s3_bucket_policy" "upload_bucket" {
