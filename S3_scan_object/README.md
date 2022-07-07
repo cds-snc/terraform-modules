@@ -23,9 +23,7 @@ No requirements.
 
 ## Modules
 
-| Name | Source | Version |
-|------|--------|---------|
-| <a name="module_upload_bucket"></a> [upload\_bucket](#module\_upload\_bucket) | github.com/cds-snc/terraform-modules | v2.0.5//S3 |
+No modules.
 
 ## Resources
 
@@ -62,8 +60,7 @@ No requirements.
 | <a name="input_product_name"></a> [product\_name](#input\_product\_name) | (Required) Name of the product using the module | `string` | n/a | yes |
 | <a name="input_s3_scan_object_function_arn"></a> [s3\_scan\_object\_function\_arn](#input\_s3\_scan\_object\_function\_arn) | (Optional, default S3 Scan Object function ARN) S3 scan object lambda function ARN | `string` | `"arn:aws:lambda:ca-central-1:806545929748:function:s3-scan-object"` | no |
 | <a name="input_s3_scan_object_role_arn"></a> [s3\_scan\_object\_role\_arn](#input\_s3\_scan\_object\_role\_arn) | (Optional, default S3 Scan Object role) S3 scan object lambda execution role ARN | `string` | `"arn:aws:iam::806545929748:role/s3-scan-object"` | no |
-| <a name="input_s3_upload_bucket_create"></a> [s3\_upload\_bucket\_create](#input\_s3\_upload\_bucket\_create) | (Optional, default 'true') Create an S3 bucket to upload files to. | `bool` | `true` | no |
-| <a name="input_s3_upload_bucket_name"></a> [s3\_upload\_bucket\_name](#input\_s3\_upload\_bucket\_name) | (Optional, default null) Name of the S3 upload bucket to scan objects in.  If `s3_upload_bucket_create` is `false` this must be an existing bucket in the account. | `string` | `null` | no |
+| <a name="input_s3_upload_bucket_name"></a> [s3\_upload\_bucket\_name](#input\_s3\_upload\_bucket\_name) | (Required) Name of the existing S3 upload bucket to scan objects in. | `string` | n/a | yes |
 | <a name="input_s3_upload_bucket_policy_create"></a> [s3\_upload\_bucket\_policy\_create](#input\_s3\_upload\_bucket\_policy\_create) | (Optional, defaut 'true') Create the S3 upload bucket policy to allow Scan Files access. | `bool` | `true` | no |
 | <a name="input_scan_files_assume_role_create"></a> [scan\_files\_assume\_role\_create](#input\_scan\_files\_assume\_role\_create) | (Optional, default 'true') Create the IAM role that Scan Files assumes.  Defaults to `true`.  If this is set to `false`, it is assumed that the role already exists in the account. | `bool` | `true` | no |
 | <a name="input_scan_files_role_arn"></a> [scan\_files\_role\_arn](#input\_scan\_files\_role\_arn) | (Optional, default Scan Files API role) Scan Files lambda execution role ARN | `string` | `"arn:aws:iam::806545929748:role/scan-files-api"` | no |
@@ -73,6 +70,4 @@ No requirements.
 
 | Name | Description |
 |------|-------------|
-| <a name="output_s3_upload_bucket_arn"></a> [s3\_upload\_bucket\_arn](#output\_s3\_upload\_bucket\_arn) | ARN of the S3 upload bucket |
-| <a name="output_s3_upload_bucket_name"></a> [s3\_upload\_bucket\_name](#output\_s3\_upload\_bucket\_name) | Name of the S3 upload bucket |
 | <a name="output_scan_files_assume_role_arn"></a> [scan\_files\_assume\_role\_arn](#output\_scan\_files\_assume\_role\_arn) | ARN of the role assumed by the Scan Files API |

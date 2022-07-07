@@ -20,21 +20,9 @@ variable "product_name" {
   }
 }
 
-variable "s3_upload_bucket_create" {
-  description = "(Optional, default 'true') Create an S3 bucket to upload files to."
-  type        = bool
-  default     = true
-}
-
 variable "s3_upload_bucket_name" {
-  description = "(Optional, default null) Name of the S3 upload bucket to scan objects in.  If `s3_upload_bucket_create` is `false` this must be an existing bucket in the account."
+  description = "(Required) Name of the existing S3 upload bucket to scan objects in."
   type        = string
-  default     = null
-
-  validation {
-    condition     = can(regex("^[0-9a-z\\-\\.]{3,63}$", var.s3_upload_bucket_name))
-    error_message = "The S3 bucket name can only container lowercase alphanumeric characters, hyphens, and periods."
-  }
 }
 
 variable "s3_upload_bucket_policy_create" {

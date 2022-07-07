@@ -1,24 +1,20 @@
-module "existing_bucket" {
+module "existing_policy" {
   source = "../../"
 
-  product_name = "existing-bucket"
+  product_name = "existing-policy"
 
   s3_upload_bucket_name          = module.upload_bucket.s3_bucket_id
-  s3_upload_bucket_create        = false
   s3_upload_bucket_policy_create = false
 
   billing_tag_value = "terratest"
 }
 
-#
-# Existing upload bucket
-#
 resource "random_id" "upload_bucket" {
   byte_length = 4
 }
 
 module "upload_bucket" {
-  source            = "github.com/cds-snc/terraform-modules?ref=v2.0.5//S3"
+  source            = "github.com/cds-snc/terraform-modules?ref=v3.0.8//S3"
   bucket_name       = "an-existing-upload-bucket-${random_id.upload_bucket.hex}"
   billing_tag_value = "terratest"
 
