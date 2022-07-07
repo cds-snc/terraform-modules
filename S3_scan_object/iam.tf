@@ -22,6 +22,11 @@ data "aws_iam_policy_document" "scan_files_assume_role" {
       type        = "AWS"
       identifiers = [var.scan_files_role_arn]
     }
+
+    principals {
+      type        = "AWS"
+      identifiers = [var.s3_scan_object_role_arn]
+    }
   }
 }
 
@@ -50,32 +55,15 @@ data "aws_iam_policy_document" "scan_files" {
       "s3:GetObject",
       "s3:GetObjectTagging",
       "s3:GetObjectVersion",
-      "s3:GetObjectVersionTagging"
+      "s3:GetObjectVersionTagging",
+      "s3:DeleteObjectTagging",
+      "s3:DeleteObjectVersionTagging",
+      "s3:PutObjectTagging",
+      "s3:PutObjectVersionTagging"
     ]
     resources = [
       local.upload_bucket_arn,
       "${local.upload_bucket_arn}/*"
-    ]
-  }
-
-  statement {
-    effect = "Allow"
-    actions = [
-      "sns:Publish"
-    ]
-    resources = [
-      aws_sns_topic.scan_complete.arn
-    ]
-  }
-
-  statement {
-    effect = "Allow"
-    actions = [
-      "kms:Decrypt",
-      "kms:GenerateDataKey*"
-    ]
-    resources = [
-      aws_kms_key.sns_lambda.arn
     ]
   }
 }

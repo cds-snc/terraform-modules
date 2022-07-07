@@ -1,3 +1,4 @@
 skip-check:
-  - CKV_AWS_109 # KMS/SNS IAM resource key policy '*' refers to self
-  - CKV_AWS_111 # KMS/SNS IAM resource key policy '*' refers to self
+  - CKV_AWS_116 # Lambda DLQ not required
+  - CKV_AWS_117 # Lambda VPC not required
+  - CKV_AWS_158 # CloudWatch service key encryption is acceptable

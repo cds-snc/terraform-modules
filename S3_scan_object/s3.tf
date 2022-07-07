@@ -54,7 +54,7 @@ data "aws_iam_policy_document" "limit_tagging" {
     condition {
       test     = "StringNotLike"
       variable = "aws:PrincipalArn"
-      values   = [module.s3_scan_object.function_role_arn]
+      values   = [local.scan_files_assume_role_arn]
     }
   }
 
@@ -62,7 +62,7 @@ data "aws_iam_policy_document" "limit_tagging" {
     effect = "Allow"
     principals {
       type        = "AWS"
-      identifiers = [module.s3_scan_object.function_role_arn]
+      identifiers = [local.scan_files_assume_role_arn]
     }
     actions = [
       "s3:PutObjectTagging",
@@ -108,7 +108,7 @@ resource "aws_lambda_permission" "s3_execute" {
   statement_id  = "S3ScanObjectS3Invoke-${var.product_name}"
   action        = "lambda:InvokeFunction"
   principal     = "s3.amazonaws.com"
-  function_name = module.s3_scan_object.function_name
+  function_name = aws_lambda_function.s3_scan_object.function_name
   source_arn    = local.upload_bucket_arn
 }
 
@@ -116,7 +116,7 @@ resource "aws_s3_bucket_notification" "s3_scan_object" {
   bucket = local.upload_bucket_id
 
   lambda_function {
-    lambda_function_arn = module.s3_scan_object.function_arn
+    lambda_function_arn = aws_lambda_function.s3_scan_object.arn
     id                  = "ScanObjectCreated"
     events              = ["s3:ObjectCreated:*"]
   }
