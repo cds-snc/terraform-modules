@@ -63,7 +63,7 @@ data "aws_iam_policy_document" "limit_tagging" {
     condition {
       test     = "StringNotLike"
       variable = "aws:PrincipalArn"
-      values   = [module.existing_bucket.scan_files_assume_role_arn]
+      values   = [module.existing_policy.scan_files_assume_role_arn]
     }
   }
 
@@ -71,7 +71,7 @@ data "aws_iam_policy_document" "limit_tagging" {
     effect = "Allow"
     principals {
       type        = "AWS"
-      identifiers = [module.existing_bucket.scan_files_assume_role_arn]
+      identifiers = [module.existing_policy.scan_files_assume_role_arn]
     }
     actions = [
       "s3:PutObjectTagging",
@@ -91,7 +91,7 @@ data "aws_iam_policy_document" "scan_files_download" {
     effect = "Allow"
     principals {
       type        = "AWS"
-      identifiers = [module.existing_bucket.scan_files_assume_role_arn]
+      identifiers = [module.existing_policy.scan_files_assume_role_arn]
     }
     actions = [
       "s3:ListBucket",
