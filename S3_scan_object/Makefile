@@ -12,4 +12,4 @@ lambda-install:
 
 lambda-test:
 	cd lambda &&\
-	python3 -m pytest -s -vv .
+	AWS_DEFAULT_REGION=ca-central-1 python3 -m pytest -s -vv .
