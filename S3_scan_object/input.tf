@@ -54,9 +54,3 @@ variable "s3_scan_object_role_arn" {
   default     = "arn:aws:iam::806545929748:role/s3-scan-object"
   type        = string
 }
-
-variable "scan_files_url" {
-  description = "(Optional, default Scan Files production URL) Scan Files URL"
-  default     = "https://scan-files.alpha.canada.ca"
-  type        = string
-}
