@@ -20,6 +20,12 @@ variable "product_name" {
   }
 }
 
+variable "reserved_concurrent_executions" {
+  description = "(Optional, default 10) The number of concurrent executions for the S3 event transport lambda that triggers the start of a scan."
+  type        = number
+  default     = 10
+}
+
 variable "s3_upload_bucket_name" {
   description = "(Required) Name of the existing S3 upload bucket to scan objects in."
   type        = string

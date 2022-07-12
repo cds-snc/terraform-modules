@@ -58,6 +58,7 @@ No modules.
 | <a name="input_billing_tag_key"></a> [billing\_tag\_key](#input\_billing\_tag\_key) | (Optional, default 'CostCentre') The name of the billing tag | `string` | `"CostCentre"` | no |
 | <a name="input_billing_tag_value"></a> [billing\_tag\_value](#input\_billing\_tag\_value) | (Required) The value of the billing tag | `string` | n/a | yes |
 | <a name="input_product_name"></a> [product\_name](#input\_product\_name) | (Required) Name of the product using the module | `string` | n/a | yes |
+| <a name="input_reserved_concurrent_executions"></a> [reserved\_concurrent\_executions](#input\_reserved\_concurrent\_executions) | (Optional, default 10) The number of concurrent executions for the S3 event transport lambda that triggers the start of a scan. | `number` | `10` | no |
 | <a name="input_s3_scan_object_function_arn"></a> [s3\_scan\_object\_function\_arn](#input\_s3\_scan\_object\_function\_arn) | (Optional, default S3 Scan Object function ARN) S3 scan object lambda function ARN | `string` | `"arn:aws:lambda:ca-central-1:806545929748:function:s3-scan-object"` | no |
 | <a name="input_s3_scan_object_role_arn"></a> [s3\_scan\_object\_role\_arn](#input\_s3\_scan\_object\_role\_arn) | (Optional, default S3 Scan Object role) S3 scan object lambda execution role ARN | `string` | `"arn:aws:iam::806545929748:role/s3-scan-object"` | no |
 | <a name="input_s3_upload_bucket_name"></a> [s3\_upload\_bucket\_name](#input\_s3\_upload\_bucket\_name) | (Required) Name of the existing S3 upload bucket to scan objects in. | `string` | n/a | yes |
