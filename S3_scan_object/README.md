@@ -64,7 +64,6 @@ No modules.
 | <a name="input_s3_upload_bucket_policy_create"></a> [s3\_upload\_bucket\_policy\_create](#input\_s3\_upload\_bucket\_policy\_create) | (Optional, defaut 'true') Create the S3 upload bucket policy to allow Scan Files access. | `bool` | `true` | no |
 | <a name="input_scan_files_assume_role_create"></a> [scan\_files\_assume\_role\_create](#input\_scan\_files\_assume\_role\_create) | (Optional, default 'true') Create the IAM role that Scan Files assumes.  Defaults to `true`.  If this is set to `false`, it is assumed that the role already exists in the account. | `bool` | `true` | no |
 | <a name="input_scan_files_role_arn"></a> [scan\_files\_role\_arn](#input\_scan\_files\_role\_arn) | (Optional, default Scan Files API role) Scan Files lambda execution role ARN | `string` | `"arn:aws:iam::806545929748:role/scan-files-api"` | no |
-| <a name="input_scan_files_url"></a> [scan\_files\_url](#input\_scan\_files\_url) | (Optional, default Scan Files production URL) Scan Files URL | `string` | `"https://scan-files.alpha.canada.ca"` | no |
 
 ## Outputs
 
