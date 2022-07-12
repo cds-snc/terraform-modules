@@ -21,7 +21,7 @@ resource "aws_lambda_function" "s3_scan_object" {
   filename         = data.archive_file.s3_scan_object.output_path
   source_code_hash = filebase64sha256(data.archive_file.s3_scan_object.output_path)
 
-  reserved_concurrent_executions = 3
+  reserved_concurrent_executions = var.reserved_concurrent_executions
 
   environment {
     variables = {
