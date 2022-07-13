@@ -36,7 +36,7 @@ This repo is a collection of modules made by folks at CDS. It is a collection of
 
 - This code is currently in use in several products
 - This code is tested by Terratest
-- This code embed security features
+- This code embeds security features
 - This code is fully documented
 - This code follows what CDS SREs consider best practices
 - The more people that use it the better it is.
