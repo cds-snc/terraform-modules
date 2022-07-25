@@ -37,7 +37,12 @@ variable "bucket" {
     id  = ""
     arn = ""
   }
-  description = "(Optional) S3 bucket that is triggering the lambda"
+  description = <<EOF
+  (Optional) The bucket that will be used to trigger the lambda, as defined below.
+  (Optional) id - The ID of the bucket.
+
+  (Optional) arn - The Arn of the bucket
+  EOF
 }
 
 
@@ -49,7 +54,10 @@ variable "dead_letter_queue_arn" {
 
 variable "ecr_arn" {
   type        = string
-  description = "(Optional) The arn of the ecr repository the image resides in the lambda will be given access to pull images and layers from this registry"
+  description = <<EOF
+    (Optional) The arn of the ecr repository the image resides in.
+    The lambda will be given access to pull images and layers from this registry
+  EOF
 }
 
 variable "enable_lambda_insights" {
@@ -89,7 +97,13 @@ variable "policies" {
 variable "reserved_concurrent_executions" {
   type        = number
   default     = -1
-  description = "(Optional) Amount of reserved concurrent executions for this lambda function. A value of 0 disables lambda from being triggered and -1 removes any concurrency limitations. Defaults to Unreserved Concurrency Limits -1. See [Managing Concurrency](https://docs.aws.amazon.com/lambda/latest/dg/concurrent-executions.html)"
+  description = <<EOF
+  (Optional) Amount of reserved concurrent executions for this lambda function.
+  0 disables lambda from being triggered and,
+  1 removes any concurrency limitations
+
+  See [Managing Concurrency](https://docs.aws.amazon.com/lambda/latest/dg/concurrent-executions.html)
+  EOF
 }
 
 variable "sns_topic_arns" {
@@ -113,5 +127,9 @@ variable "vpc" {
     subnet_ids         = []
     security_group_ids = []
   }
-  description = "(Optional) VPC to attach to the Lambda function <br/> **Please Note if this is set it will also attach the AWSLambdaVPCAccessExecutionRole to the lmabda this will enable creation of VPC ENI's as well as reading and writing to logfiles"
+  description = <<EOF
+  (Optional) VPC to attach to the Lambda function
+  **Please Note** if this is set it will also attach the AWSLambdaVPCAccessExecutionRole to the lmabda.
+  This will enable creation of VPC ENI's as well as reading and writing to logfiles
+  EOF
 }
