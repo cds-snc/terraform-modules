@@ -1,7 +1,13 @@
+variable "alarm_on_lambda_error" {
+  description = "(Optional) Create CloudWatch alarm if the transport lambda fails.  If `true`, you must also provide `alarm_sns_topic_arn`."
+  type        = bool
+  default     = false
+}
+
 variable "alarm_sns_topic_arn" {
-  description = "(Optional) The SNS topic to send transport lambda alarm notifications to.  If not provided, no alarm is created."
+  description = "(Optional) The SNS topic to send transport lambda alarm notifications to."
   type        = string
-  default     = null
+  default     = ""
 }
 
 variable "billing_tag_key" {

@@ -57,7 +57,8 @@ No modules.
 
 | Name | Description | Type | Default | Required |
 |------|-------------|------|---------|:--------:|
-| <a name="input_alarm_sns_topic_arn"></a> [alarm\_sns\_topic\_arn](#input\_alarm\_sns\_topic\_arn) | (Optional) The SNS topic to send transport lambda alarm notifications to.  If not provided, no alarm is created. | `string` | `null` | no |
+| <a name="input_alarm_on_lambda_error"></a> [alarm\_on\_lambda\_error](#input\_alarm\_on\_lambda\_error) | (Optional) Create CloudWatch alarm if the transport lambda fails.  If `true`, you must also provide `alarm_sns_topic_arn`. | `bool` | `false` | no |
+| <a name="input_alarm_sns_topic_arn"></a> [alarm\_sns\_topic\_arn](#input\_alarm\_sns\_topic\_arn) | (Optional) The SNS topic to send transport lambda alarm notifications to. | `string` | `""` | no |
 | <a name="input_billing_tag_key"></a> [billing\_tag\_key](#input\_billing\_tag\_key) | (Optional, default 'CostCentre') The name of the billing tag | `string` | `"CostCentre"` | no |
 | <a name="input_billing_tag_value"></a> [billing\_tag\_value](#input\_billing\_tag\_value) | (Required) The value of the billing tag | `string` | n/a | yes |
 | <a name="input_product_name"></a> [product\_name](#input\_product\_name) | (Required) Name of the product using the module | `string` | n/a | yes |

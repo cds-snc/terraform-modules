@@ -3,7 +3,7 @@ locals {
 }
 
 resource "aws_cloudwatch_log_metric_filter" "scan_files_lambda_error" {
-  count = var.alarm_sns_topic_arn != null ? 1 : 0
+  count = var.alarm_on_lambda_error ? 1 : 0
 
   name           = local.error_logged_lambda
   pattern        = "ERROR"
@@ -17,7 +17,7 @@ resource "aws_cloudwatch_log_metric_filter" "scan_files_lambda_error" {
 }
 
 resource "aws_cloudwatch_metric_alarm" "scan_files_api_error" {
-  count = var.alarm_sns_topic_arn != null ? 1 : 0
+  count = var.alarm_on_lambda_error ? 1 : 0
 
   alarm_name          = local.error_logged_lambda
   alarm_description   = "Errors logged by the Scan Files transport lambda function"
