@@ -1,3 +1,8 @@
+variable "alarm_sns_topic_arn" {
+  description = "(Optional) The SNS topic to send transport lambda alarm notifications to.  If not provided, no alarm is created."
+  type        = string
+  default     = null
+}
 
 variable "billing_tag_key" {
   description = "(Optional, default 'CostCentre') The name of the billing tag"

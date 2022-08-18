@@ -3,8 +3,13 @@ module "simple" {
 
   product_name          = "simple"
   s3_upload_bucket_name = module.upload_bucket.s3_bucket_id
+  alarm_sns_topic_arn   = aws_sns_topic.cloudwatch_alarms.arn
 
   billing_tag_value = "terratest"
+}
+
+resource "aws_sns_topic" "cloudwatch_alarms" {
+  name = "cloudwatch_alarms"
 }
 
 resource "random_id" "upload_bucket" {
