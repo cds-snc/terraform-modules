@@ -1,4 +1,6 @@
 skip-check:
+  - CKV_AWS_26  # SNS topic is an example and does not require encryption
   - CKV_AWS_116 # Lambda DLQ not required
   - CKV_AWS_117 # Lambda VPC not required
   - CKV_AWS_158 # CloudWatch service key encryption is acceptable
+  - CKV_AWS_173 # Lambda encryption settings for env vars are acceptable

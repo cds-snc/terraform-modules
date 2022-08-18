@@ -30,6 +30,8 @@ No modules.
 | Name | Type |
 |------|------|
 | [aws_cloudwatch_log_group.s3_scan_object](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/cloudwatch_log_group) | resource |
+| [aws_cloudwatch_log_metric_filter.scan_files_lambda_error](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/cloudwatch_log_metric_filter) | resource |
+| [aws_cloudwatch_metric_alarm.scan_files_api_error](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/cloudwatch_metric_alarm) | resource |
 | [aws_iam_policy.s3_scan_object](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/iam_policy) | resource |
 | [aws_iam_policy.scan_files](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/iam_policy) | resource |
 | [aws_iam_role.s3_scan_object](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/iam_role) | resource |
@@ -55,6 +57,8 @@ No modules.
 
 | Name | Description | Type | Default | Required |
 |------|-------------|------|---------|:--------:|
+| <a name="input_alarm_on_lambda_error"></a> [alarm\_on\_lambda\_error](#input\_alarm\_on\_lambda\_error) | (Optional) Create CloudWatch alarm if the transport lambda fails.  If `true`, you must also provide `alarm_sns_topic_arn`. | `bool` | `false` | no |
+| <a name="input_alarm_sns_topic_arn"></a> [alarm\_sns\_topic\_arn](#input\_alarm\_sns\_topic\_arn) | (Optional) The SNS topic to send transport lambda alarm notifications to. | `string` | `""` | no |
 | <a name="input_billing_tag_key"></a> [billing\_tag\_key](#input\_billing\_tag\_key) | (Optional, default 'CostCentre') The name of the billing tag | `string` | `"CostCentre"` | no |
 | <a name="input_billing_tag_value"></a> [billing\_tag\_value](#input\_billing\_tag\_value) | (Required) The value of the billing tag | `string` | n/a | yes |
 | <a name="input_product_name"></a> [product\_name](#input\_product\_name) | (Required) Name of the product using the module | `string` | n/a | yes |
