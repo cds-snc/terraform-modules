@@ -31,6 +31,6 @@ resource "aws_cloudwatch_metric_alarm" "scan_files_api_error" {
   threshold          = "1"
   treat_missing_data = "notBreaching"
 
-  alarm_actions = [var.alarm_sns_topic_arn]
-  ok_actions    = [var.alarm_sns_topic_arn]
+  alarm_actions = [var.alarm_error_sns_topic_arn]
+  ok_actions    = [var.alarm_ok_sns_topic_arn]
 }
