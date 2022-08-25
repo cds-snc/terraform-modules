@@ -7,7 +7,6 @@ import boto3
 import logging
 import json
 import os
-import uuid
 
 ACCOUNT_ID=os.environ.get("ACCOUNT_ID")
 LOG_LEVEL=os.environ.get("LOG_LEVEL", logging.INFO)
@@ -19,7 +18,7 @@ logger.setLevel(LOG_LEVEL)
 
 def handler(event, context):
   event["AccountId"] = ACCOUNT_ID
-  event["RequestId"] = str(uuid.uuid4())
+  event["RequestId"] = context.aws_request_id
   logger.debug(event)
 
   logger.info(f"[{event['RequestId']}] Invoking {S3_SCAN_OBJECT_FUNCTION_ARN}")
