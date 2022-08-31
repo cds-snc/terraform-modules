@@ -99,9 +99,9 @@ module "oicd_role" {
   source            = "../../../gh_oidc_role"
   billing_tag_value = "cal"
   roles = [{
-    name = "test"
+    name      = "test"
     repo_name = "foo"
-    claim = "*"
+    claim     = "*"
 
   }]
 }
