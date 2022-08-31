@@ -1,5 +1,5 @@
 terraform {
-  required_version = "~> 1.2.0"
+  required_version = "~> 1.1.0"
   required_providers {
     aws = {
       source  = "hashicorp/aws"
@@ -99,9 +99,9 @@ module "oicd_role" {
   source            = "../../../gh_oidc_role"
   billing_tag_value = "cal"
   roles = [{
-    name = "test"
+    name      = "test"
     repo_name = "foo"
-    claim = "*"
+    claim     = "*"
 
   }]
 }
