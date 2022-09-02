@@ -62,6 +62,7 @@ No modules.
 | <a name="input_serverless_min_capacity"></a> [serverless\_min\_capacity](#input\_serverless\_min\_capacity) | (Optional) The minimum capacity of the Aurora serverless cluster (0.5 to 128 in increments of 0.5) | `number` | `0` | no |
 | <a name="input_skip_final_snapshot"></a> [skip\_final\_snapshot](#input\_skip\_final\_snapshot) | (Optional, default 'false') This flag determines if a final database snapshot it taken before the cluster is deleted. | `bool` | `false` | no |
 | <a name="input_subnet_ids"></a> [subnet\_ids](#input\_subnet\_ids) | (Required) The name of the subnet the DB has to stay in | `set(string)` | n/a | yes |
+| <a name="input_upgrade_immediately"></a> [upgrade\_immediately](#input\_upgrade\_immediately) | (Optional, default false) Apply database engine upgrades immediately. | `bool` | `false` | no |
 | <a name="input_username"></a> [username](#input\_username) | (Required) The username for the admin user for the db | `string` | n/a | yes |
 | <a name="input_vpc_id"></a> [vpc\_id](#input\_vpc\_id) | (Required) The vpc to run the cluster and related infrastructure in | `string` | n/a | yes |
 

@@ -42,6 +42,7 @@ resource "aws_rds_cluster" "cluster" {
   db_subnet_group_name        = aws_db_subnet_group.rds.name
   deletion_protection         = var.prevent_cluster_deletion
   allow_major_version_upgrade = var.allow_major_version_upgrade
+  apply_immediately           = var.upgrade_immediately
 
   storage_encrypted   = true
   skip_final_snapshot = var.skip_final_snapshot
