@@ -127,6 +127,12 @@ variable "password" {
   sensitive   = true
 }
 
+variable "upgrade_immediately" {
+  description = "(Optional, default false) Apply database engine upgrades immediately."
+  type        = bool
+  default     = false
+}
+
 ###
 # Proxy Configuration
 ###
