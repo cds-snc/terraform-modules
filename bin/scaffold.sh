@@ -58,6 +58,52 @@ EOF
 echo 👉 Touching "$module/output.tf"
 touch "$module/output.tf"
 
+echo ⚒️ Creating "$module/examples"
+mkdir -p "$module/examples/simple"
+
+echo 📝 Creating "$module/examples/simple/simple.tf"
+cat << EOF > "$module/examples/simple/simple.tf"
+
+module "simple" {
+  source = "../../"
+
+  billing_tag_value = "Terratest"
+}
+
+EOF
+
+echo ⚒️ Creating "$module/test"
+mkdir -p "$module/test"
+
+echo 📝 Creating "$module/test/simple_test.go"
+cat << EOF > "$module/test/simple_test.go"
+package test
+
+import (
+	"testing"
+
+	"github.com/gruntwork-io/terratest/modules/terraform"
+)
+
+func TestSimple(t *testing.T) {
+	region := "ca-central-1"
+
+	terraformOptions := &terraform.Options{
+		TerraformDir: "../examples/simple",
+		EnvVars: map[string]string{
+			"AWS_DEFAULT_REGION": region,
+		},
+	}
+
+	// Destroy resource once tests are finished
+	defer terraform.Destroy(t, terraformOptions)
+
+	// Create the resources
+	terraform.InitAndApply(t, terraformOptions)
+}
+
+EOF
+
 echo "📝 Appending to .modules file, (this adds it to the Makefile)"
 echo -n " $module" >> .modules
 
