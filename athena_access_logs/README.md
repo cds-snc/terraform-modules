@@ -33,6 +33,8 @@ No modules.
 | Name | Description | Type | Default | Required |
 |------|-------------|------|---------|:--------:|
 | <a name="input_athena_bucket_name"></a> [athena\_bucket\_name](#input\_athena\_bucket\_name) | (Required) The name of the S3 bucket Athena will use to hold its data. | `string` | n/a | yes |
+| <a name="input_athena_database_name"></a> [athena\_database\_name](#input\_athena\_database\_name) | (Optional, default `access_logs`) The name Athena database to create. | `string` | `"access_logs"` | no |
+| <a name="input_athena_workgroup_name"></a> [athena\_workgroup\_name](#input\_athena\_workgroup\_name) | (Optional, default `logs`) The name Athena workgroup to create. | `string` | `"logs"` | no |
 | <a name="input_billing_tag_key"></a> [billing\_tag\_key](#input\_billing\_tag\_key) | (Optional, default `CostCentre`) The name of the billing tag | `string` | `"CostCentre"` | no |
 | <a name="input_billing_tag_value"></a> [billing\_tag\_value](#input\_billing\_tag\_value) | (Required) The value of the billing tag | `string` | n/a | yes |
 | <a name="input_lb_access_log_bucket_name"></a> [lb\_access\_log\_bucket\_name](#input\_lb\_access\_log\_bucket\_name) | (Optional, default `null`) S3 bucket name of the load balancer's access logs. | `string` | `null` | no |

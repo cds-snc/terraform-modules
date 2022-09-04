@@ -3,6 +3,18 @@ variable "athena_bucket_name" {
   type        = string
 }
 
+variable "athena_database_name" {
+  description = "(Optional, default `access_logs`) The name Athena database to create."
+  type        = string
+  default     = "access_logs"
+}
+
+variable "athena_workgroup_name" {
+  description = "(Optional, default `logs`) The name Athena workgroup to create."
+  type        = string
+  default     = "logs"
+}
+
 variable "billing_tag_key" {
   description = "(Optional, default `CostCentre`) The name of the billing tag"
   type        = string

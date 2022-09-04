@@ -4,7 +4,7 @@
 */
 
 resource "aws_athena_database" "logs" {
-  name   = "access_logs"
+  name   = var.athena_database_name
   bucket = var.athena_bucket_name
 
   encryption_configuration {
@@ -13,7 +13,7 @@ resource "aws_athena_database" "logs" {
 }
 
 resource "aws_athena_workgroup" "logs" {
-  name = "logs"
+  name = var.athena_workgroup_name
 
   configuration {
     enforce_workgroup_configuration    = true
