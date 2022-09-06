@@ -4,8 +4,9 @@
 */
 
 resource "aws_athena_database" "logs" {
-  name   = var.athena_database_name
-  bucket = var.athena_bucket_name
+  name          = var.athena_database_name
+  bucket        = var.athena_bucket_name
+  force_destroy = true
 
   encryption_configuration {
     encryption_option = "SSE_S3"
@@ -13,7 +14,8 @@ resource "aws_athena_database" "logs" {
 }
 
 resource "aws_athena_workgroup" "logs" {
-  name = var.athena_workgroup_name
+  name          = var.athena_workgroup_name
+  force_destroy = true
 
   configuration {
     enforce_workgroup_configuration    = true
