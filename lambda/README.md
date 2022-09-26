@@ -69,4 +69,5 @@ No modules.
 | <a name="output_function_arn"></a> [function\_arn](#output\_function\_arn) | ARN of the Lambda function. |
 | <a name="output_function_name"></a> [function\_name](#output\_function\_name) | Name of the Lambda function. |
 | <a name="output_function_role_arn"></a> [function\_role\_arn](#output\_function\_role\_arn) | ARN of the Lambda function execution role. |
+| <a name="output_function_version"></a> [function\_version](#output\_function\_version) | Version of the Lambda function. |
 | <a name="output_invoke_arn"></a> [invoke\_arn](#output\_invoke\_arn) | ARN used to invoke the Lambda function. |
