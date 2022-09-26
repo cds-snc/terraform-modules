@@ -15,7 +15,7 @@ output "function_role_arn" {
 
 output "function_version" {
   description = "Version of the Lambda function."
-  value       = aws_iam_role.this.arn
+  value       = aws_iam_role.this.version
 }
 
 output "invoke_arn" {
