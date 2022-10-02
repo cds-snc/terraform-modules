@@ -54,21 +54,24 @@ jobs:
       id: changes
       with:
         filters: |
+          common:
+            - '.github/workflows/terratest.yml'
           module:
             - '${{ matrix.module }}/**/*.tf'
             - '${{ matrix.module }}/test/**'
 
     - name: Setup Go
-      if: steps.changes.outputs.module == 'true'
+      if: steps.changes.outputs.module == 'true' || steps.changes.outputs.common == 'true'
       uses: actions/setup-go@268d8c0ca0432bb2cf416faae41297df9d262d7f # tag=v3.3.0
       with:
         go-version: ${{ env.GO_VERSION }}
 
     - name: Setup Terraform tools
+      if: steps.changes.outputs.module == 'true' || steps.changes.outputs.common == 'true'    
       uses: cds-snc/terraform-tools-setup@v1
 
     - name: Terratest
-      if: steps.changes.outputs.module == 'true'
+      if: steps.changes.outputs.module == 'true' || steps.changes.outputs.common == 'true'
       run: |
         cd ${{ matrix.module }}/test
         go mod tidy
