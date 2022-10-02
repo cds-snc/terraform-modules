@@ -43,7 +43,6 @@ jobs:
           - S3
           - S3_log_bucket
           - S3_scan_object
-          - user_login_alarm
           - vpc
 
     steps:
