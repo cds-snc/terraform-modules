@@ -39,7 +39,7 @@ variable "function_name" {
 
 variable "layer_arn" {
   description = "(Optional) ARN of the lambda layer to use"
-  default     = "arn:aws:lambda:ca-central-1:283582579564:layer:aws-sentinel-connector-layer:8"
+  default     = "arn:aws:lambda:ca-central-1:283582579564:layer:aws-sentinel-connector-layer:9"
 }
 
 variable "log_type" {
