@@ -49,7 +49,7 @@ jobs:
     - name: Checkout
       uses: actions/checkout@93ea575cb5d8a053eaa0ac8fa3b40d7e05a33cc8 # tag=v3.1.0
 
-    - uses: dorny/paths-filter@8c7f485a57f7cad3483dcc0fdf36122a0542f200 # v2.10.2
+    - uses: dorny/paths-filter@4512585405083f25c027a35db413c2b3b9006d50 # v2.10.2
       id: changes
       with:
         filters: |
