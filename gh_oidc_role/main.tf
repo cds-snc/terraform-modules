@@ -5,8 +5,8 @@
 * 
 */
 
-locals { 
-  roles_kv ={for r in var.roles: r.name => r}
+locals {
+  roles_kv = { for r in var.roles : r.name => r }
 }
 
 data "aws_caller_identity" "current" {}
