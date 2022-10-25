@@ -5,6 +5,9 @@
 * 
 */
 
+locals { 
+  roles_kv ={for r in var.roles: r.name => r}
+}
 
 data "aws_caller_identity" "current" {}
 
@@ -13,26 +16,26 @@ data "tls_certificate" "thumprint" {
 }
 
 resource "aws_iam_role" "this" {
-  count = length(var.roles)
+  for_each = local.roles_kv
 
 
-  name               = tolist(var.roles)[count.index].name
-  assume_role_policy = data.aws_iam_policy_document.assume_role_policy[count.index].json
+  name               = each.value.name
+  assume_role_policy = data.aws_iam_policy_document.assume_role_policy[each.key].json
   tags               = local.common_tags
 }
 
 data "aws_iam_policy_document" "assume_role_policy" {
-  count = length(data.aws_iam_policy_document.oidc_assume_role_policy.*)
+  for_each = data.aws_iam_policy_document.oidc_assume_role_policy
 
   source_policy_documents = [
-    data.aws_iam_policy_document.oidc_assume_role_policy[count.index].json,
+    each.value.json,
     var.assume_policy,
   ]
 
 }
 
 data "aws_iam_policy_document" "oidc_assume_role_policy" {
-  count = length(var.roles)
+  for_each = local.roles_kv
 
   statement {
     effect = "Allow"
@@ -47,7 +50,7 @@ data "aws_iam_policy_document" "oidc_assume_role_policy" {
     condition {
       test     = "StringLike"
       variable = "token.actions.githubusercontent.com:sub"
-      values   = ["repo:${var.org_name}/${tolist(var.roles)[count.index].repo_name}:${tolist(var.roles)[count.index].claim}"]
+      values   = ["repo:${var.org_name}/${each.value.repo_name}:${each.value.claim}"]
 
     }
   }
