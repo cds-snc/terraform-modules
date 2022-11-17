@@ -7,6 +7,7 @@ resource "aws_lambda_function" "this" {
   function_name                  = var.name
   package_type                   = "Image"
   image_uri                      = var.image_uri
+  architectures                  = var.architectures
   role                           = aws_iam_role.this.arn
   timeout                        = var.timeout
   memory_size                    = var.memory
