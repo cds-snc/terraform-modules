@@ -17,6 +17,12 @@ variable "api_gateway_source_arn" {
   description = "(Optional) The api gateway rest point that can call the lambda"
 }
 
+variable "architectures" {
+  type        = list(any)
+  default     = ["x86_64"]
+  description = "(Optional) The architectures that the lambda can run on"
+}
+
 variable "billing_tag_key" {
   description = "(Optional, default 'CostCentre') The name of the billing tag"
   type        = string
