@@ -10,6 +10,12 @@ variable "billing_tag_value" {
   type        = string
 }
 
+variable "cloudwatch_log_subscription_arns" {
+  description = "(Required) A list of CloudWatch log subscription ARNs to forward to Sentinel"
+  type        = list(string)
+  default     = []
+}
+
 variable "customer_id" {
   description = "(Required) Azure log workspace customer ID"
   sensitive   = true
