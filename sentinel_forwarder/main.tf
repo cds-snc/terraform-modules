@@ -77,13 +77,13 @@ data "archive_file" "sentinel_forwarder" {
 # CloudWatch Log Subscriptions
 #
 resource "aws_lambda_pemissions" "sentinel_forwarder_cloudwatch_log_subscription" {
-  count = length(var.cloudwatch_log_subscription_arns)
+  count = length(var.cloudwatch_log_arns)
 
   statement_id  = "AllowExecutionFromCloudWatchLogs-${var.function_name}-${count.index}"
   action        = "lambda:InvokeFunction"
   function_name = aws_lambda_function.sentinel_forwarder.function_name
   principal     = "logs.${data.aws_region.current.name}.amazonaws.com"
-  source_arn    = format("%s:*", var.cloudwatch_log_subscription_arns[count.index])
+  source_arn    = format("%s:*", var.cloudwatch_log_arns[count.index])
 }
 
 #

@@ -10,8 +10,8 @@ variable "billing_tag_value" {
   type        = string
 }
 
-variable "cloudwatch_log_subscription_arns" {
-  description = "(Required) A list of CloudWatch log subscription ARNs to forward to Sentinel"
+variable "cloudwatch_log_arns" {
+  description = "(Required) A list of CloudWatch log ARNs to forward to Sentinel"
   type        = list(string)
   default     = []
 }
