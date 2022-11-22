@@ -4,7 +4,7 @@ This module sets up a lambda that will forward AWS logs to Azure Sentinel.
 It is a light wrapper on the code found here (https://github.com/cds-snc/aws-sentinel-connector-layer) and
 just stitches together the code with the triggers.
 
-Triggers can be EventHub rules or S3 ObjectCreated events. The following log types are supported:
+Triggers can be EventHub rules, S3 ObjectCreated events, or CloudWatch Log Subscriptions. The following log types are supported:
 - CloudTrail (.json.gz)
 - Load balancer (.log.gz)
 - VPC flow logs (.log.gz)
@@ -46,6 +46,7 @@ No modules.
 | [aws_iam_role_policy_attachment.sentinel_forwarder_lambda](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/iam_role_policy_attachment) | resource |
 | [aws_iam_role_policy_attachment.sentinel_forwarder_lambda_s3](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/iam_role_policy_attachment) | resource |
 | [aws_lambda_function.sentinel_forwarder](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/lambda_function) | resource |
+| [aws_lambda_pemissions.sentinel_forwarder_cloudwatch_log_subscription](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/lambda_pemissions) | resource |
 | [aws_lambda_permission.sentinel_forwarder_events](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/lambda_permission) | resource |
 | [aws_lambda_permission.sentinel_forwarder_s3_triggers](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/lambda_permission) | resource |
 | [aws_s3_bucket_notification.sentinel_forwarder_trigger_notification](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/s3_bucket_notification) | resource |
@@ -61,6 +62,7 @@ No modules.
 |------|-------------|------|---------|:--------:|
 | <a name="input_billing_tag_key"></a> [billing\_tag\_key](#input\_billing\_tag\_key) | (Optional, default 'CostCentre') The name of the billing tag | `string` | `"CostCentre"` | no |
 | <a name="input_billing_tag_value"></a> [billing\_tag\_value](#input\_billing\_tag\_value) | (Required) The value of the billing tag | `string` | n/a | yes |
+| <a name="input_cloudwatch_log_arns"></a> [cloudwatch\_log\_arns](#input\_cloudwatch\_log\_arns) | (Required) A list of CloudWatch log ARNs to forward to Sentinel | `list(string)` | `[]` | no |
 | <a name="input_customer_id"></a> [customer\_id](#input\_customer\_id) | (Required) Azure log workspace customer ID | `string` | n/a | yes |
 | <a name="input_event_rule_names"></a> [event\_rule\_names](#input\_event\_rule\_names) | (Optional) List of names for event rules to trigger the lambda | `list(string)` | `[]` | no |
 | <a name="input_function_name"></a> [function\_name](#input\_function\_name) | (Required) Name of the Lambda function. | `string` | n/a | yes |
@@ -71,4 +73,6 @@ No modules.
 
 ## Outputs
 
-No outputs.
+| Name | Description |
+|------|-------------|
+| <a name="output_lambda_arn"></a> [lambda\_arn](#output\_lambda\_arn) | The ARN of the Lambda function. |

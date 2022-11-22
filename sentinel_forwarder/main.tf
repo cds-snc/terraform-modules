@@ -5,7 +5,7 @@
 * It is a light wrapper on the code found here (https://github.com/cds-snc/aws-sentinel-connector-layer) and
 * just stitches together the code with the triggers.
 *
-* Triggers can be EventHub rules or S3 ObjectCreated events. The following log types are supported:
+* Triggers can be EventHub rules, S3 ObjectCreated events, or CloudWatch Log Subscriptions. The following log types are supported:
 * - CloudTrail (.json.gz)
 * - Load balancer (.log.gz)
 * - VPC flow logs (.log.gz)
@@ -29,6 +29,7 @@ terraform {
 }
 
 data "aws_caller_identity" "current" {}
+data "aws_region" "current" {}
 
 resource "aws_lambda_function" "sentinel_forwarder" {
   function_name = var.function_name
@@ -71,6 +72,19 @@ data "archive_file" "sentinel_forwarder" {
   type        = "zip"
   source_file = "${path.module}/wrapper/sentinel_forwarder.py"
   output_path = "/tmp/sentinel_forwarder.py.zip"
+}
+
+#
+# CloudWatch Log Subscriptions
+#
+resource "aws_lambda_permission" "sentinel_forwarder_cloudwatch_log_subscription" {
+  count = length(var.cloudwatch_log_arns)
+
+  statement_id  = "AllowExecutionFromCloudWatchLogs-${var.function_name}-${count.index}"
+  action        = "lambda:InvokeFunction"
+  function_name = aws_lambda_function.sentinel_forwarder.function_name
+  principal     = "logs.${data.aws_region.current.name}.amazonaws.com"
+  source_arn    = format("%s:*", var.cloudwatch_log_arns[count.index])
 }
 
 #
