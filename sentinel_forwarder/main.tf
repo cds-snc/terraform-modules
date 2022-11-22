@@ -29,6 +29,7 @@ terraform {
 }
 
 data "aws_caller_identity" "current" {}
+data "aws_region" "current" {}
 
 resource "aws_lambda_function" "sentinel_forwarder" {
   function_name = var.function_name
