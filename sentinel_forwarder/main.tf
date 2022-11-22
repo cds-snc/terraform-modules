@@ -76,7 +76,7 @@ data "archive_file" "sentinel_forwarder" {
 #
 # CloudWatch Log Subscriptions
 #
-resource "aws_lambda_pemission" "sentinel_forwarder_cloudwatch_log_subscription" {
+resource "aws_lambda_permission" "sentinel_forwarder_cloudwatch_log_subscription" {
   count = length(var.cloudwatch_log_arns)
 
   statement_id  = "AllowExecutionFromCloudWatchLogs-${var.function_name}-${count.index}"
