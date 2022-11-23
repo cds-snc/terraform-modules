@@ -1,9 +1,10 @@
- This module enabled resolver DNS query logging so you can see the DNS queries being made by your VPC resources.
+# Resolver DNS
+This module enabled resolver DNS query logging so you can see the DNS queries being made by your VPC resources.
 
- Optionally, it can also enable a resolver DNS firewall that only permits DNS queries for specific domains to resolve.  This helps prevent unexpected egress from your VPC resources.
+Optionally, it can also enable a resolver DNS firewall that only permits DNS queries for specific domains to resolve.  This helps prevent unexpected egress from your VPC resources.
 
- ## :warning: Note
- Although this module helps prevent egress, it doesn't stop direct IP connections when a DNS query is not required.  To fully lock down your VPC egress, you should use Network ACLs and Security Groups that only allow egress to expected destinations.
+## :warning: Note
+Although this module helps prevent egress, it doesn't stop direct IP connections when a DNS query is not required.  To fully lock down your VPC egress, you should use Network ACLs and Security Groups that only allow egress to expected destinations.
 
 ## Requirements
 
