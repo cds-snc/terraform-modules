@@ -1,0 +1,5 @@
+skip-check:
+  - CKV_AWS_158 # CloudWatch encyption with default key is acceptable
+  - CKV2_AWS_1 # VPC NACL does not need to be attached to a subnet for examples
+  - CKV2_AWS_11 # VPC flow logging not required for examples
+  - CKV2_AWS_12 # VPC default security group lock down not required for examples

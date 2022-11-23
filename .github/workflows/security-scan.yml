@@ -3,10 +3,10 @@ name: "Terraform security scan"
 on:
   push:
     branches:
-    - main
+      - main
   pull_request:
     branches:
-    - main
+      - main
 
 jobs:
   terraform-security-scan:
@@ -19,6 +19,7 @@ jobs:
           - notify_slack
           - user_login_alarm
           - vpc
+          - resolver_dns
           - S3
           - S3_log_bucket
           - S3_scan_object

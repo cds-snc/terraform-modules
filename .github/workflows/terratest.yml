@@ -3,10 +3,10 @@ name: "Test modules"
 on:
   push:
     branches:
-    - main
+      - main
   pull_request:
     branches:
-    - main
+      - main
 
 env:
   GO_VERSION: 1.16.6
@@ -40,38 +40,39 @@ jobs:
           - gh_oidc_role
           - notify_slack
           - rds
+          - resolver_dns
           - S3
           - S3_log_bucket
           - S3_scan_object
           - vpc
 
     steps:
-    - name: Checkout
-      uses: actions/checkout@93ea575cb5d8a053eaa0ac8fa3b40d7e05a33cc8 # tag=v3.1.0
+      - name: Checkout
+        uses: actions/checkout@93ea575cb5d8a053eaa0ac8fa3b40d7e05a33cc8 # tag=v3.1.0
 
-    - uses: dorny/paths-filter@4512585405083f25c027a35db413c2b3b9006d50 # v2.11.1
-      id: changes
-      with:
-        filters: |
-          common:
-            - '.github/workflows/terratest.yml'
-          module:
-            - '${{ matrix.module }}/**/*.tf'
-            - '${{ matrix.module }}/test/**'
+      - uses: dorny/paths-filter@4512585405083f25c027a35db413c2b3b9006d50 # v2.11.1
+        id: changes
+        with:
+          filters: |
+            common:
+              - '.github/workflows/terratest.yml'
+            module:
+              - '${{ matrix.module }}/**/*.tf'
+              - '${{ matrix.module }}/test/**'
 
-    - name: Setup Go
-      if: steps.changes.outputs.module == 'true' || steps.changes.outputs.common == 'true'
-      uses: actions/setup-go@c4a742cab115ed795e34d4513e2cf7d472deb55f # tag=v3.3.1
-      with:
-        go-version: ${{ env.GO_VERSION }}
+      - name: Setup Go
+        if: steps.changes.outputs.module == 'true' || steps.changes.outputs.common == 'true'
+        uses: actions/setup-go@c4a742cab115ed795e34d4513e2cf7d472deb55f # tag=v3.3.1
+        with:
+          go-version: ${{ env.GO_VERSION }}
 
-    - name: Setup Terraform tools
-      if: steps.changes.outputs.module == 'true' || steps.changes.outputs.common == 'true'    
-      uses: cds-snc/terraform-tools-setup@v1
+      - name: Setup Terraform tools
+        if: steps.changes.outputs.module == 'true' || steps.changes.outputs.common == 'true'
+        uses: cds-snc/terraform-tools-setup@v1
 
-    - name: Terratest
-      if: steps.changes.outputs.module == 'true' || steps.changes.outputs.common == 'true'
-      run: |
-        cd ${{ matrix.module }}/test
-        go mod tidy
-        go test -v -timeout 1h
+      - name: Terratest
+        if: steps.changes.outputs.module == 'true' || steps.changes.outputs.common == 'true'
+        run: |
+          cd ${{ matrix.module }}/test
+          go mod tidy
+          go test -v -timeout 1h

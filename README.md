@@ -20,6 +20,7 @@
 - [Lambda response](lambda_response)
 - [Notify Slack](notify_slack)
 - [RDS](rds)
+- [Resolver DNS](resolver_dns)
 - [S3](S3)
 - [S3 log bucket](S3_log_bucket)
 - [S3 scan object](S3_scan_object)
