@@ -25,11 +25,11 @@ jobs:
       - name: Checkout
         uses: actions/checkout@93ea575cb5d8a053eaa0ac8fa3b40d7e05a33cc8 # tag=v3.1.0
 
-    - name: Render terraform docs inside the README.md and push changes back to PR branch
-      uses: terraform-docs/gh-actions@v1.0.0
-      with:
-        working-dir: .
-        recursive: true
-        config-file: .terraform-docs.yml
-        fail-on-diff: true
-        recursive-path: .
+      - name: Check if docs have been updated
+        uses: terraform-docs/gh-actions@v1.0.0
+        with:
+          working-dir: .
+          recursive: true
+          config-file: .terraform-docs.yml
+          fail-on-diff: true
+          recursive-path: .
