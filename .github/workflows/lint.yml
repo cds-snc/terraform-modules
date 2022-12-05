@@ -5,9 +5,6 @@ on:
     paths:
       - "**/*.tf"
 
-env:
-  TERRAFORM_VERSION: 0.14.2
-
 jobs:
   lint:
     runs-on: ubuntu-latest
@@ -15,11 +12,22 @@ jobs:
       - name: Checkout
         uses: actions/checkout@93ea575cb5d8a053eaa0ac8fa3b40d7e05a33cc8 # tag=v3.1.0
 
-      - name: Setup Terraform
-        uses: hashicorp/setup-terraform@633666f66e0061ca3b725c73b2ec20cd13a8fdd1 # v2.0.3
-        with:
-          terraform_version: ${{ env.TERRAFORM_VERSION }}
-          terraform_wrapper: true
+      - name: Setup Terraform tools
+        uses: cds-snc/terraform-tools-setup@v1
 
       - name: Lint TF files
         run: terraform fmt -check -no-color -diff -recursive
+
+  docs:
+    runs-on: ubuntu-latest
+      - name: Checkout
+        uses: actions/checkout@93ea575cb5d8a053eaa0ac8fa3b40d7e05a33cc8 # tag=v3.1.0
+
+    - name: Render terraform docs inside the README.md and push changes back to PR branch
+      uses: terraform-docs/gh-actions@v1.0.0
+      with:
+        working-dir: .
+        recursive: true
+        config-file: .terraform-docs.yml
+        fail-on-diff: true
+        recursive-path: .
