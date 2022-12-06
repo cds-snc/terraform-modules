@@ -26,8 +26,6 @@ jobs:
             && mv terraform-docs bin/ \
             && rm terraform-docs.tar.gz
           echo "$GITHUB_WORKSPACE/bin" >> $GITHUB_PATH
-      - name: Run git diff before make docs
-        run: git diff
       - name: Check if docs have been updated
         run: |
           make docs
@@ -37,15 +35,6 @@ jobs:
             # If there are, display the list of files and exit with a non-zero status code
             echo "The following files need to be committed:"
             git status --porcelain
-            # git status --porcelain | sed -e 's/^M/**Modified**/' -e 's/^A/**Added**/' -e 's/^D/**Deleted**/' >> $GITHUB_STEP_SUMMARY
-
-            # Iterate over the output of `git status --porcelain`
-            while read -r line; do
-              # Extract the second column (the filename) from each line
-              echo $line | awk '{print $2}' | cat $(cat -) >> $GITHUB_STEP_SUMMARY
-            done < <(git status --porcelain)
-
-            git diff
-
+            git status --porcelain | sed -e 's/^M/**Modified**/' -e 's/^A/**Added**/' -e 's/^D/**Deleted**/' >> $GITHUB_STEP_SUMMARY
             exit 1
           fi
