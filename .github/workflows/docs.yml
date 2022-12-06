@@ -15,17 +15,13 @@ jobs:
       - name: Checkout
         uses: actions/checkout@93ea575cb5d8a053eaa0ac8fa3b40d7e05a33cc8 # tag=v3.1.0
 
-      - name: read_modules
-        id: modules
-        run: echo "WORKING_DIRS=$(sed "s/ /,/g" < .modules)" >> $GITHUB_OUTPUT
-
       - name: install tf_docs
         env:
           TERRAFORM_DOCS_VERSION: 0.15.0
         run: |
           mkdir -p bin
           curl -Lo terraform-docs.tar.gz "https://github.com/terraform-docs/terraform-docs/releases/download/v$TERRAFORM_DOCS_VERSION/terraform-docs-v$TERRAFORM_DOCS_VERSION-linux-amd64.tar.gz" \
-            && tar -xzf terraform-docs.tar.gz \
+            && tar -xzf terraform-docs.tar.gz terraform-docs\
             && chmod +x terraform-docs \
             && mv terraform-docs bin/ \
             && rm terraform-docs.tar.gz
@@ -33,7 +29,7 @@ jobs:
       - name: Check if docs have been updated
         run: |
           make docs
-          rm -rf bin
+          rm -rf bin/terraform-docs
           # Check if there are any files to commit
           if [[ $(git status --porcelain) ]]; then
             # If there are, display the list of files and exit with a non-zero status code
