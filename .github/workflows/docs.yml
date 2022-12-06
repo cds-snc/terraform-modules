@@ -19,9 +19,24 @@ jobs:
         id: modules
         run: echo "WORKING_DIRS=$(sed "s/ /,/g" < .modules)" >> $GITHUB_OUTPUT
 
-      - name: Check if docs have been update
-        uses: terraform-docs/gh-actions@v1.0.0
-        with:
-          config-file: .terraform-docs.yml
-          fail-on-diff: true
-          working-dir: "${{ steps.modules.outputs.WORKING_DIRS }}"
+      - name: install tf_docs
+        env:
+          TERRAFORM_DOCS_VERSION: 0.15.0
+          TERRAFORM_DOCS_VERSION_CHECKSUM: e0b399d9dc2eb97853a7e12f1ae678e7160cae4c811646ce70169a8d611f6cf9
+        run: |
+          curl -Lo terraform-docs.tar.gz "https://github.com/terraform-docs/terraform-docs/releases/download/v$TERRAFORM_DOCS_VERSION/terraform-docs-v$TERRAFORM_DOCS_VERSION-linux-amd64.tar.gz" \
+            && echo "$TERRAFORM_DOCS_VERSION_CHECKSUM terraform-docs.tar.gz" | sha256sum --check \ 
+            && tar -xzf terraform-docs.tar.gz \
+            && chmod +x terraform-docs \
+            && mv terraform-docs /usr/local/bin/ \
+            && rm terraform-docs.tar.gz
+      - name: Check if docs have been updated
+        run: |
+          make docs
+          # Check if there are any files to commit
+          if [[ $(git status --porcelain) ]]; then
+            # If there are, display the list of files and exit with a non-zero status code
+            echo "The following files need to be committed:"
+            git status --porcelain | sed -e 's/^M/**Modified**/' -e 's/^A/**Added**/' -e 's/^D/**Deleted**/' >> $GITHUB_STEP_SUMMARY
+            exit 1
+          fi
