@@ -21,6 +21,9 @@ jobs:
           echo "WORKING_DIRS=$(sed "s/ /,/g" < .modules)" >> $GITHUB_OUTPUT
           echo "WORKING_DIRS=$(sed "s/ /,/g" < .modules)"
 
+      - name: test_ouput
+        run: echo ${{ steps.modules.output.WORKING_DIRS }}
+
       - name: Check if docs have been update
         uses: terraform-docs/gh-actions@v1.0.0
         with:
