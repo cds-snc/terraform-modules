@@ -34,6 +34,7 @@ jobs:
           if [[ $(git status --porcelain) ]]; then
             # If there are, display the list of files and exit with a non-zero status code
             echo "The following files need to be committed:"
+            git status --porcelain
             git status --porcelain | sed -e 's/^M/**Modified**/' -e 's/^A/**Added**/' -e 's/^D/**Deleted**/' >> $GITHUB_STEP_SUMMARY
             exit 1
           fi
