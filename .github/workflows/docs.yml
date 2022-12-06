@@ -16,20 +16,13 @@ jobs:
         uses: actions/checkout@93ea575cb5d8a053eaa0ac8fa3b40d7e05a33cc8 # tag=v3.1.0
 
       - name: read_modules
-        id: modulesa
-        run: |
-          echo "WORKING_DIRS=$(sed "s/ /,/g" < .modules)" >> $GITHUB_OUTPUT
-          echo "WORKING_DIRS=$(sed "s/ /,/g" < .modules)"
+        id: module
+        run: echo "WORKING_DIRS=$(sed "s/ /,/g" < .modules)" >> $GITHUB_OUTPUT
 
-      - name: test_ouput
-        run: |
-          echo ${{ steps.modulesa.output.WORKING_DIRS }}
-          echo "${{ steps.modulesa.output.WORKING_DIRS }}"
 
       - name: Check if docs have been update
         uses: terraform-docs/gh-actions@v1.0.0
         with:
           config-file: .terraform-docs.yml
           fail-on-diff: true
-          working-dir: "${{ steps.modules.output.WORKING_DIRS }}"
-          ##working-dir: "rds,S3,S3_log_bucket,user_login_alarm,vpc,lambda,gh_oidc_role,attach_tf_plan_policy,sentinel_forwarder,aws_goc_password_policy,sns,guardduty,guardduty_member,lambda_response,S3_scan_object,athena_access_logs,resolver_dns"
+          working-dir: "${{ steps.modules.outputs.WORKING_DIRS }}"
