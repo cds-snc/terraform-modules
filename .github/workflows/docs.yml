@@ -22,14 +22,14 @@ jobs:
       - name: install tf_docs
         env:
           TERRAFORM_DOCS_VERSION: 0.15.0
-          TERRAFORM_DOCS_VERSION_CHECKSUM: e0b399d9dc2eb97853a7e12f1ae678e7160cae4c811646ce70169a8d611f6cf9
         run: |
+          mkdir -p bin
           curl -Lo terraform-docs.tar.gz "https://github.com/terraform-docs/terraform-docs/releases/download/v$TERRAFORM_DOCS_VERSION/terraform-docs-v$TERRAFORM_DOCS_VERSION-linux-amd64.tar.gz" \
-            && echo "$TERRAFORM_DOCS_VERSION_CHECKSUM terraform-docs.tar.gz" | sha256sum --check \ 
             && tar -xzf terraform-docs.tar.gz \
             && chmod +x terraform-docs \
-            && mv terraform-docs /usr/local/bin/ \
+            && mv terraform-docs bin/ \
             && rm terraform-docs.tar.gz
+          echo "$GITHUB_WORKSPACE/bin" >> $GITHUB_PATH
       - name: Check if docs have been updated
         run: |
           make docs
