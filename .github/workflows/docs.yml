@@ -1,0 +1,28 @@
+
+name: "Lint Terraform files"
+
+on:
+  pull_request:
+    paths:
+      - "**/*.tf"
+      - "**/*.md"
+      - ".github/workflows/*.yml"
+
+jobs:
+  docs:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@93ea575cb5d8a053eaa0ac8fa3b40d7e05a33cc8 # tag=v3.1.0
+
+      - name: read_modules
+        id: modules
+        run: |
+          echo "WORKING-DIRS=$(sed "s/ /,/g" < .modules)" >> $GITHUB_OUTPUT
+
+      - name: Check if docs have been update
+        uses: terraform-docs/gh-actions@v1.0.0
+        with:
+          config-file: .terraform-docs.yml
+          fail-on-diff: true
+          working-dir: "rds,S3,S3_log_bucket,user_login_alarm,vpc,lambda,gh_oidc_role,attach_tf_plan_policy,sentinel_forwarder,aws_goc_password_policy,sns,guardduty,guardduty_member,lambda_response,S3_scan_object,athena_access_logs,resolver_dns"
