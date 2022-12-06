@@ -43,6 +43,7 @@ jobs:
               echo $line | awk '{print $2}' | cat $(cat -) >> $GITHUB_STEP_SUMMARY
             done < <(git status --porcelain)
 
+            git diff
 
             exit 1
           fi
