@@ -70,6 +70,17 @@ variable "environment_variables" {
   description = "(Optional) Environment variables to pass to the lambda"
 }
 
+variable "ephemeral_storage" {
+  type        = number
+  default     = 512
+  description = "(Optional) Set the Lambda function's ephemeral storage to a value between 512MB and 10240MB."
+
+  validation {
+    condition     = var.ephemeral_storage >= 512 && var.ephemeral_storage <= 10240
+    error_message = "Ephemeral storage must be between 512MB and 10240MB."
+  }
+}
+
 variable "image_uri" {
   type        = string
   description = "(Required) Docker image URI"

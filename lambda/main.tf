@@ -43,6 +43,10 @@ resource "aws_lambda_function" "this" {
     }
   }
 
+  ephemeral_storage {
+    size = var.ephemeral_storage
+  }
+
   tags = local.common_tags
 }
 
