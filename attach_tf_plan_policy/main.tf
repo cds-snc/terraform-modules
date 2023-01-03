@@ -53,6 +53,12 @@ data "aws_iam_policy_document" "this" {
     actions   = ["secretsmanager:ListSecrets"]
     resources = ["*"]
   }
+
+  statement {
+    sid       = "ListLogGroupTags"
+    actions   = ["logs:ListTagsForResource"]
+    resources = ["*"]
+  }
 }
 
 data "aws_iam_policy" "readonly" {
