@@ -75,7 +75,7 @@ resource "aws_lambda_permission" "disable_exposed_iam_credential_events" {
   action         = "lambda:InvokeFunction"
   function_name  = aws_lambda_function.disable_exposed_iam_credential.function_name
   principal      = "events.amazonaws.com"
-  source_arn     = aws_cloudwatch_event_target.disable_exposed_iam_credential.arn
+  source_arn     = aws_cloudwatch_event_rule.exposed_iam_credential_found_rule.arn
   source_account = data.aws_caller_identity.current.account_id
 }
 
