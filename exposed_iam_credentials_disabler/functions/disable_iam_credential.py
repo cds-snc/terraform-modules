@@ -10,7 +10,7 @@ def lambda_handler(event, context):
     access_key_id = details['affectedEntities'][0]['entityValue']
     print('Looking up username for access key pair...')
     username = get_username_from_key(access_key_id)
-    print('Deleting exposed access key pair...')
+    print('Disabling exposed access key pair...')
     disable_exposed_key_pair(username, access_key_id)
     return {
         "account_id": account_id,
