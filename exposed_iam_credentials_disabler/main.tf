@@ -49,8 +49,8 @@ resource "aws_lambda_function" "disable_exposed_iam_credential" {
 
 data "archive_file" "disable_exposed_iam_credential" {
   type        = "zip"
-  source_file = "${path.module}/functions/disable_iam_credential.py"
-  output_path = "/tmp/disable_iam_credential.py.zip"
+  source_file = "${path.module}/functions/disable_exposed_iam_credential.py"
+  output_path = "/tmp/disable_exposed_iam_credential.py.zip"
 }
 
 #
