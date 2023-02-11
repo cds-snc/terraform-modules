@@ -43,7 +43,7 @@ def get_username_from_key(access_key_id):
 
 
 def disable_exposed_key_pair(username, access_key_id):
-    """ Disabkes IAM access key pair identified by access key ID for specified user.
+    """ Disables IAM access key pair identified by access key ID for specified user.
 
     Args:
         username (string): Username of IAM user to disable key pair for.
