@@ -4,8 +4,12 @@
 	"name": "Debian",
 	"image": "mcr.microsoft.com/devcontainers/base:bullseye",
 	"features": {
-		"ghcr.io/devcontainers/features/nix:1": {
-			"packages": "terraform,terraform-docs,checkov,go,shellcheck,conftest"
+		"ghcr.io/devcontainers/features/terraform:1": {
+			"version": "1.0.3",
+			"terragrunt": "0.31.1"
+		},
+		"ghcr.io/dhoeric/features/terraform-docs:1": {
+			"version": "latest"
 		}
 	},
 	"customizations": {
@@ -18,25 +22,20 @@
 			]
 		}
 	}
-
 	// Features to add to the dev container. More info: https://containers.dev/features.
 	// "features": {},
-
 	// Use 'forwardPorts' to make a list of ports inside the container available locally.
 	// "forwardPorts": [],
-
 	// Uncomment to use the Docker CLI from inside the container. See https://aka.ms/vscode-remote/samples/docker-from-docker.
 	// "mounts": [
-    //     {
-    //         "source": "/var/run/docker.sock",
-    //         "target": "/var/run/docker-host.sock",
-    //         "type": "bind"
-    //     }
-    // ]
-
+	//     {
+	//         "source": "/var/run/docker.sock",
+	//         "target": "/var/run/docker-host.sock",
+	//         "type": "bind"
+	//     }
+	// ]
 	// Configure tool-specific properties.
 	// "customizations": {},
-
 	// Uncomment to connect as root instead. More info: https://aka.ms/dev-containers-non-root.
 	// "remoteUser": "root"
 }
