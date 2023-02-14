@@ -54,7 +54,7 @@ resource "aws_cloudwatch_event_rule" "exposed_iam_credential_found_rule" {
     {
         "source": ["aws.health"],
         "detail": {
-            "service": ["ABUSE"],
+            "service": ["RISK"],
             "eventTypeCode": ["AWS_RISK_CREDENTIALS_EXPOSED"]
         }
     }
