@@ -2,7 +2,7 @@
 // README at: https://github.com/devcontainers/templates/tree/main/src/debian
 {
 	"name": "Debian",
-	"image": "mcr.microsoft.com/devcontainers/base:bullseye",
+	"image": "mcr.microsoft.com/devcontainers/go:bullseye",
 	"features": {
 		"ghcr.io/devcontainers/features/terraform:1": {
 			"version": "1.0.3",
