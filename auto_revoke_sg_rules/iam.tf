@@ -31,7 +31,7 @@ resource "aws_iam_role_policy" "security_group_modification" {
         ]
         Effect   = "Allow"
         Sid      = "AllowSecurityGroupActions"
-        Resource = "*" 
+        Resource = "*"
       },
       {
         Action = [
