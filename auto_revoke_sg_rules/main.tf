@@ -18,7 +18,7 @@ data "archive_file" "sg_change_auto_response" {
 
 # Lambda function that is used for security group auto-response
 resource "aws_lambda_function" "security_group_change_auto_response" {
-  function_name = "security_group_change_auto_response"
+  function_name = var.function_name
   description   = "Responds to security group changes"
   role          = aws_iam_role.group_change_auto_response_role.arn
   handler       = "sg_change_auto_response.lambda_handler"
