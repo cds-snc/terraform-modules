@@ -12,6 +12,18 @@ variable "billing_tag_value" {
   type        = string
 }
 
+variable "critical_tag_key" {
+  description = "(Optional) The name of the critical tag."
+  type        = string
+  default     = "Critical"
+}
+
+variable "critical_tag_value" {
+  description = "(Required: default=true) The value of the critical tag. If set to true, protection SCP rules will be applied to the resource."
+  type        = bool
+  default     = true
+}
+
 variable "attach_elb_log_delivery_policy" {
   description = "(Optional: default=false) Controls if S3 bucket should have ELB log delivery policy attached"
   type        = bool
