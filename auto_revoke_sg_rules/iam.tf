@@ -1,3 +1,4 @@
+# IAM Role for Lambda Function
 resource "aws_iam_role" "group_change_auto_response_role" {
   name                = "group_change_auto_response_role"
   managed_policy_arns = ["arn:aws:iam::aws:policy/service-role/AWSLambdaBasicExecutionRole"]
@@ -16,6 +17,7 @@ resource "aws_iam_role" "group_change_auto_response_role" {
   })
 }
 
+# IAM Policy for Lambda Function
 resource "aws_iam_role_policy" "security_group_modification" {
   name = "security_group_modification"
   role = aws_iam_role.group_change_auto_response_role.id
@@ -29,7 +31,7 @@ resource "aws_iam_role_policy" "security_group_modification" {
         ]
         Effect   = "Allow"
         Sid      = "AllowSecurityGroupActions"
-        Resource = "*"
+        Resource = "*" 
       },
       {
         Action = [
