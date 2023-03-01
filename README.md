@@ -24,6 +24,7 @@
 - [S3](S3)
 - [S3 log bucket](S3_log_bucket)
 - [S3 scan object](S3_scan_object)
+- [Sentinel Alert Rule](sentinel_alert_rule)
 - [Sentinel forwarder](sentinel_forwarder)
 - [User login alarm](user_login_alarm)
 - [VPC](vpc)
