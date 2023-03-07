@@ -84,7 +84,7 @@ variable "ephemeral_storage" {
 variable "file_system_config" {
   type = map(string)
   default = {}
-  description = "(Optional) Configuration to connect EFS to a Lambda function"
+  description = "(Optional) Configuration to connect EFS to a Lambda function."
 }
 
 variable "image_uri" {
