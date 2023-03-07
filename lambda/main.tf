@@ -48,7 +48,7 @@ resource "aws_lambda_function" "this" {
   }
 
   dynamic "file_system_config" {
-    for_each = length(var.file_system_config) == 0 ? [] : [true]
+    for_each = length(keys(var.file_system_config)) == 0 ? [] : [true]
 
     content {
       arn              = file_system_config.value.arn
