@@ -55,6 +55,7 @@ No modules.
 | <a name="input_enable_lambda_insights"></a> [enable\_lambda\_insights](#input\_enable\_lambda\_insights) | (Optional) Enable Lambda Insights | `bool` | `true` | no |
 | <a name="input_environment_variables"></a> [environment\_variables](#input\_environment\_variables) | (Optional) Environment variables to pass to the lambda | `map(string)` | `{}` | no |
 | <a name="input_ephemeral_storage"></a> [ephemeral\_storage](#input\_ephemeral\_storage) | (Optional) Set the Lambda function's ephemeral storage to a value between 512MB and 10240MB. | `number` | `512` | no |
+| <a name="input_file_system_config"></a> [file\_system\_config](#input\_file\_system\_config) | (Optional) Configuration to connect EFS to a Lambda function. | `map(string)` | `{}` | no |
 | <a name="input_image_uri"></a> [image\_uri](#input\_image\_uri) | (Required) Docker image URI | `string` | n/a | yes |
 | <a name="input_memory"></a> [memory](#input\_memory) | (Optional) Memory in MB | `number` | `128` | no |
 | <a name="input_name"></a> [name](#input\_name) | (Required) Name of the lambda | `string` | n/a | yes |
