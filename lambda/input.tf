@@ -82,8 +82,8 @@ variable "ephemeral_storage" {
 }
 
 variable "file_system_config" {
-  type = map(string)
-  default = {}
+  type        = map(string)
+  default     = {}
   description = "(Optional) Configuration to connect EFS to a Lambda function."
 }
 

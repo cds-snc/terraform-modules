@@ -51,7 +51,7 @@ resource "aws_lambda_function" "this" {
     for_each = length(var.file_system_config) == 0 ? [] : [true]
 
     content {
-      arn = file_system_config.value.arn
+      arn              = file_system_config.value.arn
       local_mount_path = file_system_config.value.local_mount_path
     }
   }
