@@ -49,6 +49,7 @@ No modules.
 | <a name="input_suppression_duration"></a> [suppression\_duration](#input\_suppression\_duration) | (Optional) The suppression duration of the alert rule. Defaults to PT1H. | `string` | `"PT1H"` | no |
 | <a name="input_suppression_enabled"></a> [suppression\_enabled](#input\_suppression\_enabled) | (Optional) The suppression enabled of the alert rule. Defaults to false. | `bool` | `false` | no |
 | <a name="input_tactics"></a> [tactics](#input\_tactics) | (Optional) The tactics of the alert rule. Defaults to [InitialAccess]. | `list(string)` | <pre>[<br>  "InitialAccess"<br>]</pre> | no |
+| <a name="input_techniques"></a> [techniques](#input\_techniques) | (Optional) The techniques of the alert rule. Defaults to null | `list(string)` | `null` | no |
 | <a name="input_workspace_id"></a> [workspace\_id](#input\_workspace\_id) | (Required) The workspace that the alert is going to use | `string` | n/a | yes |
 
 ## Outputs

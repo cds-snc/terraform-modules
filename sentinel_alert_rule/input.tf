@@ -50,6 +50,11 @@ variable "tactics" {
     error_message = "The tactics must be in the list of [InitialAccess, Execution, Persistence, PrivilegeEscalation, DefenseEvasion, CredentialAccess, Discovery, LateralMovement, Collection, Exfiltration, CommandAndControl, Impact, ImpairProcessControl, InhibitResponseFunction, PreAttack, Reconnaissance, ResourceDevelopment]."
   }
 }
+variable "techniques" {
+  type        = list(string)
+  description = "(Optional) The techniques of the alert rule. Defaults to null"
+  default     = null
+}
 
 variable "severity" {
   type        = string
