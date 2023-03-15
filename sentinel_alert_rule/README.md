@@ -43,7 +43,7 @@ No modules.
 | <a name="input_description"></a> [description](#input\_description) | (Required) The description of the alert rule. | `string` | n/a | yes |
 | <a name="input_display_name"></a> [display\_name](#input\_display\_name) | (Required) The display name of the alert rule. | `string` | n/a | yes |
 | <a name="input_entity_mapping"></a> [entity\_mapping](#input\_entity\_mapping) | (Optional) The entity mapping of the alert rule. | <pre>list(object({<br>    entity_type = string<br>    field_mapping = list(object({<br>      column_name = string<br>      identifier  = string<br>    }))<br>  }))</pre> | `[]` | no |
-| <a name="input_query"></a> [query](#input\_query) | (Required) The query that will be used to create the alert rule. | `string` | n/a | yes |
+| <a name="input_query"></a> [query](#input\_query) | (Required) The query that will be used to create the alert rule. If there is a colum in the query called `alert_description`, the content of this column will override the Description field. | `string` | n/a | yes |
 | <a name="input_query_frequency"></a> [query\_frequency](#input\_query\_frequency) | (Optional) The frequency of the query. Defaults to PT1H. | `string` | `"PT1H"` | no |
 | <a name="input_query_period"></a> [query\_period](#input\_query\_period) | (Optional) The period of the query. Defaults to PT1H. | `string` | `"PT1H"` | no |
 | <a name="input_severity"></a> [severity](#input\_severity) | (Optional) The severity of the alert rule. Defaults to High. | `string` | `"Medium"` | no |
