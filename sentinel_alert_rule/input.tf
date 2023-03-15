@@ -96,3 +96,8 @@ variable "entity_mapping" {
   default     = []
 }
 
+variable "custom_details" {
+  type        = map(string)
+  description = "(Optional) The custom details of the alert rule."
+  default     = {}
+}
