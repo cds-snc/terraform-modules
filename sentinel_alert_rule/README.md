@@ -39,6 +39,7 @@ No modules.
 
 | Name | Description | Type | Default | Required |
 |------|-------------|------|---------|:--------:|
+| <a name="input_custom_details"></a> [custom\_details](#input\_custom\_details) | (Optional) The custom details of the alert rule. | `map(string)` | `{}` | no |
 | <a name="input_description"></a> [description](#input\_description) | (Required) The description of the alert rule. | `string` | n/a | yes |
 | <a name="input_display_name"></a> [display\_name](#input\_display\_name) | (Required) The display name of the alert rule. | `string` | n/a | yes |
 | <a name="input_entity_mapping"></a> [entity\_mapping](#input\_entity\_mapping) | (Optional) The entity mapping of the alert rule. | <pre>list(object({<br>    entity_type = string<br>    field_mapping = list(object({<br>      column_name = string<br>      identifier  = string<br>    }))<br>  }))</pre> | `[]` | no |
