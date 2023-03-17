@@ -96,3 +96,48 @@ variable "entity_mapping" {
   default     = []
 }
 
+variable "custom_details" {
+  type        = map(string)
+  description = "(Optional) The custom details of the alert rule."
+  default     = {}
+}
+
+variable "incident_configuration" {
+  type        = map(any)
+  description = "(Optional) The incident configuration of the alert rule."
+  default = {
+    create_incident = true
+
+    grouping = {
+      enabled                 = false
+      entity_matching_method  = "AllEntities"
+      group_by_alert_details  = []
+      group_by_custom_details = []
+      group_by_entities       = []
+      lookback_duration       = "PT5M"
+      reopen_closed_incidents = false
+    }
+  }
+}
+
+variable "trigger_operator" {
+  type        = string
+  description = "(Optional) The trigger operator of the alert rule. Defaults to GreaterThan."
+  default     = "GreaterThan"
+  validation {
+    condition     = can(regex("^(GreaterThan|LessThan|Equal)$", var.trigger_operator))
+    error_message = "The trigger operator must be in the list of [GreaterThan, LessThan, Equal]."
+  }
+}
+
+variable "trigger_threshold" {
+  type        = number
+  description = "(Optional) The trigger threshold of the alert rule. Defaults to 0."
+  default     = 0
+}
+
+variable "enabled" {
+  type        = bool
+  description = "(Optional) The enabled of the alert rule. Defaults to true."
+  default     = true
+}
