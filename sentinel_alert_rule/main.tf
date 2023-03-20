@@ -91,6 +91,7 @@ resource "azurerm_sentinel_alert_rule_scheduled" "this" {
             }
           }
 
+        }
       }
     }
   }
