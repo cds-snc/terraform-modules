@@ -65,18 +65,5 @@ resource "azurerm_sentinel_alert_rule_scheduled" "this" {
     }
   }
 
-  incident_configuration {
-    create_incident = true
-
-    grouping {
-      enabled                 = false
-      entity_matching_method  = "AllEntities"
-      group_by_alert_details  = []
-      group_by_custom_details = []
-      group_by_entities       = []
-      lookback_duration       = "PT5M"
-      reopen_closed_incidents = false
-    }
-  }
 
 }
