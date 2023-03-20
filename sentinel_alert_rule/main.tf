@@ -91,13 +91,6 @@ resource "azurerm_sentinel_alert_rule_scheduled" "this" {
             }
           }
 
-          dynamic "group_by_entities" {
-            for_each = grouping.value.group_by_entities
-            content {
-              field_name = group_by_entities.value
-            }
-          }
-        }
       }
     }
   }
