@@ -38,7 +38,6 @@ resource "azurerm_sentinel_alert_rule_scheduled" "this" {
   trigger_operator           = var.trigger_operator
   trigger_threshold          = var.trigger_threshold
   custom_details             = var.custom_details
-  incident_configuration     = var.incident_configuration
 
 
   # a dynamic block only when alert_description is in the query
@@ -66,17 +65,18 @@ resource "azurerm_sentinel_alert_rule_scheduled" "this" {
   }
 
   incident_configuration {
-    create_incident = true
+    create_incident = var.incident_configuration.create_incident
 
     grouping {
-      enabled                 = false
-      entity_matching_method  = "AllEntities"
-      group_by_alert_details  = []
-      group_by_custom_details = []
-      group_by_entities       = []
-      lookback_duration       = "PT5M"
-      reopen_closed_incidents = false
+      enabled                 = var.incident_configuration.grouping.enabled
+      entity_matching_method  = var.incident_configuration.grouping.entity_matching_method
+      group_by_alert_details  = var.incident_configuration.grouping.group_by_alert_details
+      group_by_custom_details = var.incident_configuration.grouping.group_by_custom_details
+      group_by_entities       = var.incident_configuration.grouping.group_by_entities
+      lookback_duration       = var.incident_configuration.grouping.lookback_duration
+      reopen_closed_incidents = var.incident_configuration.grouping.reopen_closed_incidents
     }
   }
+
 
 }

@@ -103,7 +103,7 @@ variable "custom_details" {
 }
 
 variable "incident_configuration" {
-  type        = map(any)
+  type        = any
   description = "(Optional) The incident configuration of the alert rule."
   default = {
     create_incident = true
