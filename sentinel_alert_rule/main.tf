@@ -67,7 +67,7 @@ resource "azurerm_sentinel_alert_rule_scheduled" "this" {
   incident_configuration {
     create_incident = var.incident_configuration.create_incident
 
-    grouping = {
+    grouping {
       enabled                 = var.incident_configuration.grouping.enabled
       entity_matching_method  = var.incident_configuration.grouping.entity_matching_method
       group_by_alert_details  = var.incident_configuration.grouping.group_by_alert_details
