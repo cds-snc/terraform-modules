@@ -9,6 +9,12 @@ variable "display_name" {
   description = "(Required) The display name of the alert rule."
 }
 
+variable "name" {
+  type        = string
+  description = "(Optional) The name of the azurerm_sentinel_alert_rule_scheduled. If not provided, a random UUID will be used."
+  default     = ""
+}
+
 
 variable "workspace_id" {
   type        = string
