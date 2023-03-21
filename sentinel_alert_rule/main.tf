@@ -38,6 +38,9 @@ resource "azurerm_sentinel_alert_rule_scheduled" "this" {
   trigger_operator           = var.trigger_operator
   trigger_threshold          = var.trigger_threshold
   custom_details             = var.custom_details
+  event_grouping {
+    aggregation_kind = var.event_grouping.aggregation_kind
+  }
 
 
   # a dynamic block only when alert_description is in the query

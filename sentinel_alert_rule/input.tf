@@ -149,3 +149,17 @@ variable "enabled" {
   description = "(Optional) The enabled of the alert rule. Defaults to true."
   default     = true
 }
+
+variable "event_grouping" {
+  type        = map(string)
+  description = "(Optional) The event grouping of the alert rule."
+  default = {
+    aggregation_method = "AlertPerResult"
+  }
+  validation {
+    condition     = can(regex("^(AlertPerResult|SingleAlert)$", var.event_grouping.aggregation_method))
+    error_message = "The aggregation method must be in the list of [AlertPerResult, SingleAlert]."
+  }
+
+
+}
