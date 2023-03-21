@@ -46,7 +46,9 @@ variable "tactics" {
   description = "(Optional) The tactics of the alert rule. Defaults to [InitialAccess]."
   default     = ["InitialAccess"]
   validation {
-    condition     = can(regex("^(InitialAccess|Execution|Persistence|PrivilegeEscalation|DefenseEvasion|CredentialAccess|Discovery|LateralMovement|Collection|Exfiltration|CommandAndControl|Impact|ImpairProcessControl|InhibitResponseFunction|PreAttack|Reconnaissance|ResourceDevelopment)$", join(",", var.tactics)))
+    condition = alltrue([
+      for tactic in var.tactics : can(regex("^(InitialAccess|Execution|Persistence|PrivilegeEscalation|DefenseEvasion|CredentialAccess|Discovery|LateralMovement|Collection|Exfiltration|CommandAndControl|Impact|ImpairProcessControl|InhibitResponseFunction|PreAttack|Reconnaissance|ResourceDevelopment)$", tactic))
+    ])
     error_message = "The tactics must be in the list of [InitialAccess, Execution, Persistence, PrivilegeEscalation, DefenseEvasion, CredentialAccess, Discovery, LateralMovement, Collection, Exfiltration, CommandAndControl, Impact, ImpairProcessControl, InhibitResponseFunction, PreAttack, Reconnaissance, ResourceDevelopment]."
   }
 }
