@@ -39,7 +39,7 @@ resource "azurerm_sentinel_alert_rule_scheduled" "this" {
   trigger_threshold          = var.trigger_threshold
   custom_details             = var.custom_details
   event_grouping {
-    aggregation_kind = var.event_grouping.aggregation_kind
+    aggregation_method = var.event_grouping.aggregation_method
   }
 
 
