@@ -26,7 +26,7 @@ resource "azurerm_sentinel_alert_rule_scheduled" "this" {
   display_name               = var.display_name
   enabled                    = var.enabled
   log_analytics_workspace_id = var.workspace_id
-  name                       = random_uuid.this.result
+  name                       = coalesce(var.name, random_uuid.this.result)
   query                      = var.query
   query_frequency            = var.query_frequency #"PT1H" "P1D" "PT5M"
   query_period               = var.query_period
@@ -38,6 +38,9 @@ resource "azurerm_sentinel_alert_rule_scheduled" "this" {
   trigger_operator           = var.trigger_operator
   trigger_threshold          = var.trigger_threshold
   custom_details             = var.custom_details
+  event_grouping {
+    aggregation_method = var.event_grouping.aggregation_method
+  }
 
 
   # a dynamic block only when alert_description is in the query

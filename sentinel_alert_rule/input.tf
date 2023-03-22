@@ -9,6 +9,12 @@ variable "display_name" {
   description = "(Required) The display name of the alert rule."
 }
 
+variable "name" {
+  type        = string
+  description = "(Optional) The name of the azurerm_sentinel_alert_rule_scheduled. If not provided, a random UUID will be used."
+  default     = ""
+}
+
 
 variable "workspace_id" {
   type        = string
@@ -46,7 +52,9 @@ variable "tactics" {
   description = "(Optional) The tactics of the alert rule. Defaults to [InitialAccess]."
   default     = ["InitialAccess"]
   validation {
-    condition     = can(regex("^(InitialAccess|Execution|Persistence|PrivilegeEscalation|DefenseEvasion|CredentialAccess|Discovery|LateralMovement|Collection|Exfiltration|CommandAndControl|Impact|ImpairProcessControl|InhibitResponseFunction|PreAttack|Reconnaissance|ResourceDevelopment)$", join(",", var.tactics)))
+    condition = alltrue([
+      for tactic in var.tactics : can(regex("^(InitialAccess|Execution|Persistence|PrivilegeEscalation|DefenseEvasion|CredentialAccess|Discovery|LateralMovement|Collection|Exfiltration|CommandAndControl|Impact|ImpairProcessControl|InhibitResponseFunction|PreAttack|Reconnaissance|ResourceDevelopment)$", tactic))
+    ])
     error_message = "The tactics must be in the list of [InitialAccess, Execution, Persistence, PrivilegeEscalation, DefenseEvasion, CredentialAccess, Discovery, LateralMovement, Collection, Exfiltration, CommandAndControl, Impact, ImpairProcessControl, InhibitResponseFunction, PreAttack, Reconnaissance, ResourceDevelopment]."
   }
 }
@@ -140,4 +148,18 @@ variable "enabled" {
   type        = bool
   description = "(Optional) The enabled of the alert rule. Defaults to true."
   default     = true
+}
+
+variable "event_grouping" {
+  type        = map(string)
+  description = "(Optional) The event grouping of the alert rule."
+  default = {
+    aggregation_method = "AlertPerResult"
+  }
+  validation {
+    condition     = can(regex("^(AlertPerResult|SingleAlert)$", var.event_grouping.aggregation_method))
+    error_message = "The aggregation method must be in the list of [AlertPerResult, SingleAlert]."
+  }
+
+
 }
