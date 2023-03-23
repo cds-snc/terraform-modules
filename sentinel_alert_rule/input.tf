@@ -12,7 +12,7 @@ variable "display_name" {
 variable "name" {
   type        = string
   description = "(Optional) The name of the azurerm_sentinel_alert_rule_scheduled. If not provided, a random UUID will be used."
-  default     = ""
+  default     = null
 }
 
 
@@ -111,7 +111,18 @@ variable "custom_details" {
 }
 
 variable "incident_configuration" {
-  type        = any
+  type = object({
+    create_incident = bool
+    grouping = object({
+      enabled                 = bool
+      entity_matching_method  = string
+      group_by_alert_details  = list(string)
+      group_by_custom_details = list(string)
+      group_by_entities       = list(string)
+      lookback_duration       = string
+      reopen_closed_incidents = bool
+    })
+  })
   description = "(Optional) The incident configuration of the alert rule."
   default = {
     create_incident = true
