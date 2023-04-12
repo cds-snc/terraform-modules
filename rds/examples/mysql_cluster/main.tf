@@ -5,7 +5,7 @@ module "mysql_cluster" {
 
   database_name  = "terratest_mysql"
   engine         = "aurora-mysql"
-  engine_version = "5.7.mysql_aurora.2.10.0"
+  engine_version = "5.7.mysql_aurora.2.11.2"
   instances      = 2
   instance_class = "db.t3.small"
   username       = "thebigcheese"
