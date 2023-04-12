@@ -57,7 +57,6 @@ jobs:
             module:
               - '${{ matrix.module }}/**/*.tf'
               - '${{ matrix.module }}/test/**'
-              - '.github/workflows/terratest.yml'
 
       - name: Setup Go
         if: steps.changes.outputs.module == 'true'

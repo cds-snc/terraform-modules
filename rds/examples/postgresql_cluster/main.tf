@@ -5,7 +5,7 @@ module "postgresql_cluster" {
 
   database_name  = "terratest_postgresql"
   engine         = "aurora-postgresql"
-  engine_version = "11.9"
+  engine_version = "15.2"
   instances      = 2
   instance_class = "db.t3.medium"
   username       = "thebigcheese"
