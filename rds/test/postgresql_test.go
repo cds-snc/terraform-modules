@@ -67,7 +67,7 @@ func TestPostgresqlCluster(t *testing.T) {
 	assert.Equal(t, "terratest_postgresql", *cluster.DatabaseName)
 	assert.Equal(t, "thebigcheese", *cluster.MasterUsername)
 	assert.Equal(t, "aurora-postgresql", *cluster.Engine)
-	assert.Equal(t, "default.aurora-postgresql11", *cluster.DBClusterParameterGroup)
+	assert.Equal(t, "default.aurora-postgresql15", *cluster.DBClusterParameterGroup)
 	assert.Equal(t, "01:00-03:00", *cluster.PreferredBackupWindow)
 	assert.Equal(t, false, *cluster.DeletionProtection)
 	assert.Equal(t, true, *cluster.StorageEncrypted)
