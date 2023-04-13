@@ -63,7 +63,7 @@ No modules.
 |------|-------------|------|---------|:--------:|
 | <a name="input_billing_tag_key"></a> [billing\_tag\_key](#input\_billing\_tag\_key) | (Optional, default 'CostCentre') The name of the billing tag | `string` | `"CostCentre"` | no |
 | <a name="input_billing_tag_value"></a> [billing\_tag\_value](#input\_billing\_tag\_value) | (Required) The value of the billing tag | `string` | n/a | yes |
-| <a name="input_cloudwatch_log_arns"></a> [cloudwatch\_log\_arns](#input\_cloudwatch\_log\_arns) | (Required) A list of CloudWatch log ARNs to forward to Sentinel | `list(string)` | `[]` | no |
+| <a name="input_cloudwatch_log_arns"></a> [cloudwatch\_log\_arns](#input\_cloudwatch\_log\_arns) | (Optional) A list of CloudWatch log ARNs to forward to Sentinel | `list(string)` | `[]` | no |
 | <a name="input_customer_id"></a> [customer\_id](#input\_customer\_id) | (Required) Azure log workspace customer ID | `string` | n/a | yes |
 | <a name="input_event_rule_names"></a> [event\_rule\_names](#input\_event\_rule\_names) | (Optional) List of names for event rules to trigger the lambda | `list(string)` | `[]` | no |
 | <a name="input_function_name"></a> [function\_name](#input\_function\_name) | (Required) Name of the Lambda function. | `string` | n/a | yes |
