@@ -14,7 +14,7 @@ resource "aws_network_acl_rule" "block_ssh" {
   egress         = false
   protocol       = "tcp"
   rule_action    = "deny"
-  cidr_block     = "0.0.0.0/0" 
+  cidr_block     = "0.0.0.0/0"
   from_port      = 22
   to_port        = 22
 }
