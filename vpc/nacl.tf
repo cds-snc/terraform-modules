@@ -14,7 +14,7 @@ resource "aws_network_acl_rule" "block_ssh" {
   egress         = false
   protocol       = "tcp"
   rule_action    = "deny"
-  cidr_block     = aws_vpc.main.cidr_block
+  cidr_block     = "0.0.0.0/0" 
   from_port      = 22
   to_port        = 22
 }
@@ -26,7 +26,7 @@ resource "aws_network_acl_rule" "block_rdp" {
   egress         = false
   protocol       = "tcp"
   rule_action    = "deny"
-  cidr_block     = aws_vpc.main.cidr_block
+  cidr_block     = "0.0.0.0/0"
   from_port      = 3389
   to_port        = 3389
 }
