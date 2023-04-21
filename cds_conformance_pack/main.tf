@@ -28,6 +28,20 @@ locals {
   }
 }
 
+resource "random_uuid" "bucket_suffix" {}
+
+module "s3" {
+  source            = "github.com/cds-snc/terraform-modules?ref=v5.1.6/S3"
+  bucket_name       = "cds-conformance-pack-${random_uuid.bucket_suffix.result}"
+  billing_tag_value = var.billing_tag_value
+}
+
+resource "aws_s3_object" "conformace_pack_yaml" {
+  bucket  = module.s3.bucket_name
+  key     = "CDSConformancePack.yaml"
+  content = yamlencode(local.modified_conformance_pack)
+}
+
 
 resource "aws_config_conformance_pack" "cds_conformance_pack" {
   name = "CDSConformancePack"
@@ -157,5 +171,5 @@ resource "aws_config_conformance_pack" "cds_conformance_pack" {
     parameter_value = var.vpc_sg_open_only_to_authorized_ports_param_authorized_tcp_ports
   }
 
-  template_body = yamlencode(local.modified_conformance_pack)
+  template_s3_uri = "s3://${module.s3.bucket_name}/CDSConformancePack.yaml"
 }
