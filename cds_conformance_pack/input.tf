@@ -105,7 +105,7 @@ variable "internet_gateway_authorized_vpc_only_param_authorized_vpc_ids" {
   default     = ""
 }
 
-variable "redshift_cluster_configuration_check_param_logging_enabled" {
+variable "redshift_cluster_configuration_check_param_cluster_db_encrypted" {
   description = "Boolean value indicating whether the Redshift cluster's database is encrypted"
   type        = string
   default     = "true"

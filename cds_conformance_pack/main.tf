@@ -83,7 +83,7 @@ resource "aws_config_conformance_pack" "cds_conformance_pack" {
 
   input_parameter {
     parameter_name  = "RedshiftClusterConfigurationCheckParamClusterDbEncrypted"
-    parameter_value = var.redshift_cluster_configuration_check_param_logging_enabled
+    parameter_value = var.redshift_cluster_configuration_check_param_cluster_db_encrypted
   }
 
   input_parameter {
