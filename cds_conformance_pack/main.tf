@@ -173,6 +173,12 @@ resource "aws_config_conformance_pack" "cds_conformance_pack" {
 
   template_s3_uri = "s3://${module.s3.s3_bucket_id}/CDSConformancePack.yaml"
 
+  lifecycle {
+    replace_triggered_by = [
+      aws_s3_object.conformace_pack_yaml.content
+    ]
+  }
+
   depends_on = [
     aws_s3_object.conformace_pack_yaml
   ]
