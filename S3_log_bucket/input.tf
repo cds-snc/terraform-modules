@@ -65,3 +65,9 @@ variable "lifecycle_rule" {
   type        = any
   default     = []
 }
+
+variable "object_ownership" {
+  description = "(Optional), overrides object ownership value in aws_s3_bucket_ownership_controls. Defaults to BucketOwnerPreferred"
+  type        = string
+  default     = "BucketOwnerPreferred"
+}
