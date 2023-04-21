@@ -1,3 +1,22 @@
+/* 
+* # CDS Conformance Pack
+* 
+* This module creates a conformance pack for CDS based on the CCCS conformance pack found here: https://github.com/awslabs/aws-config-rules/blob/master/aws-config-conformance-packs/Operational-Best-Practices-for-CCCS-Medium.yaml
+* 
+* It uses the same default inputs for terraform as specified in the CCCS conformance pack YAML, but can easily be overridden.
+* 
+* For example to meet the config rule `internet-gateway-authorized-vpc-only` you can set the authorized vpcs as follows:
+* 
+* ```hcl
+* module "conformance_pack" {
+*   source                                                        = "github.com/cds-snc/terraform-modules?ref=v1.0.11/cds_conformance_pack"
+*   internet_gateway_authorized_vpc_only_param_authorized_vpc_ids = "vpc-00534274da4ade29d"
+*   billing_tag_value = var.billing_code
+* }
+* ```
+*/
+
+
 resource "aws_config_conformance_pack" "cds_conformance_pack" {
   name = "CDSConformancePack"
 

@@ -1,4 +1,4 @@
-# CDS conformance pack
+# CDS Conformance Pack
 
 This module creates a conformance pack for CDS based on the CCCS conformance pack found here: https://github.com/awslabs/aws-config-rules/blob/master/aws-config-conformance-packs/Operational-Best-Practices-for-CCCS-Medium.yaml
 
@@ -13,7 +13,6 @@ module "conformance_pack" {
   billing_tag_value = var.billing_code
 }
 ```
-
 
 ## Requirements
 
