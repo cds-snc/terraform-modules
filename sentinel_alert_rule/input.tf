@@ -66,7 +66,7 @@ variable "techniques" {
 
 variable "severity" {
   type        = string
-  description = "(Optional) The severity of the alert rule. Defaults to High."
+  description = "(Optional) The severity of the alert rule. Defaults to Medium."
   default     = "Medium"
   validation {
     condition     = can(regex("^(High|Medium|Low)$", var.severity))
@@ -146,7 +146,7 @@ variable "trigger_threshold" {
 
 variable "enabled" {
   type        = bool
-  description = "(Optional) The enabled of the alert rule. Defaults to true."
+  description = "(Optional) The enabled status of the alert rule. Defaults to true."
   default     = true
 }
 
