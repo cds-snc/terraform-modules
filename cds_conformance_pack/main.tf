@@ -37,7 +37,7 @@ module "s3" {
 }
 
 resource "aws_s3_object" "conformace_pack_yaml" {
-  bucket  = module.s3.bucket_name
+  bucket  = module.s3.s3_bucket_id
   key     = "CDSConformancePack.yaml"
   content = yamlencode(local.modified_conformance_pack)
 }
@@ -171,5 +171,5 @@ resource "aws_config_conformance_pack" "cds_conformance_pack" {
     parameter_value = var.vpc_sg_open_only_to_authorized_ports_param_authorized_tcp_ports
   }
 
-  template_s3_uri = "s3://${module.s3.bucket_name}/CDSConformancePack.yaml"
+  template_s3_uri = "s3://${module.s3.s3_bucket_id}/CDSConformancePack.yaml"
 }
