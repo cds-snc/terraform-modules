@@ -50,7 +50,7 @@ No modules.
 | <a name="input_force_destroy"></a> [force\_destroy](#input\_force\_destroy) | (Optional, Default:false ) A boolean that indicates all objects should be deleted from the bucket so that the bucket can be destroyed without error. These objects are not recoverable. | `bool` | `false` | no |
 | <a name="input_lifecycle_rule"></a> [lifecycle\_rule](#input\_lifecycle\_rule) | (Optional) List of maps containing configuration of object lifecycle management. | `any` | `[]` | no |
 | <a name="input_tags"></a> [tags](#input\_tags) | (Optional) A mapping of tags to assign to the bucket. | `map(string)` | `{}` | no |
-| <a name="object_ownership"></a> [object\_ownership](#input\_object\_ownership) | (Optional), overrides object ownership value in aws_s3_bucket_ownership_controls | `map(string)` | `{}` | no |
+| <a name="object_ownership"></a> [object\_ownership](#input\_object\_ownership) | (Optional), overrides object ownership value in aws_s3_bucket_ownership_controls | `string` | `BucketOwnerPreferred` | no |
 
 
 ## Outputs
