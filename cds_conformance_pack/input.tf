@@ -33,6 +33,12 @@ variable "cloudwatch_alarm_action_check_param_ok_action_required" {
   default     = "false"
 }
 
+variable "conformance_pack_name" {
+  description = "(Optional) The name of the conformance pack."
+  type        = string
+  default     = "CDS-Conformance-Pack"
+}
+
 variable "elb_predefined_security_policy_ssl_check_param_predefined_policy_name" {
   description = "(Optional) The name of the predefined security policy for the ELB SSL negotiation configuration."
   type        = string

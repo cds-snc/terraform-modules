@@ -44,7 +44,7 @@ resource "aws_s3_object" "conformace_pack_yaml" {
 
 
 resource "aws_config_conformance_pack" "cds_conformance_pack" {
-  name = "CDSConformancePack"
+  name = var.conformance_pack_name
 
   input_parameter {
     parameter_name  = "AccessKeysRotatedParamMaxAccessKeyAge"
