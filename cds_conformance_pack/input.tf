@@ -39,6 +39,12 @@ variable "elb_predefined_security_policy_ssl_check_param_predefined_policy_name"
   default     = "TLS-1-2-2017-01"
 }
 
+variable "excluded_rules" {
+  description = "(Optional) The list of rules to exclude from the conformance pack. These need to be in the CamelCase format as found in the YAML."
+  type        = list(string)
+  default     = []
+}
+
 variable "iam_customer_policy_blocked_kms_actions_param_blocked_actions_patterns" {
   description = "(Optional) The patterns of KMS actions to be blocked in the customer-managed IAM policy."
   type        = string

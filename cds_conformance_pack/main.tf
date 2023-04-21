@@ -16,6 +16,18 @@
 * ```
 */
 
+locals {
+  conformance_yaml = yamldecode(file("${path.module}/Operational-Best-Practices-for-CCCS-Medium.yaml"))
+  conformance_yaml_without_excluded_rules = {
+    for k, v in local.conformance_yaml.Resources : k => v if !contains(var.excluded_rules, k)
+  }
+  modified_conformance_pack = {
+    Parameters = local.conformance_yaml.Parameters
+    Resources  = local.conformance_yaml_without_excluded_rules
+    Conditions = local.conformance_yaml.Conditions
+  }
+}
+
 
 resource "aws_config_conformance_pack" "cds_conformance_pack" {
   name = "CDSConformancePack"
@@ -145,5 +157,5 @@ resource "aws_config_conformance_pack" "cds_conformance_pack" {
     parameter_value = var.vpc_sg_open_only_to_authorized_ports_param_authorized_tcp_ports
   }
 
-  template_body = file("${path.module}/Operational-Best-Practices-for-CCCS-Medium.yaml")
+  template_body = yamlencode(local.modified_conformance_pack)
 }
