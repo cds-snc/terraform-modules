@@ -102,7 +102,7 @@ variable "iam_user_unused_credentials_check_param_max_credential_usage_age" {
 variable "internet_gateway_authorized_vpc_only_param_authorized_vpc_ids" {
   description = "Comma-separated list of authorized VPC IDs that are allowed to use the Internet Gateway"
   type        = string
-  default     = ""
+  default     = "here add Comma-separated list of the authorized VPC IDs"
 }
 
 variable "redshift_cluster_configuration_check_param_cluster_db_encrypted" {
