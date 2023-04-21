@@ -15,8 +15,6 @@ resource "aws_s3_bucket" "this" {
   bucket        = var.bucket_name
   bucket_prefix = var.bucket_prefix
 
-  acl = "log-delivery-write"
-
   tags          = merge(local.common_tags, var.tags)
   force_destroy = var.force_destroy
 
@@ -59,6 +57,23 @@ resource "aws_s3_bucket_policy" "this" {
   policy = data.aws_iam_policy_document.combined.json
 }
 
+resource "aws_s3_bucket_ownership_controls" "this" {
+  bucket = aws_s3_bucket.this.id
+  rule {
+    object_ownership = "BucketOwnerPreferred"
+  }
+}
+
+resource "aws_s3_bucket_acl" "this" {
+  depends_on = [
+    aws_s3_bucket_public_access_block.this,
+    aws_s3_bucket_ownership_controls.this,
+  ]
+
+  bucket = aws_s3_bucket.this.id
+  acl    = "log-delivery-write"
+}
+
 data "aws_iam_policy_document" "combined" {
 
   source_policy_documents = compact([
@@ -95,6 +110,7 @@ data "aws_iam_policy_document" "elb_log_delivery" {
     ]
   }
 }
+
 
 # ALB/NLB
 data "aws_iam_policy_document" "lb_log_delivery" {
