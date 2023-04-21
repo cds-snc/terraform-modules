@@ -3,7 +3,7 @@
 */
 
 resource "aws_config_conformance_pack" "cds_conformance_pack" {
-  name = "cds_conformance_pack"
+  name = "cdsConformancePack"
 
   input_parameter {
     parameter_name  = "InternetGatewayAuthorizedVpcOnlyParamAuthorizedVpcIds"
