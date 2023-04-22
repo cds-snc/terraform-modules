@@ -2,16 +2,28 @@
 
 This module creates a conformance pack for CDS based on the CCCS conformance pack found here: https://github.com/awslabs/aws-config-rules/blob/master/aws-config-conformance-packs/Operational-Best-Practices-for-CCCS-Medium.yaml
 
-It uses the same default inputs for terraform as specified in the CCCS conformance pack YAML, but can easily be overridden.
+It uses the same default inputs for terraform as specified in the CCCS conformance pack YAML, but can easily be overridden. Because a cloudformation template can only be 50kb in size when it is created over the wire, we need to create a bucket and upload the conformance pack to it. This module creates a bucket and uploads the conformance pack to it. The name of the bucket is based on the pattern `cds-conformance-pack-<random-uuid>`.
 
 For example to meet the config rule `internet-gateway-authorized-vpc-only` you can set the authorized vpcs as follows:
 
 ```hcl
 module "conformance_pack" {
-  source                                                        = "github.com/cds-snc/terraform-modules?ref=v5.1.6/cds_conformance_pack"
+  source                                                        = "github.com/cds-snc/terraform-modules?ref=v5.1.7/cds_conformance_pack"
   internet_gateway_authorized_vpc_only_param_authorized_vpc_ids = "vpc-00534274da4ade29d"
   billing_tag_value = var.billing_code
 }
+```
+
+To exclude specific rules from the conformance pack, you can use the `excluded_rules` variable. For example, to exclude the `internet-gateway-authorized-vpc-only` rule, you can set the variable as follows:
+
+```hcl
+module "conformance_pack" {
+  source                                                        = "github.com/cds-snc/terraform-modules?ref=v5.1.7/cds_conformance_pack"
+  excluded_rules                                                = ["InternetGatewayAuthorizedVpcOnly"]
+  billing_tag_value = var.billing_code
+}
+
+Note: The rules need to be in the CamelCase format as found in the YAML.
 ```
 
 ## Requirements
@@ -23,16 +35,21 @@ No requirements.
 | Name | Version |
 |------|---------|
 | <a name="provider_aws"></a> [aws](#provider\_aws) | n/a |
+| <a name="provider_random"></a> [random](#provider\_random) | n/a |
 
 ## Modules
 
-No modules.
+| Name | Source | Version |
+|------|--------|---------|
+| <a name="module_s3"></a> [s3](#module\_s3) | github.com/cds-snc/terraform-modules | v5.1.6/S3 |
 
 ## Resources
 
 | Name | Type |
 |------|------|
 | [aws_config_conformance_pack.cds_conformance_pack](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/config_conformance_pack) | resource |
+| [aws_s3_object.conformace_pack_yaml](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/s3_object) | resource |
+| [random_uuid.bucket_suffix](https://registry.terraform.io/providers/hashicorp/random/latest/docs/resources/uuid) | resource |
 
 ## Inputs
 
@@ -44,7 +61,9 @@ No modules.
 | <a name="input_cloudwatch_alarm_action_check_param_alarm_action_required"></a> [cloudwatch\_alarm\_action\_check\_param\_alarm\_action\_required](#input\_cloudwatch\_alarm\_action\_check\_param\_alarm\_action\_required) | (Optional) Indicates whether an action is required when the alarm changes to the ALARM state. | `string` | `"true"` | no |
 | <a name="input_cloudwatch_alarm_action_check_param_insufficient_data_action_required"></a> [cloudwatch\_alarm\_action\_check\_param\_insufficient\_data\_action\_required](#input\_cloudwatch\_alarm\_action\_check\_param\_insufficient\_data\_action\_required) | (Optional) Indicates whether an action is required when the alarm changes to the INSUFFICIENT\_DATA state. | `string` | `"true"` | no |
 | <a name="input_cloudwatch_alarm_action_check_param_ok_action_required"></a> [cloudwatch\_alarm\_action\_check\_param\_ok\_action\_required](#input\_cloudwatch\_alarm\_action\_check\_param\_ok\_action\_required) | (Optional) Indicates whether an action is required when the alarm changes to the OK state. | `string` | `"false"` | no |
+| <a name="input_conformance_pack_name"></a> [conformance\_pack\_name](#input\_conformance\_pack\_name) | (Optional) The name of the conformance pack. | `string` | `"CDS-Conformance-Pack"` | no |
 | <a name="input_elb_predefined_security_policy_ssl_check_param_predefined_policy_name"></a> [elb\_predefined\_security\_policy\_ssl\_check\_param\_predefined\_policy\_name](#input\_elb\_predefined\_security\_policy\_ssl\_check\_param\_predefined\_policy\_name) | (Optional) The name of the predefined security policy for the ELB SSL negotiation configuration. | `string` | `"TLS-1-2-2017-01"` | no |
+| <a name="input_excluded_rules"></a> [excluded\_rules](#input\_excluded\_rules) | (Optional) The list of rules to exclude from the conformance pack. These need to be in the CamelCase format as found in the YAML. | `list(string)` | `[]` | no |
 | <a name="input_iam_customer_policy_blocked_kms_actions_param_blocked_actions_patterns"></a> [iam\_customer\_policy\_blocked\_kms\_actions\_param\_blocked\_actions\_patterns](#input\_iam\_customer\_policy\_blocked\_kms\_actions\_param\_blocked\_actions\_patterns) | (Optional) The patterns of KMS actions to be blocked in the customer-managed IAM policy. | `string` | `"kms:*, kms:Decrypt, kms:ReEncrypt*"` | no |
 | <a name="input_iam_inline_policy_blocked_kms_actions_param_blocked_actions_patterns"></a> [iam\_inline\_policy\_blocked\_kms\_actions\_param\_blocked\_actions\_patterns](#input\_iam\_inline\_policy\_blocked\_kms\_actions\_param\_blocked\_actions\_patterns) | (Optional) The patterns of KMS actions to be blocked in the inline IAM policy. | `string` | `"kms:*, kms:Decrypt, kms:ReEncrypt*"` | no |
 | <a name="input_iam_password_policy_param_max_password_age"></a> [iam\_password\_policy\_param\_max\_password\_age](#input\_iam\_password\_policy\_param\_max\_password\_age) | (Optional) The maximum password age in days for IAM users. | `string` | `"90"` | no |

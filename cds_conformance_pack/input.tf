@@ -33,10 +33,22 @@ variable "cloudwatch_alarm_action_check_param_ok_action_required" {
   default     = "false"
 }
 
+variable "conformance_pack_name" {
+  description = "(Optional) The name of the conformance pack."
+  type        = string
+  default     = "CDS-Conformance-Pack"
+}
+
 variable "elb_predefined_security_policy_ssl_check_param_predefined_policy_name" {
   description = "(Optional) The name of the predefined security policy for the ELB SSL negotiation configuration."
   type        = string
   default     = "TLS-1-2-2017-01"
+}
+
+variable "excluded_rules" {
+  description = "(Optional) The list of rules to exclude from the conformance pack. These need to be in the CamelCase format as found in the YAML."
+  type        = list(string)
+  default     = []
 }
 
 variable "iam_customer_policy_blocked_kms_actions_param_blocked_actions_patterns" {
