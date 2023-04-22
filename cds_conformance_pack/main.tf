@@ -3,7 +3,7 @@
 * 
 * This module creates a conformance pack for CDS based on the CCCS conformance pack found here: https://github.com/awslabs/aws-config-rules/blob/master/aws-config-conformance-packs/Operational-Best-Practices-for-CCCS-Medium.yaml
 * 
-* It uses the same default inputs for terraform as specified in the CCCS conformance pack YAML, but can easily be overridden. Because a cloudformation template can only be 50kb in size when it is created over the wire, we need to create a bucket and upload the conformance pack to it. This module creates a bucket and uploads the conformance pack to it based on the pattern `cds-conformance-pack-<random-uuid>`.
+* It uses the same default inputs for terraform as specified in the CCCS conformance pack YAML, but can easily be overridden. Because a cloudformation template can only be 50kb in size when it is created over the wire, we need to create a bucket and upload the conformance pack to it. This module creates a bucket and uploads the conformance pack to it. The name of the bucket is based on the pattern `cds-conformance-pack-<random-uuid>`.
 * 
 * For example to meet the config rule `internet-gateway-authorized-vpc-only` you can set the authorized vpcs as follows:
 * 
