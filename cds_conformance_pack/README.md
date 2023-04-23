@@ -8,7 +8,7 @@ For example to meet the config rule `internet-gateway-authorized-vpc-only` you c
 
 ```hcl
 module "conformance_pack" {
-  source                                                        = "github.com/cds-snc/terraform-modules?ref=v5.1.7/cds_conformance_pack"
+  source                                                        = "github.com/cds-snc/terraform-modules?ref=v5.1.8/cds_conformance_pack"
   internet_gateway_authorized_vpc_only_param_authorized_vpc_ids = "vpc-00534274da4ade29d"
   billing_tag_value = var.billing_code
 }
@@ -18,13 +18,24 @@ To exclude specific rules from the conformance pack, you can use the `excluded_r
 
 ```hcl
 module "conformance_pack" {
-  source                                                        = "github.com/cds-snc/terraform-modules?ref=v5.1.7/cds_conformance_pack"
+  source                                                        = "github.com/cds-snc/terraform-modules?ref=v5.1.8/cds_conformance_pack"
   excluded_rules                                                = ["InternetGatewayAuthorizedVpcOnly"]
   billing_tag_value = var.billing_code
 }
+```
 
 Note: The rules need to be in the CamelCase format as found in the YAML.
+
+If you would like to append or override the default conformance pack, you can use the `custom_conformance_pack_path` variable. For example, to append a rule to the conformance pack, you can set the variable as follows:
+
+```hcl
+module "conformance_pack" {
+  source                                                        = "github.com/cds-snc/terraform-modules?ref=v5.1.8/cds_conformance_pack"
+  custom_conformance_pack_path                                   = "custom_conformance_pack.yaml"
+  billing_tag_value = var.billing_code
+}
 ```
+The custom conformance pack should be in the same format as the CCCS conformance pack YAML, in that you can use a `Parameters`, `Resources`, and `Conditions` section.
 
 ## Requirements
 
@@ -62,6 +73,7 @@ No requirements.
 | <a name="input_cloudwatch_alarm_action_check_param_insufficient_data_action_required"></a> [cloudwatch\_alarm\_action\_check\_param\_insufficient\_data\_action\_required](#input\_cloudwatch\_alarm\_action\_check\_param\_insufficient\_data\_action\_required) | (Optional) Indicates whether an action is required when the alarm changes to the INSUFFICIENT\_DATA state. | `string` | `"true"` | no |
 | <a name="input_cloudwatch_alarm_action_check_param_ok_action_required"></a> [cloudwatch\_alarm\_action\_check\_param\_ok\_action\_required](#input\_cloudwatch\_alarm\_action\_check\_param\_ok\_action\_required) | (Optional) Indicates whether an action is required when the alarm changes to the OK state. | `string` | `"false"` | no |
 | <a name="input_conformance_pack_name"></a> [conformance\_pack\_name](#input\_conformance\_pack\_name) | (Optional) The name of the conformance pack. | `string` | `"CDS-Conformance-Pack"` | no |
+| <a name="input_custom_conformance_pack_path"></a> [custom\_conformance\_pack\_path](#input\_custom\_conformance\_pack\_path) | (Optional) The path to the custom conformance pack YAML file. | `string` | `""` | no |
 | <a name="input_elb_predefined_security_policy_ssl_check_param_predefined_policy_name"></a> [elb\_predefined\_security\_policy\_ssl\_check\_param\_predefined\_policy\_name](#input\_elb\_predefined\_security\_policy\_ssl\_check\_param\_predefined\_policy\_name) | (Optional) The name of the predefined security policy for the ELB SSL negotiation configuration. | `string` | `"TLS-1-2-2017-01"` | no |
 | <a name="input_excluded_rules"></a> [excluded\_rules](#input\_excluded\_rules) | (Optional) The list of rules to exclude from the conformance pack. These need to be in the CamelCase format as found in the YAML. | `list(string)` | `[]` | no |
 | <a name="input_iam_customer_policy_blocked_kms_actions_param_blocked_actions_patterns"></a> [iam\_customer\_policy\_blocked\_kms\_actions\_param\_blocked\_actions\_patterns](#input\_iam\_customer\_policy\_blocked\_kms\_actions\_param\_blocked\_actions\_patterns) | (Optional) The patterns of KMS actions to be blocked in the customer-managed IAM policy. | `string` | `"kms:*, kms:Decrypt, kms:ReEncrypt*"` | no |

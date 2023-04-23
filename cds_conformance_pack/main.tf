@@ -9,7 +9,7 @@
 * 
 * ```hcl
 * module "conformance_pack" {
-*   source                                                        = "github.com/cds-snc/terraform-modules?ref=v5.1.7/cds_conformance_pack"
+*   source                                                        = "github.com/cds-snc/terraform-modules?ref=v5.1.8/cds_conformance_pack"
 *   internet_gateway_authorized_vpc_only_param_authorized_vpc_ids = "vpc-00534274da4ade29d"
 *   billing_tag_value = var.billing_code
 * }
@@ -19,12 +19,25 @@
 *
 * ```hcl
 * module "conformance_pack" {
-*   source                                                        = "github.com/cds-snc/terraform-modules?ref=v5.1.7/cds_conformance_pack"
+*   source                                                        = "github.com/cds-snc/terraform-modules?ref=v5.1.8/cds_conformance_pack"
 *   excluded_rules                                                = ["InternetGatewayAuthorizedVpcOnly"]
 *   billing_tag_value = var.billing_code
 * }
-*
+* ```
+* 
 * Note: The rules need to be in the CamelCase format as found in the YAML.
+*
+* If you would like to append or override the default conformance pack, you can use the `custom_conformance_pack_path` variable. For example, to append a rule to the conformance pack, you can set the variable as follows:
+*
+* ```hcl
+* module "conformance_pack" {
+*   source                                                        = "github.com/cds-snc/terraform-modules?ref=v5.1.8/cds_conformance_pack"
+*   custom_conformance_pack_path                                   = "custom_conformance_pack.yaml"
+*   billing_tag_value = var.billing_code
+* }
+* ```
+* The custom conformance pack should be in the same format as the CCCS conformance pack YAML, in that you can use a `Parameters`, `Resources`, and `Conditions` section. 
+*
 */
 
 resource "random_uuid" "bucket_suffix" {}
