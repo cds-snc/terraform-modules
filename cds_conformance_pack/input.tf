@@ -39,6 +39,12 @@ variable "conformance_pack_name" {
   default     = "CDS-Conformance-Pack"
 }
 
+variable "custom_conformance_pack_path" {
+  description = "(Optional) The path to the custom conformance pack YAML file."
+  type        = string
+  default     = ""
+}
+
 variable "elb_predefined_security_policy_ssl_check_param_predefined_policy_name" {
   description = "(Optional) The name of the predefined security policy for the ELB SSL negotiation configuration."
   type        = string
