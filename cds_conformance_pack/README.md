@@ -10,7 +10,7 @@ For example to meet the config rule `internet-gateway-authorized-vpc-only` you c
 module "conformance_pack" {
   source                                                        = "github.com/cds-snc/terraform-modules?ref=v5.1.8/cds_conformance_pack"
   internet_gateway_authorized_vpc_only_param_authorized_vpc_ids = "vpc-00534274da4ade29d"
-  billing_tag_value = var.billing_code
+  billing_tag_value                                             = var.billing_code
 }
 ```
 
@@ -20,7 +20,7 @@ To exclude specific rules from the conformance pack, you can use the `excluded_r
 module "conformance_pack" {
   source                                                        = "github.com/cds-snc/terraform-modules?ref=v5.1.8/cds_conformance_pack"
   excluded_rules                                                = ["InternetGatewayAuthorizedVpcOnly"]
-  billing_tag_value = var.billing_code
+  billing_tag_value                                             = var.billing_code
 }
 ```
 
@@ -31,8 +31,8 @@ If you would like to append or override the default conformance pack, you can us
 ```hcl
 module "conformance_pack" {
   source                                                        = "github.com/cds-snc/terraform-modules?ref=v5.1.8/cds_conformance_pack"
-  custom_conformance_pack_path                                   = "custom_conformance_pack.yaml"
-  billing_tag_value = var.billing_code
+  custom_conformance_pack_path                                  = "./custom_conformance_pack.yaml"
+  billing_tag_value                                             = var.billing_code
 }
 ```
 The custom conformance pack should be in the same format as the CCCS conformance pack YAML, in that you can use a `Parameters`, `Resources`, and `Conditions` section.
