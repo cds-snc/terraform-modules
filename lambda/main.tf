@@ -65,3 +65,25 @@ resource "aws_cloudwatch_log_group" "this" {
   retention_in_days = "14"
   tags              = local.common_tags
 }
+
+resource "aws_cloudwatch_query_definition" "lambda_statistics" {
+  name = "Lambda Statistics"
+
+  log_group_names = [
+    "aws_cloudwatch_log_group.this"
+  ]
+
+  query_string = <<-QUERY
+    filter @type = “REPORT”
+    | stats
+    count(@type) as countInvocations,
+    count(@initDuration) as countColdStarts, (count(@initDuration)/count(@type))*100 as percentageColdStarts,
+    max(@initDuration) as maxColdStartTime,
+    avg(@duration) as averageDuration,
+    max(@duration) as maxDuration,
+    min(@duration) as minDuration,
+    avg(@maxMemoryUsed) as averageMemoryUsed,
+    max(@memorySize) as memoryAllocated, (avg(@maxMemoryUsed)/max(@memorySize))*100 as percentageMemoryUsed
+    by bin(1h) as timeFrame
+  QUERY
+}
