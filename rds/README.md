@@ -20,6 +20,7 @@ No modules.
 | Name | Type |
 |------|------|
 | [aws_cloudwatch_log_group.proxy](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/cloudwatch_log_group) | resource |
+| [aws_db_event_subscription.rds_sg_events_alerts](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/db_event_subscription) | resource |
 | [aws_db_proxy.proxy](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/db_proxy) | resource |
 | [aws_db_proxy_default_target_group.this](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/db_proxy_default_target_group) | resource |
 | [aws_db_proxy_target.target](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/db_proxy_target) | resource |
@@ -58,6 +59,7 @@ No modules.
 | <a name="input_prevent_cluster_deletion"></a> [prevent\_cluster\_deletion](#input\_prevent\_cluster\_deletion) | (Optional, default 'true') This flag prevents deletion of the RDS cluster. <br/> **Please Note:** We cannot prevent deletion of RDS instances in the module, we recommend you add `lifecycle { prevent_deletion = true }` to the module to prevent instance deletion | `bool` | `true` | no |
 | <a name="input_proxy_debug_logging"></a> [proxy\_debug\_logging](#input\_proxy\_debug\_logging) | (Optional, default 'false') Allows the proxy to log debug information. <br/> **Please Note:** This will include all sql commands and potential sensitive information | `bool` | `false` | no |
 | <a name="input_proxy_log_retention_in_days"></a> [proxy\_log\_retention\_in\_days](#input\_proxy\_log\_retention\_in\_days) | (Optional, default '14') The number of days to retain the proxy logs in cloudwatch | `number` | `14` | no |
+| <a name="input_security_group_notifications_topic_arn"></a> [security\_group\_notifications\_topic\_arn](#input\_security\_group\_notifications\_topic\_arn) | (Optional) The SNS topic ARN to send notifications about security group changes to. | `string` | `""` | no |
 | <a name="input_serverless_max_capacity"></a> [serverless\_max\_capacity](#input\_serverless\_max\_capacity) | (Optional) The maximum capacity of the Aurora serverless cluster (0.5 to 128 in increments of 0.5) | `number` | `0` | no |
 | <a name="input_serverless_min_capacity"></a> [serverless\_min\_capacity](#input\_serverless\_min\_capacity) | (Optional) The minimum capacity of the Aurora serverless cluster (0.5 to 128 in increments of 0.5) | `number` | `0` | no |
 | <a name="input_skip_final_snapshot"></a> [skip\_final\_snapshot](#input\_skip\_final\_snapshot) | (Optional, default 'false') This flag determines if a final database snapshot it taken before the cluster is deleted. | `bool` | `false` | no |
