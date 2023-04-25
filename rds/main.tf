@@ -131,7 +131,7 @@ resource "aws_db_event_subscription" "rds_sg_events_alerts" {
   name      = "${var.name}-rds-sg-events"
   sns_topic = var.security_group_notifications_topic_arn
 
-  source_type = ["db-security-group"]
+  source_type = "db-security-group"
   source_ids  = [aws_security_group.rds_proxy.id]
 
   event_categories = [
