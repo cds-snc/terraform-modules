@@ -120,3 +120,23 @@ resource "aws_db_proxy_target" "target" {
   target_group_name     = aws_db_proxy_default_target_group.this.name
   db_cluster_identifier = aws_rds_cluster.cluster.id
 }
+
+###
+# Monitoring
+###
+
+# Security Group change events
+resource "aws_db_event_subscription" "rds_sg_events_alerts" {
+  count     = var.security_group_notifications_topic_arn != "" ? 1 : 0
+  name      = "${var.name}-rds-sg-events"
+  sns_topic = var.security_group_notifications_topic_arn
+
+  source_type = ["db-security-group"]
+  source_ids  = [aws_security_group.rds_proxy.id]
+
+  event_categories = [
+    "configuration change",
+    "failure",
+  ]
+}
+
