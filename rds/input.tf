@@ -172,3 +172,13 @@ variable "serverless_max_capacity" {
     error_message = "Serverless_max_capacity must be between 0.5 and 128 in increments of 0.5."
   }
 }
+
+###
+# Monitoring options
+###
+
+variable "security_group_notifications_topic_arn" {
+  type        = string
+  description = "(Optional) The SNS topic ARN to send notifications about security group changes to."
+  default     = ""
+}
