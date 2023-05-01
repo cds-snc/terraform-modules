@@ -201,3 +201,11 @@ resource "aws_s3_bucket_public_access_block" "this" {
   ignore_public_acls      = true
   restrict_public_buckets = true
 }
+
+resource "aws_s3_bucket_versioning" "this" {
+  count  = var.critical_tag_value == "true" ? 1 : 0
+  bucket = aws_s3_bucket_policy.this.id
+  dynamic "versioning_configuration" {
+    status = "Enabled"
+  }
+}
