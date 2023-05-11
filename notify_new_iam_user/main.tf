@@ -42,44 +42,9 @@ resource "aws_lambda_function" "new_iam_user_added" {
 }
 
 
-#
-# EventBridge: Catch and trigger security group changes 
-#
-resource "aws_cloudwatch_event_rule" "sg_change_auto_response_event_rule" {
-  name          = "security_group_change_auto_response"
-  description   = "Responds to security group change events"
-  is_enabled    = true
-  event_pattern = <<PATTERN
-    {
-        "detail-type": [
-            "AWS API Call via CloudTrail"
-        ],
-        "detail": {
-            "eventSource": [
-              "ec2.amazonaws.com"
-            ],
-            "eventName": [
-            "AuthorizeSecurityGroupIngress",
-            "AuthorizeSecurityGroupEgress",
-            "RevokeSecurityGroupIngress",
-            "RevokeSecurityGroupEgress",
-            "CreateSecurityGroup",
-            "DeleteSecurityGroup"
-            ]
-        }
-    }
-    PATTERN
-}
-
-# Target that triggers the Lambda function
-resource "aws_cloudwatch_event_target" "target_sg_change_auto_response_event_rule" {
-  rule = aws_cloudwatch_event_rule.sg_change_auto_response_event_rule.name
-  arn  = aws_lambda_function.security_group_change_auto_response.arn
-}
-
-# Permission that allows the Cloudwatch service to execute the Lambda function
-resource "aws_lambda_permission" "security_group_change_auto_response_lambda_permission" {
-  action        = "lambda:InvokeFunction"
-  principal     = "events.amazonaws.com"
-  function_name = aws_lambda_function.security_group_change_auto_response.function_name
+# Permission to execute the Lambda function
+resource "aws_lambda_permission" "new_iam_user_added_lambda_permission" {
+  action = "lambda:InvokeFunction"
+  function_name = aws_lambda_function.new_iam_user_added.arn
+  principal = "events.amazonaws.com"
 }
