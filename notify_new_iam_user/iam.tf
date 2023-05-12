@@ -44,7 +44,7 @@ resource "aws_iam_role_policy" "new_iam_user_response_policy" {
         ]
         Effect   = "Allow"
         Sid      = "AllowSnsActions"
-        Resource = "arn:aws:sns:${local.region}:${local.account_id}:internal-sre-alert"
+        Resource = "arn:aws:sns:ca-central-1:${local.account_id}:internal-sre-alert"
       }
     ]
   })

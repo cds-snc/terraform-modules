@@ -12,7 +12,7 @@ variable "billing_tag_value" {
 variable "function_name" {
   description = "(Required) Name of the Lambda function."
   type        = string
-  default     = "security_group_change_auto_response"
+  default     = "new_iam_user_added"
 
   validation {
     condition     = length(var.function_name) < 65
@@ -23,5 +23,11 @@ variable "function_name" {
     condition     = can(regex("^[A-Za-z][\\w-]{0,63}$", var.function_name))
     error_message = "The function name must only contain alphanumeric, underscore and hyphen characters."
   }
+}
+
+variable "logging_level" {
+  description = "The logging level of the lambda function"
+  type	      = string
+  default     = "ERROR"
 }
 
