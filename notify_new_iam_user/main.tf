@@ -12,7 +12,7 @@ data "aws_region" "current" {}
 # S3 Bucket: Create an S3 bucket for cloudtrail
 #
 resource "aws_s3_bucket" "new_iam_user_bucket" {
-  bucket = "new-iam-user-bucket1234567"
+  bucket = "new-iam-user-bucket"
   force_destroy = true
 
   tags = {
