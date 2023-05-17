@@ -27,7 +27,7 @@ variable "function_name" {
 
 variable "logging_level" {
   description = "The logging level of the lambda function"
-  type	      = string
+  type        = string
   default     = "ERROR"
 }
 

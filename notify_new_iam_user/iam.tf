@@ -1,3 +1,7 @@
+#
+# IAM roles and policies
+#
+
 # get the aws partition
 data "aws_partition" "current" {}
 
