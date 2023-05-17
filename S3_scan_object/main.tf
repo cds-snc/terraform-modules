@@ -17,6 +17,7 @@ resource "aws_lambda_function" "s3_scan_object" {
   runtime       = "python3.8"
   handler       = "main.handler"
   memory_size   = 512
+  timeout       = 120
 
   filename         = data.archive_file.s3_scan_object.output_path
   source_code_hash = filebase64sha256(data.archive_file.s3_scan_object.output_path)
