@@ -25,6 +25,12 @@ variable "function_name" {
   }
 }
 
+variable "sns_topic" {
+  description = "(Required, default 'internal-sre-alert') The name of the sns topic to send alerts to"
+  type        = string
+  default     = "internal-sre-alert"
+}
+
 variable "logging_level" {
   description = "The logging level of the lambda function"
   type        = string
