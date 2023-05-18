@@ -4,6 +4,12 @@ variable "billing_tag_key" {
   default     = "CostCentre"
 }
 
+variable "sns_topic" {
+  description = "(Optional, default 'internal-sre-alert') The name of the sns topic to send alerts to"
+  type        = string
+  default     = "internal-sre-alert"
+}
+
 variable "billing_tag_value" {
   description = "(Required) The value of the billing tag"
   type        = string

@@ -33,7 +33,7 @@ resource "aws_lambda_function" "security_group_change_auto_response" {
   }
   environment {
     variables = {
-      sns_topic_arn = "arn:aws:sns:${local.region}:${local.account_id}:internal-sre-alert"
+      sns_topic_arn = "arn:aws:sns:${local.region}:${local.account_id}:${var.sns_topic}"
     }
   }
   depends_on = [

@@ -39,7 +39,7 @@ resource "aws_iam_role_policy" "security_group_modification" {
         ]
         Effect   = "Allow"
         Sid      = "AllowSnsActions"
-        Resource = "arn:aws:sns:${local.region}:${local.account_id}:internal-sre-alert"
+        Resource = "arn:aws:sns:${local.region}:${local.account_id}:${var.sns_topic}"
       }
     ]
   })
