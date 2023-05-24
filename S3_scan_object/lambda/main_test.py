@@ -13,6 +13,7 @@ class LambdaContext:
 def test_handler(mock_json_loads, mock_client):
   main.handler({"Hello": "There"}, LambdaContext("1234asdf-5678-ghjk-9012-qwer12324poiy5678"))
   mock_client.invoke.assert_called_with(
-    FunctionName='arn:aws:lambda:ca-central-1:123456789012:function:anakin', 
+    FunctionName='arn:aws:lambda:ca-central-1:123456789012:function:anakin',
+    InvocationType="Event",
     Payload='{"Hello": "There", "AccountId": "GeneralKenobi", "RequestId": "1234asdf-5678-ghjk-9012-qwer12324poiy5678"}'
   )

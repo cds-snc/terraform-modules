@@ -27,6 +27,7 @@ resource "aws_lambda_function" "s3_scan_object" {
   environment {
     variables = {
       ACCOUNT_ID                  = local.account_id
+      LOG_LEVEL                   = var.log_level
       S3_SCAN_OBJECT_FUNCTION_ARN = var.s3_scan_object_function_arn
     }
   }

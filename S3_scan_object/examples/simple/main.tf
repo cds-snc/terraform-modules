@@ -9,6 +9,8 @@ module "simple" {
   alarm_error_sns_topic_arn = aws_sns_topic.cloudwatch_alarms_chaos_and_madness.arn
 
   billing_tag_value = "terratest"
+
+  log_level = "DEBUG"
 }
 
 resource "aws_sns_topic" "cloudwatch_alarms_ok" {
@@ -24,7 +26,7 @@ resource "random_id" "upload_bucket" {
 }
 
 module "upload_bucket" {
-  source            = "github.com/cds-snc/terraform-modules?ref=v3.0.8//S3"
+  source            = "github.com/cds-snc/terraform-modules?ref=v5.1.10//S3"
   bucket_name       = "an-existing-upload-bucket-${random_id.upload_bucket.hex}"
   billing_tag_value = "terratest"
 

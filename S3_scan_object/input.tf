@@ -27,6 +27,12 @@ variable "billing_tag_value" {
   type        = string
 }
 
+variable "log_level" {
+  description = "(optional, default 'INFO') Log level of the transport lambda function"
+  type        = string
+  default     = "INFO"
+}
+
 variable "product_name" {
   description = "(Required) Name of the product using the module"
   type        = string

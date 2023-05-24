@@ -17,17 +17,21 @@ logger = logging.getLogger()
 logger.setLevel(LOG_LEVEL)
 
 def handler(event, context):
+  status = "OK"
   event["AccountId"] = ACCOUNT_ID
   event["RequestId"] = context.aws_request_id
+
   logger.debug(event)
+  logger.debug(f"[{event['RequestId']}] Invoking {S3_SCAN_OBJECT_FUNCTION_ARN}")
 
-  logger.info(f"[{event['RequestId']}] Invoking {S3_SCAN_OBJECT_FUNCTION_ARN}")
-  client_response = client.invoke(
-    FunctionName=S3_SCAN_OBJECT_FUNCTION_ARN,
-    Payload=json.dumps(event),
-  )
-  
-  response = json.loads(client_response["Payload"].read().decode("utf-8"))
-  logger.debug(response)
+  try:
+    client.invoke(
+      FunctionName=S3_SCAN_OBJECT_FUNCTION_ARN,
+      InvocationType="Event",
+      Payload=json.dumps(event),
+    )
+  except Exception as err:
+    logger.error(f"[{event['RequestId']}] Error invoking function: {err}")
+    status = "ERROR"
 
-  return response
+  return {status: status}
