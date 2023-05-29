@@ -11,6 +11,8 @@ resource "aws_kms_alias" "s3_scan_object_queue" {
 }
 
 data "aws_iam_policy_document" "s3_scan_object_queue" {
+  # checkov:skip=CKV_AWS_109: false-positify as `resources = ["*"]` refers to the key itself 
+  # checkov:skip=CKV_AWS_111: false-positify as `resources = ["*"]` refers to the key itself 
   statement {
     effect    = "Allow"
     resources = ["*"]
