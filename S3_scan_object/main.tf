@@ -1,8 +1,6 @@
 /* 
 * # S3_scan_object
-* Lambda function that triggers a [ClamAV scan](https://scan-files.alpha.canada.ca) of newly created S3 objects and updates the object with the scan results.
-* 
-* The function is invoked by `s3:ObjectCreated:*` events.
+* Trigger [ClamAV scans](https://scan-files.alpha.canada.ca) of newly created S3 objects and updates the object with the scan results.  The S3 events are sent to an SQS queue where they are processed by the Scan Files API.
 *
 * ## ⚠️ Notes
 * - To use the default values for the following variables, your account must be part of our AWS organization:
@@ -11,95 +9,48 @@
 *    - `s3_scan_object_role_arn`
 * - You can build your own Lambda Docker image using the code in [cds-snc/scan-files/module/s3-scan-object](https://github.com/cds-snc/scan-files/tree/main/module/s3-scan-object).
 */
-resource "aws_lambda_function" "s3_scan_object" {
-  function_name = "s3-scan-object-${var.product_name}"
-  role          = aws_iam_role.s3_scan_object.arn
-  runtime       = "python3.8"
-  handler       = "main.handler"
-  memory_size   = 512
-  timeout       = 120
-
-  filename         = data.archive_file.s3_scan_object.output_path
-  source_code_hash = filebase64sha256(data.archive_file.s3_scan_object.output_path)
-
-  reserved_concurrent_executions = var.reserved_concurrent_executions
-
-  environment {
-    variables = {
-      ACCOUNT_ID                  = local.account_id
-      LOG_LEVEL                   = var.log_level
-      S3_SCAN_OBJECT_FUNCTION_ARN = var.s3_scan_object_function_arn
-    }
-  }
-
-  tracing_config {
-    mode = "PassThrough"
-  }
-
-  tags = local.common_tags
+resource "aws_sqs_queue" "s3_scan_object" {
+  name                       = "s3-scan-object"
+  kms_master_key_id          = aws_kms_key.s3_scan_object_queue.arn
+  visibility_timeout_seconds = 300
+  tags                       = local.common_tags
 }
 
-data "archive_file" "s3_scan_object" {
-  type        = "zip"
-  source_file = "${path.module}/lambda/main.py"
-  output_path = "/tmp/main.py.zip"
-}
-
-resource "aws_cloudwatch_log_group" "s3_scan_object" {
-  name              = "/aws/lambda/${aws_lambda_function.s3_scan_object.function_name}"
-  retention_in_days = 7
-  tags              = local.common_tags
-}
-
-resource "aws_iam_role" "s3_scan_object" {
-  name               = "S3ScanObject-${var.product_name}"
-  assume_role_policy = data.aws_iam_policy_document.lambda_assume_policy.json
-}
-
-resource "aws_iam_policy" "s3_scan_object" {
-  name   = "S3ScanObject-${var.product_name}"
-  path   = "/"
-  policy = data.aws_iam_policy_document.s3_scan_object.json
-}
-
-resource "aws_iam_role_policy_attachment" "s3_scan_object" {
-  role       = aws_iam_role.s3_scan_object.name
-  policy_arn = aws_iam_policy.s3_scan_object.arn
-}
-
-data "aws_iam_policy_document" "lambda_assume_policy" {
-  statement {
-    effect = "Allow"
-    actions = [
-      "sts:AssumeRole",
-    ]
-    principals {
-      type        = "Service"
-      identifiers = ["lambda.amazonaws.com"]
-    }
-  }
+resource "aws_sqs_queue_policy" "s3_scan_object" {
+  queue_url = aws_sqs_queue.s3_scan_object.id
+  policy    = data.aws_iam_policy_document.s3_scan_object.json
 }
 
 data "aws_iam_policy_document" "s3_scan_object" {
   statement {
+    sid    = "S3sendToSQS"
     effect = "Allow"
-    actions = [
-      "logs:CreateLogStream",
-      "logs:PutLogEvents"
-    ]
-    resources = [
-      aws_cloudwatch_log_group.s3_scan_object.arn,
-      "${aws_cloudwatch_log_group.s3_scan_object.arn}:log-stream:*"
-    ]
+    principals {
+      type        = "Service"
+      identifiers = ["s3.amazonaws.com"]
+    }
+    actions   = ["sqs:SendMessage"]
+    resources = [aws_sqs_queue.s3_scan_object.arn]
+
+    condition {
+      test     = "ArnEquals"
+      variable = "aws:SourceArn"
+      values   = [local.upload_bucket_arn]
+    }
   }
 
   statement {
+    sid    = "LambdaTriggerFromSQS"
     effect = "Allow"
+    principals {
+      type        = "AWS"
+      identifiers = [var.s3_scan_object_role_arn]
+    }
     actions = [
-      "lambda:InvokeFunction"
+      "sqs:ReceiveMessage",
+      "sqs:DeleteMessage",
+      "sqs:GetQueueAttributes",
     ]
-    resources = [
-      var.s3_scan_object_function_arn
-    ]
+    resources = [aws_sqs_queue.s3_scan_object.arn]
   }
 }

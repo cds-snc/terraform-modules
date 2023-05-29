@@ -90,21 +90,12 @@ data "aws_iam_policy_document" "scan_files_download" {
 #
 # Trigger scan when file is created
 #
-resource "aws_lambda_permission" "s3_execute" {
-  statement_id  = "S3ScanObjectS3Invoke-${var.product_name}"
-  action        = "lambda:InvokeFunction"
-  principal     = "s3.amazonaws.com"
-  function_name = aws_lambda_function.s3_scan_object.function_name
-  source_arn    = local.upload_bucket_arn
-}
-
 resource "aws_s3_bucket_notification" "s3_scan_object" {
   bucket = local.upload_bucket_id
 
-  lambda_function {
-    lambda_function_arn = aws_lambda_function.s3_scan_object.arn
-    id                  = "ScanObjectCreated"
-    events              = ["s3:ObjectCreated:*"]
+  queue {
+    id        = "ScanObjectCreated"
+    queue_arn = aws_sqs_queue.s3_scan_object.arn
+    events    = ["s3:ObjectCreated:*"]
   }
-  depends_on = [aws_lambda_permission.s3_execute]
 }

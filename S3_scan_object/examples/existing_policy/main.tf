@@ -1,12 +1,9 @@
 module "existing_policy" {
   source = "../../"
 
-  product_name = "existing-policy"
-
   s3_upload_bucket_name          = module.upload_bucket.s3_bucket_id
   s3_upload_bucket_policy_create = false
-
-  billing_tag_value = "terratest"
+  billing_tag_value              = "terratest"
 }
 
 resource "random_id" "upload_bucket" {

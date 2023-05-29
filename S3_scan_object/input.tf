@@ -1,21 +1,3 @@
-variable "alarm_on_lambda_error" {
-  description = "(Optional) Create CloudWatch alarm if the transport lambda fails.  If `true`, you must also provide `alarm_ok_sns_topic_arn` and `alarm_error_sns_topic_arn` inputs."
-  type        = bool
-  default     = false
-}
-
-variable "alarm_ok_sns_topic_arn" {
-  description = "(Optional) The SNS topic to send lambda alarm `OK` notifications to."
-  type        = string
-  default     = ""
-}
-
-variable "alarm_error_sns_topic_arn" {
-  description = "(Optional) The SNS topic to send lambda alarm `Error` notifications to."
-  type        = string
-  default     = ""
-}
-
 variable "billing_tag_key" {
   description = "(Optional, default 'CostCentre') The name of the billing tag"
   type        = string
@@ -25,28 +7,6 @@ variable "billing_tag_key" {
 variable "billing_tag_value" {
   description = "(Required) The value of the billing tag"
   type        = string
-}
-
-variable "log_level" {
-  description = "(optional, default 'INFO') Log level of the transport lambda function"
-  type        = string
-  default     = "INFO"
-}
-
-variable "product_name" {
-  description = "(Required) Name of the product using the module"
-  type        = string
-
-  validation {
-    condition     = can(regex("^[0-9A-Za-z\\-_]+$", var.product_name))
-    error_message = "The product name can only container alphanumeric characters, hyphens, and underscores."
-  }
-}
-
-variable "reserved_concurrent_executions" {
-  description = "(Optional, default 10) The number of concurrent executions for the S3 event transport lambda that triggers the start of a scan."
-  type        = number
-  default     = 10
 }
 
 variable "s3_upload_bucket_name" {

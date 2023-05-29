@@ -1,7 +1,5 @@
 # S3\_scan\_object
-Lambda function that triggers a [ClamAV scan](https://scan-files.alpha.canada.ca) of newly created S3 objects and updates the object with the scan results.
-
-The function is invoked by `s3:ObjectCreated:*` events.
+Trigger [ClamAV scans](https://scan-files.alpha.canada.ca) of newly created S3 objects and updates the object with the scan results.  The S3 events are sent to an SQS queue where they are processed by the Scan Files API.
 
 ## ⚠️ Notes
 - To use the default values for the following variables, your account must be part of our AWS organization:
@@ -18,7 +16,6 @@ No requirements.
 
 | Name | Version |
 |------|---------|
-| <a name="provider_archive"></a> [archive](#provider\_archive) | n/a |
 | <a name="provider_aws"></a> [aws](#provider\_aws) | n/a |
 
 ## Modules
@@ -29,24 +26,19 @@ No modules.
 
 | Name | Type |
 |------|------|
-| [aws_cloudwatch_log_group.s3_scan_object](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/cloudwatch_log_group) | resource |
-| [aws_cloudwatch_log_metric_filter.scan_files_lambda_error](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/cloudwatch_log_metric_filter) | resource |
-| [aws_cloudwatch_metric_alarm.scan_files_api_error](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/cloudwatch_metric_alarm) | resource |
-| [aws_iam_policy.s3_scan_object](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/iam_policy) | resource |
 | [aws_iam_policy.scan_files](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/iam_policy) | resource |
-| [aws_iam_role.s3_scan_object](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/iam_role) | resource |
 | [aws_iam_role.scan_files](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/iam_role) | resource |
-| [aws_iam_role_policy_attachment.s3_scan_object](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/iam_role_policy_attachment) | resource |
 | [aws_iam_role_policy_attachment.scan_files](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/iam_role_policy_attachment) | resource |
-| [aws_lambda_function.s3_scan_object](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/lambda_function) | resource |
-| [aws_lambda_permission.s3_execute](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/lambda_permission) | resource |
+| [aws_kms_alias.s3_scan_object_queue](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/kms_alias) | resource |
+| [aws_kms_key.s3_scan_object_queue](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/kms_key) | resource |
 | [aws_s3_bucket_notification.s3_scan_object](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/s3_bucket_notification) | resource |
 | [aws_s3_bucket_policy.upload_bucket](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/s3_bucket_policy) | resource |
-| [archive_file.s3_scan_object](https://registry.terraform.io/providers/hashicorp/archive/latest/docs/data-sources/file) | data source |
+| [aws_sqs_queue.s3_scan_object](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/sqs_queue) | resource |
+| [aws_sqs_queue_policy.s3_scan_object](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/sqs_queue_policy) | resource |
 | [aws_caller_identity.current](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/data-sources/caller_identity) | data source |
-| [aws_iam_policy_document.lambda_assume_policy](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/data-sources/iam_policy_document) | data source |
 | [aws_iam_policy_document.limit_tagging](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/data-sources/iam_policy_document) | data source |
 | [aws_iam_policy_document.s3_scan_object](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/data-sources/iam_policy_document) | data source |
+| [aws_iam_policy_document.s3_scan_object_queue](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/data-sources/iam_policy_document) | data source |
 | [aws_iam_policy_document.scan_files](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/data-sources/iam_policy_document) | data source |
 | [aws_iam_policy_document.scan_files_assume_role](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/data-sources/iam_policy_document) | data source |
 | [aws_iam_policy_document.scan_files_download](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/data-sources/iam_policy_document) | data source |
@@ -57,14 +49,8 @@ No modules.
 
 | Name | Description | Type | Default | Required |
 |------|-------------|------|---------|:--------:|
-| <a name="input_alarm_error_sns_topic_arn"></a> [alarm\_error\_sns\_topic\_arn](#input\_alarm\_error\_sns\_topic\_arn) | (Optional) The SNS topic to send lambda alarm `Error` notifications to. | `string` | `""` | no |
-| <a name="input_alarm_ok_sns_topic_arn"></a> [alarm\_ok\_sns\_topic\_arn](#input\_alarm\_ok\_sns\_topic\_arn) | (Optional) The SNS topic to send lambda alarm `OK` notifications to. | `string` | `""` | no |
-| <a name="input_alarm_on_lambda_error"></a> [alarm\_on\_lambda\_error](#input\_alarm\_on\_lambda\_error) | (Optional) Create CloudWatch alarm if the transport lambda fails.  If `true`, you must also provide `alarm_ok_sns_topic_arn` and `alarm_error_sns_topic_arn` inputs. | `bool` | `false` | no |
 | <a name="input_billing_tag_key"></a> [billing\_tag\_key](#input\_billing\_tag\_key) | (Optional, default 'CostCentre') The name of the billing tag | `string` | `"CostCentre"` | no |
 | <a name="input_billing_tag_value"></a> [billing\_tag\_value](#input\_billing\_tag\_value) | (Required) The value of the billing tag | `string` | n/a | yes |
-| <a name="input_log_level"></a> [log\_level](#input\_log\_level) | (optional, default 'INFO') Log level of the transport lambda function | `string` | `"INFO"` | no |
-| <a name="input_product_name"></a> [product\_name](#input\_product\_name) | (Required) Name of the product using the module | `string` | n/a | yes |
-| <a name="input_reserved_concurrent_executions"></a> [reserved\_concurrent\_executions](#input\_reserved\_concurrent\_executions) | (Optional, default 10) The number of concurrent executions for the S3 event transport lambda that triggers the start of a scan. | `number` | `10` | no |
 | <a name="input_s3_scan_object_function_arn"></a> [s3\_scan\_object\_function\_arn](#input\_s3\_scan\_object\_function\_arn) | (Optional, default S3 Scan Object function ARN) S3 scan object lambda function ARN | `string` | `"arn:aws:lambda:ca-central-1:806545929748:function:s3-scan-object"` | no |
 | <a name="input_s3_scan_object_role_arn"></a> [s3\_scan\_object\_role\_arn](#input\_s3\_scan\_object\_role\_arn) | (Optional, default S3 Scan Object role) S3 scan object lambda execution role ARN | `string` | `"arn:aws:iam::806545929748:role/s3-scan-object"` | no |
 | <a name="input_s3_upload_bucket_name"></a> [s3\_upload\_bucket\_name](#input\_s3\_upload\_bucket\_name) | (Required) Name of the existing S3 upload bucket to scan objects in. | `string` | n/a | yes |
