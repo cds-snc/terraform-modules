@@ -5,7 +5,6 @@
 * ## ⚠️ Notes
 * - To use the default values for the following variables, your account must be part of our AWS organization:
 *    - `scan_files_role_arn`
-*    - `s3_scan_object_function_arn`
 *    - `s3_scan_object_role_arn`
 * - You can build your own Lambda Docker image using the code in [cds-snc/scan-files/module/s3-scan-object](https://github.com/cds-snc/scan-files/tree/main/module/s3-scan-object).
 */
