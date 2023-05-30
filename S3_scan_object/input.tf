@@ -32,12 +32,6 @@ variable "scan_files_role_arn" {
   type        = string
 }
 
-variable "s3_scan_object_function_arn" {
-  description = "(Optional, default S3 Scan Object function ARN) S3 scan object lambda function ARN"
-  default     = "arn:aws:lambda:ca-central-1:806545929748:function:s3-scan-object"
-  type        = string
-}
-
 variable "s3_scan_object_role_arn" {
   description = "(Optional, default S3 Scan Object role) S3 scan object lambda execution role ARN"
   default     = "arn:aws:iam::806545929748:role/s3-scan-object"

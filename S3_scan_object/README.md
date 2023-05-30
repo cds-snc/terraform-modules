@@ -4,7 +4,6 @@ Trigger [ClamAV scans](https://scan-files.alpha.canada.ca) of newly created S3 o
 ## ⚠️ Notes
 - To use the default values for the following variables, your account must be part of our AWS organization:
    - `scan_files_role_arn`
-   - `s3_scan_object_function_arn`
    - `s3_scan_object_role_arn`
 - You can build your own Lambda Docker image using the code in [cds-snc/scan-files/module/s3-scan-object](https://github.com/cds-snc/scan-files/tree/main/module/s3-scan-object).
 
@@ -51,7 +50,6 @@ No modules.
 |------|-------------|------|---------|:--------:|
 | <a name="input_billing_tag_key"></a> [billing\_tag\_key](#input\_billing\_tag\_key) | (Optional, default 'CostCentre') The name of the billing tag | `string` | `"CostCentre"` | no |
 | <a name="input_billing_tag_value"></a> [billing\_tag\_value](#input\_billing\_tag\_value) | (Required) The value of the billing tag | `string` | n/a | yes |
-| <a name="input_s3_scan_object_function_arn"></a> [s3\_scan\_object\_function\_arn](#input\_s3\_scan\_object\_function\_arn) | (Optional, default S3 Scan Object function ARN) S3 scan object lambda function ARN | `string` | `"arn:aws:lambda:ca-central-1:806545929748:function:s3-scan-object"` | no |
 | <a name="input_s3_scan_object_role_arn"></a> [s3\_scan\_object\_role\_arn](#input\_s3\_scan\_object\_role\_arn) | (Optional, default S3 Scan Object role) S3 scan object lambda execution role ARN | `string` | `"arn:aws:iam::806545929748:role/s3-scan-object"` | no |
 | <a name="input_s3_upload_bucket_name"></a> [s3\_upload\_bucket\_name](#input\_s3\_upload\_bucket\_name) | (Required) Name of the existing S3 upload bucket to scan objects in. | `string` | n/a | yes |
 | <a name="input_s3_upload_bucket_policy_create"></a> [s3\_upload\_bucket\_policy\_create](#input\_s3\_upload\_bucket\_policy\_create) | (Optional, defaut 'true') Create the S3 upload bucket policy to allow Scan Files access. | `bool` | `true` | no |
