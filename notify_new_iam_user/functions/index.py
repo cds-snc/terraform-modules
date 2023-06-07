@@ -69,7 +69,7 @@ def violation_message(event):
     message += 'IAM ARN: ' + \
         event['detail']['responseElements']['user']['arn'] + ' \n'
     message += 'IAM User: ' + \
-        event['detail']['responseElements']['user']['userName'] + ' \n'
+        event['detail']['responseElements']['user']['userName'] + '\n'
     message += 'Event: ' + \
         event['detail']['eventName'] + '\n'
     message += 'Actor: ' + \
