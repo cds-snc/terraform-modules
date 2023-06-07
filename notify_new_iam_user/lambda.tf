@@ -28,7 +28,7 @@ resource "aws_lambda_function" "new_iam_user_added_lambda" {
   role          = aws_iam_role.new_iam_user_response_role.arn
   environment {
     variables = {
-      outbound_topic_arn = "arn:aws:sns:${local.region}:${local.account_id}:${var.sns_topic}"
+      outbound_topic_arn = "arn:aws:sns:ca-central-1:${local.account_id}:${var.sns_topic}"
       logging_level      = var.logging_level
     }
   }

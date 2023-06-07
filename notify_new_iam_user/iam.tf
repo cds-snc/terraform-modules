@@ -40,7 +40,7 @@ resource "aws_iam_role_policy" "new_iam_user_response_policy" {
           "logs:CreateLogStream",
           "logs:PutLogEvents"
         ]
-        Resource = "arn:${data.aws_partition.current.partition}:logs:*:*:*"
+        Resource = "arn:aws:logs:*:*:*"
       },
       {
         Action = [
@@ -48,7 +48,7 @@ resource "aws_iam_role_policy" "new_iam_user_response_policy" {
         ]
         Effect   = "Allow"
         Sid      = "AllowSnsActions"
-        Resource = "arn:aws:sns:${local.region}:${local.account_id}:${var.sns_topic}"
+        Resource = "arn:aws:sns:ca-central-1:${local.account_id}:${var.sns_topic}"
       }
     ]
   })
