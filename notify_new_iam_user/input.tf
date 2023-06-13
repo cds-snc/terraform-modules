@@ -10,7 +10,7 @@ variable "billing_tag_value" {
 }
 
 variable "function_name" {
-  description = "(Required) Name of the Lambda function."
+  description = "(Optional) Name of the Lambda function."
   type        = string
   default     = "new_iam_user_added"
 
