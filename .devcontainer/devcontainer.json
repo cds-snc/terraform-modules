@@ -10,7 +10,8 @@
 		},
 		"ghcr.io/dhoeric/features/terraform-docs:1": {
 			"version": "latest"
-		}
+		},
+		"azure-cli": "latest"
 	},
 	"customizations": {
 		"vscode": {
