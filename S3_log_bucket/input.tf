@@ -80,5 +80,5 @@ variable "versioning_status" {
   validation {
     condition     = contains(["Enabled", "Disabled", "Suspended"], var.versioning_status)
     error_message = "Versioning status must be 'Enabled', 'Disabled' or 'Suspended'"
-  }   
+  }
 }
