@@ -52,6 +52,7 @@ No modules.
 | <a name="input_lifecycle_rule"></a> [lifecycle\_rule](#input\_lifecycle\_rule) | (Optional) List of maps containing configuration of object lifecycle management. | `any` | `[]` | no |
 | <a name="input_object_ownership"></a> [object\_ownership](#input\_object\_ownership) | (Optional), overrides object ownership value in aws\_s3\_bucket\_ownership\_controls. Defaults to BucketOwnerPreferred | `string` | `"BucketOwnerPreferred"` | no |
 | <a name="input_tags"></a> [tags](#input\_tags) | (Optional) A mapping of tags to assign to the bucket. | `map(string)` | `{}` | no |
+| <a name="input_versioning_status"></a> [versioning\_status](#input\_versioning\_status) | (Optional) The versioning status of the bucket.  Valid values are 'Enabled', 'Disabled' or 'Suspended'. | `string` | `"Disabled"` | no |
 
 ## Outputs
 

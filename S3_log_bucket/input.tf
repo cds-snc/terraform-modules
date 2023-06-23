@@ -71,3 +71,14 @@ variable "object_ownership" {
   type        = string
   default     = "BucketOwnerPreferred"
 }
+
+variable "versioning_status" {
+  description = "(Optional) The versioning status of the bucket.  Valid values are 'Enabled', 'Disabled' or 'Suspended'."
+  type        = string
+  default     = "Disabled"
+
+  validation {
+    condition     = contains(["Enabled", "Disabled", "Suspended"], var.versioning_status)
+    error_message = "Versioning status must be 'Enabled', 'Disabled' or 'Suspended'"
+  }   
+}
