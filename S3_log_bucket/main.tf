@@ -205,12 +205,7 @@ resource "aws_s3_bucket_public_access_block" "this" {
 resource "aws_s3_bucket_versioning" "this" {
   bucket = aws_s3_bucket_policy.this.id
 
-  dynamic "versioning_configuration" {
-    for_each = var.critical_tag_value == true ? [1] : []
-
-    content {
-      status = "Enabled"
-    }
+  versioning_configuration {
+    status = var.critical_tag_value ? "Enabled" : "Disabled"
   }
-
 }
