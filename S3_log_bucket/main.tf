@@ -206,6 +206,6 @@ resource "aws_s3_bucket_versioning" "this" {
   bucket = aws_s3_bucket_policy.this.id
 
   versioning_configuration {
-    status = var.critical_tag_value ? "Enabled" : "Disabled"
+    status = var.versioning_status
   }
 }
