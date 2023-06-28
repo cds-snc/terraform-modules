@@ -57,9 +57,20 @@ data "aws_iam_policy_document" "oidc_assume_role_policy" {
 }
 
 resource "aws_iam_openid_connect_provider" "github" {
-  count           = var.oidc_exists ? 0 : 1
-  url             = local.gh_url
-  client_id_list  = ["sts.amazonaws.com"]
-  thumbprint_list = [data.tls_certificate.thumprint.certificates.0.sha1_fingerprint]
-  tags            = local.common_tags
+  count          = var.oidc_exists ? 0 : 1
+  url            = local.gh_url
+  client_id_list = ["sts.amazonaws.com"]
+  # Manually setting the thumbprint as we are seeing inconsistent thumbprints returned
+  # https://github.blog/changelog/2023-06-27-github-actions-update-on-oidc-integration-with-aws/
+  thumbprint_list = distinct(
+    concat(
+      [
+        "1c58a3a8518e8759bf075b76b750d4f2df264fcd",
+        "6938fd4d98bab03faadb97b34396831e3780aea1",
+        "f879abce0008e4eb126e0097e46620f5aaae26ad",
+      ],
+      data.tls_certificate.thumprint.certificates.*.sha1_fingerprint
+    )
+  )
+  tags = local.common_tags
 }
