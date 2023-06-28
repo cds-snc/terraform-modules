@@ -60,6 +60,6 @@ resource "aws_iam_openid_connect_provider" "github" {
   count           = var.oidc_exists ? 0 : 1
   url             = local.gh_url
   client_id_list  = ["sts.amazonaws.com"]
-  thumbprint_list = [data.tls_certificate.thumprint.certificates.*.sha1_fingerprint]
+  thumbprint_list = data.tls_certificate.thumprint.certificates.*.sha1_fingerprint
   tags            = local.common_tags
 }
