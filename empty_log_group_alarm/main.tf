@@ -1,4 +1,6 @@
-/* # empty_log_group_alarm
+/* 
+* # Empty lpg group alarm
+*
 * This module creates a CloudWatch alarm that triggers when a log group is not receiving the expected amount of 
 * data based on the `IncomingLogEvents` metric. The input is a list of log group names ex. ["/aws/lambda/
 * my-lambda", "/aws/lambda/my-other-lambda"] as well as the arn of a SNS topic to send the alarm to. The module 
@@ -17,15 +19,6 @@
 * }
 * ```
 */
-
-terraform {
-  required_providers {
-    aws = {
-      source  = "hashicorp/aws"
-      version = ">= 3.46.0"
-    }
-  }
-}
 
 resource "aws_cloudwatch_metric_alarm" "empty_log_group_metric_alarm" {
   for_each = { for name in(var.use_anomaly_detection ? [] : var.log_group_names) : name => name }
