@@ -16,6 +16,7 @@ terraform {
 }
 
 resource "aws_cloudwatch_metric_alarm" "empty_log_group_metric_alarm" {
+  count    = var.use_anomaly_detection ? 0 : 1
   for_each = { for name in var.log_group_names : name => name }
 
   alarm_name          = "Empty log group alarm: ${each.key}"
@@ -27,7 +28,48 @@ resource "aws_cloudwatch_metric_alarm" "empty_log_group_metric_alarm" {
   statistic           = "Sum"
   threshold           = 0
 
+  treat_missing_data = "breaching"
+
   alarm_description = "Alarm when there are no incoming log events for ${var.time_period_minutes} minutes"
+
+  alarm_actions             = [var.alarm_sns_topic_arn]
+  insufficient_data_actions = [var.alarm_sns_topic_arn]
+  ok_actions                = [var.alarm_sns_topic_arn]
+}
+
+resource "aws_cloudwatch_metric_alarm" "empty_log_group_metric_alarm_using_anomaly_detection" {
+  count    = var.use_anomaly_detection ? 1 : 0
+  for_each = { for name in var.log_group_names : name => name }
+
+  alarm_name          = "Less than expected log group alarm: ${each.key}"
+  comparison_operator = "LessThanLowerThreshold"
+  datapoints_to_alarm = 1
+  evaluation_periods  = 1
+  period              = 0
+  threshold_metric_id = "ad1"
+
+  alarm_description = "Alarm when there are less than expected incoming log events for ${var.time_period_minutes} minutes"
+
+  metric_query {
+    id          = "m1"
+    period      = 0
+    return_data = true
+
+    metric {
+      dimensions  = {}
+      metric_name = "IncomingLogEvents"
+      namespace   = "AWS/Logs"
+      period      = 60 * var.time_period_minutes
+      stat        = "Sum"
+    }
+  }
+  metric_query {
+    expression  = "ANOMALY_DETECTION_BAND(m1, 2)"
+    id          = "ad1"
+    label       = "IncomingLogEvents (expected)"
+    period      = 0
+    return_data = true
+  }
 
   alarm_actions             = [var.alarm_sns_topic_arn]
   insufficient_data_actions = [var.alarm_sns_topic_arn]

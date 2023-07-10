@@ -25,6 +25,7 @@ No modules.
 | Name | Type |
 |------|------|
 | [aws_cloudwatch_metric_alarm.empty_log_group_metric_alarm](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/cloudwatch_metric_alarm) | resource |
+| [aws_cloudwatch_metric_alarm.empty_log_group_metric_alarm_using_anomaly_detection](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/cloudwatch_metric_alarm) | resource |
 
 ## Inputs
 
