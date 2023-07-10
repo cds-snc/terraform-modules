@@ -6,13 +6,13 @@ amount of data, otherwise it will alert on log groups that receive 0 `IncomingLo
 
 Note: AWS anomaly detection works best in very specific, unclear, circumstances.
 
-example usage:
+Example usage:
 ```
 module "empty_log_group_alarm" {
-  source = "github.com/terraform-aws-modules/terraform-aws-cloudwatch-log-empty-log-group-alarm"
+  source              = "github.com/terraform-aws-modules/terraform-aws-cloudwatch-log-empty-log-group-alarm"
   alarm_sns_topic_arn = "arn:aws:sns:ca-central-1:000000000000:alert"
   log_group_names     = ["/aws/lambda/foo"]
-  billing_tag_value = "TagValue"
+  billing_tag_value   = "TagValue"
 }
 ```
 
