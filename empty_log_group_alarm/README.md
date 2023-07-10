@@ -24,7 +24,7 @@ No modules.
 
 | Name | Type |
 |------|------|
-| [aws_cloudwatch_metric_alarm.empty_logs_metric_alarm](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/cloudwatch_metric_alarm) | resource |
+| [aws_cloudwatch_metric_alarm.empty_log_group_metric_alarm](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/cloudwatch_metric_alarm) | resource |
 
 ## Inputs
 
