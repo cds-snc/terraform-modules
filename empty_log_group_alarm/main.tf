@@ -16,7 +16,7 @@ terraform {
 }
 
 resource "aws_cloudwatch_metric_alarm" "empty_log_group_metric_alarm" {
-  for_each = { for name in (var.use_anomaly_detection ? [] : var.log_group_names) : name => name }
+  for_each = { for name in(var.use_anomaly_detection ? [] : var.log_group_names) : name => name }
 
   alarm_name          = "Empty log group alarm: ${each.key}"
   comparison_operator = "LessThanOrEqualToThreshold"
@@ -37,7 +37,7 @@ resource "aws_cloudwatch_metric_alarm" "empty_log_group_metric_alarm" {
 }
 
 resource "aws_cloudwatch_metric_alarm" "empty_log_group_metric_alarm_using_anomaly_detection" {
-  for_each = { for name in (var.use_anomaly_detection ? var.log_group_names : []) : name => name }
+  for_each = { for name in(var.use_anomaly_detection ? var.log_group_names : []) : name => name }
 
   alarm_name          = "Less than expected log group alarm: ${each.key}"
   comparison_operator = "LessThanLowerThreshold"
