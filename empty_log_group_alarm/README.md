@@ -1,4 +1,4 @@
-# Empty lpg group alarm
+# Empty log group alarm
 
 This module creates a CloudWatch alarm that triggers when a log group is not receiving the expected amount of
 data based on the `IncomingLogEvents` metric. The input is a list of log group names ex. ["/aws/lambda/
