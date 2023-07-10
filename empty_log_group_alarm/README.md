@@ -3,7 +3,18 @@ data based on the `IncomingLogEvents` metric. The input is a list of log group n
 my-lambda", "/aws/lambda/my-other-lambda"] as well as the arn of a SNS topic to send the alarm to. The module
 also incudes the flag `use_anomaly_detection` which will use anomaly detection feature to determine the expected
 amount of data, otherwise it will alert on log groups that receive 0 `IncomingLogEvents` over the time period.
-\_\_Note:\_\_ AWS anomaly detection works best in very specific, unclear, circumstances.
+
+Note: AWS anomaly detection works best in very specific, unclear, circumstances.
+
+example usage:
+```
+module "empty_log_group_alarm" {
+  source = "github.com/terraform-aws-modules/terraform-aws-cloudwatch-log-empty-log-group-alarm"
+  alarm_sns_topic_arn = "arn:aws:sns:ca-central-1:000000000000:alert"
+  log_group_names     = ["/aws/lambda/foo"]
+  billing_tag_value = "TagValue"
+}
+```
 
 ## Requirements
 
