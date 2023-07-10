@@ -18,7 +18,7 @@ terraform {
 resource "aws_cloudwatch_metric_alarm" "empty_log_group_metric_alarm" {
   for_each = { for name in var.log_group_names : name => name }
 
-  alarm_name          = "empty-log-group-alarm-${each.key}"
+  alarm_name          = "Empty log group alarm: ${each.key}"
   comparison_operator = "LessThanOrEqualToThreshold"
   evaluation_periods  = 1
   metric_name         = "IncomingLogEvents"
