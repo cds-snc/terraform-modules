@@ -12,7 +12,7 @@
 * Example usage:
 * ```
 * module "empty_log_group_alarm" {
-*   source              = "github.com/terraform-aws-modules/terraform-aws-cloudwatch-log-empty-log-group-alarm"
+*   source              = "github.com/terraform-aws-modules/empty_log_group_alarm"
 *   alarm_sns_topic_arn = "arn:aws:sns:ca-central-1:000000000000:alert"
 *   log_group_names     = ["/aws/lambda/foo"]
 *   billing_tag_value   = "TagValue"
