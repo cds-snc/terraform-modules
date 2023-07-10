@@ -43,7 +43,6 @@ resource "aws_cloudwatch_metric_alarm" "empty_log_group_metric_alarm_using_anoma
   comparison_operator = "LessThanLowerThreshold"
   datapoints_to_alarm = 1
   evaluation_periods  = 1
-  period              = 0
   threshold_metric_id = "ad1"
 
   alarm_description = "Alarm when there are less than expected incoming log events for ${var.time_period_minutes} minutes"
