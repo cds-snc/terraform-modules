@@ -52,7 +52,7 @@ No requirements.
 
 | Name | Source | Version |
 |------|--------|---------|
-| <a name="module_s3"></a> [s3](#module\_s3) | github.com/cds-snc/terraform-modules | v5.1.6/S3 |
+| <a name="module_s3"></a> [s3](#module\_s3) | github.com/cds-snc/terraform-modules | v6.1.0/S3 |
 
 ## Resources
 
