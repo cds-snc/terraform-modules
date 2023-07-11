@@ -2,6 +2,8 @@
 Creates an OpenID Connect Role that can be used for authenticating workflows in Github Actions
 This allows for a more secure way to connect to AWS as it doesn't rely on static credentials but uses temporary credentials created for each run.
 
+**Warning - there is a breaking change in terraform-module release 4.0.0, so if you are using the gh\_oicd\_role module stick to a version below 4.0.0 unless you properly migrate to use the aft-account\_request github repo or fix the gh\_oidc\_role module.**
+
 ## Requirements
 
 No requirements.
