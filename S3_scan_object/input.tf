@@ -20,6 +20,12 @@ variable "s3_upload_bucket_policy_create" {
   default     = true
 }
 
+variable "s3_scan_object_role_arn" {
+  description = "(Optional, default S3 Scan Object role) S3 scan object lambda execution role ARN"
+  default     = "arn:aws:iam::806545929748:role/s3-scan-object"
+  type        = string
+}
+
 variable "scan_files_assume_role_create" {
   description = "(Optional, default 'true') Create the IAM role that Scan Files assumes.  Defaults to `true`.  If this is set to `false`, it is assumed that the role already exists in the account."
   type        = bool
@@ -32,8 +38,8 @@ variable "scan_files_role_arn" {
   type        = string
 }
 
-variable "s3_scan_object_role_arn" {
-  description = "(Optional, default S3 Scan Object role) S3 scan object lambda execution role ARN"
-  default     = "arn:aws:iam::806545929748:role/s3-scan-object"
+variable "scan_queue_suffix" {
+  description = "(Optional, default blank) Suffix to add the scan queue resources.  This allows multiple instances of the module to be used in the same account."
+  default     = ""
   type        = string
 }

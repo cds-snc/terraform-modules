@@ -5,7 +5,7 @@ data "aws_iam_role" "scan_files" {
 
 resource "aws_iam_role" "scan_files" {
   count              = var.scan_files_assume_role_create ? 1 : 0
-  name               = "ScanFilesGetObjects"
+  name               = "ScanFilesGetObjects${var.scan_queue_suffix}"
   assume_role_policy = data.aws_iam_policy_document.scan_files_assume_role[0].json
   tags               = local.common_tags
 }
@@ -32,7 +32,7 @@ data "aws_iam_policy_document" "scan_files_assume_role" {
 
 resource "aws_iam_policy" "scan_files" {
   count  = var.scan_files_assume_role_create ? 1 : 0
-  name   = "ScanFilesGetObjects"
+  name   = "ScanFilesGetObjects${var.scan_queue_suffix}"
   path   = "/"
   policy = data.aws_iam_policy_document.scan_files[0].json
   tags   = local.common_tags
