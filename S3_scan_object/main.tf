@@ -9,7 +9,7 @@
 * - You can build your own Lambda Docker image using the code in [cds-snc/scan-files/module/s3-scan-object](https://github.com/cds-snc/scan-files/tree/main/module/s3-scan-object).
 */
 resource "aws_sqs_queue" "s3_scan_object" {
-  name                       = "s3-scan-object${var.scan_queue_suffix}"
+  name                       = "s3-scan-object"
   kms_master_key_id          = aws_kms_key.s3_scan_object_queue.arn
   visibility_timeout_seconds = 300
   tags                       = local.common_tags

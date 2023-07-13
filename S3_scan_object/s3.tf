@@ -77,7 +77,7 @@ data "aws_iam_policy_document" "scan_files_download" {
       "s3:GetObjectVersion",
       "s3:GetObjectVersionTagging"
     ]
-    resources = join(local.upload_bucket_arns, local.upload_bucket_arns_items)
+    resources = concat(local.upload_bucket_arns, local.upload_bucket_arns_items)
   }
 }
 
