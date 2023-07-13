@@ -6,7 +6,7 @@ resource "aws_kms_key" "s3_scan_object_queue" {
 }
 
 resource "aws_kms_alias" "s3_scan_object_queue" {
-  name          = "alias/s3_scan_object_queue${var.scan_queue_suffix}"
+  name          = "alias/s3_scan_object_queue"
   target_key_id = aws_kms_key.s3_scan_object_queue.key_id
 }
 

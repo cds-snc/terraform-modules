@@ -9,9 +9,9 @@ variable "billing_tag_value" {
   type        = string
 }
 
-variable "s3_upload_bucket_name" {
-  description = "(Required) Name of the existing S3 upload bucket to scan objects in."
-  type        = string
+variable "s3_upload_bucket_names" {
+  description = "(Required) Names of the existing S3 upload bucket to scan objects in."
+  type        = list(string)
 }
 
 variable "s3_upload_bucket_policy_create" {
@@ -35,11 +35,5 @@ variable "scan_files_assume_role_create" {
 variable "scan_files_role_arn" {
   description = "(Optional, default Scan Files API role) Scan Files lambda execution role ARN"
   default     = "arn:aws:iam::806545929748:role/scan-files-api"
-  type        = string
-}
-
-variable "scan_queue_suffix" {
-  description = "(Optional, default blank) Suffix to add the scan queue resources.  This allows multiple instances of the module to be used in the same account."
-  default     = ""
   type        = string
 }
