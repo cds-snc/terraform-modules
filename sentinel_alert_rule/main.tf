@@ -81,5 +81,22 @@ resource "azurerm_sentinel_alert_rule_scheduled" "this" {
     }
   }
 
+  # A dynamic block for incident configuration to set grouping to true by default when query_frequency is not PT5M and no variables are provided for the grouping
+  dynamic "incident_configuration" {
+    for_each = can(regex("PT5M", var.query_frequency)) ? [] : [1]
+
+    create_incident = var.incident_configuration.create_incident
+    content {
+      grouping {
+        enabled                 = true
+        entity_matching_method  = var.incident_configuration.grouping.entity_matching_method
+        group_by_alert_details  = var.incident_configuration.grouping.group_by_alert_details
+        group_by_custom_details = var.incident_configuration.grouping.group_by_custom_details
+        group_by_entities       = var.incident_configuration.grouping.group_by_entities
+        lookback_duration       = var.incident_configuration.grouping.lookback_duration
+        reopen_closed_incidents = var.incident_configuration.grouping.reopen_closed_incidents
+      }
+    }
+  }
 
 }
