@@ -61,9 +61,6 @@ data "aws_iam_policy_document" "scan_files" {
       "s3:PutObjectTagging",
       "s3:PutObjectVersionTagging"
     ]
-    resources = [
-      local.upload_bucket_arn,
-      "${local.upload_bucket_arn}/*"
-    ]
+    resources = join(local.upload_bucket_arns, local.upload_bucket_arns_items)
   }
 }

@@ -2,8 +2,9 @@
 # Bucket policy
 #
 resource "aws_s3_bucket_policy" "upload_bucket" {
-  count  = var.s3_upload_bucket_policy_create ? 1 : 0
-  bucket = local.upload_bucket_id
+  for_each = toset(var.s3_upload_bucket_policy_create ? local.upload_bucket_ids : [])
+
+  bucket = each.key
   policy = data.aws_iam_policy_document.upload_bucket[0].json
 }
 
@@ -34,9 +35,7 @@ data "aws_iam_policy_document" "limit_tagging" {
       "s3:PutObjectTagging",
       "s3:PutObjectVersionTagging"
     ]
-    resources = [
-      "${local.upload_bucket_arn}/*"
-    ]
+    resources = local.upload_bucket_arns_items
     condition {
       test     = "StringNotLike"
       variable = "aws:PrincipalArn"
@@ -54,9 +53,7 @@ data "aws_iam_policy_document" "limit_tagging" {
       "s3:PutObjectTagging",
       "s3:PutObjectVersionTagging"
     ]
-    resources = [
-      "${local.upload_bucket_arn}/*"
-    ]
+    resources = local.upload_bucket_arns_items
   }
 }
 
@@ -80,10 +77,7 @@ data "aws_iam_policy_document" "scan_files_download" {
       "s3:GetObjectVersion",
       "s3:GetObjectVersionTagging"
     ]
-    resources = [
-      local.upload_bucket_arn,
-      "${local.upload_bucket_arn}/*"
-    ]
+    resources = join(local.upload_bucket_arns, local.upload_bucket_arns_items)
   }
 }
 
@@ -91,7 +85,8 @@ data "aws_iam_policy_document" "scan_files_download" {
 # Trigger scan when file is created
 #
 resource "aws_s3_bucket_notification" "s3_scan_object" {
-  bucket = local.upload_bucket_id
+  for_each = toset(local.upload_bucket_ids)
+  bucket   = each.key
 
   queue {
     id        = "ScanObjectCreated"

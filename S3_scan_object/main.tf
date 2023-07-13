@@ -34,7 +34,7 @@ data "aws_iam_policy_document" "s3_scan_object" {
     condition {
       test     = "ArnEquals"
       variable = "aws:SourceArn"
-      values   = [local.upload_bucket_arn]
+      values   = local.upload_bucket_arns
     }
   }
 
