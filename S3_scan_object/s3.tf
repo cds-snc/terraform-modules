@@ -2,9 +2,8 @@
 # Bucket policy
 #
 resource "aws_s3_bucket_policy" "upload_bucket" {
-  for_each = toset(var.s3_upload_bucket_policy_create ? local.upload_bucket_ids : [])
-
-  bucket = each.key
+  count  = var.s3_upload_bucket_policy_create ? length(local.upload_bucket_ids) : 0
+  bucket = local.upload_bucket_ids[count.index]
   policy = data.aws_iam_policy_document.upload_bucket[0].json
 }
 
@@ -85,8 +84,8 @@ data "aws_iam_policy_document" "scan_files_download" {
 # Trigger scan when file is created
 #
 resource "aws_s3_bucket_notification" "s3_scan_object" {
-  for_each = toset(local.upload_bucket_ids)
-  bucket   = each.key
+  count  = length(local.upload_bucket_ids)
+  bucket = local.upload_bucket_ids[count.index]
 
   queue {
     id        = "ScanObjectCreated"
