@@ -2,16 +2,16 @@
 # Bucket policy
 #
 resource "aws_s3_bucket_policy" "upload_bucket" {
-  count  = var.s3_upload_bucket_policy_create ? length(local.upload_bucket_ids) : 0
-  bucket = local.upload_bucket_ids[count.index]
-  policy = data.aws_iam_policy_document.upload_bucket[0].json
+  count  = var.s3_upload_bucket_policy_create ? length(local.upload_buckets) : 0
+  bucket = local.upload_buckets[count.index].id
+  policy = data.aws_iam_policy_document.upload_bucket[count.index].json
 }
 
 data "aws_iam_policy_document" "upload_bucket" {
-  count = var.s3_upload_bucket_policy_create ? 1 : 0
+  count = var.s3_upload_bucket_policy_create ? length(local.upload_buckets) : 0
   source_policy_documents = [
-    data.aws_iam_policy_document.limit_tagging[0].json,
-    data.aws_iam_policy_document.scan_files_download[0].json
+    data.aws_iam_policy_document.limit_tagging[count.index].json,
+    data.aws_iam_policy_document.scan_files_download[count.index].json
   ]
 }
 
@@ -20,7 +20,7 @@ data "aws_iam_policy_document" "upload_bucket" {
 # to upload bucket
 #
 data "aws_iam_policy_document" "limit_tagging" {
-  count = var.s3_upload_bucket_policy_create ? 1 : 0
+  count = var.s3_upload_bucket_policy_create ? length(local.upload_buckets) : 0
 
   statement {
     effect = "Deny"
@@ -34,7 +34,7 @@ data "aws_iam_policy_document" "limit_tagging" {
       "s3:PutObjectTagging",
       "s3:PutObjectVersionTagging"
     ]
-    resources = local.upload_bucket_arns_items
+    resources = [local.upload_buckets[count.index].arn_items]
     condition {
       test     = "StringNotLike"
       variable = "aws:PrincipalArn"
@@ -52,7 +52,7 @@ data "aws_iam_policy_document" "limit_tagging" {
       "s3:PutObjectTagging",
       "s3:PutObjectVersionTagging"
     ]
-    resources = local.upload_bucket_arns_items
+    resources = [local.upload_buckets[count.index].arn_items]
   }
 }
 
@@ -60,7 +60,7 @@ data "aws_iam_policy_document" "limit_tagging" {
 # Allow Scan Files to download objects
 #
 data "aws_iam_policy_document" "scan_files_download" {
-  count = var.s3_upload_bucket_policy_create ? 1 : 0
+  count = var.s3_upload_bucket_policy_create ? length(local.upload_buckets) : 0
 
   statement {
     effect = "Allow"
@@ -76,7 +76,10 @@ data "aws_iam_policy_document" "scan_files_download" {
       "s3:GetObjectVersion",
       "s3:GetObjectVersionTagging"
     ]
-    resources = concat(local.upload_bucket_arns, local.upload_bucket_arns_items)
+    resources = [
+      local.upload_buckets[count.index].arn,
+      local.upload_buckets[count.index].arn_items
+    ]
   }
 }
 
@@ -84,8 +87,8 @@ data "aws_iam_policy_document" "scan_files_download" {
 # Trigger scan when file is created
 #
 resource "aws_s3_bucket_notification" "s3_scan_object" {
-  count  = length(local.upload_bucket_ids)
-  bucket = local.upload_bucket_ids[count.index]
+  count  = length(local.upload_buckets)
+  bucket = local.upload_buckets[count.index].id
 
   queue {
     id        = "ScanObjectCreated"

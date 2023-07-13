@@ -5,6 +5,7 @@ module "simple" {
     module.upload_bucket_one.s3_bucket_id,
     module.upload_bucket_two.s3_bucket_id
   ]
+
   billing_tag_value = "terratest"
 }
 

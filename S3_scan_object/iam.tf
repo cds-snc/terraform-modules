@@ -61,6 +61,6 @@ data "aws_iam_policy_document" "scan_files" {
       "s3:PutObjectTagging",
       "s3:PutObjectVersionTagging"
     ]
-    resources = concat(local.upload_bucket_arns, local.upload_bucket_arns_items)
+    resources = concat(local.upload_buckets[*].arn, local.upload_buckets[*].arn_items)
   }
 }
