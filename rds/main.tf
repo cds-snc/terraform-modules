@@ -47,7 +47,7 @@ resource "aws_rds_cluster" "cluster" {
   storage_encrypted   = true
   skip_final_snapshot = var.skip_final_snapshot
 
-  vpc_security_group_ids = [aws_security_group.rds_proxy.id]
+  vpc_security_group_ids = distinct(concat([aws_security_group.rds_proxy.id], var.security_group_ids))
 
   dynamic "serverlessv2_scaling_configuration" {
     for_each = var.serverless_min_capacity + var.serverless_max_capacity <= 1 ? [] : [1]
