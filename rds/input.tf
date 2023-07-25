@@ -58,6 +58,12 @@ variable "prevent_cluster_deletion" {
   default     = true
 }
 
+variable "security_group_ids" {
+  type        = list(string)
+  description = "(Optional, default '[]') A list of additional security group IDs to associate with the RDS cluster."
+  default     = []
+}
+
 variable "skip_final_snapshot" {
   type        = bool
   description = "(Optional, default 'false') This flag determines if a final database snapshot it taken before the cluster is deleted."
