@@ -172,3 +172,43 @@ resource "aws_s3_bucket_public_access_block" "this" {
   ignore_public_acls      = var.ignore_public_acls
   restrict_public_buckets = var.restrict_public_buckets
 }
+
+module "s3_log_bucket" {
+  source = "../S3_log_bucket"
+
+  count = var.configure_critical_bucket_logs ? 1 : 0
+
+  bucket_name       = local.s3_log_bucket.bucket_name
+  billing_tag_key   = local.s3_log_bucket.billing_tag_key
+  billing_tag_value = local.s3_log_bucket.billing_tag_value
+
+  depends_on = [aws_s3_bucket.this]
+}
+
+module "sentinel_forwarder" {
+  source = "../sentinel_forwarder"
+
+  count = var.configure_critical_bucket_logs ? 1 : 0
+
+  function_name = "${aws_s3_bucket.this.id}-sentinel-forwarder}"
+  customer_id   = var.customer_id
+  shared_key    = var.shared_key
+
+  log_type = local.sentinel_forwarder.log_type
+
+  layer_arn = "arn:aws:lambda:ca-central-1:283582579564:layer:aws-sentinel-connector-layer:78"
+
+  s3_sources = [
+    {
+      bucket_arn    = local.sentinel_forwarder.bucket_arn
+      bucket_id     = local.sentinel_forwarder.bucket_id
+      filter_prefix = local.sentinel_forwarder.filter_prefix
+      kms_key_arn   = local.sentinel_forwarder.kms_key_arn
+    }
+  ]
+
+  billing_tag_key   = var.billing_tag_key
+  billing_tag_value = var.billing_tag_value
+
+  depends_on = [module.s3_log_bucket, aws_s3_bucket.this]
+}
