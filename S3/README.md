@@ -21,13 +21,13 @@ The License file for this module can be found in this directory
 | Name | Source | Version |
 |------|--------|---------|
 | <a name="module_s3_log_bucket"></a> [s3\_log\_bucket](#module\_s3\_log\_bucket) | ../S3_log_bucket | n/a |
-| <a name="module_sentinel_forwarder"></a> [sentinel\_forwarder](#module\_sentinel\_forwarder) | ../sentinel_forwarder | n/a |
 
 ## Resources
 
 | Name | Type |
 |------|------|
 | [aws_s3_bucket.this](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/s3_bucket) | resource |
+| [aws_s3_bucket_logging.this](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/s3_bucket_logging) | resource |
 | [aws_s3_bucket_public_access_block.this](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/s3_bucket_public_access_block) | resource |
 
 ## Inputs

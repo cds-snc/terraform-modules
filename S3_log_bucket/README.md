@@ -18,7 +18,9 @@ The License file for this module can be found in this directory.
 
 ## Modules
 
-No modules.
+| Name | Source | Version |
+|------|--------|---------|
+| <a name="module_sentinel_forwarder"></a> [sentinel\_forwarder](#module\_sentinel\_forwarder) | ../sentinel_forwarder | n/a |
 
 ## Resources
 
@@ -46,11 +48,14 @@ No modules.
 | <a name="input_billing_tag_value"></a> [billing\_tag\_value](#input\_billing\_tag\_value) | (required) The value of the billing tag | `string` | n/a | yes |
 | <a name="input_bucket_name"></a> [bucket\_name](#input\_bucket\_name) | (Optional, Forces new resource) The name of the bucket. If omitted, Terraform will assign a random, unique name. | `string` | `null` | no |
 | <a name="input_bucket_prefix"></a> [bucket\_prefix](#input\_bucket\_prefix) | (Optional, Forces new resource) Creates a unique bucket name beginning with the specified prefix. Conflicts with bucket. | `string` | `null` | no |
+| <a name="input_configure_sentinel_forwarder"></a> [configure\_sentinel\_forwarder](#input\_configure\_sentinel\_forwarder) | (Optional, default=false) Provides the ability to automatically configure a sentinel forwader for S3 server logs saved in the log bucket.<br>For more control, the same behaviour can be manually generated using the distinct module: sentinel\_forwarder. | `bool` | `false` | no |
 | <a name="input_critical_tag_key"></a> [critical\_tag\_key](#input\_critical\_tag\_key) | (Optional) The name of the critical tag. | `string` | `"Critical"` | no |
 | <a name="input_critical_tag_value"></a> [critical\_tag\_value](#input\_critical\_tag\_value) | (Required: default=true) The value of the critical tag. If set to true, protection SCP rules will be applied to the resource. | `bool` | `true` | no |
+| <a name="input_customer_id"></a> [customer\_id](#input\_customer\_id) | (Optional) The Azure customer id for the Sentinel Forwarder. Only required if the *configure\_sentinel\_forwarder* variable is set to true. | `string` | `null` | no |
 | <a name="input_force_destroy"></a> [force\_destroy](#input\_force\_destroy) | (Optional, Default:false ) A boolean that indicates all objects should be deleted from the bucket so that the bucket can be destroyed without error. These objects are not recoverable. | `bool` | `false` | no |
 | <a name="input_lifecycle_rule"></a> [lifecycle\_rule](#input\_lifecycle\_rule) | (Optional) List of maps containing configuration of object lifecycle management. | `any` | `[]` | no |
 | <a name="input_object_ownership"></a> [object\_ownership](#input\_object\_ownership) | (Optional), overrides object ownership value in aws\_s3\_bucket\_ownership\_controls. Defaults to BucketOwnerPreferred | `string` | `"BucketOwnerPreferred"` | no |
+| <a name="input_shared_key"></a> [shared\_key](#input\_shared\_key) | (Optional) The Azure shared key for the Sentinel Forwarder. Only required if the *configure\_sentinel\_forwarder* variable is set to true. | `string` | `null` | no |
 | <a name="input_tags"></a> [tags](#input\_tags) | (Optional) A mapping of tags to assign to the bucket. | `map(string)` | `{}` | no |
 | <a name="input_versioning_status"></a> [versioning\_status](#input\_versioning\_status) | (Optional) The versioning status of the bucket.  Valid values are 'Enabled', 'Disabled' or 'Suspended'. | `string` | `"Disabled"` | no |
 
