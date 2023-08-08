@@ -174,7 +174,7 @@ resource "aws_s3_bucket_public_access_block" "this" {
 }
 
 resource "aws_s3_bucket_logging" "this" {
-  
+
   count = length(local.logging_configuration_objects)
 
   bucket        = aws_s3_bucket.this.id
