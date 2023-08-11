@@ -8,7 +8,7 @@ locals {
     function_name     = "${var.bucket_name}-logs-sentinel-forwarder"
     billing_tag_key   = var.billing_tag_key
     billing_tag_value = var.billing_tag_value
-    log_type          = "AWSS3ServerAccessLogs"
+    log_type          = "s3serveraccesslogs"
     bucket_arn        = aws_s3_bucket.this.arn
     bucket_id         = aws_s3_bucket.this.id
     filter_prefix     = "logs/"
