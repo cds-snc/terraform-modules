@@ -49,6 +49,131 @@ variable "service_name" {
   default     = null
 }
 
+variable "launch_type" {
+  description = "Launch type on which to run your service. The valid values are `EC2`, `FARGATE`, and `EXTERNAL`. Defaults to `FARGATE`"
+  type        = string
+  default     = "FARGATE"
+}
+
+variable "platform_version" {
+  description = "Platform version on which to run your service. Only applicable for `launch_type` set to `FARGATE`. Defaults to `LATEST`"
+  type        = string
+  default     = "LATEST" 
+}
+
+variable "propagate_tags" {
+  description = "Specifies whether to propagate the tags from the task definition or the service to the tasks. The valid values are `SERVICE` and `TASK_DEFINITION`. The default value is `SERVICE`"
+  type        = string
+  default     = "SERVICE" 
+}
+
+variable "container_name" {
+  description = "The default container name."
+  type        = string
+  default     = "null" 
+}
+
+variable "container_port" {
+  description = "The default port of the container."
+  type        = number 
+  default     = 8000 
+}
+
+variable "elb_name" {
+  description = "The name of the load balancer."
+  type        = string
+}
+
+variable "lb_target_group_arn" {
+  description = "The arn of the load balancer target group."
+  type        = string
+}
+
+variable "assign_public_ip" {
+  description = "Assign a public IP address to the ENI (Fargate launch type only)"
+  type        = bool
+  default     = false
+}
+
+variable "subnet_ids" {
+  description = "List of subnets to associate with the task or service"
+  type        = list(string)
+  default     = []
+}
+
+variable "security_group_ids" {
+  description = "List of security groups to associate with the task or service"
+  type        = list(string)
+  default     = []
+}
+
+################################################################################
+# Autoscaling
+################################################################################
+
+variable "enable_autoscaling" {
+  description = "Determines whether to enable autoscaling for the service"
+  type        = bool
+  default     = false 
+}
+
+variable "autoscaling_min_capacity" {
+  description = "Minimum number of tasks to run in your service"
+  type        = number
+  default     = 1
+}
+
+variable "autoscaling_max_capacity" {
+  description = "Maximum number of tasks to run in your service"
+  type        = number
+  default     = 2 
+}
+
+variable "ecs_scale_cpu_threshold" {
+  description = "Cluster CPU use threshold that causes an ECS task scaling event"
+  type        = number
+}
+
+variable "ecs_scale_memory_threshold" {
+  description = "Cluster memory use threshold that causes an ECS task scaling event"
+  type        = number
+}
+
+variable "ecs_scale_in_cooldown" {
+  description = "Amount of time, in seconds, before another scale-in event can occur"
+  type        = number
+}
+
+variable "ecs_scale_out_cooldown" {
+  description = "Amount of time, in seconds, before another scale-out event can occur"
+  type        = number
+}
+
+variable "autoscaling_policies" {
+  description = "Map of autoscaling policies to create for the service"
+  type        = any
+  default = {
+    cpu = {
+      policy_type = "TargetTrackingScaling"
+
+      target_tracking_scaling_policy_configuration = {
+        predefined_metric_specification = {
+          predefined_metric_type = "ECSServiceAverageCPUUtilization"
+        }
+      }
+    }
+    memory = {
+      policy_type = "TargetTrackingScaling"
+
+      target_tracking_scaling_policy_configuration = {
+        predefined_metric_specification = {
+          predefined_metric_type = "ECSServiceAverageMemoryUtilization"
+        }
+      }
+    }
+  }
+}
+
 ################################################################################
 # Common
 ################################################################################
@@ -63,9 +188,5 @@ variable "billing_tag_value" {
   type        = string
 }
 
-variable "launch_type" {
-  description = "Launch type on which to run your service. The valid values are `EC2`, `FARGATE`, and `EXTERNAL`. Defaults to `FARGATE`"
-  type        = string
-  default     = "FARGATE"
-}
+
 
