@@ -1,6 +1,11 @@
 ################################################################################
 # Cluster
 ################################################################################
+variable "create_cluster" {
+  description = "Determines whether to create a cluster for the service"
+  type        = bool
+  default     = true
+}
 
 variable "cluster_name" {
   description = "Name of the cluster (up to 255 letters, numbers, hyphens, and underscores)"
@@ -36,6 +41,11 @@ variable "cloudwatch_log_group_retention_in_days" {
 ################################################################################
 # Service
 ################################################################################
+variable "create_service" {
+  description = "Determines whether to create a service for the cluster"
+  type        = bool
+  default     = true
+}
 
 variable "desired_count" {
   description = "The number of instances of the task definition to place and keep running. Defaults to `0`"
@@ -174,6 +184,45 @@ variable "autoscaling_policies" {
   }
 }
 
+################################################################################
+# Task Definition
+################################################################################
+variable "create_task_definition" {
+  description = "Determines whether to create a task definition for the service"
+  type        = bool
+  default     = true
+}
+
+variable "cpu" {
+  description = "The number of cpu units used by the task. If the `launch_type` is `FARGATE` this field is required and you must use one of the following values, which determines your range of valid values for the `memory` parameter: `256 (.25 vCPU) | 512 (.5 vCPU) | 1024 (1 vCPU) | 2048 (2 vCPU) | 4096 (4 vCPU)`"
+  type        = number
+  default     = 256
+}
+
+variable "task_definition_family" {
+  description = "The family name of the task definition"
+  type        = string
+  default     = null
+}
+
+variable "memory" {
+  description = "The amount (in MiB) of memory used by the task. If the `launch_type` is `FARGATE` this field is required and you must use one of the following values, which determines your range of valid values for the `cpu` parameter: `512 (0.5 GB), 1024 (1 GB), 2048 (2 GB)`"
+  type        = number
+  default     = 512
+}
+
+variable "requires_compatibilities" {
+  description = "A set of launch types required by the task. The valid values are `EC2` and `FARGATE`"
+  type        = list(string)
+  default     = ["FARGATE"]
+}
+
+variable "network_mode" {
+  description = "The Docker networking mode to use for the containers in the task. The valid values are `none`, `bridge`, `awsvpc`, and `host`"
+  type        = string
+  default     = "awsvpc"
+}
+  
 ################################################################################
 # Common
 ################################################################################

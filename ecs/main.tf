@@ -8,6 +8,7 @@
 ################################################################################
 
 resource "aws_ecs_cluster" "this" {
+  count = var.create_cluster ? 1 : 0
   name = var.cluster_name
 
   dynamic "setting" {
@@ -29,6 +30,7 @@ resource "aws_ecs_cluster" "this" {
 # Service
 ################################################################################
 resource "aws_ecs_service" "this" {
+  count           = var.create_service ? 1 : 0
   name            = var.service_name
   cluster         = aws_ecs_cluster.ecs_cluster.id
   task_definition = aws_ecs_task_definition.ecs_task_definition.arn
@@ -97,28 +99,23 @@ resource "aws_appautoscaling_policy" "this" {
 }
 
 ################################################################################
-# Task Definition - TO DO
+# Task Definition  
 ################################################################################
 resource "aws_ecs_task_definition" "this" {
-  family                   = var.task_definition_family
-  container_definitions    = var.container_definitions
-  execution_role_arn       = var.execution_role_arn
-  task_role_arn            = var.task_role_arn
-  network_mode             = var.network_mode
+  count = var.create_task_definition ? 1 : 0
+  cpu   = var.cpu
+  execution_role_arn = #TO DO
+  family = var.task_definition_family
+  memory = var.memory
+  network_mode = var.network_mode
   requires_compatibilities = var.requires_compatibilities
-  cpu                      = var.cpu
-  memory                   = var.memory
-  ipc_mode                 = var.ipc_mode
-  pid_mode                 = var.pid_mode
-  proxy_configuration      = var.proxy_configuration
-  volumes                  = var.volumes
-  placement_constraints    = var.placement_constraints
-  inference_accelerator    = var.inference_accelerator
-  tags                     = merge(local.common_tags, {
+  task_role_arn = #TO DO
+  container_definitions = #TODO 
+
+  tags = merge(local.common_tags, {
     Name = "${var.name}_ecs_task_definition"
   })
 }
-
 ################################################################################
 # CloudWatch Log Group
 ################################################################################
