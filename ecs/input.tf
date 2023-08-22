@@ -222,7 +222,30 @@ variable "network_mode" {
   type        = string
   default     = "awsvpc"
 }
-  
+
+variable "operating_system" {
+  description = "The operating system of the task." 
+  type        = string
+  default     = "LINUX"
+}
+
+variable "cpu_architecture" {
+  description = "The CPU architecture of the task. The valid values are `x86_64` and `arm64`"
+  type        = string
+  default     = "x86_64"
+}
+
+variable "container_definition_json" {
+  type        = string
+  description = <<-EOT
+    A string containing a JSON-encoded array of container definitions
+    (`"[{ "name": "container1", ... }, { "name": "container2", ... }]"`).
+    See [API_ContainerDefinition](https://docs.aws.amazon.com/AmazonECS/latest/APIReference/API_ContainerDefinition.html),
+    [cloudposse/terraform-aws-ecs-container-definition](https://github.com/cloudposse/terraform-aws-ecs-container-definition), or
+    [ecs_task_definition#container_definitions](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/ecs_task_definition#container_definitions)
+    EOT
+}
+
 ################################################################################
 # Common
 ################################################################################

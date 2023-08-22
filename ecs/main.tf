@@ -110,8 +110,12 @@ resource "aws_ecs_task_definition" "this" {
   network_mode = var.network_mode
   requires_compatibilities = var.requires_compatibilities
   task_role_arn = #TO DO
-  container_definitions = #TODO 
+  container_definitions = var.container_definitions 
 
+  runtime_platform {
+    operating_system_family = var.operating_system_family
+    cpu_architecture = var.cpu_architecture
+  }
   tags = merge(local.common_tags, {
     Name = "${var.name}_ecs_task_definition"
   })
