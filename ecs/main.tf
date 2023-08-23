@@ -34,8 +34,8 @@ resource "aws_ecs_cluster" "this" {
 resource "aws_ecs_service" "this" {
   count            = var.create_service ? 1 : 0
   name             = var.name
-  cluster          = aws_ecs_cluster.ecs_cluster.id
-  task_definition  = aws_ecs_task_definition.ecs_task_definition.arn
+  cluster          = aws_ecs_cluster.this[0].id
+  task_definition  = aws_cs_task_definition.this[0].arn
   desired_count    = var.desired_count
   launch_type      = var.launch_type
   platform_version = var.platform_version

@@ -49,13 +49,9 @@ output "cloudwatch_log_group_arn" {
   value       = try(aws_cloudwatch_log_group.this[0].arn, null)
 }
 
-################################################################################
-# Container Definition
-################################################################################
-
 output "container_definitions" {
   description = "Container definitions"
-  value       = module.container_definition
+  value       = local.container_definition
 }
 
 ################################################################################
