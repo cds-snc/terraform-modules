@@ -19,7 +19,7 @@ locals {
 
   definition = {
     command           = length(var.command) > 0 ? var.command : null
-    cpu               = var.cpu
+    cpu               = var.container_cpu
     dependsOn         = length(var.dependencies) > 0 ? var.dependencies : null # depends_on is a reserved word
     disableNetworking = var.disable_networking
     entrypoint        = length(var.entrypoint) > 0 ? var.entrypoint : null
@@ -32,7 +32,7 @@ locals {
     interactive       = var.interactive
     linuxParameters   = length(var.linux_parameters) > 0 ? var.linux_parameters : null
     logConfiguration  = length(local.log_configuration) > 0 ? local.log_configuration : null
-    memory            = var.memory
+    memory            = var.container_memory
     memoryReservation = var.memory_reservation
     mountPoints       = var.mount_points
     name              = var.name

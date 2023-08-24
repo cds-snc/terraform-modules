@@ -193,7 +193,7 @@ variable "command" {
   default     = []
 }
 
-variable "cpu" {
+variable "container_cpu" {
   description = "The number of cpu units to reserve for the container. This is optional for tasks using Fargate launch type and the total amount of `cpu` of all containers in a task will need to be lower than the task-level cpu value"
   type        = number
   default     = null
@@ -280,7 +280,7 @@ variable "log_configuration" {
   default     = {}
 }
 
-variable "memory" {
+variable "container_memory" {
   description = "The amount (in MiB) of memory to present to the container. If your container attempts to exceed the memory specified here, the container is killed. The total amount of memory reserved for all containers within a task must be lower than the task `memory` value, if one is specified"
   type        = number
   default     = null
@@ -298,7 +298,7 @@ variable "mount_points" {
   default     = []
 }
 
-variable "name" {
+variable "container_name" {
   description = "The name of a container. If you're linking multiple containers together in a task definition, the name of one container can be entered in the links of another container to connect the containers. Up to 255 letters (uppercase and lowercase), numbers, underscores, and hyphens are allowed"
   type        = string
   default     = null

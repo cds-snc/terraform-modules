@@ -7,12 +7,12 @@ output "arn" {
   value       = try(aws_ecs_cluster.this[0].arn, null)
 }
 
-output "id" {
+output "cluster_id" {
   description = "ID that identifies the cluster"
   value       = try(aws_ecs_cluster.this[0].id, null)
 }
 
-output "name" {
+output "cluster_name" {
   description = "Name that identifies the cluster"
   value       = try(aws_ecs_cluster.this[0].name, null)
 }
@@ -25,7 +25,7 @@ output "id" {
   value       = try(aws_ecs_service.this[0].id, aws_ecs_service.ignore_task_definition[0].id, null)
 }
 
-output "name" {
+output "service_name" {
   description = "Name of the service"
   value       = try(aws_ecs_service.this[0].name, aws_ecs_service.ignore_task_definition[0].name, null)
 }
@@ -44,9 +44,9 @@ output "cloudwatch_log_group_name" {
   value       = try(aws_cloudwatch_log_group.this[0].name, null)
 }
 
-output "cloudwatch_log_group_arn" {
+output "container_cloudwatch_log_group_arn" {
   description = "Arn of cloudwatch log group created"
-  value       = try(aws_cloudwatch_log_group.this[0].arn, null)
+  value       = try(aws_cloudwatch_log_group.this_container[0].arn, null)
 }
 
 output "container_definitions" {
