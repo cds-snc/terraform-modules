@@ -298,12 +298,6 @@ variable "mount_points" {
   default     = []
 }
 
-variable "container_name" {
-  description = "The name of a container. If you're linking multiple containers together in a task definition, the name of one container can be entered in the links of another container to connect the containers. Up to 255 letters (uppercase and lowercase), numbers, underscores, and hyphens are allowed"
-  type        = string
-  default     = null
-}
-
 variable "port_mappings" {
   description = "The list of port mappings for the container. Port mappings allow containers to access ports on the host container instance to send or receive traffic. For task definitions that use the awsvpc network mode, only specify the containerPort. The hostPort can be left blank or it must be the same value as the containerPort"
   type        = list(any)
