@@ -142,21 +142,25 @@ variable "autoscaling_max_capacity" {
 variable "ecs_scale_cpu_threshold" {
   description = "Cluster CPU use threshold that causes an ECS task scaling event"
   type        = number
+  default     = 60
 }
 
 variable "ecs_scale_memory_threshold" {
   description = "Cluster memory use threshold that causes an ECS task scaling event"
   type        = number
+  default     = 60
 }
 
 variable "ecs_scale_in_cooldown" {
   description = "Amount of time, in seconds, before another scale-in event can occur"
   type        = number
+  default     = 60
 }
 
 variable "ecs_scale_out_cooldown" {
   description = "Amount of time, in seconds, before another scale-out event can occur"
   type        = number
+  default     = 60
 }
 
 variable "autoscaling_policies" {
@@ -409,17 +413,6 @@ variable "container_definitions" {
   description = "A map of valid [container definitions](http://docs.aws.amazon.com/AmazonECS/latest/APIReference/API_ContainerDefinition.html). Please note that you should only provide values that are part of the container definition document"
   type        = any
   default     = {}
-}
-
-variable "container_definition_json" {
-  type        = string
-  description = <<-EOT
-    A string containing a JSON-encoded array of container definitions
-    (`"[{ "name": "container1", ... }, { "name": "container2", ... }]"`).
-    See [API_ContainerDefinition](https://docs.aws.amazon.com/AmazonECS/latest/APIReference/API_ContainerDefinition.html),
-    [cloudposse/terraform-aws-ecs-container-definition](https://github.com/cloudposse/terraform-aws-ecs-container-definition), or
-    [ecs_task_definition#container_definitions](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/ecs_task_definition#container_definitions)
-    EOT
 }
 
 ################################################################################
