@@ -37,12 +37,14 @@ resource "aws_rds_cluster" "cluster" {
   final_snapshot_identifier   = "${var.name}-${random_string.random.result}"
   master_username             = var.username
   master_password             = var.password
-  backup_retention_period     = var.backup_retention_period
-  preferred_backup_window     = var.preferred_backup_window
   db_subnet_group_name        = aws_db_subnet_group.rds.name
   deletion_protection         = var.prevent_cluster_deletion
   allow_major_version_upgrade = var.allow_major_version_upgrade
   apply_immediately           = var.upgrade_immediately
+
+  backup_retention_period      = var.backup_retention_period
+  preferred_backup_window      = var.preferred_backup_window
+  preferred_maintenance_window = var.preferred_maintenance_window
 
   storage_encrypted   = true
   skip_final_snapshot = var.skip_final_snapshot

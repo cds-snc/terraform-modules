@@ -98,6 +98,12 @@ variable "backup_retention_period" {
   type        = number
 }
 
+variable "preferred_maintenance_window" {
+  description = "(Optional) The UTC time you want your DB to be maintained. Takes the format `\"wed:06:00-wed:07:00\"`"
+  type        = string
+  default     = "sun:06:00-sun:07:00"
+}
+
 
 ###
 # Network info
