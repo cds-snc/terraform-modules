@@ -16,8 +16,9 @@ module "postgresql_cluster" {
   prevent_cluster_deletion = false
   skip_final_snapshot      = true
 
-  backup_retention_period = 1
-  preferred_backup_window = "01:00-03:00"
+  backup_retention_period      = 1
+  preferred_backup_window      = "01:00-03:00"
+  preferred_maintenance_window = "sun:06:00-sun:07:00" # timezone is UTC
 
   vpc_id     = module.postgresql_cluster_vpc.vpc_id
   subnet_ids = module.postgresql_cluster_vpc.private_subnet_ids
