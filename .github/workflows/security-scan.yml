@@ -16,6 +16,7 @@ jobs:
       matrix:
         module:
           - athena_access_logs
+          - ecs
           - notify_slack
           - user_login_alarm
           - vpc
