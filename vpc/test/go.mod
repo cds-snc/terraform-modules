@@ -3,7 +3,7 @@ module github.com/cds-snc/terraform-modules/vpc
 go 1.21.1
 
 require (
-	github.com/aws/aws-sdk-go v1.45.20
+	github.com/aws/aws-sdk-go v1.45.24
 	github.com/gruntwork-io/terratest v0.44.0
 	github.com/stretchr/testify v1.8.4
 )
