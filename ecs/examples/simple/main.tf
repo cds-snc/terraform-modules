@@ -38,6 +38,7 @@ module "vpc" {
 }
 
 resource "aws_security_group" "simple" {
+  # checkov:skip=CKV2_AWS_5:Security Group is attached to the ECS service
   name        = "simple_cluster"
   description = "Simple ECS cluster example security group"
   vpc_id      = module.vpc.vpc_id

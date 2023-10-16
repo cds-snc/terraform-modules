@@ -1,0 +1,3 @@
+skip-check:
+  - CKV_AWS_158 # CloudWatch encyption with default key is acceptable
+  
