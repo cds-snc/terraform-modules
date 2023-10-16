@@ -30,20 +30,8 @@ variable "domain_name_source" {
   }
 }
 
-variable "error_document" {
-  description = "(Optional, default 'error.html') The name of the error document."
-  type        = string
-  default     = "error.html"
-}
-
 variable "hosted_zone_id" {
   description = "(Optional, default '') Hosted zone ID used to create the domain name source ALIAS record pointing to Cloudfront.  If not specified, a new hosted zone will be created."
   type        = string
   default     = ""
-}
-
-variable "index_document" {
-  description = "(Optional, default 'index.html') The name of the index document."
-  type        = string
-  default     = "index.html"
 }
