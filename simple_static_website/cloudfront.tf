@@ -18,6 +18,8 @@ resource "aws_cloudfront_distribution" "simple_static_website" {
     }
   }
 
+  default_root_object = var.index_document
+
   enabled     = true
   aliases     = [var.domain_name_source]
   price_class = var.cloudfront_price_class
