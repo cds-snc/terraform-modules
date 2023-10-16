@@ -22,4 +22,3 @@ func TestSimple(t *testing.T) {
 	// Create the resources
 	terraform.InitAndApply(t, terraformOptions)
 }
-
