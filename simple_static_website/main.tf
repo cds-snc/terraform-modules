@@ -33,3 +33,15 @@ resource "aws_s3_bucket_policy" "oai_policy" {
   bucket = aws_s3_bucket.this.id
   policy = data.aws_iam_policy_document.s3_policy.json
 }
+
+resource "aws_s3_bucket_website_configuration" "this" {
+  bucket = aws_s3_bucket.this.id
+
+  index_document {
+    suffix = var.index_document
+  }
+
+  error_document {
+    key = var.error_document
+  }
+}
