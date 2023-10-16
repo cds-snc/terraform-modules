@@ -1,3 +1,4 @@
+# Elastic Container Service Cluster (ECS)
 
 This module creates a pre-configured ECS cluster with a single service and task definition using Fargate.
 

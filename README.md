@@ -14,6 +14,7 @@
 - [Attach TF plan policy](attach_tf_plan_policy)
 - [AWS Government of Canada password policy](aws_goc_password_policy)
 - [Empty log group alarm](empty_log_group_alarm)
+- [ECS](ecs)
 - [GuardDuty](guardduty)
 - [GuardDuty member](guardduty_member)
 - [Github Open ID Connect](gh_oidc_role)
