@@ -20,7 +20,7 @@ data "aws_iam_policy_document" "s3_policy" {
 
     principals {
       type        = "AWS"
-      identifiers = [aws_cloudfront_origin_access_identity.this.iam_arn]
+      identifiers = [aws_cloudfront_origin_access_identity.simple_static_website.iam_arn]
     }
   }
 }
