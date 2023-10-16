@@ -1,5 +1,22 @@
-/* # simple_static_website
+/* 
+* # Simple static website
+* The purpose of this module is to create a simple static website using S3 and CloudFront. 
+* Access to the S3 bucket is restricted to CloudFront using an Origin Access Identity (OAI).
 *
+* ## Usage
+* ```
+* module "website" {
+*  source  = "github.com/cds-snc/terraform-modules//simple_static_website"
+*
+*  domain_name_source = "example.com"
+*  billing_tag_value  = "simple-static-website"
+*
+*  providers = {
+*    aws           = aws
+*    aws.us-east-1 = aws.us-east-1
+*  }
+* }
+* ```
 */
 
 
@@ -25,8 +42,13 @@ data "aws_iam_policy_document" "s3_policy" {
   }
 }
 
+resource "random_string" "suffix" {
+  length  = 8
+  special = false
+}
+
 resource "aws_s3_bucket" "this" {
-  bucket = var.domain_name_source
+  bucket = "${var.domain_name_source}-${random_string.suffix.result}"
 }
 
 resource "aws_s3_bucket_policy" "oai_policy" {

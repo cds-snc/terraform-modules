@@ -1,3 +1,22 @@
+# Simple static website
+The purpose of this module is to create a simple static website using S3 and CloudFront.
+Access to the S3 bucket is restricted to CloudFront using an Origin Access Identity (OAI).
+
+## Usage
+```
+module "website" {
+ source  = "github.com/cds-snc/terraform-modules//simple_static_website"
+
+ domain_name_source = "example.com"
+ billing_tag_value  = "simple-static-website"
+
+ providers = {
+   aws           = aws
+   aws.us-east-1 = aws.us-east-1
+ }
+}
+```
+
 ## Requirements
 
 | Name | Version |
@@ -10,6 +29,7 @@
 |------|---------|
 | <a name="provider_aws"></a> [aws](#provider\_aws) | >= 4.9 |
 | <a name="provider_aws.us-east-1"></a> [aws.us-east-1](#provider\_aws.us-east-1) | >= 4.9 |
+| <a name="provider_random"></a> [random](#provider\_random) | n/a |
 
 ## Modules
 
@@ -27,7 +47,9 @@ No modules.
 | [aws_route53_record.cloudfront_certificate_validation](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/route53_record) | resource |
 | [aws_route53_zone.hosted_zone](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/route53_zone) | resource |
 | [aws_s3_bucket.this](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/s3_bucket) | resource |
+| [aws_s3_bucket_policy.oai_policy](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/s3_bucket_policy) | resource |
 | [aws_s3_bucket_website_configuration.this](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/s3_bucket_website_configuration) | resource |
+| [random_string.suffix](https://registry.terraform.io/providers/hashicorp/random/latest/docs/resources/string) | resource |
 | [aws_iam_policy_document.s3_policy](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/data-sources/iam_policy_document) | data source |
 
 ## Inputs
