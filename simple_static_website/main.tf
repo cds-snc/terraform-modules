@@ -45,6 +45,8 @@ data "aws_iam_policy_document" "s3_policy" {
 resource "random_string" "suffix" {
   length  = 8
   special = false
+  lower   = true
+  upper   = false
 }
 
 resource "aws_s3_bucket" "this" {
