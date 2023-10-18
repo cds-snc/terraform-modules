@@ -50,7 +50,7 @@ resource "aws_cloudfront_distribution" "simple_static_website" {
       error_code            = 403
       error_caching_min_ttl = 3600
       response_code         = 200
-      response_page_path    = var.index_document
+      response_page_path    = "/${var.index_document}"
     }
   }
 
