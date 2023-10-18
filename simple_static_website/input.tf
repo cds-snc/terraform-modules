@@ -47,3 +47,9 @@ variable "index_document" {
   type        = string
   default     = "index.html"
 }
+
+variable "single_page_app" {
+  description = "(Optional, default 'false') If true, the index document will be returned for all 403 requests to the origin."
+  type        = bool
+  default     = false
+}

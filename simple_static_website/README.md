@@ -64,6 +64,7 @@ No modules.
 | <a name="input_error_document"></a> [error\_document](#input\_error\_document) | (Optional, default 'error.html') The name of the error document. | `string` | `"error.html"` | no |
 | <a name="input_hosted_zone_id"></a> [hosted\_zone\_id](#input\_hosted\_zone\_id) | (Optional, default '') Hosted zone ID used to create the domain name source ALIAS record pointing to Cloudfront.  If not specified, a new hosted zone will be created. | `string` | `""` | no |
 | <a name="input_index_document"></a> [index\_document](#input\_index\_document) | (Optional, default 'index.html') The name of the index document. | `string` | `"index.html"` | no |
+| <a name="input_single_page_app"></a> [single\_page\_app](#input\_single\_page\_app) | (Optional, default 'false') If true, the index document will be returned for all 403 requests to the origin. | `bool` | `false` | no |
 
 ## Outputs
 
