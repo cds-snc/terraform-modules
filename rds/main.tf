@@ -42,6 +42,7 @@ resource "aws_rds_cluster" "cluster" {
   allow_major_version_upgrade = var.allow_major_version_upgrade
   apply_immediately           = var.upgrade_immediately
 
+  backtrack_window             = var.engine == "aurora-mysql" ? var.backtrack_window : 0
   backup_retention_period      = var.backup_retention_period
   preferred_backup_window      = var.preferred_backup_window
   preferred_maintenance_window = var.preferred_maintenance_window

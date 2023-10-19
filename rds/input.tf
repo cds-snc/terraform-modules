@@ -40,6 +40,7 @@ variable "engine_version" {
   type        = string
   description = "(Required) The database version to use. Engine version is contingent on instance_class see [this list of supported combinations](https://docs.amazonaws.cn/en_us/AmazonRDS/latest/AuroraUserGuide/Concepts.DBInstanceClass.html#Concepts.DBInstanceClass.SupportAurora)"
 }
+
 variable "allow_major_version_upgrade" {
   type        = bool
   description = "(Optional, default 'false') This flag allows RDS to perform a major engine upgrade. <br/> **Please Note:** This could break things so make sure you know that your code is compatible with the new features in this version."
@@ -193,4 +194,10 @@ variable "security_group_notifications_topic_arn" {
   type        = string
   description = "(Optional) The SNS topic ARN to send notifications about security group changes to."
   default     = ""
+}
+
+variable "backtrack_window" {
+  type        = number
+  description = "(Optional, defaults to 72 hours) The number of days to retain a backtrack. Set to 0 to disable backtracking.  This is only valid for the `aurora-mysql` engine type."
+  default     = 259200
 }
