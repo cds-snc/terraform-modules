@@ -30,7 +30,7 @@ resource "aws_rds_cluster_instance" "instances" {
 }
 
 resource "aws_rds_cluster" "cluster" {
-  cluster_identifier          = "${var.name}-cluster"
+  cluster_identifier          = local.identifier
   engine                      = var.engine
   engine_version              = var.engine_version
   database_name               = var.database_name
@@ -42,13 +42,16 @@ resource "aws_rds_cluster" "cluster" {
   allow_major_version_upgrade = var.allow_major_version_upgrade
   apply_immediately           = var.upgrade_immediately
 
+  enabled_cloudwatch_logs_exports = local.enabled_cloudwatch_logs_exports
+
   backtrack_window             = var.engine == "aurora-mysql" ? var.backtrack_window : 0
   backup_retention_period      = var.backup_retention_period
   preferred_backup_window      = var.preferred_backup_window
   preferred_maintenance_window = var.preferred_maintenance_window
 
-  storage_encrypted   = true
-  skip_final_snapshot = var.skip_final_snapshot
+  copy_tags_to_snapshot = true
+  storage_encrypted     = true
+  skip_final_snapshot   = var.skip_final_snapshot
 
   vpc_security_group_ids = local.security_group_ids
 
@@ -59,6 +62,10 @@ resource "aws_rds_cluster" "cluster" {
       max_capacity = var.serverless_max_capacity
     }
   }
+
+  depends_on = [
+    aws_cloudwatch_log_group.log_exports
+  ]
 
   tags = merge(local.common_tags, {
     Name = "${var.name}-cluster"
@@ -102,15 +109,6 @@ resource "aws_db_proxy" "proxy" {
 
   tags = merge(local.common_tags, {
     Name = "${var.name}-rds-proxy"
-  })
-}
-
-resource "aws_cloudwatch_log_group" "proxy" {
-  name              = "/aws/rds/proxy/${local.proxy_name}"
-  retention_in_days = var.proxy_log_retention_in_days
-
-  tags = merge(local.common_tags, {
-    Name = "${var.name}_proxy_logs"
   })
 }
 

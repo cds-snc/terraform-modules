@@ -25,6 +25,19 @@ variable "database_name" {
   }
 }
 
+variable "enabled_cloudwatch_logs_exports" {
+  type        = list(string)
+  description = "(Optional, default empty list) The database log types to export to CloudWatch. Valid values are `audit`, `error`, `general`, `slowquery`, `postgresql`."
+  default     = []
+
+  validation {
+    condition = alltrue([
+      for e in var.enabled_cloudwatch_logs_exports : contains(["audit", "error", "general", "slowquery", "postgresql"], e)
+    ])
+    error_message = "CloudWatch log exports valid values are `audit`, `error`, `general`, `slowquery`, and `postgresql`."
+  }
+}
+
 variable "engine" {
   type        = string
   description = "(Optional, defaults 'aurora-postgresql') The database engine to use. Valid values are 'aurora-postgresql' and 'aurora-mysql'"
