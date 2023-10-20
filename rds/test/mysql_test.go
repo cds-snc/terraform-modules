@@ -67,7 +67,7 @@ func TestMysqlCluster(t *testing.T) {
 	assert.Equal(t, "terratest_mysql", *cluster.DatabaseName)
 	assert.Equal(t, "thebigcheese", *cluster.MasterUsername)
 	assert.Equal(t, "aurora-mysql", *cluster.Engine)
-	assert.Equal(t, "default.aurora-mysql5.7", *cluster.DBClusterParameterGroup)
+	assert.Equal(t, "terratest-aurora-mysql57", *cluster.DBClusterParameterGroup)
 	assert.Equal(t, "01:00-03:00", *cluster.PreferredBackupWindow)
 	assert.Equal(t, false, *cluster.DeletionProtection)
 	assert.Equal(t, true, *cluster.StorageEncrypted)
