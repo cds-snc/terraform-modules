@@ -42,6 +42,7 @@ resource "aws_rds_cluster" "cluster" {
   allow_major_version_upgrade = var.allow_major_version_upgrade
   apply_immediately           = var.upgrade_immediately
 
+  db_cluster_parameter_group_name = var.db_cluster_parameter_group_name
   enabled_cloudwatch_logs_exports = local.enabled_cloudwatch_logs_exports
 
   backtrack_window             = var.engine == "aurora-mysql" ? var.backtrack_window : 0
