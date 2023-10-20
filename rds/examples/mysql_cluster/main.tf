@@ -11,6 +11,9 @@ module "mysql_cluster" {
   username       = "thebigcheese"
   password       = "pasword123"
 
+  # Enable audit logging
+  db_cluster_parameter_group_name = aws_rds_cluster_parameter_group.enable_audit_logging.name
+  enabled_cloudwatch_logs_exports = ["audit"]
 
   # These two settings are not recommended for prod, but required by our
   # Terratests so they can properly destroy resources once finished.
