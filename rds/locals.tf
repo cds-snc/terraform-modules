@@ -10,6 +10,6 @@ locals {
   engine_family      = local.is_mysql ? "MYSQL" : "POSTGRESQL"
   security_group_ids = distinct(concat([aws_security_group.rds_proxy.id], var.security_group_ids))
 
-  # Configure the database logs that are exported to CloudWatch.  Default to `audit` for MySQL and `postgresql` for Postgres if no values are specified
-  enabled_cloudwatch_logs_exports = length(var.enabled_cloudwatch_logs_exports) > 0 ? var.enabled_cloudwatch_logs_exports : (local.is_mysql ? ["audit"] : ["postgresql"])
+  # Configure the database logs that are exported to CloudWatch.  Default to none for MySQL and `postgresql` for Postgres if no values are specified
+  enabled_cloudwatch_logs_exports = length(var.enabled_cloudwatch_logs_exports) > 0 ? var.enabled_cloudwatch_logs_exports : (local.is_mysql ? [] : ["postgresql"])
 }

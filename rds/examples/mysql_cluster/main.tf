@@ -1,4 +1,4 @@
-# MySQL Database cluster with two instances
+# MySQL Database cluster with two instances and audit logs exported to CloudWatch
 module "mysql_cluster" {
   source = "../../"
   name   = "mysql"
@@ -10,6 +10,7 @@ module "mysql_cluster" {
   instance_class = "db.t3.small"
   username       = "thebigcheese"
   password       = "pasword123"
+
 
   # These two settings are not recommended for prod, but required by our
   # Terratests so they can properly destroy resources once finished.
@@ -27,6 +28,23 @@ module "mysql_cluster" {
 
   billing_tag_key   = "Business Unit"
   billing_tag_value = "Terratest"
+}
+
+resource "aws_rds_cluster_parameter_group" "enable_audit_logging" {
+  name        = "terratest-aurora-mysql57"
+  family      = "aurora-mysql5.7"
+  description = "RDS cluster parameter group"
+
+  parameter {
+    name  = "server_audit_logging"
+    value = "1"
+  }
+
+  # Available events: https://docs.aws.amazon.com/AmazonRDS/latest/AuroraUserGuide/AuroraMySQL.Auditing.html#AuroraMySQL.Auditing.Enable.server_audit_events
+  parameter {
+    name  = "server_audit_events"
+    value = "CONNECT,QUERY_DCL,QUERY_DDL,QUERY_DML"
+  }
 }
 
 # At least 2 subnets are required by the RDS proxy

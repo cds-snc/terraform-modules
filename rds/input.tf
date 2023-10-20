@@ -25,6 +25,12 @@ variable "database_name" {
   }
 }
 
+variable "db_cluster_parameter_group_name" {
+  type        = string
+  description = "(Optional, no default) Name of DB cluster parameter group to associate with this DB cluster."
+  default     = null
+}
+
 variable "enabled_cloudwatch_logs_exports" {
   type        = list(string)
   description = "(Optional, default empty list) The database log types to export to CloudWatch. Valid values are `audit`, `error`, `general`, `slowquery`, `postgresql`."
