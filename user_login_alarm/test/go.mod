@@ -3,7 +3,7 @@ module github.com/cds-snc/terraform-modules/user_login_alarm
 go 1.21.1
 
 require (
-	github.com/aws/aws-sdk-go v1.45.24
+	github.com/aws/aws-sdk-go v1.45.25
 	github.com/gruntwork-io/terratest v0.45.0
 	github.com/stretchr/testify v1.8.4
 )
