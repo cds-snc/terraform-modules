@@ -18,6 +18,9 @@ module "simple_cluster" {
   autoscaling_min_capacity = 1
   autoscaling_max_capacity = 2
 
+  task_role_arn		= aws_iam_role.simple
+  task_exec_role_arn 	= aws_iam_role.simple 
+
   billing_tag_value = "Terratest"
 }
 
@@ -56,4 +59,25 @@ resource "aws_security_group_rule" "simple" {
   protocol          = "tcp"
   security_group_id = aws_security_group.simple.id
   cidr_blocks       = ["0.0.0.0/0"]
+}
+
+
+####################################################################################
+# IAM Roles
+####################################################################################
+
+data "aws_iam_policy_document" "simple" {
+  statement {
+    actions = ["sts:AssumeRole"]
+
+    principals {
+      type        = "Service"
+      identifiers = ["ecs-tasks.amazonaws.com"]
+    }
+  }
+}
+
+resource "aws_iam_role" "simple" {
+  name = "simple"
+  assume_role_policy = data.aws_iam_policy_document.simple.json
 }
