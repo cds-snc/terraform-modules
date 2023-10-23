@@ -87,8 +87,8 @@ resource "aws_ecs_task_definition" "this" {
   family                = local.task_definition_family
   cpu                   = var.task_cpu
   memory                = var.task_memory
-  execution_role_arn    = aws_iam_role.this_task_exec.arn
-  task_role_arn         = aws_iam_role.this_task.arn
+  execution_role_arn    = var.task_exec_role_arn != null ? var.task_exec_role_arn : aws_iam_role.this_task_exec.arn
+  task_role_arn         = var.task_role_arn != null ? var.task_role_arn : aws_iam_role.this_task.arn
   container_definitions = jsonencode([local.container_definition])
 
   network_mode             = "awsvpc"

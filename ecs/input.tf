@@ -256,6 +256,16 @@ variable "task_role_policy_documents" {
   default     = []
 }
 
+variable "task_exec_role_arn" {
+  description = "(Optional) The Arn of the IAM role controlling the task execution."
+  type        = string
+}
+
+variable "task_role_arn" {
+  description = "(Optional) The arn of the IAM role controlling the task."
+  type        = string
+}
+
 ################################################################################
 # Sentinel
 ################################################################################
