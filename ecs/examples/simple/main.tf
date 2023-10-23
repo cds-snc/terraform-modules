@@ -14,6 +14,10 @@ module "simple_cluster" {
   subnet_ids         = module.vpc.private_subnet_ids
   security_group_ids = [aws_security_group.simple.id]
 
+  enable_autoscaling       = true
+  autoscaling_min_capacity = 1
+  autoscaling_max_capacity = 2
+
   billing_tag_value = "Terratest"
 }
 

@@ -2,7 +2,7 @@ data "aws_region" "current" {}
 
 locals {
   definition = {
-    name            = var.container_name != null ? var.container_name : local.task_definition_family
+    name            = local.container_name
     cpu             = var.container_cpu
     memory          = var.container_memory
     essential       = var.container_essential

@@ -65,7 +65,7 @@ resource "aws_ecs_service" "this" {
     for_each = var.lb_target_group_arn != null ? [1] : []
     content {
       target_group_arn = var.lb_target_group_arn
-      container_name   = var.container_name
+      container_name   = local.container_name
       container_port   = var.container_host_port
     }
   }
@@ -116,6 +116,8 @@ resource "aws_appautoscaling_target" "this" {
   resource_id        = "service/${var.cluster_name}/${var.service_name}"
   scalable_dimension = "ecs:service:DesiredCount"
   service_namespace  = "ecs"
+
+  tags = local.common_tags
 }
 
 resource "aws_appautoscaling_policy" "this" {

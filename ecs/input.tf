@@ -131,25 +131,15 @@ variable "ecs_scale_out_cooldown" {
 
 variable "autoscaling_policies" {
   description = "(Optional, scales based on average CPU and memory use) Map of autoscaling policies to create for the service"
-  type        = any
+  type        = map(any)
   default = {
     cpu = {
-      policy_type = "TargetTrackingScaling"
-
-      target_tracking_scaling_policy_configuration = {
-        predefined_metric_specification = {
-          predefined_metric_type = "ECSServiceAverageCPUUtilization"
-        }
-      }
+      policy_type            = "TargetTrackingScaling"
+      predefined_metric_type = "ECSServiceAverageCPUUtilization"
     }
     memory = {
-      policy_type = "TargetTrackingScaling"
-
-      target_tracking_scaling_policy_configuration = {
-        predefined_metric_specification = {
-          predefined_metric_type = "ECSServiceAverageMemoryUtilization"
-        }
-      }
+      policy_type            = "TargetTrackingScaling"
+      predefined_metric_type = "ECSServiceAverageMemoryUtilization"
     }
   }
 }
