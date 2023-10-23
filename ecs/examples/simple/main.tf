@@ -18,8 +18,8 @@ module "simple_cluster" {
   autoscaling_min_capacity = 1
   autoscaling_max_capacity = 2
 
-  task_role_arn      = aws_iam_role.simple
-  task_exec_role_arn = aws_iam_role.simple
+  task_role_arn      = aws_iam_role.simple.arn
+  task_exec_role_arn = aws_iam_role.simple.arn
 
   billing_tag_value = "Terratest"
 }
