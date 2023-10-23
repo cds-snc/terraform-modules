@@ -116,6 +116,8 @@ resource "aws_appautoscaling_target" "this" {
   resource_id        = "service/${var.cluster_name}/${var.service_name}"
   scalable_dimension = "ecs:service:DesiredCount"
   service_namespace  = "ecs"
+
+  tags = local.common_tags
 }
 
 resource "aws_appautoscaling_policy" "this" {
