@@ -10,6 +10,7 @@ module "simple_cluster" {
   task_cpu        = 256
   task_memory     = 512
   container_image = "nginx:latest"
+  desired_count   = 1
 
   subnet_ids         = module.vpc.private_subnet_ids
   security_group_ids = [aws_security_group.simple.id]
@@ -17,6 +18,9 @@ module "simple_cluster" {
   enable_autoscaling       = true
   autoscaling_min_capacity = 1
   autoscaling_max_capacity = 2
+
+  task_role_arn      = aws_iam_role.simple.arn
+  task_exec_role_arn = aws_iam_role.simple.arn
 
   billing_tag_value = "Terratest"
 }
@@ -56,4 +60,31 @@ resource "aws_security_group_rule" "simple" {
   protocol          = "tcp"
   security_group_id = aws_security_group.simple.id
   cidr_blocks       = ["0.0.0.0/0"]
+}
+
+
+####################################################################################
+# IAM Roles
+####################################################################################
+
+data "aws_iam_policy_document" "simple" {
+  statement {
+    actions = ["sts:AssumeRole"]
+
+    principals {
+      type        = "Service"
+      identifiers = ["ecs-tasks.amazonaws.com"]
+    }
+
+  }
+}
+
+resource "aws_iam_role" "simple" {
+  name               = "simple"
+  assume_role_policy = data.aws_iam_policy_document.simple.json
+}
+
+resource "aws_iam_role_policy_attachment" "simple" {
+  role       = aws_iam_role.simple.name
+  policy_arn = "arn:aws:iam::aws:policy/service-role/AmazonECSTaskExecutionRolePolicy"
 }
