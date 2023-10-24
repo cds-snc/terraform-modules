@@ -83,3 +83,8 @@ resource "aws_iam_role" "simple" {
   name               = "simple"
   assume_role_policy = data.aws_iam_policy_document.simple.json
 }
+
+resource "aws_iam_role_policy_attachment" "simple" {
+  role       = aws_iam_role.simple.name
+  policy_arn = "arn:aws:iam::aws:policy/service-role/AmazonECSTaskExecutionRolePolicy"
+}
