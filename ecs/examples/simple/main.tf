@@ -10,7 +10,7 @@ module "simple_cluster" {
   task_cpu        = 256
   task_memory     = 512
   container_image = "nginx:latest"
-  desired_count	  = 1
+  desired_count   = 1
 
   subnet_ids         = module.vpc.private_subnet_ids
   security_group_ids = [aws_security_group.simple.id]
@@ -71,7 +71,7 @@ data "aws_iam_policy_document" "simple" {
   statement {
     actions = ["sts:AssumeRole"]
 
-   principals {
+    principals {
       type        = "Service"
       identifiers = ["ecs-tasks.amazonaws.com"]
     }
