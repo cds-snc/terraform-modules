@@ -12,7 +12,7 @@ resource "aws_cloudwatch_log_group" "this" {
 module "sentinel_forwarder" {
   count             = var.sentinel_forwarder ? 1 : 0
   source            = "github.com/cds-snc/terraform-modules//sentinel_forwarder?ref=main"
-  function_name     = "${var.cluster_name}-sentinel-forwarder"
+  function_name     = "${var.cluster_name}"
   billing_tag_value = var.billing_tag_value
 
   layer_arn   = var.sentinel_forwarder_layer_arn
