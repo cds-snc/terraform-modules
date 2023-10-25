@@ -276,13 +276,15 @@ variable "task_role_policy_documents" {
 }
 
 variable "task_exec_role_arn" {
-  description = "(Optional) The Arn of the IAM role controlling the task execution."
+  description = "(Optional) The ARN of the IAM role controlling the task execution."
   type        = string
+  default     = null
 }
 
 variable "task_role_arn" {
-  description = "(Optional) The arn of the IAM role controlling the task."
+  description = "(Optional) The ARN of the IAM role controlling the task."
   type        = string
+  default     = null
 }
 
 ################################################################################
