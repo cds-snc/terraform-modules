@@ -9,6 +9,7 @@ locals {
     image           = var.container_image
     healthCheck     = length(var.container_health_check) > 0 ? var.container_health_check : null
     linuxParameters = length(var.container_linux_parameters) > 0 ? var.container_linux_parameters : null
+    mountPoints     = length(var.container_mount_points) > 0 ? var.container_mount_points : null
 
     portMappings = var.container_host_port != null && var.container_port != null ? [{
       hostPort : var.container_host_port,
@@ -28,6 +29,7 @@ locals {
     readonlyRootFilesystem = var.container_read_only_root_filesystem
     environment            = length(var.container_environment) > 0 ? var.container_environment : null
     secrets                = length(var.container_secrets) > 0 ? var.container_secrets : null
+    ulimits                = length(var.container_ulimits) > 0 ? var.container_ulimits : null
   }
 
   # Strip out all null values, ECS API will provide defaults in place of null/empty values

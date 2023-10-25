@@ -87,8 +87,8 @@ resource "aws_ecs_task_definition" "this" {
   family                = local.task_definition_family
   cpu                   = var.task_cpu
   memory                = var.task_memory
-  execution_role_arn    = var.task_exec_role_arn != null ? var.task_exec_role_arn : aws_iam_role.this_task_exec.arn
-  task_role_arn         = var.task_role_arn != null ? var.task_role_arn : aws_iam_role.this_task.arn
+  execution_role_arn    = local.is_create_task_exec_role ? aws_iam_role.this_task_exec[0].arn : var.task_exec_role_arn
+  task_role_arn         = local.is_create_task_role ? aws_iam_role.this_task[0].arn : var.task_role_arn
   container_definitions = jsonencode([local.container_definition])
 
   network_mode             = "awsvpc"
@@ -113,7 +113,7 @@ resource "aws_appautoscaling_target" "this" {
   min_capacity = min(var.autoscaling_min_capacity, var.desired_count)
   max_capacity = max(var.autoscaling_max_capacity, var.desired_count)
 
-  resource_id        = "service/${var.cluster_name}/${var.service_name}"
+  resource_id        = "service/${var.cluster_name}/${aws_ecs_service.this.name}"
   scalable_dimension = "ecs:service:DesiredCount"
   service_namespace  = "ecs"
 

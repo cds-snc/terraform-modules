@@ -1,4 +1,7 @@
 locals {
+  is_create_task_exec_role = var.task_exec_role_arn == null
+  is_create_task_role      = var.task_role_arn == null
+
   common_tags = {
     (var.billing_tag_key) = var.billing_tag_value
     Terraform             = true
