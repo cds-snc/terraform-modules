@@ -187,7 +187,6 @@ variable "container_health_check" {
   default     = {}
 }
 
-
 variable "container_image" {
   description = "(Required) The image used to start a container. This string is passed directly to the Docker daemon. By default, images in the Docker Hub registry are available. Other repositories are specified with either `repository-url/image:tag` or `repository-url/image@digest`"
   type        = string
@@ -203,11 +202,31 @@ variable "container_linux_parameters" {
   }
 }
 
+variable "container_mount_points" {
+  description = "(Optional, no default) The mount points for data volumes in the container"
+  type = list(object({
+    containerPath = string
+    sourceVolume  = string
+    readOnly      = bool
+  }))
+  default = []
+}
+
 variable "container_secrets" {
   description = "(Optional, no default) The secrets to pass to the container. For more information, see [Specifying Sensitive Data](https://docs.aws.amazon.com/AmazonECS/latest/developerguide/specifying-sensitive-data.html) in the Amazon Elastic Container Service Developer Guide"
   type = list(object({
     name      = string
     valueFrom = string
+  }))
+  default = []
+}
+
+variable "container_ulimits" {
+  description = "(Optional, no default) The ulimits of the container"
+  type = list(object({
+    name      = string
+    softLimit = number
+    hardLimit = number
   }))
   default = []
 }
@@ -257,13 +276,15 @@ variable "task_role_policy_documents" {
 }
 
 variable "task_exec_role_arn" {
-  description = "(Optional) The Arn of the IAM role controlling the task execution."
+  description = "(Optional) The ARN of the IAM role controlling the task execution."
   type        = string
+  default     = null
 }
 
 variable "task_role_arn" {
-  description = "(Optional) The arn of the IAM role controlling the task."
+  description = "(Optional) The ARN of the IAM role controlling the task."
   type        = string
+  default     = null
 }
 
 ################################################################################
