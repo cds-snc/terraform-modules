@@ -276,15 +276,30 @@ variable "task_role_policy_documents" {
 }
 
 variable "task_exec_role_arn" {
-  description = "(Optional) The ARN of the IAM role controlling the task execution."
+  description = "(Optional, no default) The ARN of the IAM role controlling the task execution."
   type        = string
   default     = null
 }
 
 variable "task_role_arn" {
-  description = "(Optional) The ARN of the IAM role controlling the task."
+  description = "(Optional, no default) The ARN of the IAM role controlling the task."
   type        = string
   default     = null
+}
+
+variable "task_volume" {
+  description = "(Optional, no default) The volumes to make available to the task to bind mount."
+  type = list(object({
+    name      = string
+    host_path = optional(string)
+    efs_volume_configuration = optional(object({
+      file_system_id          = string
+      root_directory          = optional(string)
+      transit_encryption      = optional(string)
+      transit_encryption_port = optional(number)
+    }))
+  }))
+  default = []
 }
 
 ################################################################################

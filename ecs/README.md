@@ -90,12 +90,13 @@ No requirements.
 | <a name="input_service_name"></a> [service\_name](#input\_service\_name) | (Required) Name of the service (up to 255 letters, numbers, hyphens, and underscores) | `string` | n/a | yes |
 | <a name="input_subnet_ids"></a> [subnet\_ids](#input\_subnet\_ids) | (Required) List of subnets to associate with the service | `list(string)` | n/a | yes |
 | <a name="input_task_cpu"></a> [task\_cpu](#input\_task\_cpu) | (Required) The number of cpu units used by the task. Consult https://docs.aws.amazon.com/AmazonECS/latest/userguide/fargate-task-defs.html#fargate-tasks-size for valid values | `number` | n/a | yes |
-| <a name="input_task_exec_role_arn"></a> [task\_exec\_role\_arn](#input\_task\_exec\_role\_arn) | (Optional) The ARN of the IAM role controlling the task execution. | `string` | `null` | no |
+| <a name="input_task_exec_role_arn"></a> [task\_exec\_role\_arn](#input\_task\_exec\_role\_arn) | (Optional, no default) The ARN of the IAM role controlling the task execution. | `string` | `null` | no |
 | <a name="input_task_exec_role_policy_documents"></a> [task\_exec\_role\_policy\_documents](#input\_task\_exec\_role\_policy\_documents) | (Optional, default `[]`) A list of IAM policy documents to attach to the task execution role.  Provide this for accessing things needed to initialize ECS tasks like SecretsManager or SSM Parameter Store | `list(any)` | `[]` | no |
 | <a name="input_task_memory"></a> [task\_memory](#input\_task\_memory) | (Required) The amount (in MiB) of memory used by the task. Consult https://docs.aws.amazon.com/AmazonECS/latest/userguide/fargate-task-defs.html#fargate-tasks-size for valid values | `number` | n/a | yes |
 | <a name="input_task_name"></a> [task\_name](#input\_task\_name) | (Optional, defaults to the service name) The name of the ECS task | `string` | `null` | no |
-| <a name="input_task_role_arn"></a> [task\_role\_arn](#input\_task\_role\_arn) | (Optional) The ARN of the IAM role controlling the task. | `string` | `null` | no |
+| <a name="input_task_role_arn"></a> [task\_role\_arn](#input\_task\_role\_arn) | (Optional, no default) The ARN of the IAM role controlling the task. | `string` | `null` | no |
 | <a name="input_task_role_policy_documents"></a> [task\_role\_policy\_documents](#input\_task\_role\_policy\_documents) | (Optional, default `[]`) A list of IAM policy documents to attach to the task role.  Provide this to provide your app access to other AWS resources at runtime (e.g. S3 or RDS). | `list(any)` | `[]` | no |
+| <a name="input_task_volume"></a> [task\_volume](#input\_task\_volume) | (Optional, no default) The volumes to make available to the task to bind mount. | <pre>list(object({<br>    name      = string<br>    host_path = optional(string)<br>    efs_volume_configuration = optional(object({<br>      file_system_id          = string<br>      root_directory          = optional(string)<br>      transit_encryption      = optional(string)<br>      transit_encryption_port = optional(number)<br>    }))<br>  }))</pre> | `[]` | no |
 
 ## Outputs
 

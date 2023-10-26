@@ -99,6 +99,26 @@ resource "aws_ecs_task_definition" "this" {
     cpu_architecture        = var.cpu_architecture
   }
 
+  dynamic "volume" {
+    for_each = var.task_volume != null ? var.task_volume : []
+    content {
+      name      = volume.value.name
+      host_path = volume.value.host_path
+
+      dynamic "efs_volume_configuration" {
+        for_each = volume.value.efs_volume_configuration != null ? [volume.value.efs_volume_configuration] : []
+        content {
+          file_system_id          = efs_volume_configuration.value.file_system_id
+          root_directory          = efs_volume_configuration.value.root_directory
+          transit_encryption      = efs_volume_configuration.value.transit_encryption
+          transit_encryption_port = efs_volume_configuration.value.transit_encryption_port
+        }
+      }
+    }
+  }
+
+
+
   tags = local.common_tags
 }
 
