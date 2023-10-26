@@ -112,6 +112,14 @@ resource "aws_ecs_task_definition" "this" {
           root_directory          = efs_volume_configuration.value.root_directory
           transit_encryption      = efs_volume_configuration.value.transit_encryption
           transit_encryption_port = efs_volume_configuration.value.transit_encryption_port
+
+          dynamic "authorization_config" {
+            for_each = efs_volume_configuration.value.authorization_config != null ? [efs_volume_configuration.value.authorization_config] : []
+            content {
+              access_point_id = authorization_config.value.access_point_id
+              iam             = authorization_config.value.iam
+            }
+          }
         }
       }
     }

@@ -297,6 +297,10 @@ variable "task_volume" {
       root_directory          = optional(string)
       transit_encryption      = optional(string)
       transit_encryption_port = optional(number)
+      authorization_config = optional(object({
+        access_point_id = optional(string)
+        iam             = optional(string)
+      }))
     }))
   }))
   default = []
