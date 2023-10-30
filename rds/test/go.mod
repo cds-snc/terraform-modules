@@ -3,7 +3,7 @@ module test
 go 1.21.1
 
 require (
-	github.com/aws/aws-sdk-go v1.45.25
+	github.com/aws/aws-sdk-go v1.46.1
 	github.com/gruntwork-io/terratest v0.46.1
 	github.com/stretchr/testify v1.8.4
 )
