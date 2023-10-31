@@ -1,8 +1,5 @@
 import pytest
-import unittest
-from unittest.mock import patch, MagicMock
-import os
-import boto3
+from unittest.mock import patch
 import schedule
 
 
