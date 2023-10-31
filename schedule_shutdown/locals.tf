@@ -1,7 +1,7 @@
 
 locals {
-  is_ecs_arns = var.ecs_service_arns != []
-  is_rds_arns = var.rds_cluster_arns != []
+  is_ecs_arns = length(var.ecs_service_arns) > 0
+  is_rds_arns = length(var.rds_cluster_arns) > 0
   lambda_name = "schedule-shutdown"
 
   schedule = {
