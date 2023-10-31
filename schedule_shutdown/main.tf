@@ -1,4 +1,5 @@
-/* # Schedule shutdown
+/* 
+* # Schedule shutdown
 * Lambda function to schedule resource shutdown and startup to save costs.  The function is triggered by CloudWatch Events
 * controlled by schedule expressions.  Currently the function supports ECS services and RDS clusters.
 */
