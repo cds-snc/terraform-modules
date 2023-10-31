@@ -1,7 +1,13 @@
 /* 
 * # Schedule shutdown
 * Lambda function to schedule resource shutdown and startup to save costs.  The function is triggered by CloudWatch Events
-* controlled by schedule expressions.  Currently the function supports ECS services and RDS clusters.
+* controlled by schedule expressions.   
+* 
+* Currently the function supports scaling the following resources:
+* - CloudWatch alarms: enables/disables the alarm actions.
+* - ECS services: scales the service between 0 and 1 tasks.
+* - RDS clusters: stops/starts the cluster.
+* - Route53 healthchecks: enables/disables the healthcheck.
 */
 resource "aws_lambda_function" "schedule" {
   function_name = local.lambda_name
@@ -9,7 +15,7 @@ resource "aws_lambda_function" "schedule" {
 
   filename    = data.archive_file.schedule.output_path
   handler     = "schedule.handler"
-  runtime     = "python3.11"
+  runtime     = var.lambda_runtime
   timeout     = 60
   memory_size = 128
 
@@ -18,8 +24,10 @@ resource "aws_lambda_function" "schedule" {
 
   environment {
     variables = {
-      ECS_SERVICE_ARNS = join(",", var.ecs_service_arns)
-      RDS_CLUSTER_ARNS = join(",", var.rds_cluster_arns)
+      CLOUDWATCH_ALARM_ARNS    = join(",", var.cloudwatch_alarm_arns)
+      ECS_SERVICE_ARNS         = join(",", var.ecs_service_arns)
+      RDS_CLUSTER_ARNS         = join(",", var.rds_cluster_arns)
+      ROUTE53_HEALTHCHECK_ARNS = join(",", var.route53_healthcheck_arns)
     }
   }
 
