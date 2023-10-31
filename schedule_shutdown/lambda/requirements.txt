@@ -1,0 +1,5 @@
+black==23.10.0 
+boto3==1.28.74
+coverage==7.3.2
+pylint==2.17.7
+pytest==7.4.2
