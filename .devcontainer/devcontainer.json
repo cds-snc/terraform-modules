@@ -4,6 +4,9 @@
 	"name": "Debian",
 	"image": "mcr.microsoft.com/devcontainers/go:bullseye",
 	"features": {
+		"ghcr.io/devcontainers/features/python:1": {
+			"installTools": "false"
+		},
 		"ghcr.io/devcontainers/features/terraform:1": {
 			"version": "1.6.1",
 			"terragrunt": "0.31.1"

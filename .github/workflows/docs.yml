@@ -1,5 +1,5 @@
 
-name: "Check if documentation has been updatedt "
+name: "Check if documentation has been updated"
 
 on:
   pull_request:
