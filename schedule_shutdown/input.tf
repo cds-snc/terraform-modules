@@ -9,14 +9,32 @@ variable "billing_tag_value" {
   type        = string
 }
 
-variable "ecs_service_arns" {
-  description = "(Optional) ECS service ARNs to scale down to zero."
+variable "cloudwatch_alarm_arns" {
+  description = "(Optional) CloudWatch alarm ARNs to enable/disable."
   type        = list(string)
   default     = []
 }
 
+variable "ecs_service_arns" {
+  description = "(Optional) ECS service ARNs to scale up/down."
+  type        = list(string)
+  default     = []
+}
+
+variable "lambda_runtime" {
+  description = "(Optional, defaults to 3.11) The Python runtime to use for the lambda function."
+  type        = string
+  default     = "python3.11"
+}
+
 variable "rds_cluster_arns" {
   description = "(Optional) RDS cluster ARNs to shutdown and startup."
+  type        = list(string)
+  default     = []
+}
+
+variable "route53_healthcheck_arns" {
+  description = "(Optional) Route53 healthcheck ARNs to enable/disable."
   type        = list(string)
   default     = []
 }

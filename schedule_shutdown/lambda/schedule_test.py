@@ -1,24 +1,42 @@
 import pytest
-import unittest
-from unittest.mock import patch, MagicMock
-import os
-import boto3
+from unittest.mock import patch
 import schedule
 
 
 @patch("boto3.client")
-@patch("schedule.ecs_service_scale")
-@patch("schedule.rds_cluster_scale")
-def test_handler(mock_rds_cluster_scale, mock_ecs_service_scale, mock_client):
+@patch("schedule.cloudwatch_scale")
+@patch("schedule.ecs_scale")
+@patch("schedule.rds_scale")
+@patch("schedule.route53_scale")
+def test_handler(
+    mock_route53_scale,
+    mock_rds_scale,
+    mock_ecs_scale,
+    mock_cloudwatch_scale,
+    mock_client,
+):
     event = {"action": "startup"}
     context = None
+    mock_services = {
+        "cloudwatch": ["arn1", "arn2"],
+        "ecs": ["arn1", "arn2", "arn3"],
+        "rds": ["arn1"],
+        "route53": None,
+    }
 
-    with patch("schedule.ECS_SERVICES", new=["arn1", "arn2", "arn3"]), patch(
-        "schedule.RDS_CLUSTERS", new=["arn1", "arn2"]
-    ):
+    with patch("schedule.SERVICES", new=mock_services):
         schedule.handler(event, context)
-        assert mock_ecs_service_scale.call_count == 3
-        assert mock_rds_cluster_scale.call_count == 2
+        assert mock_cloudwatch_scale.call_count == 2
+        assert mock_ecs_scale.call_count == 3
+        assert mock_rds_scale.call_count == 1
+        assert mock_route53_scale.call_count == 0
+
+
+def test_get_resource_list():
+    assert schedule.get_resource_list(None) is None
+    assert schedule.get_resource_list("") is None
+    assert schedule.get_resource_list("arn1") == ["arn1"]
+    assert schedule.get_resource_list("arn1,arn2") == ["arn1", "arn2"]
 
 
 @patch("boto3.client")
@@ -33,6 +51,20 @@ def test_handler_invalid_action(mock_client):
 
 
 @pytest.mark.parametrize(
+    "action, function_name",
+    [
+        ("shutdown", "disable_alarm_actions"),
+        ("startup", "enable_alarm_actions"),
+    ],
+)
+@patch("boto3.client")
+def test_cloudwatch_scale(mock_client, action, function_name):
+    alarm_arn = "arn:aws:cloudwatch:ca-central-1:123456789012:alarm:FancyAlarm"
+    schedule.cloudwatch_scale(mock_client, alarm_arn, action)
+    getattr(mock_client, function_name).assert_called_with(AlarmNames=["FancyAlarm"])
+
+
+@pytest.mark.parametrize(
     "action, desired_count",
     [
         ("shutdown", 0),
@@ -40,12 +72,14 @@ def test_handler_invalid_action(mock_client):
     ],
 )
 @patch("boto3.client")
-def test_ecs_service_scale(mock_client, action, desired_count):
-    service_arn = "arn:aws:ecs:ca-central-1:123456789012:service/my-cluster/my-service"
-    schedule.ecs_service_scale(mock_client, service_arn, action)
+def test_ecs_scale(mock_client, action, desired_count):
+    service_arn = (
+        "arn:aws:ecs:ca-central-1:123456789012:service/some-cluster/with-a-service"
+    )
+    schedule.ecs_scale(mock_client, service_arn, action)
     mock_client.update_service.assert_called_with(
-        cluster="my-cluster",
-        service="my-service",
+        cluster="some-cluster",
+        service="with-a-service",
         desiredCount=desired_count,
     )
 
@@ -58,9 +92,26 @@ def test_ecs_service_scale(mock_client, action, desired_count):
     ],
 )
 @patch("boto3.client")
-def test_rds_cluster_scale(mock_client, action, function_name):
-    cluster_arn = "arn:aws:rds:ca-central-1:123456789012:cluster:my-cluster"
-    schedule.rds_cluster_scale(mock_client, cluster_arn, action)
+def test_rds_scale(mock_client, action, function_name):
+    cluster_arn = "arn:aws:rds:ca-central-1:123456789012:cluster:so-very-much-data"
+    schedule.rds_scale(mock_client, cluster_arn, action)
     getattr(mock_client, function_name).assert_called_with(
-        DBClusterIdentifier="my-cluster"
+        DBClusterIdentifier="so-very-much-data"
+    )
+
+
+@pytest.mark.parametrize(
+    "action, disabled",
+    [
+        ("shutdown", True),
+        ("startup", False),
+    ],
+)
+@patch("boto3.client")
+def test_route53_scale(mock_client, action, disabled):
+    healthcheck_arn = "arn:aws:route53:::healthcheck/mmm-healthy"
+    schedule.route53_scale(mock_client, healthcheck_arn, action)
+    mock_client.update_health_check.assert_called_with(
+        HealthCheckId="mmm-healthy",
+        Disabled=disabled,
     )

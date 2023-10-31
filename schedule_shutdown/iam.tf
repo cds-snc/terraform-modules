@@ -30,8 +30,10 @@ data "aws_iam_policy_document" "assume_role_policy" {
 data "aws_iam_policy_document" "combined" {
   source_policy_documents = concat([
     data.aws_iam_policy_document.cloudwatch_policy.json,
+    local.is_cloudwatch_alarm_arns ? data.aws_iam_policy_document.cloudwatch_alarm_policy[0].json : "",
     local.is_ecs_arns ? data.aws_iam_policy_document.ecs_service_policy[0].json : "",
     local.is_rds_arns ? data.aws_iam_policy_document.rds_cluster_policy[0].json : "",
+    local.is_route53_healthcheck_arns ? data.aws_iam_policy_document.route53_healthcheck_policy[0].json : "",
   ])
 }
 
@@ -46,6 +48,20 @@ data "aws_iam_policy_document" "cloudwatch_policy" {
     resources = [
       "${aws_cloudwatch_log_group.schedule.arn}:*",
     ]
+  }
+}
+
+data "aws_iam_policy_document" "cloudwatch_alarm_policy" {
+  count = local.is_cloudwatch_alarm_arns ? 1 : 0
+
+  statement {
+    sid    = "EnableDisableCloudWatchAlarms"
+    effect = "Allow"
+    actions = [
+      "cloudwatch:DisableAlarmActions",
+      "cloudwatch:EnableAlarmActions",
+    ]
+    resources = var.cloudwatch_alarm_arns
   }
 }
 
@@ -73,5 +89,18 @@ data "aws_iam_policy_document" "rds_cluster_policy" {
       "rds:StopDBCluster",
     ]
     resources = var.rds_cluster_arns
+  }
+}
+
+data "aws_iam_policy_document" "route53_healthcheck_policy" {
+  count = local.is_route53_healthcheck_arns ? 1 : 0
+
+  statement {
+    sid    = "EnableDisableRotue53HealthChecks"
+    effect = "Allow"
+    actions = [
+      "route53:UpdateHealthCheck",
+    ]
+    resources = var.route53_healthcheck_arns
   }
 }
