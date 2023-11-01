@@ -1,6 +1,5 @@
 """
 Lambda function to start or stop resources based on a schedule.
-Currently supports ECS services and RDS clusters.
 """
 import os
 import boto3
