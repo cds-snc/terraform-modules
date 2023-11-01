@@ -1,0 +1,76 @@
+name: "CI unit and integration tests"
+
+on:
+  pull_request:
+    branches:
+      - main
+
+jobs:
+  python-test:
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        module:
+          - schedule_shutdown/lambda
+    
+    steps:
+      - name: Checkout
+        uses: actions/checkout@b4ffde65f46336ab88eb53be808477a3936bae11 # v4.1.1
+
+      - uses: dorny/paths-filter@4512585405083f25c027a35db413c2b3b9006d50 # v2.11.1
+        id: changes
+        with:
+          filters: |
+            module:
+              - '${{ matrix.module }}/**'
+
+      - name: Setup Python
+        if: steps.changes.outputs.module == 'true'
+        uses: actions/setup-python@65d7f2d534ac1bc67fcd62888c5f4f3d2cb2b236 # v4.7.1
+        with:
+          python-version: "3.11"
+
+      - name: Python tests
+        if: steps.changes.outputs.module == 'true'
+        working-directory: ${{ matrix.module }}
+        run: |
+          make install
+          make ARGS=--check fmt
+          make lint
+          make test
+
+  terraform-test:
+    runs-on: ubuntu-latest
+    env:
+      TERRAFORM_VERSION: 1.6.1
+      CONFTEST_VERSION: 0.27.0
+      AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
+      AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+    strategy:
+      fail-fast: false
+      matrix:
+        module:
+          - schedule_shutdown
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@b4ffde65f46336ab88eb53be808477a3936bae11 # v4.1.1
+
+      - uses: dorny/paths-filter@4512585405083f25c027a35db413c2b3b9006d50 # v2.11.1
+        id: changes
+        with:
+          filters: |
+            module:
+              - '${{ matrix.module }}/**/*.tf'
+              - '${{ matrix.module }}/tests/**'
+
+      - name: Setup Terraform tools
+        if: steps.changes.outputs.module == 'true'
+        uses: cds-snc/terraform-tools-setup@v1
+
+      - name: Terraform tests
+        if: steps.changes.outputs.module == 'true'
+        working-directory: ${{ matrix.module }}
+        run: |
+          make test
