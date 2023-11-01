@@ -27,9 +27,9 @@ jobs:
 
       - name: Setup Python
         if: steps.changes.outputs.module == 'true'
-        uses: actions/setup-python@f8dce14123d5d1ccf3724c3a06c7a4d9e6c7de6f # v2.2.2
+        uses: actions/setup-python@65d7f2d534ac1bc67fcd62888c5f4f3d2cb2b236 # v4.7.1
         with:
-          python-version: 3.11
+          python-version: "3.11"
 
       - name: Python tests
         if: steps.changes.outputs.module == 'true'
