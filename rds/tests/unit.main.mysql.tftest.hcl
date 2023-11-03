@@ -2,32 +2,39 @@ provider "aws" {
   region = "ca-central-1"
 }
 
-  variables {
-    name = "mysql"
+variables {
+  name = "mysql"
 
-    database_name  = "terratest_mysql"
-    engine         = "aurora-mysql"
-    engine_version = "5.7.mysql_aurora.2.11.2"
-    instances      = 2
-    instance_class = "db.t3.small"
-    username       = "thebigcheese"
-    password       = "pasword123"
+  database_name  = "mysql"
+  engine         = "aurora-mysql"
+  engine_version = "5.7.mysql_aurora.2.11.2"
+  instances      = 2
+  instance_class = "db.t3.small"
+  username       = "thebigcheese"
+  password       = "pasword123"
 
-    serverless_min_capacity = 1
-    serverless_max_capacity = 2
+  serverless_min_capacity = 1
+  serverless_max_capacity = 2
 
-    backup_retention_period = 1
-    preferred_backup_window = "01:00-03:00"
-    snapshot_identifier     = "snapshot-identifier"
+  backup_retention_period = 1
+  preferred_backup_window = "01:00-03:00"
+  snapshot_identifier     = "snapshot-identifier"
 
-    security_group_ids              = ["sg1234"]
-    enabled_cloudwatch_logs_exports = ["audit"]
+  security_group_ids              = ["sg1234"]
+  enabled_cloudwatch_logs_exports = ["audit"]
+  db_cluster_parameter_group_name = "audit-logging-aurora-mysql57"
 
-    vpc_id     = "vpc1234"
-    subnet_ids = ["subnet1234", "subnet5678"]
+  vpc_id     = "vpc1234"
+  subnet_ids = ["subnet1234", "subnet5678"]
 
-    security_group_notifications_topic_arn = "arn:aws:sns:us-east-1:123456789012:security-group-notifications"
+  security_group_notifications_topic_arn = "arn:aws:sns:us-east-1:123456789012:security-group-notifications"
+}
+
+run "setup" {
+  module {
+    source = "./tests/setup/mysql"
   }
+}
 
 run "mysql_cluster" {
   command = plan
@@ -35,6 +42,11 @@ run "mysql_cluster" {
   assert {
     condition     = aws_rds_cluster.cluster.cluster_identifier == "mysql-cluster"
     error_message = "Cluster identifier did not match expected value"
+  }
+
+  assert {
+    condition     = aws_rds_cluster.cluster.database_name == "mysql"
+    error_message = "Cluster database name did not match expected value"
   }
 
   assert {
@@ -65,11 +77,16 @@ run "mysql_cluster" {
   assert {
     condition     = aws_rds_cluster.cluster.snapshot_identifier == "snapshot-identifier"
     error_message = "Cluster snapshot identifier did not match expected value"
-  }  
+  }
 
   assert {
     condition     = aws_rds_cluster.cluster.enabled_cloudwatch_logs_exports == toset(["audit"])
     error_message = "Cluster enabled cloudwatch log exports did not match expected value"
+  }
+
+  assert {
+    condition     = aws_rds_cluster.cluster.db_cluster_parameter_group_name == "audit-logging-aurora-mysql57"
+    error_message = "Cluster DB parameter group name did not match expected value"
   }
 
   assert {
@@ -123,6 +140,16 @@ run "mysql_cluster" {
   }
 
   assert {
+    condition     = aws_db_proxy_default_target_group.this.db_proxy_name == "mysql-proxy"
+    error_message = "DB proxy default target group proxy name did not match expected value"
+  }
+
+  assert {
+    condition     = aws_db_proxy_target.target.db_proxy_name == "mysql-proxy"
+    error_message = "DB proxy target proxy name did not match expected value"
+  }
+
+  assert {
     condition     = aws_db_subnet_group.rds.subnet_ids == toset(["subnet1234", "subnet5678"])
     error_message = "DB subnet group subnet IDs did not match expected value"
   }
@@ -141,5 +168,9 @@ run "mysql_cluster" {
     condition     = aws_cloudwatch_log_group.log_exports["audit"].name == "/aws/rds/cluster/mysql-cluster/audit"
     error_message = "CloudWatch log exports audit log group name did not match expected value"
   }
-}
 
+  assert {
+    condition     = local.database_port == 3306
+    error_message = "Local database port did not match expected value"
+  }
+}
