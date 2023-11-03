@@ -36,7 +36,6 @@ jobs:
       fail-fast: false
       matrix:
         module:
-          - athena_access_logs
           - ecs
           - gh_oidc_role
           - notify_slack

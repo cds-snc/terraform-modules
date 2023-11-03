@@ -51,6 +51,7 @@ jobs:
       fail-fast: false
       matrix:
         module:
+          - athena_access_logs
           - schedule_shutdown
           - rds
 
