@@ -90,6 +90,12 @@ variable "skip_final_snapshot" {
   default     = false
 }
 
+variable "snapshot_identifier" {
+  type        = string
+  description = "(Optional, no default) The name or ARN of the DB cluster snapshot to create the cluster from."
+  default     = null
+}
+
 ###
 # Common tags
 ###
