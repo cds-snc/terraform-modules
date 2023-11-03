@@ -52,6 +52,7 @@ jobs:
       matrix:
         module:
           - schedule_shutdown
+          - rds
 
     steps:
       - name: Checkout

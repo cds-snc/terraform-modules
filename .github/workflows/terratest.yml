@@ -40,7 +40,6 @@ jobs:
           - ecs
           - gh_oidc_role
           - notify_slack
-          - rds
           - resolver_dns
           - S3
           - S3_log_bucket

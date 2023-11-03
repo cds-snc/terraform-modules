@@ -11,7 +11,7 @@ echo 🚧 Creating module
 
 echo 📝 Creating "$module/Makefile"
 cat << EOF > "$module/Makefile"
-.PHONY: fmt docs
+.PHONY: fmt docs test
 
 fmt:
 	@terraform fmt -recursive
@@ -20,6 +20,10 @@ docs:
 	@rm -rf .terraform
 	@rm -f .terraform.lock.hcl
 	@terraform-docs markdown -c ../.terraform-docs.yml . > README.md
+
+test:
+	terraform init &&\
+	terraform test --var-file=./tests/globals.tfvars	
 EOF
 
 echo 📝 Creating "$module/input.tf"
@@ -74,36 +78,26 @@ module "simple" {
 
 EOF
 
-echo ⚒️ Creating "$module/test"
-mkdir -p "$module/test"
+echo ⚒️ Creating "$module/tests"
+mkdir -p "$module/tests"
 
-echo 📝 Creating "$module/test/simple_test.go"
-cat << EOF > "$module/test/simple_test.go"
-package test
+echo 📝 Creating "$module/tests/globals.tfvars"
+cat << EOF > "$module/tests/globals.tfvars"
+billing_tag_value = "tests"
+EOF
 
-import (
-	"testing"
-
-	"github.com/gruntwork-io/terratest/modules/terraform"
-)
-
-func TestSimple(t *testing.T) {
-	region := "ca-central-1"
-
-	terraformOptions := &terraform.Options{
-		TerraformDir: "../examples/simple",
-		EnvVars: map[string]string{
-			"AWS_DEFAULT_REGION": region,
-		},
-	}
-
-	// Destroy resource once tests are finished
-	defer terraform.Destroy(t, terraformOptions)
-
-	// Create the resources
-	terraform.InitAndApply(t, terraformOptions)
+echo 📝 Creating "$module/tests/unit.main.tftest.hcl"
+cat << EOF > "$module/tests/unit.main.tftest.hcl"
+provider "aws" {
+  region = "ca-central-1"
 }
 
+variables {
+}
+
+run "test_case" {
+  command = plan
+}
 EOF
 
 echo "📝 Appending to .modules file, (this adds it to the Makefile)"
