@@ -2,6 +2,12 @@ provider "aws" {
   region = "ca-central-1"
 }
 
+run "setup" {
+  module {
+    source = "./tests/setup"
+  }
+}
+
 run "default_inputs" {
   command = plan
 
