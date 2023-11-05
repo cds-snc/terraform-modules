@@ -63,7 +63,7 @@ run "default_inputs" {
           }
           Effect = "Allow"
           Principal = {
-            Federated = "arn:aws:iam::571510889204:oidc-provider/token.actions.githubusercontent.com"
+            Federated = "arn:aws:iam::${run.setup.account_id}:oidc-provider/token.actions.githubusercontent.com"
           }
         },
       ]
@@ -84,7 +84,7 @@ run "default_inputs" {
           }
           Effect = "Allow"
           Principal = {
-            Federated = "arn:aws:iam::571510889204:oidc-provider/token.actions.githubusercontent.com"
+            Federated = "arn:aws:iam::${run.setup.account_id}:oidc-provider/token.actions.githubusercontent.com"
           }
         },
       ]
