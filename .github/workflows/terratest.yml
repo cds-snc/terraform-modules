@@ -37,7 +37,6 @@ jobs:
       matrix:
         module:
           - ecs
-          - gh_oidc_role
           - notify_slack
           - resolver_dns
           - S3
