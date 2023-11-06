@@ -22,7 +22,7 @@ resource "aws_lambda_function" "notify_slack" {
 
   filename    = data.archive_file.notify_slack.output_path
   handler     = "notify_slack.lambda_handler"
-  runtime     = "python3.8"
+  runtime     = "python3.11"
   timeout     = 30
   memory_size = 128
 
@@ -49,7 +49,7 @@ resource "aws_lambda_function" "notify_slack" {
 
 data "archive_file" "notify_slack" {
   type        = "zip"
-  source_file = "${path.module}/notify_slack/notify_slack.py"
+  source_file = "${path.module}/lambda/notify_slack.py"
   output_path = "/tmp/notify_slack.py.zip"
 }
 

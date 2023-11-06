@@ -37,7 +37,6 @@ jobs:
       matrix:
         module:
           - ecs
-          - notify_slack
           - resolver_dns
           - S3
           - S3_log_bucket

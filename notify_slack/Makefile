@@ -8,10 +8,6 @@ docs:
 	@rm -f .terraform.lock.hcl
 	@terraform-docs markdown -c ../.terraform-docs.yml . > README.md
 
-lambda-install:
-	cd notify_slack &&\
-	pip3 install -r requirements.txt
-
-lambda-test:
-	cd notify_slack &&\
-	python3 -m pytest -s -vv .
+test:
+	terraform init &&\
+	terraform test --var-file=./tests/globals.tfvars

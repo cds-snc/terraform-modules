@@ -12,6 +12,7 @@ jobs:
       fail-fast: false
       matrix:
         module:
+          - notify_slack/lambda
           - schedule_shutdown/lambda
     
     steps:
@@ -53,6 +54,7 @@ jobs:
         module:
           - athena_access_logs
           - gh_oidc_role
+          - notify_slack
           - schedule_shutdown
           - rds
 
