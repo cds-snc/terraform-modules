@@ -1,6 +1,6 @@
 module github.com/cds-snc/terraform-modules/S3_log_bucket
 
-go 1.21.1
+go 1.21.3
 
 require (
 	github.com/gruntwork-io/terratest v0.46.1
