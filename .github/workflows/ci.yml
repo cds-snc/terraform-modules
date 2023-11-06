@@ -52,6 +52,7 @@ jobs:
       matrix:
         module:
           - athena_access_logs
+          - gh_oidc_role
           - schedule_shutdown
           - rds
 

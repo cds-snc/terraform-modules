@@ -53,7 +53,6 @@ data "aws_iam_policy_document" "oidc_assume_role_policy" {
       test     = "StringLike"
       variable = "token.actions.githubusercontent.com:sub"
       values   = ["repo:${var.org_name}/${each.value.repo_name}:${each.value.claim}"]
-
     }
   }
 }
