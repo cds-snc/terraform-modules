@@ -134,7 +134,7 @@ def test_cloudwatch_notification(event):
 @pytest.mark.parametrize("event", events)
 def test_notify_slack(MockRequest, MockUrlopen, event):
     MockResult = MagicMock()
-    MockUrlopen.return_value = MockResult
+    MockUrlopen.return_value.__enter__.return_value = MockResult
     MockResult.getcode.return_value = 200
     MockResult.info.return_value.as_string.return_value = "Muffins"
     TestRequest = MagicMock()
