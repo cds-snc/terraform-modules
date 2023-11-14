@@ -57,6 +57,7 @@ jobs:
           - notify_slack
           - schedule_shutdown
           - rds
+          - vpc
 
     steps:
       - name: Checkout
