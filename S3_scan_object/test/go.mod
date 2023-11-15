@@ -3,7 +3,7 @@ module github.com/cds-snc/terraform-modules/S3_scan_object
 go 1.21.4
 
 require (
-	github.com/aws/aws-sdk-go v1.46.6
+	github.com/aws/aws-sdk-go v1.47.6
 	github.com/gruntwork-io/terratest v0.46.6
 	github.com/stretchr/testify v1.8.4
 )
