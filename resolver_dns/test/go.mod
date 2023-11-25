@@ -2,7 +2,7 @@ module test
 
 go 1.21.4
 
-require github.com/gruntwork-io/terratest v0.46.6
+require github.com/gruntwork-io/terratest v0.46.7
 
 require (
 	bazil.org/fuse v0.0.0-20160811212531-371fbbdaa898 // indirect
