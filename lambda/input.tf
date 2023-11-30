@@ -138,3 +138,9 @@ variable "vpc" {
   }
   description = "(Optional) VPC to attach to the Lambda function <br/> **Please Note if this is set it will also attach the AWSLambdaVPCAccessExecutionRole to the lmabda this will enable creation of VPC ENI's as well as reading and writing to logfiles"
 }
+
+variable "log_group_retention_period" {
+  type        = number
+  description = "(Optional) Override the retention period for the lambda log group"
+  default     = 14
+}
