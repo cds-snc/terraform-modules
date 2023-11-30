@@ -65,7 +65,7 @@ No modules.
 | <a name="input_sns_topic_arns"></a> [sns\_topic\_arns](#input\_sns\_topic\_arns) | (Optional) SNS triggers to attach to the Lambda function | `list(string)` | `[]` | no |
 | <a name="input_timeout"></a> [timeout](#input\_timeout) | (Optional) Timeout in seconds | `number` | `3` | no |
 | <a name="input_vpc"></a> [vpc](#input\_vpc) | (Optional) VPC to attach to the Lambda function <br/> **Please Note if this is set it will also attach the AWSLambdaVPCAccessExecutionRole to the lmabda this will enable creation of VPC ENI's as well as reading and writing to logfiles | <pre>object({<br>    subnet_ids         = list(string)<br>    security_group_ids = list(string)<br>  })</pre> | <pre>{<br>  "security_group_ids": [],<br>  "subnet_ids": []<br>}</pre> | no |
-
+| <a name="log_retention_period"></a> [log_retention_period](#input\_log_retention_period) | (Optional) Retention period for lambda logs | `number` | `14` | no |
 ## Outputs
 
 | Name | Description |
