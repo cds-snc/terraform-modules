@@ -58,6 +58,7 @@ No modules.
 | <a name="input_ephemeral_storage"></a> [ephemeral\_storage](#input\_ephemeral\_storage) | (Optional) Set the Lambda function's ephemeral storage to a value between 512MB and 10240MB. | `number` | `512` | no |
 | <a name="input_file_system_config"></a> [file\_system\_config](#input\_file\_system\_config) | (Optional) Configuration to connect EFS to a Lambda function. | `map(string)` | `{}` | no |
 | <a name="input_image_uri"></a> [image\_uri](#input\_image\_uri) | (Required) Docker image URI | `string` | n/a | yes |
+| <a name="input_log_group_retention_period"></a> [log\_group\_retention\_period](#input\_log\_group\_retention\_period) | (Optional) Override the retention period for the lambda log group | `number` | `14` | no |
 | <a name="input_memory"></a> [memory](#input\_memory) | (Optional) Memory in MB | `number` | `128` | no |
 | <a name="input_name"></a> [name](#input\_name) | (Required) Name of the lambda | `string` | n/a | yes |
 | <a name="input_policies"></a> [policies](#input\_policies) | (Optional) List of policies to attach to the Lambda function | `list(string)` | `[]` | no |
@@ -65,7 +66,7 @@ No modules.
 | <a name="input_sns_topic_arns"></a> [sns\_topic\_arns](#input\_sns\_topic\_arns) | (Optional) SNS triggers to attach to the Lambda function | `list(string)` | `[]` | no |
 | <a name="input_timeout"></a> [timeout](#input\_timeout) | (Optional) Timeout in seconds | `number` | `3` | no |
 | <a name="input_vpc"></a> [vpc](#input\_vpc) | (Optional) VPC to attach to the Lambda function <br/> **Please Note if this is set it will also attach the AWSLambdaVPCAccessExecutionRole to the lmabda this will enable creation of VPC ENI's as well as reading and writing to logfiles | <pre>object({<br>    subnet_ids         = list(string)<br>    security_group_ids = list(string)<br>  })</pre> | <pre>{<br>  "security_group_ids": [],<br>  "subnet_ids": []<br>}</pre> | no |
-| <a name="log_retention_period"></a> [log_retention_period](#input\_log_retention_period) | (Optional) Retention period for lambda logs | `number` | `14` | no |
+
 ## Outputs
 
 | Name | Description |
