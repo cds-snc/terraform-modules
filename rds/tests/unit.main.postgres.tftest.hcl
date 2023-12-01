@@ -195,4 +195,9 @@ run "postgres_cluster" {
     condition     = local.database_port == 5432
     error_message = "Local database port did not match expected value"
   }
+
+  assert {
+    condition     = aws_rds_cluster.cluster.iam_database_authentication_enabled == false
+    error_message = "IAM database authentication enabled did not match expected value"
+  }
 }
