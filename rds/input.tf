@@ -66,6 +66,12 @@ variable "allow_major_version_upgrade" {
   default     = false
 }
 
+variable "iam_database_authentication_enabled" {
+  type        = bool
+  description = "(Optional, default 'false') Enable IAM database authentication for the RDS cluster."
+  default     = false
+}
+
 variable "performance_insights_enabled" {
   type        = bool
   description = "(Optional, default 'true') This flag enables performance insights for the RDS cluster instances."
