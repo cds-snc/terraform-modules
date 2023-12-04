@@ -13,6 +13,7 @@
 
 - [Attach TF plan policy](attach_tf_plan_policy)
 - [AWS Government of Canada password policy](aws_goc_password_policy)
+- [Client VPN](client_vpn)
 - [Empty log group alarm](empty_log_group_alarm)
 - [ECS](ecs)
 - [GuardDuty](guardduty)
