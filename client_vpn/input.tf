@@ -1,6 +1,7 @@
 variable "access_group_id" {
   description = "(Required) IAM Identity Center access group ID that is authorized to access the private subnets."
   type        = string
+  sensitive   = true
 }
 
 variable "acm_certificate_arn" {
