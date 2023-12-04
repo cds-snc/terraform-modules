@@ -77,7 +77,7 @@ variable "subnet_cidr_blocks" {
 }
 
 variable "subnet_ids" {
-  description = "(Optional, default []) IDs of the subnets to associate with the VPN endpoint."
+  description = "(Optional, default []) IDs of the subnets to associate with the VPN endpoint.  If left blank, no subnets will be associated with the VPN client endpoint, removing the $0.10/hour/association cost."
   type        = list(string)
   default     = []
 }

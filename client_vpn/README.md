@@ -49,7 +49,7 @@ No modules.
 | <a name="input_session_timeout_hours"></a> [session\_timeout\_hours](#input\_session\_timeout\_hours) | (Optional, default 8) The maximum number of hours after which to automatically disconnect a session.  Allowed values are 8, 10, 12, 24 | `number` | `8` | no |
 | <a name="input_split_tunnel"></a> [split\_tunnel](#input\_split\_tunnel) | (Optional, default true) Whether to enable split tunneling for the VPN endpoint. | `bool` | `true` | no |
 | <a name="input_subnet_cidr_blocks"></a> [subnet\_cidr\_blocks](#input\_subnet\_cidr\_blocks) | (Required) CIDR blocks of the subnets to associate with the VPN endpoint. | `list(string)` | n/a | yes |
-| <a name="input_subnet_ids"></a> [subnet\_ids](#input\_subnet\_ids) | (Optional, default []) IDs of the subnets to associate with the VPN endpoint. | `list(string)` | `[]` | no |
+| <a name="input_subnet_ids"></a> [subnet\_ids](#input\_subnet\_ids) | (Optional, default []) IDs of the subnets to associate with the VPN endpoint.  If left blank, no subnets will be associated with the VPN client endpoint, removing the $0.10/hour/association cost. | `list(string)` | `[]` | no |
 | <a name="input_transport_protocol"></a> [transport\_protocol](#input\_transport\_protocol) | (Optional, default 'udp') Transport protocol to use for the VPN endpoint.  Valid values are 'tcp' or 'udp'. | `string` | `"udp"` | no |
 | <a name="input_vpc_cidr_block"></a> [vpc\_cidr\_block](#input\_vpc\_cidr\_block) | (Required) The CIDR block of the VPC to associate with the VPN endpoint. | `string` | n/a | yes |
 | <a name="input_vpc_id"></a> [vpc\_id](#input\_vpc\_id) | (Required) ID of the VPC to associate with the VPN endpoint. | `string` | n/a | yes |
