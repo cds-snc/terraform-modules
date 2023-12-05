@@ -5,6 +5,9 @@
 * Client authentication and authorization is managed by AWS IAM Identity Center.  Users must be added to the access group specified by the `access_group_id` variable in order to connect to the VPN.
 *
 * The client VPN endpoint must be associated with the resource's subnet that you are providing access to.  For each association, there is a fixed $0.10/hour charge as well as a $0.05/hour charge for each active client connection.
+*
+* ## Credit
+* This module is based on the design of [fivexl/terraform-aws-client-vpn-endpoint](https://github.com/fivexl/terraform-aws-client-vpn-endpoint).
 */
 
 resource "aws_ec2_client_vpn_endpoint" "this" {
