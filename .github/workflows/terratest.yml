@@ -14,6 +14,10 @@ env:
   TERRAFORM_VERSION: 1.6.1
   CONFTEST_VERSION: 0.27.0
 
+permissions:
+  contents: read
+  id-token: write
+
 jobs:
   conftest:
     runs-on: ubuntu-latest
