@@ -25,6 +25,7 @@ jobs:
           filters: |
             module:
               - '${{ matrix.module }}/**'
+              - '.github/workflows/ci.yml'
 
       - name: Setup Python
         if: steps.changes.outputs.module == 'true'
@@ -70,6 +71,7 @@ jobs:
             module:
               - '${{ matrix.module }}/**/*.tf'
               - '${{ matrix.module }}/tests/**'
+              - '.github/workflows/ci.yml'
 
       - name: Configure AWS credentials using OIDC
         if: steps.changes.outputs.module == 'true'
