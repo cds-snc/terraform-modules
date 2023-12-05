@@ -12,7 +12,7 @@ terraform {
     region         = "ca-central-1"
     encrypt        = true
     dynamodb_table = "tfstate-lock"
-  }  
+  }
 }
 
 provider "aws" {
