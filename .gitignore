@@ -3,7 +3,9 @@
 .tool-versions
 .terraform*
 !.terraform-docs.yml
+!terraform/.terraform.lock.hcl
 test.tf
+*.tfvars
 *.tfstate*
 
 .DS_Store
