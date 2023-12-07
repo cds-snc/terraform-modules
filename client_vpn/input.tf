@@ -61,7 +61,7 @@ variable "session_timeout_hours" {
 
   validation {
     condition     = can(regex("^(8|10|12|24)$", var.session_timeout_hours))
-    error_message = "The session_timeout_hours must be 8, 10, 12, or 24"
+    error_message = "The session_timeout_hours must be 8, 10, 12, or 24."
   }
 }
 
@@ -89,7 +89,7 @@ variable "transport_protocol" {
 
   validation {
     condition     = can(regex("^(tcp|udp)$", var.transport_protocol))
-    error_message = "The transport_protocol must be 'tcp' or 'udp'"
+    error_message = "The transport_protocol must be 'tcp' or 'udp'."
   }
 }
 
