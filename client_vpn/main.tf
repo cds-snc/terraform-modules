@@ -21,7 +21,7 @@ resource "aws_ec2_client_vpn_endpoint" "this" {
   split_tunnel          = var.split_tunnel
   transport_protocol    = var.transport_protocol
   security_group_ids    = [aws_security_group.this.id]
-  dns_servers           = [local.dns_host]
+  dns_servers           = concat([local.dns_host], var.public_dns_servers)
 
   authentication_options {
     type                           = "federated-authentication"
