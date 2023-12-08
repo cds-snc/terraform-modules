@@ -33,8 +33,9 @@ variable "client_vpn_saml_metadata_document" {
 }
 
 variable "client_vpn_self_service_saml_metadata_document" {
-  description = "(Required) The base64 encoded SAML metadata document for the Client VPN's self-service endpoint"
+  description = "(Optional, default empty) The base64 encoded SAML metadata document for the Client VPN's self-service endpoint. The self_service_portal variable must be set to 'enabled' for this to take effect."
   type        = string
+  default     = ""
   sensitive   = true
 }
 
@@ -52,6 +53,17 @@ variable "endpoint_cidr_block" {
   description = "(Optional, default '172.16.0.0/22') The CIDR block to use for the VPN endpoint."
   type        = string
   default     = "172.16.0.0/22"
+}
+
+variable "self_service_portal" {
+  description = "(Optional, default 'disabled') Should a self-service portal be created for users to download the VPN client software?"
+  type        = string
+  default     = "disabled"
+
+  validation {
+    condition     = can(regex("^(enabled|disabled)$", var.self_service_portal))
+    error_message = "The self_service_portal must be 'enabled' or 'disabled'."
+  }
 }
 
 variable "session_timeout_hours" {

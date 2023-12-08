@@ -15,7 +15,7 @@ resource "aws_ec2_client_vpn_endpoint" "this" {
   vpc_id                 = var.vpc_id
   server_certificate_arn = var.acm_certificate_arn
   client_cidr_block      = var.endpoint_cidr_block
-  self_service_portal    = "enabled"
+  self_service_portal    = var.self_service_portal
 
   session_timeout_hours = var.session_timeout_hours
   split_tunnel          = var.split_tunnel
@@ -26,7 +26,7 @@ resource "aws_ec2_client_vpn_endpoint" "this" {
   authentication_options {
     type                           = "federated-authentication"
     saml_provider_arn              = aws_iam_saml_provider.client_vpn.arn
-    self_service_saml_provider_arn = aws_iam_saml_provider.client_vpn_self_service.arn
+    self_service_saml_provider_arn = local.is_self_service ? aws_iam_saml_provider.client_vpn_self_service[0].arn : null
   }
 
   connection_log_options {
