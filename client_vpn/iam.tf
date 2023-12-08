@@ -9,6 +9,7 @@ resource "aws_iam_saml_provider" "client_vpn" {
 }
 
 resource "aws_iam_saml_provider" "client_vpn_self_service" {
+  count                  = local.is_self_service ? 1 : 0
   name                   = "client-vpn-self-service"
   saml_metadata_document = base64decode(var.client_vpn_self_service_saml_metadata_document)
   tags                   = local.common_tags
