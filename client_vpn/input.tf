@@ -55,6 +55,12 @@ variable "endpoint_cidr_block" {
   default     = "172.16.0.0/22"
 }
 
+variable "public_dns_servers" {
+  description = "(Optional, default ['8.8.8.8']) Public DNS servers to add to the VPN."
+  type        = list(string)
+  default     = ["8.8.8.8"]
+}
+
 variable "self_service_portal" {
   description = "(Optional, default 'disabled') Should a self-service portal be created for users to download the VPN client software?"
   type        = string

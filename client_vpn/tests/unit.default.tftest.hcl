@@ -67,7 +67,12 @@ run "default" {
 
   assert {
     condition     = aws_ec2_client_vpn_endpoint.this.dns_servers[0] == "10.0.0.2"
-    error_message = "aws_ec2_client_vpn_endpoint.this.dns_servers did not match expected value"
+    error_message = "aws_ec2_client_vpn_endpoint.this.dns_servers[0] did not match expected value"
+  }
+
+  assert {
+    condition     = aws_ec2_client_vpn_endpoint.this.dns_servers[1] == "8.8.8.8"
+    error_message = "aws_ec2_client_vpn_endpoint.this.dns_servers[1] did not match expected value"
   }
 
   assert {
