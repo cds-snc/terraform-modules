@@ -14,7 +14,8 @@ resource "aws_acm_certificate" "cloudfront" {
 }
 
 resource "aws_route53_record" "cloudfront_certificate_validation" {
-  zone_id = local.hosted_zone_id
+  zone_id  = local.hosted_zone_id
+  provider = aws.dns
 
   for_each = {
     for dvo in local.domain_validation_options : dvo.domain_name => {
