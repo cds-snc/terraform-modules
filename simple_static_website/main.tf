@@ -25,7 +25,7 @@ terraform {
     aws = {
       source                = "hashicorp/aws"
       version               = ">= 4.9"
-      configuration_aliases = [aws, aws.us-east-1]
+      configuration_aliases = [aws, aws.us-east-1, aws.dns]
     }
   }
 }
@@ -50,7 +50,7 @@ resource "random_string" "suffix" {
 }
 
 resource "aws_s3_bucket" "this" {
-  bucket = "${var.domain_name_source}-${random_string.suffix.result}"
+  bucket = var.s3_bucket_name == "" ? "${var.domain_name_source}-${random_string.suffix.result}" : var.s3_bucket_name
 }
 
 resource "aws_s3_bucket_policy" "oai_policy" {

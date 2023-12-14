@@ -30,6 +30,12 @@ variable "domain_name_source" {
   }
 }
 
+variable "s3_bucket_name" {
+  description = "(Optional, default '') Name of the S3 bucket.  If not specified the domain_name_source + a random number will be used."
+  type        = string
+  default     = ""
+}
+
 variable "error_document" {
   description = "(Optional, default 'error.html') The name of the error document."
   type        = string
