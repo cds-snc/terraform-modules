@@ -12,6 +12,7 @@ module "website" {
 
  providers = {
    aws           = aws
+   aws.dns       = aws.dns # For scenarios where there is a dedicated DNS provider.  You can also just use the default.
    aws.us-east-1 = aws.us-east-1
  }
 }
