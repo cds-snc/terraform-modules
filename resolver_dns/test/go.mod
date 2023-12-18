@@ -1,8 +1,8 @@
 module test
 
-go 1.21.4
+go 1.21.5
 
-require github.com/gruntwork-io/terratest v0.46.7
+require github.com/gruntwork-io/terratest v0.46.8
 
 require (
 	bazil.org/fuse v0.0.0-20160811212531-371fbbdaa898 // indirect
@@ -260,14 +260,14 @@ require (
 	github.com/go-ini/ini v1.25.4 // indirect
 	github.com/go-kit/kit v0.9.0 // indirect
 	github.com/go-logfmt/logfmt v0.4.0 // indirect
-	github.com/go-logr/logr v1.2.3 // indirect
+	github.com/go-logr/logr v1.2.4 // indirect
 	github.com/go-openapi/jsonpointer v0.19.6 // indirect
-	github.com/go-openapi/jsonreference v0.20.1 // indirect
+	github.com/go-openapi/jsonreference v0.20.2 // indirect
 	github.com/go-openapi/spec v0.19.3 // indirect
 	github.com/go-openapi/swag v0.22.3 // indirect
 	github.com/go-sql-driver/mysql v1.4.1 // indirect
 	github.com/go-stack/stack v1.8.0 // indirect
-	github.com/go-task/slim-sprig v0.0.0-20210107165309-348f09dbbbc0 // indirect
+	github.com/go-task/slim-sprig v0.0.0-20230315185526-52ccab3ef572 // indirect
 	github.com/go-test/deep v1.0.7 // indirect
 	github.com/godbus/dbus v0.0.0-20190422162347-ade71ed3457e // indirect
 	github.com/godbus/dbus/v5 v5.0.4 // indirect
@@ -282,7 +282,7 @@ require (
 	github.com/google/gnostic v0.5.7-v3refs // indirect
 	github.com/google/go-cmp v0.5.9 // indirect
 	github.com/google/go-containerregistry v0.6.0 // indirect
-	github.com/google/gofuzz v1.1.0 // indirect
+	github.com/google/gofuzz v1.2.0 // indirect
 	github.com/google/martian v2.1.0+incompatible // indirect
 	github.com/google/martian/v3 v3.3.2 // indirect
 	github.com/google/pprof v0.0.0-20210720184732-4bb14d4b1be1 // indirect
@@ -344,7 +344,7 @@ require (
 	github.com/konsorten/go-windows-terminal-sequences v1.0.3 // indirect
 	github.com/kr/fs v0.1.0 // indirect
 	github.com/kr/logfmt v0.0.0-20140226030751-b84e30acd515 // indirect
-	github.com/kr/pretty v0.3.0 // indirect
+	github.com/kr/pretty v0.3.1 // indirect
 	github.com/kr/pty v1.1.5 // indirect
 	github.com/kr/text v0.2.0 // indirect
 	github.com/kylelemons/godebug v1.1.0 // indirect
@@ -388,8 +388,8 @@ require (
 	github.com/oklog/ulid v1.3.1 // indirect
 	github.com/olekukonko/tablewriter v0.0.0-20170122224234-a0225b3f23b5 // indirect
 	github.com/onsi/ginkgo v1.16.4 // indirect
-	github.com/onsi/ginkgo/v2 v2.9.1 // indirect
-	github.com/onsi/gomega v1.27.4 // indirect
+	github.com/onsi/ginkgo/v2 v2.9.4 // indirect
+	github.com/onsi/gomega v1.27.6 // indirect
 	github.com/opencontainers/go-digest v1.0.0 // indirect
 	github.com/opencontainers/image-spec v1.0.2 // indirect
 	github.com/opencontainers/runc v1.0.0-rc93 // indirect
@@ -479,15 +479,15 @@ require (
 	golang.org/x/image v0.0.0-20190802002840-cff245a6509b // indirect
 	golang.org/x/lint v0.0.0-20210508222113-6edffad5e616 // indirect
 	golang.org/x/mobile v0.0.0-20190719004257-d2bd2a29d028 // indirect
-	golang.org/x/mod v0.9.0 // indirect
+	golang.org/x/mod v0.10.0 // indirect
 	golang.org/x/net v0.17.0 // indirect
-	golang.org/x/oauth2 v0.7.0 // indirect
+	golang.org/x/oauth2 v0.8.0 // indirect
 	golang.org/x/sync v0.1.0 // indirect
 	golang.org/x/sys v0.13.0 // indirect
 	golang.org/x/term v0.13.0 // indirect
 	golang.org/x/text v0.13.0 // indirect
 	golang.org/x/time v0.3.0 // indirect
-	golang.org/x/tools v0.7.0 // indirect
+	golang.org/x/tools v0.8.0 // indirect
 	golang.org/x/xerrors v0.0.0-20220907171357-04be3eba64a2 // indirect
 	google.golang.org/api v0.114.0 // indirect
 	google.golang.org/appengine v1.6.7 // indirect
@@ -514,17 +514,17 @@ require (
 	gotest.tools v2.2.0+incompatible // indirect
 	gotest.tools/v3 v3.0.3 // indirect
 	honnef.co/go/tools v0.0.1-2020.1.4 // indirect
-	k8s.io/api v0.27.2 // indirect
-	k8s.io/apimachinery v0.27.2 // indirect
+	k8s.io/api v0.28.4 // indirect
+	k8s.io/apimachinery v0.28.4 // indirect
 	k8s.io/apiserver v0.20.6 // indirect
-	k8s.io/client-go v0.27.2 // indirect
+	k8s.io/client-go v0.28.4 // indirect
 	k8s.io/component-base v0.20.6 // indirect
 	k8s.io/cri-api v0.20.6 // indirect
 	k8s.io/gengo v0.0.0-20210813121822-485abfe95c7c // indirect
-	k8s.io/klog/v2 v2.90.1 // indirect
-	k8s.io/kube-openapi v0.0.0-20230501164219-8b0f38b5fd1f // indirect
+	k8s.io/klog/v2 v2.100.1 // indirect
+	k8s.io/kube-openapi v0.0.0-20230717233707-2695361300d9 // indirect
 	k8s.io/kubernetes v1.13.0 // indirect
-	k8s.io/utils v0.0.0-20230209194617-a36077c30491 // indirect
+	k8s.io/utils v0.0.0-20230406110748-d93618cff8a2 // indirect
 	rsc.io/binaryregexp v0.2.0 // indirect
 	rsc.io/quote/v3 v3.1.0 // indirect
 	rsc.io/sampler v1.3.0 // indirect

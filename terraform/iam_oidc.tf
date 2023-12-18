@@ -3,7 +3,7 @@ locals {
 }
 
 module "test_role" {
-  source            = "github.com/cds-snc/terraform-modules//gh_oidc_role?ref=v7.4.0"
+  source            = "github.com/cds-snc/terraform-modules//gh_oidc_role?ref=v7.4.3"
   billing_tag_value = var.billing_code
   roles = [
     {
