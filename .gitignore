@@ -5,7 +5,7 @@
 !.terraform-docs.yml
 !terraform/.terraform.lock.hcl
 test.tf
-*.tfvars
+terraform/*.tfvars
 *.tfstate*
 
 .DS_Store
