@@ -60,6 +60,7 @@ jobs:
           - client_vpn
           - gh_oidc_role
           - notify_slack
+          - S3_scan_object
           - schedule_shutdown
           - rds
           - vpc
