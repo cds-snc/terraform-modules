@@ -37,7 +37,7 @@ resource "aws_vpc" "main" {
 resource "aws_eip" "nat" {
   count = var.enable_eip ? local.nat_gateway_count : 0
   # checkov:skip=CKV2_AWS_19:EIP is used by NAT Gateway
-  vpc = true
+  domain = "vpc"
   tags = merge(local.common_tags, {
     Name = "${var.name}-eip${count.index}"
   })
@@ -57,11 +57,17 @@ resource "aws_nat_gateway" "nat_gw" {
   depends_on = [aws_internet_gateway.gw]
 }
 
+locals {
+  // If a single subnet then use 10 for newbits, otherwise use 8
+  private_cidr_blocks = local.max_subnet_length == 1 ? [cidrsubnet(aws_vpc.main.cidr_block, 10, 0)] : [for i in range(local.max_subnet_length) : cidrsubnet(aws_vpc.main.cidr_block, 8, i)]
+  public_cidr_blocks  = local.max_subnet_length == 1 ? [cidrsubnet(aws_vpc.main.cidr_block, 10, 1)] : [for i in range(local.max_subnet_length) : cidrsubnet(aws_vpc.main.cidr_block, 8, i + local.max_subnet_length)]
+}
+
 resource "aws_subnet" "private" {
   count             = local.max_subnet_length
   vpc_id            = aws_vpc.main.id
   availability_zone = element(local.zone_names, count.index)
-  cidr_block        = length(var.private_subnets) == 0 ? var.high_availability ? cidrsubnet(aws_vpc.main.cidr_block, 8, count.index) : cidrsubnet(aws_vpc.main.cidr_block, 10, 0) : element(var.private_subnets, count.index)
+  cidr_block        = length(var.private_subnets) == 0 ? element(local.private_cidr_blocks, count.index) : element(var.private_subnets, count.index)
 
   tags = merge(local.common_tags, {
     Name = "${var.name}_private_subnet_${element(local.zone_names, count.index)}"
@@ -77,7 +83,7 @@ resource "aws_subnet" "public" {
   count             = local.max_subnet_length
   vpc_id            = aws_vpc.main.id
   availability_zone = element(local.zone_names, count.index)
-  cidr_block        = length(var.public_subnets) == 0 ? var.high_availability ? cidrsubnet(aws_vpc.main.cidr_block, 8, count.index + local.max_subnet_length) : cidrsubnet(aws_vpc.main.cidr_block, 10, 1) : element(var.public_subnets, count.index)
+  cidr_block        = length(var.public_subnets) == 0 ? element(local.public_cidr_blocks, count.index) : element(var.public_subnets, count.index)
 
   tags = merge(local.common_tags, {
     Name = "${var.name}_public_subnet_${element(local.zone_names, count.index)}"

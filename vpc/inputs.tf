@@ -14,10 +14,10 @@ variable "billing_tag_value" {
   type        = string
 }
 
-variable "high_availability" {
-  description = "(Optional, default 'false') Create 3 public and 3 private subnets across 3 availability zones in the region."
-  type        = bool
-  default     = false
+variable "availability_zones" {
+  description = "(Optional, default '1') The number of availability zones to use"
+  type        = number
+  default     = 1
 }
 
 variable "enable_flow_log" {
@@ -37,7 +37,6 @@ variable "block_rdp" {
   type        = bool
   default     = true
 }
-
 
 variable "enable_eip" {
   description = "(Optional, default 'true') Enables Elastic IPs, disabling is mainly used for testing purposes"
