@@ -4,7 +4,7 @@ provider "aws" {
 
 variables {
   name               = "tests"
-  high_availability  = true
+  availability_zones = 3
   single_nat_gateway = true
 }
 
