@@ -4,7 +4,7 @@ module "high_availability_single_nat_vpc" {
   name   = "high_availability_single_nat"
 
   availability_zones = 3
-  enable_flow_log   = true
+  enable_flow_log    = true
 
   # Only provision one NAT gateway to be shared by all your private subnets
   single_nat_gateway = true

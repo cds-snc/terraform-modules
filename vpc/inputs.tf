@@ -91,3 +91,9 @@ variable "single_nat_gateway" {
   type        = bool
   default     = false
 }
+
+variable "cidrsubnet_newbits" {
+  type        = number
+  default     = 10
+  description = "(Optional, default '10') The number of additional bits with which to extend the cidr subnet prefix"
+}

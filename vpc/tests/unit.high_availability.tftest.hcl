@@ -5,8 +5,9 @@ provider "aws" {
 variables {
   name                             = "tests"
   cidr                             = "10.10.0.0/24"
+  cidrsubnet_newbits               = 8
   enable_flow_log                  = true
-  aws_availability_zones           = 3
+  availability_zones               = 3
   allow_https_request_out          = true
   allow_https_request_out_response = true
   allow_https_request_in           = true

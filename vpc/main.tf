@@ -59,8 +59,8 @@ resource "aws_nat_gateway" "nat_gw" {
 
 locals {
   // If a single subnet then use 10 for newbits, otherwise use 8
-  private_cidr_blocks = local.max_subnet_length == 1 ? [cidrsubnet(aws_vpc.main.cidr_block, 10, 0)] : [for i in range(local.max_subnet_length) : cidrsubnet(aws_vpc.main.cidr_block, 8, i)]
-  public_cidr_blocks  = local.max_subnet_length == 1 ? [cidrsubnet(aws_vpc.main.cidr_block, 10, 1)] : [for i in range(local.max_subnet_length) : cidrsubnet(aws_vpc.main.cidr_block, 8, i + local.max_subnet_length)]
+  private_cidr_blocks = [for i in range(local.max_subnet_length) : cidrsubnet(aws_vpc.main.cidr_block, var.cidrsubnet_newbits, i)]
+  public_cidr_blocks  = [for i in range(local.max_subnet_length) : cidrsubnet(aws_vpc.main.cidr_block, var.cidrsubnet_newbits, i + local.max_subnet_length)]
 }
 
 resource "aws_subnet" "private" {

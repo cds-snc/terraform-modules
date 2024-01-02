@@ -89,6 +89,7 @@ No modules.
 | <a name="input_block_rdp"></a> [block\_rdp](#input\_block\_rdp) | (Optional, default 'true') Whether or not to block Port 3389 | `bool` | `true` | no |
 | <a name="input_block_ssh"></a> [block\_ssh](#input\_block\_ssh) | (Optional, default 'true') Whether or not to block Port 22 | `bool` | `true` | no |
 | <a name="input_cidr"></a> [cidr](#input\_cidr) | (Optional, default '10.0.0.0/16') The CIDR block for the VPC | `string` | `"10.0.0.0/16"` | no |
+| <a name="input_cidrsubnet_newbits"></a> [cidrsubnet\_newbits](#input\_cidrsubnet\_newbits) | (Optional, default '10') The number of additional bits with which to extend the cidr subnet prefix | `number` | `10` | no |
 | <a name="input_enable_eip"></a> [enable\_eip](#input\_enable\_eip) | (Optional, default 'true') Enables Elastic IPs, disabling is mainly used for testing purposes | `bool` | `true` | no |
 | <a name="input_enable_flow_log"></a> [enable\_flow\_log](#input\_enable\_flow\_log) | (Optional, default 'false') Whether or not to enable VPC Flow Logs | `bool` | `false` | no |
 | <a name="input_name"></a> [name](#input\_name) | (Required) The name of the vpc | `string` | n/a | yes |
