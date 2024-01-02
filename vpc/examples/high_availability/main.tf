@@ -3,8 +3,8 @@ module "high_availability_vpc" {
   source = "../../"
   name   = "high_availability"
 
-  high_availability = true
-  enable_flow_log   = true
+  availability_zones = 3
+  enable_flow_log    = true
 
   # Allow VPC resources to send requests out to the internet and recieve a response
   allow_https_request_out          = true

@@ -17,7 +17,8 @@ module "vpc" {
   source            = "../../../vpc"
   name              = "vpc"
   billing_tag_value = "cal"
-  high_availability = true
+  availability_zones = 3
+  cidrsubnet_newbits = 8
   enable_eip        = false
 }
 

@@ -22,13 +22,15 @@ Single Zone mode deployes in the first AZ in a region that is found by the avail
 
 ## Requirements
 
-No requirements.
+| Name | Version |
+|------|---------|
+| <a name="requirement_aws"></a> [aws](#requirement\_aws) | >= 5 |
 
 ## Providers
 
 | Name | Version |
 |------|---------|
-| <a name="provider_aws"></a> [aws](#provider\_aws) | n/a |
+| <a name="provider_aws"></a> [aws](#provider\_aws) | >= 5 |
 
 ## Modules
 
@@ -81,14 +83,15 @@ No modules.
 | <a name="input_allow_https_request_in_response"></a> [allow\_https\_request\_in\_response](#input\_allow\_https\_request\_in\_response) | (Optional, default 'false') Allow a response back to the internet in reply to a request | `bool` | `false` | no |
 | <a name="input_allow_https_request_out"></a> [allow\_https\_request\_out](#input\_allow\_https\_request\_out) | (Optional, default 'false') Allow HTTPS connections on port 443 out to the internet | `bool` | `false` | no |
 | <a name="input_allow_https_request_out_response"></a> [allow\_https\_request\_out\_response](#input\_allow\_https\_request\_out\_response) | (Optional, default 'false') Allow a response back from the internet in reply to a request | `bool` | `false` | no |
+| <a name="input_availability_zones"></a> [availability\_zones](#input\_availability\_zones) | (Optional, default '1') The number of availability zones to use | `number` | `1` | no |
 | <a name="input_billing_tag_key"></a> [billing\_tag\_key](#input\_billing\_tag\_key) | (Optional, default 'CostCentre') The name of the billing tag | `string` | `"CostCentre"` | no |
 | <a name="input_billing_tag_value"></a> [billing\_tag\_value](#input\_billing\_tag\_value) | (Required) The value of the billing tag | `string` | n/a | yes |
 | <a name="input_block_rdp"></a> [block\_rdp](#input\_block\_rdp) | (Optional, default 'true') Whether or not to block Port 3389 | `bool` | `true` | no |
 | <a name="input_block_ssh"></a> [block\_ssh](#input\_block\_ssh) | (Optional, default 'true') Whether or not to block Port 22 | `bool` | `true` | no |
 | <a name="input_cidr"></a> [cidr](#input\_cidr) | (Optional, default '10.0.0.0/16') The CIDR block for the VPC | `string` | `"10.0.0.0/16"` | no |
+| <a name="input_cidrsubnet_newbits"></a> [cidrsubnet\_newbits](#input\_cidrsubnet\_newbits) | (Optional, default '10') The number of additional bits with which to extend the cidr subnet prefix | `number` | `10` | no |
 | <a name="input_enable_eip"></a> [enable\_eip](#input\_enable\_eip) | (Optional, default 'true') Enables Elastic IPs, disabling is mainly used for testing purposes | `bool` | `true` | no |
 | <a name="input_enable_flow_log"></a> [enable\_flow\_log](#input\_enable\_flow\_log) | (Optional, default 'false') Whether or not to enable VPC Flow Logs | `bool` | `false` | no |
-| <a name="input_high_availability"></a> [high\_availability](#input\_high\_availability) | (Optional, default 'false') Create 3 public and 3 private subnets across 3 availability zones in the region. | `bool` | `false` | no |
 | <a name="input_name"></a> [name](#input\_name) | (Required) The name of the vpc | `string` | n/a | yes |
 | <a name="input_private_subnets"></a> [private\_subnets](#input\_private\_subnets) | (Optional, default []) A list of private subnets inside the VPC | `list(string)` | `[]` | no |
 | <a name="input_public_subnets"></a> [public\_subnets](#input\_public\_subnets) | (Optional, default []) A list of public subnets inside the VPC | `list(string)` | `[]` | no |

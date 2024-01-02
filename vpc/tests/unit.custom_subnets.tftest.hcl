@@ -3,12 +3,12 @@ provider "aws" {
 }
 
 variables {
-  name              = "tests"
-  high_availability = true
-  enable_eip        = false
-  cidr              = "172.16.0.0/16"
-  public_subnets    = ["172.16.0.0/20", "172.16.16.0/20", "172.16.32.0/20"]
-  private_subnets   = ["172.16.128.0/20", "172.16.144.0/20", "172.16.160.0/20"]
+  name               = "tests"
+  enable_eip         = false
+  cidr               = "172.16.0.0/16"
+  availability_zones = 3
+  public_subnets     = ["172.16.0.0/20", "172.16.16.0/20", "172.16.32.0/20"]
+  private_subnets    = ["172.16.128.0/20", "172.16.144.0/20", "172.16.160.0/20"]
 }
 
 # Multi zone VPC with custom subnet CIDR ranges
