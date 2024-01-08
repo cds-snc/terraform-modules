@@ -59,3 +59,9 @@ variable "single_page_app" {
   type        = bool
   default     = false
 }
+
+variable "cloudfront_query_string_forwarding" {
+  description = "(Optional, default 'false') If true, query strings will be forwarded to the origin."
+  type        = bool
+  default     = false
+}
