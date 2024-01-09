@@ -52,6 +52,9 @@ resource "random_string" "suffix" {
 
 resource "aws_s3_bucket" "this" {
   bucket = var.s3_bucket_name == "" ? "${var.domain_name_source}-${random_string.suffix.result}" : var.s3_bucket_name
+
+  force_destroy = var.force_destroy_s3_bucket
+
 }
 
 resource "aws_s3_bucket_policy" "oai_policy" {
