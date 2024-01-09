@@ -65,3 +65,9 @@ variable "cloudfront_query_string_forwarding" {
   type        = bool
   default     = false
 }
+
+variable "force_destroy_s3_bucket" {
+  description = "(Optional, default 'false') If true, the s3 bucket will be deleted even if it's full. Not advised for production use."
+  type        = bool
+  default     = false
+}
