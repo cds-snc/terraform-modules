@@ -30,6 +30,7 @@ No modules.
 | [aws_iam_role_policy_attachment.lambda_insights](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/iam_role_policy_attachment) | resource |
 | [aws_iam_role_policy_attachment.non_vpc_policies](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/iam_role_policy_attachment) | resource |
 | [aws_iam_role_policy_attachment.vpc_policies](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/iam_role_policy_attachment) | resource |
+| [aws_lambda_alias.this](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/lambda_alias) | resource |
 | [aws_lambda_function.this](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/lambda_function) | resource |
 | [aws_lambda_permission.api_gateway](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/lambda_permission) | resource |
 | [aws_lambda_permission.s3_execution](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/lambda_permission) | resource |
@@ -44,6 +45,7 @@ No modules.
 
 | Name | Description | Type | Default | Required |
 |------|-------------|------|---------|:--------:|
+| <a name="input_alias_name"></a> [alias\_name](#input\_alias\_name) | (Optional, default '') Lambda function's alias name | `string` | `""` | no |
 | <a name="input_allow_api_gateway_invoke"></a> [allow\_api\_gateway\_invoke](#input\_allow\_api\_gateway\_invoke) | (Optional) Allow API Gateway to invoke the lambda | `bool` | `false` | no |
 | <a name="input_allow_s3_execution"></a> [allow\_s3\_execution](#input\_allow\_s3\_execution) | (Optional) Allow S3 to execute the lambda | `bool` | `false` | no |
 | <a name="input_api_gateway_source_arn"></a> [api\_gateway\_source\_arn](#input\_api\_gateway\_source\_arn) | (Optional) The api gateway rest point that can call the lambda | `string` | `""` | no |

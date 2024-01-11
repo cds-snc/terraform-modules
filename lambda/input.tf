@@ -144,3 +144,9 @@ variable "log_group_retention_period" {
   description = "(Optional) Override the retention period for the lambda log group"
   default     = 14
 }
+
+variable "alias_name" {
+  type        = string
+  description = "(Optional, default '') Lambda function's alias name"
+  default     = ""
+}
