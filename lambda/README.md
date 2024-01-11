@@ -45,7 +45,7 @@ No modules.
 
 | Name | Description | Type | Default | Required |
 |------|-------------|------|---------|:--------:|
-| <a name="input_alias_name"></a> [alias\_name](#input\_alias\_name) | (Optional, default 'latest') Alias name | `string` | `"latest"` | no |
+| <a name="input_alias_name"></a> [alias\_name](#input\_alias\_name) | (Optional, default '') Lambda function's alias name | `string` | `""` | no |
 | <a name="input_allow_api_gateway_invoke"></a> [allow\_api\_gateway\_invoke](#input\_allow\_api\_gateway\_invoke) | (Optional) Allow API Gateway to invoke the lambda | `bool` | `false` | no |
 | <a name="input_allow_s3_execution"></a> [allow\_s3\_execution](#input\_allow\_s3\_execution) | (Optional) Allow S3 to execute the lambda | `bool` | `false` | no |
 | <a name="input_api_gateway_source_arn"></a> [api\_gateway\_source\_arn](#input\_api\_gateway\_source\_arn) | (Optional) The api gateway rest point that can call the lambda | `string` | `""` | no |
