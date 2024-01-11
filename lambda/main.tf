@@ -87,3 +87,11 @@ resource "aws_cloudwatch_query_definition" "lambda_statistics" {
     by bin(1h) as timeFrame
   QUERY
 }
+
+resource "aws_lambda_alias" "this" {
+  count            = var.alias_name != "" ? 1 : 0
+  name             = var.alias_name
+  description      = "The most recently deployed version of the API"
+  function_name    = aws_lambda_function.this.function_name
+  function_version = aws_lambda_function.this.version
+}
