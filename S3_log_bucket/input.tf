@@ -82,3 +82,21 @@ variable "versioning_status" {
     error_message = "Versioning status must be 'Enabled', 'Disabled' or 'Suspended'."
   }
 }
+
+variable "configure_sentinel_forwarder" {
+  description = "(Optional, default=false) Provides the ability to automatically configure a sentinel forwader for S3 server logs saved in the log bucket.\nFor more control, the same behaviour can be manually generated using the distinct module: sentinel_forwarder."
+  type        = bool
+  default     = false
+}
+
+variable "customer_id" {
+  description = "(Optional) The Azure customer id for the Sentinel Forwarder. Only required if the *configure_sentinel_forwarder* variable is set to true."
+  type        = string
+  default     = null
+}
+
+variable "shared_key" {
+  description = "(Optional) The Azure shared key for the Sentinel Forwarder. Only required if the *configure_sentinel_forwarder* variable is set to true."
+  type        = string
+  default     = null
+}

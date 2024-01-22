@@ -18,13 +18,16 @@ The License file for this module can be found in this directory
 
 ## Modules
 
-No modules.
+| Name | Source | Version |
+|------|--------|---------|
+| <a name="module_s3_log_bucket"></a> [s3\_log\_bucket](#module\_s3\_log\_bucket) | ../S3_log_bucket | n/a |
 
 ## Resources
 
 | Name | Type |
 |------|------|
 | [aws_s3_bucket.this](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/s3_bucket) | resource |
+| [aws_s3_bucket_logging.this](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/s3_bucket_logging) | resource |
 | [aws_s3_bucket_public_access_block.this](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/s3_bucket_public_access_block) | resource |
 
 ## Inputs
@@ -37,8 +40,10 @@ No modules.
 | <a name="input_block_public_policy"></a> [block\_public\_policy](#input\_block\_public\_policy) | (Optional, default 'true') Reject requests to add Bucket policy if the specified bucket policy allows public access. | `bool` | `true` | no |
 | <a name="input_bucket_name"></a> [bucket\_name](#input\_bucket\_name) | (Optional, Forces new resource) The name of the bucket. If omitted, Terraform will assign a random, unique name. | `string` | `null` | no |
 | <a name="input_bucket_prefix"></a> [bucket\_prefix](#input\_bucket\_prefix) | (Optional, Forces new resource) Creates a unique bucket name beginning with the specified prefix. Conflicts with bucket. | `string` | `null` | no |
+| <a name="input_configure_critical_bucket_logs"></a> [configure\_critical\_bucket\_logs](#input\_configure\_critical\_bucket\_logs) | (Optional, default=false) Provides the ability to automatically configure a critical bucket default settings for S3 server log backups and forwarder to Sentinel.<br>For more control, the same behaviour can be manually generated using the distinct modules: S3\_log\_bucket and Sentinel\_forwarder. | `bool` | `false` | no |
 | <a name="input_critical_tag_key"></a> [critical\_tag\_key](#input\_critical\_tag\_key) | (Optional) The name of the critical tag. | `string` | `"Critical"` | no |
 | <a name="input_critical_tag_value"></a> [critical\_tag\_value](#input\_critical\_tag\_value) | (Required: default=false) The value of the critical tag. If set to true, protection SCP rules will be applied to the resource. | `bool` | `false` | no |
+| <a name="input_customer_id"></a> [customer\_id](#input\_customer\_id) | (Optional) The Azure customer id for the Sentinel Forwarder. Only required if the *configure\_critical\_bucket\_logs* variable is set to true. | `string` | `null` | no |
 | <a name="input_force_destroy"></a> [force\_destroy](#input\_force\_destroy) | (Optional, Default:false ) A boolean that indicates all objects should be deleted from the bucket so that the bucket can be destroyed without error. These objects are not recoverable. | `bool` | `false` | no |
 | <a name="input_ignore_public_acls"></a> [ignore\_public\_acls](#input\_ignore\_public\_acls) | (Optional, default 'true') Ignore public ACLs on this bucket and any objects that it contains. | `bool` | `true` | no |
 | <a name="input_kms_key_arn"></a> [kms\_key\_arn](#input\_kms\_key\_arn) | (Optional) KMS key ARN that will be used to encrypt S3 objects.  If not specified, default S3 service key is used for encryption. | `string` | `null` | no |
@@ -47,6 +52,7 @@ No modules.
 | <a name="input_object_lock_configuration"></a> [object\_lock\_configuration](#input\_object\_lock\_configuration) | (Optional, Forces new resource) Map containing S3 object locking configuration. | `any` | `{}` | no |
 | <a name="input_replication_configuration"></a> [replication\_configuration](#input\_replication\_configuration) | (Optional) Map containing cross-region replication configuration. | `any` | `{}` | no |
 | <a name="input_restrict_public_buckets"></a> [restrict\_public\_buckets](#input\_restrict\_public\_buckets) | (Optional, default 'true') Only the bucket owner and AWS Services can access this buckets if it has a public policy. | `bool` | `true` | no |
+| <a name="input_shared_key"></a> [shared\_key](#input\_shared\_key) | (Optional) The Azure shared key for the Sentinel Forwarder. Only required if the *configure\_critical\_bucket\_logs* variable is set to true. | `string` | `null` | no |
 | <a name="input_tags"></a> [tags](#input\_tags) | (Optional) A mapping of tags to assign to the bucket. | `map(string)` | `{}` | no |
 | <a name="input_versioning"></a> [versioning](#input\_versioning) | (Optional) Map containing versioning configuration. | `map(string)` | `{}` | no |
 

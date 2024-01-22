@@ -209,3 +209,30 @@ resource "aws_s3_bucket_versioning" "this" {
     status = var.versioning_status
   }
 }
+
+
+module "sentinel_forwarder" {
+  source = "../sentinel_forwarder"
+
+  count = var.configure_sentinel_forwarder ? 1 : 0
+
+  function_name = "${aws_s3_bucket.this.id}-sentinel-forwarder"
+  customer_id   = var.customer_id
+  shared_key    = var.shared_key
+
+  layer_arn = "arn:aws:lambda:ca-central-1:283582579564:layer:aws-sentinel-connector-layer:79"
+
+  log_type = local.sentinel_forwarder.log_type
+
+  s3_sources = [
+    {
+      bucket_arn    = local.sentinel_forwarder.bucket_arn
+      bucket_id     = local.sentinel_forwarder.bucket_id
+      filter_prefix = local.sentinel_forwarder.filter_prefix
+      kms_key_arn   = local.sentinel_forwarder.kms_key_arn
+    }
+  ]
+
+  billing_tag_key   = var.billing_tag_key
+  billing_tag_value = var.billing_tag_value
+}

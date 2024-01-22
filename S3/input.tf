@@ -84,6 +84,24 @@ variable "logging" {
   default     = {}
 }
 
+variable "configure_critical_bucket_logs" {
+  description = "(Optional, default=false) Provides the ability to automatically configure a critical bucket default settings for S3 server log backups and forwarder to Sentinel.\nFor more control, the same behaviour can be manually generated using the distinct modules: S3_log_bucket and Sentinel_forwarder."
+  type        = bool
+  default     = false
+}
+
+variable "customer_id" {
+  description = "(Optional) The Azure customer id for the Sentinel Forwarder. Only required if the *configure_critical_bucket_logs* variable is set to true."
+  type        = string
+  default     = null
+}
+
+variable "shared_key" {
+  description = "(Optional) The Azure shared key for the Sentinel Forwarder. Only required if the *configure_critical_bucket_logs* variable is set to true."
+  type        = string
+  default     = null
+}
+
 variable "lifecycle_rule" {
   description = "(Optional) List of maps containing configuration of object lifecycle management."
   type        = any

@@ -30,14 +30,14 @@ resource "aws_s3_bucket" "this" {
     }
   }
 
-  dynamic "logging" {
-    for_each = length(keys(var.logging)) == 0 ? [] : [var.logging]
+  # dynamic "logging" {
+  #   for_each = length(keys(var.logging)) == 0 ? [] : [var.logging]
 
-    content {
-      target_bucket = logging.value.target_bucket
-      target_prefix = lookup(logging.value, "target_prefix", null)
-    }
-  }
+  #   content {
+  #     target_bucket = logging.value.target_bucket
+  #     target_prefix = lookup(logging.value, "target_prefix", null)
+  #   }
+  # }
 
   dynamic "lifecycle_rule" {
     for_each = try(jsondecode(var.lifecycle_rule), var.lifecycle_rule)
@@ -171,4 +171,30 @@ resource "aws_s3_bucket_public_access_block" "this" {
   block_public_policy     = var.block_public_policy
   ignore_public_acls      = var.ignore_public_acls
   restrict_public_buckets = var.restrict_public_buckets
+}
+
+resource "aws_s3_bucket_logging" "this" {
+
+  count = length(local.logging_configuration_objects)
+
+  bucket        = aws_s3_bucket.this.id
+  target_bucket = element(local.logging_configuration_objects, count.index).target_bucket
+  target_prefix = element(local.logging_configuration_objects, count.index).target_prefix
+}
+
+module "s3_log_bucket" {
+  source = "../S3_log_bucket"
+
+  count = var.configure_critical_bucket_logs ? 1 : 0
+
+  configure_sentinel_forwarder = local.s3_log_bucket.configure_sentinel_forwarder
+
+  billing_tag_key   = local.s3_log_bucket.billing_tag_key
+  billing_tag_value = local.s3_log_bucket.billing_tag_value
+
+  bucket_name = local.s3_log_bucket.bucket_name
+
+  customer_id = local.s3_log_bucket.customer_id
+  shared_key  = local.s3_log_bucket.shared_key
+
 }
