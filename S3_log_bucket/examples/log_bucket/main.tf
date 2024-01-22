@@ -6,6 +6,7 @@ module "bucket" {
 
   logging = {
     target_bucket = module.log_bucket.s3_bucket_id
+    target_prefix = ""
   }
 
 }
