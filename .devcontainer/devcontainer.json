@@ -6,7 +6,7 @@
 			"installTools": "false"
 		},
 		"ghcr.io/devcontainers/features/terraform:1": {
-			"version": "1.6.1",
+			"version": "1.7.0",
 			"terragrunt": "0.31.1"
 		},
 		"ghcr.io/dhoeric/features/terraform-docs:1": {
