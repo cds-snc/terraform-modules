@@ -3,7 +3,7 @@ module github.com/cds-snc/terraform-modules/S3
 go 1.21.6
 
 require (
-	github.com/aws/aws-sdk-go v1.49.21
+	github.com/aws/aws-sdk-go v1.50.0
 	github.com/gruntwork-io/terratest v0.46.11
 	github.com/stretchr/testify v1.8.4
 )
