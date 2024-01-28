@@ -3,7 +3,7 @@ module github.com/cds-snc/terraform-modules/S3_log_bucket
 go 1.21.6
 
 require (
-	github.com/gruntwork-io/terratest v0.46.9
+	github.com/gruntwork-io/terratest v0.46.11
 	github.com/stretchr/testify v1.8.4
 )
 
