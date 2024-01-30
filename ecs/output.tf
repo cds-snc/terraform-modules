@@ -32,7 +32,7 @@ output "service_name" {
 }
 
 ################################################################################
-# Task Definition
+# Task
 ################################################################################
 
 output "task_definition_arn" {
@@ -48,6 +48,16 @@ output "task_definition_revision" {
 output "task_definition_family" {
   description = "The unique name of the task definition"
   value       = aws_ecs_task_definition.this.family
+}
+
+output "task_exec_role_arn" {
+  description = "ARN of the ECS task execution role (used by ECS to initialize and manage the task)"
+  value       = local.task_exec_role_arn
+}
+
+output "task_role_arn" {
+  description = "ARN of the ECS task role (used by the running task container)"
+  value       = local.task_role_arn
 }
 
 ################################################################################
