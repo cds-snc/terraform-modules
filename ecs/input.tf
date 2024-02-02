@@ -89,6 +89,12 @@ variable "security_group_ids" {
   type        = list(string)
 }
 
+variable "service_discovery_enabled" {
+  description = "(Optional, false) Determines if service discovery should be enabled for the ECS service.  If enabled you must also provide a `service_discovery_namespace_id`."
+  type        = bool
+  default     = false
+}
+
 variable "service_discovery_namespace_id" {
   description = "(Optional, no default) Service discovery namespace ID to associate with the service.  This will allow the service to be discovered by other services within the namespace."
   type        = string
