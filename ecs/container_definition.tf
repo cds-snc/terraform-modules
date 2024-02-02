@@ -3,6 +3,7 @@ data "aws_region" "current" {}
 locals {
   definition = {
     name            = local.container_name
+    command         = length(var.container_command) > 0 ? var.container_command : null
     cpu             = var.container_cpu
     memory          = var.container_memory
     essential       = var.container_essential

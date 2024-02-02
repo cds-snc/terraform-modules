@@ -70,6 +70,14 @@ resource "aws_ecs_service" "this" {
     }
   }
 
+  dynamic "service_registries" {
+    for_each = var.service_discovery_namespace_id != null ? [1] : []
+    content {
+      registry_arn   = aws_service_discovery_service.this[0].arn
+      container_name = local.container_name
+    }
+  }
+
   lifecycle {
     ignore_changes = [
       desired_count, # Always ignored
