@@ -49,6 +49,12 @@ variable "container_name" {
   default     = null
 }
 
+variable "container_command" {
+  description = "(Optional, defaults to []) The container command to use instead of the one specified in the container's Docker image."
+  type        = list(string)
+  default     = []
+}
+
 variable "container_host_port" {
   description = "(Optional, no default) The exposed port of the container used by the load balancer"
   type        = number
@@ -81,6 +87,12 @@ variable "subnet_ids" {
 variable "security_group_ids" {
   description = "(Required) List of security groups to associate with the service"
   type        = list(string)
+}
+
+variable "service_discovery_namespace_id" {
+  description = "(Optional, no default) Service discovery namespace ID to associate with the service.  This will allow the service to be discovered by other services within the namespace."
+  type        = string
+  default     = null
 }
 
 ################################################################################

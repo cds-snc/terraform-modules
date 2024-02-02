@@ -36,6 +36,7 @@ No requirements.
 | [aws_iam_role.this_task_exec](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/iam_role) | resource |
 | [aws_iam_role_policy_attachment.this_task](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/iam_role_policy_attachment) | resource |
 | [aws_iam_role_policy_attachment.this_task_exec](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/iam_role_policy_attachment) | resource |
+| [aws_service_discovery_service.this](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/service_discovery_service) | resource |
 | [aws_iam_policy_document.this_task_assume](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/data-sources/iam_policy_document) | data source |
 | [aws_iam_policy_document.this_task_combined](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/data-sources/iam_policy_document) | data source |
 | [aws_iam_policy_document.this_task_exec_assume](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/data-sources/iam_policy_document) | data source |
@@ -55,6 +56,7 @@ No requirements.
 | <a name="input_billing_tag_value"></a> [billing\_tag\_value](#input\_billing\_tag\_value) | (Required) The value of the billing tag | `string` | n/a | yes |
 | <a name="input_cloudwatch_log_group_retention_in_days"></a> [cloudwatch\_log\_group\_retention\_in\_days](#input\_cloudwatch\_log\_group\_retention\_in\_days) | (Optional, default `30`) Number of days to retain log events | `number` | `30` | no |
 | <a name="input_cluster_name"></a> [cluster\_name](#input\_cluster\_name) | (Required) Name of the cluster (up to 255 letters, numbers, hyphens, and underscores) | `string` | n/a | yes |
+| <a name="input_container_command"></a> [container\_command](#input\_container\_command) | (Optional, defaults to []) The container command to use instead of the one specified in the container's Docker image. | `list(string)` | `[]` | no |
 | <a name="input_container_cpu"></a> [container\_cpu](#input\_container\_cpu) | (Optional, no default) The number of cpu units to reserve for the container. This is optional for tasks using Fargate launch type and the total amount of `cpu` of all containers in a task will need to be lower than the task-level cpu value | `number` | `null` | no |
 | <a name="input_container_environment"></a> [container\_environment](#input\_container\_environment) | (Optional, no default) The environment variables to pass to the container | <pre>list(object({<br>    name  = string<br>    value = string<br>  }))</pre> | `[]` | no |
 | <a name="input_container_essential"></a> [container\_essential](#input\_container\_essential) | (Optional, no default) If the `essential` parameter of a container is marked as `true`, and that container fails or stops for any reason, all other containers that are part of the task are stopped | `bool` | `null` | no |
@@ -87,6 +89,7 @@ No requirements.
 | <a name="input_sentinel_forwarder_layer_arn"></a> [sentinel\_forwarder\_layer\_arn](#input\_sentinel\_forwarder\_layer\_arn) | (Optional, default is latest layer ARN) ARN of the Sentinel forwarder lambda layer | `string` | `"arn:aws:lambda:ca-central-1:283582579564:layer:aws-sentinel-connector-layer:97"` | no |
 | <a name="input_sentinel_fowarder_filter_pattern"></a> [sentinel\_fowarder\_filter\_pattern](#input\_sentinel\_fowarder\_filter\_pattern) | (Optional, defaults to sending all logs) The filter pattern of logs to forward to Sentinel | `string` | `"[w1=\"*\"]"` | no |
 | <a name="input_sentinel_shared_key"></a> [sentinel\_shared\_key](#input\_sentinel\_shared\_key) | (Optional, no default) The Sentinel customer shared key used to forward logs | `string` | `""` | no |
+| <a name="input_service_discovery_namespace_id"></a> [service\_discovery\_namespace\_id](#input\_service\_discovery\_namespace\_id) | (Optional, no default) Service discovery namespace ID to associate with the service.  This will allow the service to be discovered by other services within the namespace. | `string` | `null` | no |
 | <a name="input_service_name"></a> [service\_name](#input\_service\_name) | (Required) Name of the service (up to 255 letters, numbers, hyphens, and underscores) | `string` | n/a | yes |
 | <a name="input_subnet_ids"></a> [subnet\_ids](#input\_subnet\_ids) | (Required) List of subnets to associate with the service | `list(string)` | n/a | yes |
 | <a name="input_task_cpu"></a> [task\_cpu](#input\_task\_cpu) | (Required) The number of cpu units used by the task. Consult https://docs.aws.amazon.com/AmazonECS/latest/userguide/fargate-task-defs.html#fargate-tasks-size for valid values | `number` | n/a | yes |
