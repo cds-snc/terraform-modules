@@ -1,5 +1,5 @@
 resource "aws_service_discovery_service" "this" {
-  count = var.service_discovery_namespace_id != null ? 1 : 0
+  count = var.service_discovery_enabled ? 1 : 0
   name  = local.container_name
 
   dns_config {
