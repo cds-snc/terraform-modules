@@ -4,17 +4,17 @@
 
 output "arn" {
   description = "ARN that identifies the cluster"
-  value       = try(aws_ecs_cluster.this[0].arn, null)
+  value       = var.create_cluster ? aws_ecs_cluster.this[0].arn : data.aws_ecs_cluster.this[0].arn
 }
 
 output "cluster_id" {
   description = "ID that identifies the cluster"
-  value       = try(aws_ecs_cluster.this[0].id, null)
+  value       = var.create_cluster ? aws_ecs_cluster.this[0].id : var.cluster_name
 }
 
 output "cluster_name" {
   description = "Name that identifies the cluster"
-  value       = try(aws_ecs_cluster.this[0].name, null)
+  value       = var.cluster_name
 }
 
 ################################################################################

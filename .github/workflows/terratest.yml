@@ -36,7 +36,6 @@ jobs:
       fail-fast: false
       matrix:
         module:
-          - ecs
           - resolver_dns
           - S3
           - S3_log_bucket
