@@ -33,13 +33,18 @@ resource "aws_ecs_cluster_capacity_providers" "this" {
   }
 }
 
+data "aws_ecs_cluster" "this" {
+  count        = var.create_cluster ? 0 : 1
+  cluster_name = var.cluster_name
+}
+
 ################################################################################
 # Service
 ################################################################################
 
 resource "aws_ecs_service" "this" {
   name             = var.service_name
-  cluster          = aws_ecs_cluster.this[0].id
+  cluster          = var.create_cluster ? aws_ecs_cluster.this[0].name : var.cluster_name
   task_definition  = aws_ecs_task_definition.this.arn
   platform_version = var.platform_version
   launch_type      = "FARGATE"
