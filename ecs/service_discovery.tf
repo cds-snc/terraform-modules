@@ -12,7 +12,7 @@ resource "aws_service_discovery_service" "this" {
   }
 
   health_check_custom_config {
-    failure_threshold = 5
+    failure_threshold = 1
   }
 
   tags = local.common_tags
