@@ -37,6 +37,7 @@ No requirements.
 | [aws_iam_role_policy_attachment.this_task](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/iam_role_policy_attachment) | resource |
 | [aws_iam_role_policy_attachment.this_task_exec](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/iam_role_policy_attachment) | resource |
 | [aws_service_discovery_service.this](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/service_discovery_service) | resource |
+| [aws_ecs_cluster.this](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/data-sources/ecs_cluster) | data source |
 | [aws_iam_policy_document.this_task_assume](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/data-sources/iam_policy_document) | data source |
 | [aws_iam_policy_document.this_task_combined](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/data-sources/iam_policy_document) | data source |
 | [aws_iam_policy_document.this_task_exec_assume](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/data-sources/iam_policy_document) | data source |
@@ -54,6 +55,7 @@ No requirements.
 | <a name="input_autoscaling_policies"></a> [autoscaling\_policies](#input\_autoscaling\_policies) | (Optional, scales based on average CPU and memory use) Map of autoscaling policies to create for the service | `map(any)` | <pre>{<br>  "cpu": {<br>    "policy_type": "TargetTrackingScaling",<br>    "predefined_metric_type": "ECSServiceAverageCPUUtilization"<br>  },<br>  "memory": {<br>    "policy_type": "TargetTrackingScaling",<br>    "predefined_metric_type": "ECSServiceAverageMemoryUtilization"<br>  }<br>}</pre> | no |
 | <a name="input_billing_tag_key"></a> [billing\_tag\_key](#input\_billing\_tag\_key) | (Optional, default `CostCentre`) The name of the billing tag | `string` | `"CostCentre"` | no |
 | <a name="input_billing_tag_value"></a> [billing\_tag\_value](#input\_billing\_tag\_value) | (Required) The value of the billing tag | `string` | n/a | yes |
+| <a name="input_cloudwatch_log_group_append_service_name"></a> [cloudwatch\_log\_group\_append\_service\_name](#input\_cloudwatch\_log\_group\_append\_service\_name) | (Optional, default `true`) Determines whether to append the service name to the CloudWatch log group name | `bool` | `true` | no |
 | <a name="input_cloudwatch_log_group_retention_in_days"></a> [cloudwatch\_log\_group\_retention\_in\_days](#input\_cloudwatch\_log\_group\_retention\_in\_days) | (Optional, default `30`) Number of days to retain log events | `number` | `30` | no |
 | <a name="input_cluster_name"></a> [cluster\_name](#input\_cluster\_name) | (Required) Name of the cluster (up to 255 letters, numbers, hyphens, and underscores) | `string` | n/a | yes |
 | <a name="input_container_command"></a> [container\_command](#input\_container\_command) | (Optional, defaults to []) The container command to use instead of the one specified in the container's Docker image. | `list(string)` | `[]` | no |

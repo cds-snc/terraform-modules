@@ -1,4 +1,5 @@
 locals {
+  cloudwatch_log_group_name = var.cloudwatch_log_group_append_service_name ? "/aws/ecs/${var.cluster_name}/${var.service_name}" : "/aws/ecs/${var.cluster_name}"
   common_tags = {
     (var.billing_tag_key) = var.billing_tag_value
     Terraform             = true

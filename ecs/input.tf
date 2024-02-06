@@ -16,6 +16,12 @@ variable "cluster_name" {
 # CloudWatch Log Group
 ################################################################################
 
+variable "cloudwatch_log_group_append_service_name" {
+  description = "(Optional, default `true`) Determines whether to append the service name to the CloudWatch log group name"
+  type        = bool
+  default     = true
+}
+
 variable "cloudwatch_log_group_retention_in_days" {
   description = "(Optional, default `30`) Number of days to retain log events"
   type        = number
