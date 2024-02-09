@@ -64,6 +64,9 @@ jobs:
           - S3_scan_object
           - schedule_shutdown
           - rds
+          - resolver_dns
+          - S3
+          - S3_log_bucket       
           - vpc
 
     steps:
