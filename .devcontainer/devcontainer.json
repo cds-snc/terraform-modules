@@ -1,6 +1,9 @@
 {
 	"name": "terraform-modules",
 	"image": "mcr.microsoft.com/devcontainers/go:bullseye",
+	"containerEnv": {
+		"SHELL": "/bin/zsh"
+	},	
 	"features": {
 		"ghcr.io/devcontainers/features/python:1": {
 			"installTools": "false"
