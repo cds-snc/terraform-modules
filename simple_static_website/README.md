@@ -69,6 +69,7 @@ No modules.
 | <a name="input_force_destroy_s3_bucket"></a> [force\_destroy\_s3\_bucket](#input\_force\_destroy\_s3\_bucket) | (Optional, default 'false') If true, the s3 bucket will be deleted even if it's full. Not advised for production use. | `bool` | `false` | no |
 | <a name="input_hosted_zone_id"></a> [hosted\_zone\_id](#input\_hosted\_zone\_id) | (Optional, default '') Hosted zone ID used to create the domain name source ALIAS record pointing to Cloudfront.  If not specified, a new hosted zone will be created. | `string` | `""` | no |
 | <a name="input_index_document"></a> [index\_document](#input\_index\_document) | (Optional, default 'index.html') The name of the index document. | `string` | `"index.html"` | no |
+| <a name="input_lambda_function_association"></a> [lambda\_function\_association](#input\_lambda\_function\_association) | (Optional) Map containing lambda function association configuration. A maximum of 4 can be specified. | `list(map(string))` | `[]` | no |
 | <a name="input_s3_bucket_name"></a> [s3\_bucket\_name](#input\_s3\_bucket\_name) | (Optional, default '') Name of the S3 bucket.  If not specified the domain\_name\_source + a random number will be used. | `string` | `""` | no |
 | <a name="input_single_page_app"></a> [single\_page\_app](#input\_single\_page\_app) | (Optional, default 'false') If true, the index document will be returned for all 403 requests to the origin. | `bool` | `false` | no |
 

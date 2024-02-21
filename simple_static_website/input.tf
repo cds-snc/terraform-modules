@@ -30,6 +30,16 @@ variable "domain_name_source" {
   }
 }
 
+variable "lambda_function_association" {
+  description = "(Optional) Map containing lambda function association configuration. A maximum of 4 can be specified."
+  type        = list(map(string))
+  default     = []
+  validation {
+    condition     = length(var.lambda_function_association) <= 4
+    error_message = "No more than 4 lambda function associations can be specified."
+  }
+}
+
 variable "s3_bucket_name" {
   description = "(Optional, default '') Name of the S3 bucket.  If not specified the domain_name_source + a random number will be used."
   type        = string
