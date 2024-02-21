@@ -38,6 +38,16 @@ resource "aws_cloudfront_distribution" "simple_static_website" {
       }
     }
 
+    dynamic "lambda_function_association" {
+      for_each = var.lambda_function_association
+
+      content {
+        event_type   = lookup(lambda_function_association.value, "event_type", null)
+        include_body = lookup(lambda_function_association.value, "include_body", false)
+        lambda_arn   = lookup(lambda_function_association.value, "lambda_arn", null)
+      }
+    }
+
     viewer_protocol_policy = "redirect-to-https"
     min_ttl                = 0
     default_ttl            = 86400
