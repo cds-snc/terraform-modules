@@ -11,6 +11,7 @@ resource "aws_lambda_function" "this" {
   role                           = aws_iam_role.this.arn
   timeout                        = var.timeout
   memory_size                    = var.memory
+  publish                        = var.publish
   reserved_concurrent_executions = var.reserved_concurrent_executions
 
   dynamic "environment" {
