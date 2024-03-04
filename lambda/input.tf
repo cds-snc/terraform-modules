@@ -109,6 +109,12 @@ variable "policies" {
   default     = []
 }
 
+variable "publish" {
+  type        = bool
+  default     = false
+  description = "(Optional, default 'false') Whether to publish creation/change as new Lambda Function Version."
+}
+
 variable "reserved_concurrent_executions" {
   type        = number
   default     = -1
