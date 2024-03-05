@@ -31,6 +31,7 @@ No modules.
 
 | Name | Description | Type | Default | Required |
 |------|-------------|------|---------|:--------:|
+| <a name="input_acl"></a> [acl](#input\_acl) | (Optional, defaults to 'private') ACL to apply to the bucket | `string` | `"private"` | no |
 | <a name="input_billing_tag_key"></a> [billing\_tag\_key](#input\_billing\_tag\_key) | (Optional) The name of the billing tag | `string` | `"CostCentre"` | no |
 | <a name="input_billing_tag_value"></a> [billing\_tag\_value](#input\_billing\_tag\_value) | (Rquired) The value of the billing tag | `string` | n/a | yes |
 | <a name="input_block_public_acls"></a> [block\_public\_acls](#input\_block\_public\_acls) | (Optional, default 'true') Reject requests to create public ACLs. | `bool` | `true` | no |
