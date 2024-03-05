@@ -15,7 +15,7 @@ resource "aws_s3_bucket" "this" {
   bucket        = var.bucket_name
   bucket_prefix = var.bucket_prefix
 
-  acl = "private"
+  acl = var.acl
 
   tags          = merge(local.common_tags, var.tags)
   force_destroy = var.force_destroy
