@@ -1,6 +1,7 @@
 """
 Lambda function to start or stop resources based on a schedule.
 """
+
 import os
 import boto3
 
