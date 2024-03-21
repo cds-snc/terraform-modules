@@ -57,15 +57,6 @@ resource "aws_iam_role_policy_attachment" "spend_notifier" {
   policy_arn = aws_iam_policy.spend_notifier.arn
 }
 
-data "aws_iam_policy" "org_read_only" {
-  arn = "arn:aws:iam::aws:policy/AWSOrganizationsReadOnlyAccess"
-}
-
-resource "aws_iam_role_policy_attachment" "org_read_only" {
-  role       = aws_iam_role.spend_notifier.name
-  policy_arn = data.aws_iam_policy.org_read_only.arn
-}
-
 data "aws_iam_policy" "lambda_insights" {
   name = "CloudWatchLambdaInsightsExecutionRolePolicy"
 }
