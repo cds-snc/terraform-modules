@@ -4,4 +4,6 @@ fmt:
 	@terraform fmt -recursive
 
 docs:
-	@terraform-docs markdown -c ../../.terraform-docs.yml . > README.md
+	@rm -rf .terraform
+	@rm -f .terraform.lock.hcl
+	@terraform-docs markdown -c ../.terraform-docs.yml . > README.md

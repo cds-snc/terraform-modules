@@ -42,6 +42,8 @@ No modules.
 
 | Name | Description | Type | Default | Required |
 |------|-------------|------|---------|:--------:|
+| <a name="input_account_name"></a> [account\_name](#input\_account\_name) | (Required) The name of the AWS account for which the costing is being done | `string` | n/a | yes |
+| <a name="input_billing_tag_value"></a> [billing\_tag\_value](#input\_billing\_tag\_value) | (Required) The value of the billing tag | `string` | `null` | no |
 | <a name="input_daily_spend_notifier_hook"></a> [daily\_spend\_notifier\_hook](#input\_daily\_spend\_notifier\_hook) | (Required) The identifier of the webhook to be used by the spend notifier lambda daily | `string` | n/a | yes |
 | <a name="input_weekly_spend_notifier_hook"></a> [weekly\_spend\_notifier\_hook](#input\_weekly\_spend\_notifier\_hook) | (Required) The identifier of the webhook to be used by the spend notifier lambda weekly | `string` | n/a | yes |
 

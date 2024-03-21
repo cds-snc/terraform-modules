@@ -15,11 +15,16 @@
 		"ghcr.io/dhoeric/features/terraform-docs:1": {
 			"version": "latest"
 		},
+		"node": {
+			"version": "lts",
+			"nodeGypDependencies": true
+		},
 		"azure-cli": "latest"
+
 	},
 	"customizations": {
 		"vscode": {
-			"extensions": [
+			"extensions": [ 
 				"GitHub.copilot",
 				"HashiCorp.HCL",
 				"hashicorp.terraform",
