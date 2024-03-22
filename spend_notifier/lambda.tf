@@ -19,7 +19,11 @@ resource "aws_lambda_function" "spend_notifier" {
   tracing_config {
     mode = "PassThrough"
   }
-
+  environment {
+    variables = {
+      ACCOUNT_NAME = var.account_name
+    }
+  }
   timeout = 30
 
   tags = local.common_tags

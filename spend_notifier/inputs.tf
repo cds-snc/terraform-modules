@@ -17,6 +17,7 @@ variable "billing_tag_value" {
 }
 
 variable "account_name" {
-  description = "(Required) The name of the AWS account for which the costing is being done"
+  description = "(Required) The name of the account"
   type        = string
+  default     = null
 }

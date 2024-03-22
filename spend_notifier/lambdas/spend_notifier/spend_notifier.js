@@ -6,7 +6,8 @@ const costexplorer = new AWS.CostExplorer({ region: 'us-east-1' });
 const https = require('https')
 
 exports.handler = async (event) => {
- const hook = event.hook;
+  const hook = event.hook;
+  const account_name = process.env.ACCOUNT_NAME; 
   const today = new Date();
 
   // get the current account
@@ -30,7 +31,7 @@ exports.handler = async (event) => {
 
   const footer = {
           "type": "section",
-          "fields": [{ "type": "mrkdwn", "text": `*Total for Account ${account} *` }, { "type": "mrkdwn", "text": `$${totalCost.toFixed(2).replace(/\d(?=(\d{3})+\.)/g, '$&,')} USD` }]
+          "fields": [{ "type": "mrkdwn", "text": `*Total for ${account} *` }, { "type": "mrkdwn", "text": `$${totalCost.toFixed(2).replace(/\d(?=(\d{3})+\.)/g, '$&,')} USD` }]
         }
     
 
@@ -45,6 +46,7 @@ exports.handler = async (event) => {
     }
   )
   
+  console.log(data)
   const options = {
     hostname: 'sre-bot.cdssandbox.xyz',
     port: 443,
