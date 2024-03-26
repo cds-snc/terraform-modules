@@ -85,4 +85,5 @@ No modules.
 | <a name="output_proxy_endpoint"></a> [proxy\_endpoint](#output\_proxy\_endpoint) | n/a |
 | <a name="output_proxy_security_group_arn"></a> [proxy\_security\_group\_arn](#output\_proxy\_security\_group\_arn) | n/a |
 | <a name="output_proxy_security_group_id"></a> [proxy\_security\_group\_id](#output\_proxy\_security\_group\_id) | n/a |
+| <a name="output_rds_cluster_arn"></a> [rds\_cluster\_arn](#output\_rds\_cluster\_arn) | The ARN of the RDS cluster |
 | <a name="output_rds_cluster_id"></a> [rds\_cluster\_id](#output\_rds\_cluster\_id) | The ID of the RDS cluster |

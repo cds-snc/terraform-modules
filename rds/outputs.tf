@@ -1,3 +1,8 @@
+output "rds_cluster_arn" {
+  description = "The ARN of the RDS cluster"
+  value       = aws_rds_cluster.cluster.arn
+}
+
 output "rds_cluster_id" {
   description = "The ID of the RDS cluster"
   value       = aws_rds_cluster.cluster.id
