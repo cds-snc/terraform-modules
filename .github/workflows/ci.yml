@@ -17,6 +17,7 @@ jobs:
       matrix:
         module:
           - notify_slack/lambda
+          - rds_activity_stream/lambda
           - schedule_shutdown/lambda
     
     steps:
@@ -29,7 +30,6 @@ jobs:
           filters: |
             module:
               - '${{ matrix.module }}/**'
-              - '.github/workflows/ci.yml'
 
       - name: Setup Python
         if: steps.changes.outputs.module == 'true'
@@ -64,6 +64,7 @@ jobs:
           - S3_scan_object
           - schedule_shutdown
           - rds
+          - rds_activity_stream
           - resolver_dns
           - S3
           - S3_log_bucket       
@@ -80,7 +81,6 @@ jobs:
             module:
               - '${{ matrix.module }}/**/*.tf'
               - '${{ matrix.module }}/tests/**'
-              - '.github/workflows/ci.yml'
 
       - name: Configure AWS credentials using OIDC
         if: steps.changes.outputs.module == 'true'
