@@ -70,6 +70,10 @@ No requirements.
 
 | Name | Description |
 |------|-------------|
-| <a name="output_decrypt_lambda_cloudwatch_log_group_name"></a> [decrypt\_lambda\_cloudwatch\_log\_group\_name](#output\_decrypt\_lambda\_cloudwatch\_log\_group\_name) | The name of the CloudWatch log group that the decrypt Lambda function writes to. |
+| <a name="output_decrypt_lambda_arn"></a> [decrypt\_lambda\_arn](#output\_decrypt\_lambda\_arn) | The ARN of the decrypt Lambda function. |
+| <a name="output_decrypt_lambda_cloudwatch_log_group_name"></a> [decrypt\_lambda\_cloudwatch\_log\_group\_name](#output\_decrypt\_lambda\_cloudwatch\_log\_group\_name) | The name of the decrypt Lambda function's CloudWatch log group. |
+| <a name="output_decrypt_lambda_name"></a> [decrypt\_lambda\_name](#output\_decrypt\_lambda\_name) | The name of the decrypt Lambda function. |
+| <a name="output_kinesis_firehose_arn"></a> [kinesis\_firehose\_arn](#output\_kinesis\_firehose\_arn) | The ARN of the Kinesis Firehose that is processing the RDS activity stream events. |
+| <a name="output_rds_activity_stream_arn"></a> [rds\_activity\_stream\_arn](#output\_rds\_activity\_stream\_arn) | The ARN of the RDS activity stream. |
 | <a name="output_s3_activity_stream_bucket_arn"></a> [s3\_activity\_stream\_bucket\_arn](#output\_s3\_activity\_stream\_bucket\_arn) | The ARN of the S3 bucket that the decrypted activity stream logs are written to. |
 | <a name="output_s3_activity_stream_bucket_name"></a> [s3\_activity\_stream\_bucket\_name](#output\_s3\_activity\_stream\_bucket\_name) | The name of the S3 bucket that the decrypted activity stream logs are written to. |
