@@ -28,6 +28,7 @@
 - [Notify New IAM user](notify_new_iam_user)
 - [Notify Slack](notify_slack)
 - [RDS](rds)
+- [RDS activity stream](rds_activity_stream)
 - [Resolver DNS](resolver_dns)
 - [S3](S3)
 - [S3 log bucket](S3_log_bucket)

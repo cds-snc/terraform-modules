@@ -20,6 +20,7 @@ jobs:
           - notify_slack
           - user_login_alarm
           - vpc
+          - rds_activity_stream
           - resolver_dns
           - S3
           - S3_log_bucket
