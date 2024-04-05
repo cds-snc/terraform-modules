@@ -71,12 +71,14 @@ resource "aws_cloudwatch_log_group" "decrypt" {
 resource "aws_iam_role" "decrypt" {
   name               = local.decrypt_lambda_function
   assume_role_policy = data.aws_iam_policy_document.decrypt_assume.json
+  tags               = local.common_tags
 }
 
 resource "aws_iam_policy" "decrypt" {
   name   = local.decrypt_lambda_function
   path   = "/"
   policy = data.aws_iam_policy_document.decrypt.json
+  tags   = local.common_tags
 }
 
 resource "aws_iam_role_policy_attachment" "decrypt" {

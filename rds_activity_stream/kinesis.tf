@@ -1,5 +1,5 @@
 resource "aws_kinesis_firehose_delivery_stream" "activity_stream" {
-  name        = "${var.rds_stream_name}-firehose"
+  name        = "${var.rds_stream_name}-activity-stream"
   destination = "extended_s3"
 
   kinesis_source_configuration {
@@ -36,7 +36,7 @@ resource "aws_kinesis_firehose_delivery_stream" "activity_stream" {
 }
 
 resource "aws_cloudwatch_log_group" "firehose_activity_stream" {
-  name              = "/aws/kinesis/${var.rds_stream_name}-firehose"
+  name              = "/aws/kinesis/${var.rds_stream_name}-activity-stream"
   retention_in_days = "14"
   tags              = local.common_tags
 }
@@ -78,14 +78,16 @@ module "activity_stream_bucket" {
 # IAM
 #
 resource "aws_iam_role" "firehose_activity_stream" {
-  name               = "${var.rds_stream_name}-firehose"
+  name               = "${var.rds_stream_name}-firehose-activity-stream"
   assume_role_policy = data.aws_iam_policy_document.firehose_assume.json
+  tags               = local.common_tags
 }
 
 resource "aws_iam_policy" "firehose_activity_stream" {
-  name   = "${var.rds_stream_name}-firehose"
+  name   = "${var.rds_stream_name}-firehose-activity-stream"
   path   = "/"
   policy = data.aws_iam_policy_document.firehose_activity_stream.json
+  tags   = local.common_tags
 }
 
 resource "aws_iam_role_policy_attachment" "firehose_activity_stream" {
