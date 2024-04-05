@@ -9,7 +9,8 @@
 */
 
 resource "aws_kms_key" "activity_stream" {
-  description = "Encrypts the ${var.rds_stream_name} database activity stream events"
+  description = "Encrypts the ${var.rds_stream_name} RDS activity stream"
+  tags        = local.common_tags
 }
 
 resource "aws_rds_cluster_activity_stream" "activity_stream" {
