@@ -1,5 +1,5 @@
 resource "aws_kinesis_firehose_delivery_stream" "activity_stream" {
-  name        = "${var.rds_stream_name}-activity-stream"
+  name        = "${var.rds_stream_name}-${local.resource_name_suffix}"
   destination = "extended_s3"
 
   kinesis_source_configuration {
@@ -36,7 +36,7 @@ resource "aws_kinesis_firehose_delivery_stream" "activity_stream" {
 }
 
 resource "aws_cloudwatch_log_group" "firehose_activity_stream" {
-  name              = "/aws/kinesis/${var.rds_stream_name}-activity-stream"
+  name              = "/aws/kinesis/${var.rds_stream_name}-${local.resource_name_suffix}"
   retention_in_days = "14"
   tags              = local.common_tags
 }
@@ -59,7 +59,7 @@ resource "random_string" "bucket_suffix" {
 
 module "activity_stream_bucket" {
   source            = "github.com/cds-snc/terraform-modules//S3?ref=v9.2.7"
-  bucket_name       = "${var.rds_stream_name}-activity-stream-${random_string.bucket_suffix.result}"
+  bucket_name       = "${var.rds_stream_name}-${local.resource_name_suffix}-${random_string.bucket_suffix.result}"
   billing_tag_value = var.billing_tag_value
 
   lifecycle_rule = [
@@ -78,13 +78,13 @@ module "activity_stream_bucket" {
 # IAM
 #
 resource "aws_iam_role" "firehose_activity_stream" {
-  name               = "${var.rds_stream_name}-firehose-activity-stream"
+  name               = "${var.rds_stream_name}-firehose-${local.resource_name_suffix}"
   assume_role_policy = data.aws_iam_policy_document.firehose_assume.json
   tags               = local.common_tags
 }
 
 resource "aws_iam_policy" "firehose_activity_stream" {
-  name   = "${var.rds_stream_name}-firehose-activity-stream"
+  name   = "${var.rds_stream_name}-firehose-${local.resource_name_suffix}"
   path   = "/"
   policy = data.aws_iam_policy_document.firehose_activity_stream.json
   tags   = local.common_tags

@@ -26,7 +26,7 @@ run "default_values" {
   }
 
   assert {
-    condition     = aws_kinesis_firehose_delivery_stream.activity_stream.name == "terraform-tests-activity-stream"
+    condition     = aws_kinesis_firehose_delivery_stream.activity_stream.name == "terraform-tests-${local.resource_name_suffix}"
     error_message = "Attribute not match expected value"
   }
 
@@ -36,7 +36,7 @@ run "default_values" {
   }
 
   assert {
-    condition     = aws_lambda_function.decrypt.function_name == "terraform-tests-decrypt-activity-stream"
+    condition     = aws_lambda_function.decrypt.function_name == "terraform-tests-decrypt-${local.resource_name_suffix}"
     error_message = "Attribute not match expected value"
   }
 
