@@ -25,13 +25,13 @@ variable "account_name" {
 variable "enable_daily_spend_notification" {
   description = "(Optional) Enable daily spend notification"
   type        = bool
-  default     = true 
+  default     = true
 }
 
 variable "enable_weekly_spend_notification" {
   description = "(Optional) Enable weekly spend notification"
   type        = bool
-  default     = true 
+  default     = true
 }
 
 variable "weekly_schedule_expression" {
