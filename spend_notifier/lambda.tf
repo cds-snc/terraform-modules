@@ -35,7 +35,7 @@ resource "aws_lambda_permission" "allow_daily_budget" {
   action        = "lambda:InvokeFunction"
   function_name = aws_lambda_function.spend_notifier.function_name
   principal     = "events.amazonaws.com"
-  source_arn    = aws_cloudwatch_event_rule.daily_budget_spend.arn
+  source_arn    = aws_cloudwatch_event_rule.daily_budget_spend[0].arn
 }
 
 resource "aws_lambda_permission" "allow_weekly_budget" {
@@ -43,7 +43,7 @@ resource "aws_lambda_permission" "allow_weekly_budget" {
   action        = "lambda:InvokeFunction"
   function_name = aws_lambda_function.spend_notifier.function_name
   principal     = "events.amazonaws.com"
-  source_arn    = aws_cloudwatch_event_rule.weekly_budget_spend.arn
+  source_arn    = aws_cloudwatch_event_rule.weekly_budget_spend[0].arn
 }
 
 
