@@ -31,6 +31,7 @@ resource "aws_lambda_function" "spend_notifier" {
 
 
 resource "aws_lambda_permission" "allow_daily_budget" {
+  count         = var.enable_daily_spend_notification ? 1 : 0
   statement_id  = "AllowDailyBudget"
   action        = "lambda:InvokeFunction"
   function_name = aws_lambda_function.spend_notifier.function_name
@@ -39,6 +40,7 @@ resource "aws_lambda_permission" "allow_daily_budget" {
 }
 
 resource "aws_lambda_permission" "allow_weekly_budget" {
+  count         = var.enable_weekly_spend_notification ? 1 : 0
   statement_id  = "AllowWeeklyBudget"
   action        = "lambda:InvokeFunction"
   function_name = aws_lambda_function.spend_notifier.function_name
