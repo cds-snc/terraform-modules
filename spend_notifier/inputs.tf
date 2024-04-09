@@ -21,3 +21,28 @@ variable "account_name" {
   type        = string
   default     = null
 }
+
+variable "enable_daily_spend_notification" {
+  description = "(Optional) Enable daily spend notification"
+  type        = bool
+  default     = true
+}
+
+variable "enable_weekly_spend_notification" {
+  description = "(Optional) Enable weekly spend notification"
+  type        = bool
+  default     = true
+}
+
+variable "weekly_schedule_expression" {
+  description = "(Optional) The schedule expression for the weekly spend notification"
+  type        = string
+  default     = "0 12 ? * SUN *"
+}
+
+variable "daily_schedule_expression" {
+  description = "(Optional) The schedule expression for the daily spend notification"
+  type        = string
+  default     = "0 12 * * ? *"
+}
+

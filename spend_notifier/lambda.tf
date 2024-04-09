@@ -31,19 +31,21 @@ resource "aws_lambda_function" "spend_notifier" {
 
 
 resource "aws_lambda_permission" "allow_daily_budget" {
+  count         = var.enable_daily_spend_notification ? 1 : 0
   statement_id  = "AllowDailyBudget"
   action        = "lambda:InvokeFunction"
   function_name = aws_lambda_function.spend_notifier.function_name
   principal     = "events.amazonaws.com"
-  source_arn    = aws_cloudwatch_event_rule.daily_budget_spend.arn
+  source_arn    = aws_cloudwatch_event_rule.daily_budget_spend[0].arn
 }
 
 resource "aws_lambda_permission" "allow_weekly_budget" {
+  count         = var.enable_weekly_spend_notification ? 1 : 0
   statement_id  = "AllowWeeklyBudget"
   action        = "lambda:InvokeFunction"
   function_name = aws_lambda_function.spend_notifier.function_name
   principal     = "events.amazonaws.com"
-  source_arn    = aws_cloudwatch_event_rule.weekly_budget_spend.arn
+  source_arn    = aws_cloudwatch_event_rule.weekly_budget_spend[0].arn
 }
 
 
