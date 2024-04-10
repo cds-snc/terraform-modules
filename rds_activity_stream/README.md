@@ -63,6 +63,8 @@ No requirements.
 | <a name="input_activity_stream_mode"></a> [activity\_stream\_mode](#input\_activity\_stream\_mode) | (Optional, default 'async') The activity stream recording mode to enable on the RDS cluster. Valid values are 'sync' or 'async'. | `string` | `"async"` | no |
 | <a name="input_billing_tag_key"></a> [billing\_tag\_key](#input\_billing\_tag\_key) | (Optional, default 'CostCentre') The name of the billing tag. | `string` | `"CostCentre"` | no |
 | <a name="input_billing_tag_value"></a> [billing\_tag\_value](#input\_billing\_tag\_value) | (Required) The value of the billing tag. | `string` | n/a | yes |
+| <a name="input_decrypt_lambda_memory_size"></a> [decrypt\_lambda\_memory\_size](#input\_decrypt\_lambda\_memory\_size) | (Optional, default 1024) The amount of memory in MB that the Lambda function will have available for processing. | `number` | `1024` | no |
+| <a name="input_decrypt_lambda_timeout"></a> [decrypt\_lambda\_timeout](#input\_decrypt\_lambda\_timeout) | (Optional, default 10) The maximum amount of time in seconds that the Lambda function will process before timing out. | `number` | `10` | no |
 | <a name="input_rds_cluster_arn"></a> [rds\_cluster\_arn](#input\_rds\_cluster\_arn) | (Required) The ARN of the RDS cluster to enable the activity stream on. | `string` | n/a | yes |
 | <a name="input_rds_stream_name"></a> [rds\_stream\_name](#input\_rds\_stream\_name) | (Required) The name that will be used to represent this activity stream's resources.  It must be unique within the account. | `string` | n/a | yes |
 

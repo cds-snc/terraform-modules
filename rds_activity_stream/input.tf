@@ -26,6 +26,18 @@ variable "billing_tag_value" {
   type        = string
 }
 
+variable "decrypt_lambda_memory_size" {
+  description = "(Optional, default 1024) The amount of memory in MB that the Lambda function will have available for processing."
+  type        = number
+  default     = 1024
+}
+
+variable "decrypt_lambda_timeout" {
+  description = "(Optional, default 10) The maximum amount of time in seconds that the Lambda function will process before timing out."
+  type        = number
+  default     = 10
+}
+
 variable "rds_cluster_arn" {
   description = "(Required) The ARN of the RDS cluster to enable the activity stream on."
   type        = string
