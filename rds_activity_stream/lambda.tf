@@ -42,8 +42,8 @@ resource "aws_lambda_function" "decrypt" {
   function_name = local.decrypt_lambda_function
   handler       = "decrypt.handler"
   runtime       = local.python_version
-  memory_size   = 1024
-  timeout       = 10
+  memory_size   = var.decrypt_lambda_memory_size
+  timeout       = var.decrypt_lambda_timeout
   role          = aws_iam_role.decrypt.arn
 
   filename         = data.archive_file.decrypt_code.output_path
