@@ -3,17 +3,16 @@
 # The events are encrypted by the activity stream, so we need to decrypt them before we store them
 # to allow for easier monitoring.
 #
-resource "terraform_data" "decrypt_deps" {
+resource "null_resource" "decrypt_deps" {
   # Docker is used to download the Python dependencies so that the people using the module do not
   # need to worry about which version of Python they have installed in the build environment.
   provisioner "local-exec" {
     command = "docker run -v \"${abspath(path.module)}\":/var/task public.ecr.aws/sam/build-${local.python_version} /bin/sh -c \"pip install -r lambda/requirements.txt -t lambda/layer/python/; exit\""
   }
 
-  triggers_replace = [
-    sha256(file("${path.module}/lambda/requirements.txt")),
-    sha256(file("${path.module}/lambda/decrypt.py"))
-  ]
+  triggers = {
+    always_run = timestamp()
+  }
 }
 
 data "archive_file" "decrypt_deps" {
@@ -21,7 +20,7 @@ data "archive_file" "decrypt_deps" {
   source_dir  = "${path.module}/lambda/layer"
   output_path = "/tmp/decrypt_deps.zip"
   depends_on = [
-    terraform_data.decrypt_deps
+    null_resource.decrypt_deps
   ]
 }
 
