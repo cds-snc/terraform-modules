@@ -17,11 +17,10 @@ docker run -v "${SRC_DIR}":/var/task public.ecr.aws/sam/build-${PYTHON_VERSION} 
     > /dev/null 2>&1
 
 # Generate a deterministic zip file
-# This is done by removing the compiled bytecode and setting the timestamp of the downloaded
-# files to the date of the `requirements.txt` file's last commit
-REQUIREMENTS_DATE="$(git log -1 --date=format:"%Y%m%d%H%M" --format="%ad" ${SRC_DIR}/lambda/requirements.txt)"
+# This is done by removing the compiled bytecode and setting the timestamp of the
+# downloaded files to the same date.
 find "${SRC_DIR}/lambda/layer" | grep -E "(__pycache__|\.pyc|\.pyo$)" | xargs rm -rf  > /dev/null 2>&1
-find "${SRC_DIR}/lambda/layer" -exec touch -t "$REQUIREMENTS_DATE" {} +  > /dev/null 2>&1
+find "${SRC_DIR}/lambda/layer" -exec touch -t 197001010000 {} + > /dev/null 2>&1
 cd "${SRC_DIR}/lambda/layer"
 zip -r -X "${SRC_DIR}/lambda/decrypt_deps.zip" python/ > /dev/null 2>&1
 
