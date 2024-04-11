@@ -37,7 +37,7 @@ resource "aws_lambda_function" "sentinel_forwarder" {
 
   filename    = data.archive_file.sentinel_forwarder.output_path
   handler     = "sentinel_forwarder.lambda_handler"
-  runtime     = "python3.9"
+  runtime     = "python3.12"
   timeout     = 30
   memory_size = 128
 
@@ -46,9 +46,8 @@ resource "aws_lambda_function" "sentinel_forwarder" {
 
   environment {
     variables = {
-      CUSTOMER_ID = var.customer_id
-      LOG_TYPE    = var.log_type
-      SHARED_KEY  = var.shared_key
+      LOG_TYPE                 = var.log_type
+      SENTINEL_AUTH_PARAMS_ARN = aws_ssm_parameter.sentinel_forwarder_auth.arn
     }
   }
 
@@ -143,6 +142,22 @@ resource "aws_s3_bucket_notification" "sentinel_forwarder_trigger_notification" 
 resource "aws_cloudwatch_log_group" "sentinel_forwarder_lambda" {
   name              = "/aws/lambda/${var.function_name}"
   retention_in_days = "14"
+
+  tags = {
+    (var.billing_tag_key) = var.billing_tag_value
+  }
+}
+
+#
+# Lambda function secrets
+#
+resource "aws_ssm_parameter" "sentinel_forwarder_auth" {
+  name  = "sentinel_forwarder_auth"
+  type  = "SecureString"
+  value = <<-EOT
+  CUSTOMER_ID=${var.customer_id}
+  SHARED_KEY=${var.shared_key}
+  EOT
 
   tags = {
     (var.billing_tag_key) = var.billing_tag_value
