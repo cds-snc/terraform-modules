@@ -3,38 +3,31 @@
 # The events are encrypted by the activity stream, so we need to decrypt them before we store them
 # to allow for easier monitoring.
 #
-resource "null_resource" "decrypt_deps" {
-  # Docker is used to download the Python dependencies so that the people using the module do not
-  # need to worry about which version of Python they have installed in the build environment.
-  provisioner "local-exec" {
-    command = "docker run -v \"${abspath(path.module)}\":/var/task public.ecr.aws/sam/build-${local.python_version} /bin/sh -c \"pip install -r lambda/requirements.txt -t lambda/layer/python/; exit\""
-  }
 
-  triggers = {
-    always_run = timestamp()
+#
+# An external data provider is used to download and package the Python dependencies.
+# This is done so that the Lambda layer is only updated when the `requirements.txt`
+# file changes.
+#
+data "external" "decrypt_deps" {
+  program = ["bash", "${path.module}/scripts/decrypt_deps.sh"]
+  query = {
+    python_version = local.python_version
+    src_dir        = abspath(path.module)
   }
 }
 
-data "archive_file" "decrypt_deps" {
-  type        = "zip"
-  source_dir  = "${path.module}/lambda/layer"
-  output_path = "/tmp/decrypt_deps.zip"
-  depends_on = [
-    null_resource.decrypt_deps
-  ]
+resource "aws_lambda_layer_version" "decrypt_deps" {
+  layer_name          = "decrypt-deps"
+  filename            = data.external.decrypt_deps.result.layer_zip
+  source_code_hash    = filebase64sha256(data.external.decrypt_deps.result.layer_zip)
+  compatible_runtimes = [local.python_version]
 }
 
 data "archive_file" "decrypt_code" {
   type        = "zip"
   source_file = "${path.module}/lambda/decrypt.py"
   output_path = "/tmp/decrypt.zip"
-}
-
-resource "aws_lambda_layer_version" "decrypt_deps" {
-  layer_name          = "decrypt-deps"
-  filename            = data.archive_file.decrypt_deps.output_path
-  source_code_hash    = data.archive_file.decrypt_deps.output_base64sha256
-  compatible_runtimes = [local.python_version]
 }
 
 resource "aws_lambda_function" "decrypt" {

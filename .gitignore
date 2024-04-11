@@ -14,5 +14,6 @@ terraform/*.tfvars
 .pytest_cache
 __pycache__
 rds_activity_stream/lambda/layer
+rds_activity_stream/lambda/*.zip
 
 .github/workflows/conftest/policy
