@@ -37,7 +37,7 @@ resource "aws_lambda_function" "sentinel_forwarder" {
 
   filename    = data.archive_file.sentinel_forwarder.output_path
   handler     = "sentinel_forwarder.lambda_handler"
-  runtime     = "python3.12"
+  runtime     = "python3.9"
   timeout     = 30
   memory_size = 128
 
@@ -152,12 +152,13 @@ resource "aws_cloudwatch_log_group" "sentinel_forwarder_lambda" {
 # Lambda function secrets
 #
 resource "aws_ssm_parameter" "sentinel_forwarder_auth" {
-  name  = "sentinel_forwarder_auth"
-  type  = "SecureString"
-  value = <<-EOT
+  name = "sentinel_forwarder_auth"
+  type = "SecureString"
+  value = chomp(<<-EOT
   CUSTOMER_ID=${var.customer_id}
   SHARED_KEY=${var.shared_key}
   EOT
+  )
 
   tags = {
     (var.billing_tag_key) = var.billing_tag_value

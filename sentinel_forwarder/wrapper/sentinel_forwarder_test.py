@@ -27,14 +27,14 @@ class TestSentinelForwarder(unittest.TestCase):
             patch("boto3.client") as mock_boto3_client,
         ):
             mock_boto3_client().get_parameter.return_value = {
-                "Parameter": {"Value": "CUSTOMER_ID=boom\nSHARED_KEY=baz"}
+                "Parameter": {"Value": "CUSTOMER_ID=boom\nSHARED_KEY=baz=="}
             }
             import sentinel_forwarder
 
             sentinel_forwarder.lambda_handler(event, None)
 
             assert os.environ["CUSTOMER_ID"] == "boom"
-            assert os.environ["SHARED_KEY"] == "baz"
+            assert os.environ["SHARED_KEY"] == "baz=="
 
         mock_connector.handle_log.assert_called_once_with(event)
         mock_boto3_client.assert_called_with("ssm", region_name="ca-central-1")

@@ -26,7 +26,7 @@ def set_env_vars(params_arn):
         "Parameter"
     ]["Value"]
     for param in sentinel_auth_params.split("\n"):
-        key, value = param.split("=")
+        key, value = param.split("=", 1)
         os.environ[key] = value
 
 

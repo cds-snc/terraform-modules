@@ -12,10 +12,11 @@ run "default_values" {
   command = plan
 
   assert {
-    condition     = aws_ssm_parameter.sentinel_forwarder_auth.value == <<-EOT
+    condition = aws_ssm_parameter.sentinel_forwarder_auth.value == chomp(<<-EOT
     CUSTOMER_ID=bruce
     SHARED_KEY=manbat
     EOT
+    )
     error_message = "Attribute does not match expected value"
   }
 
