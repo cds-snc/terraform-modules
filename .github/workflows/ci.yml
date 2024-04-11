@@ -19,7 +19,7 @@ jobs:
           - notify_slack/lambda
           - rds_activity_stream/lambda
           - schedule_shutdown/lambda
-          - sentinel_forwader/wrapper
+          - sentinel_forwarder/wrapper
     
     steps:
       - name: Checkout
@@ -69,7 +69,7 @@ jobs:
           - resolver_dns
           - S3
           - S3_log_bucket
-          - sentinel_forwader   
+          - sentinel_forwarder   
           - vpc
 
     steps:
