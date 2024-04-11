@@ -19,6 +19,7 @@ jobs:
           - notify_slack/lambda
           - rds_activity_stream/lambda
           - schedule_shutdown/lambda
+          - sentinel_forwarder/wrapper
     
     steps:
       - name: Checkout
@@ -67,7 +68,8 @@ jobs:
           - rds_activity_stream
           - resolver_dns
           - S3
-          - S3_log_bucket       
+          - S3_log_bucket
+          - sentinel_forwarder   
           - vpc
 
     steps:
