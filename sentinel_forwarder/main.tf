@@ -152,7 +152,7 @@ resource "aws_cloudwatch_log_group" "sentinel_forwarder_lambda" {
 # Lambda function secrets
 #
 resource "aws_ssm_parameter" "sentinel_forwarder_auth" {
-  name = "sentinel_forwarder_auth"
+  name = "${var.function_name}-auth"
   type = "SecureString"
   value = chomp(<<-EOT
   CUSTOMER_ID=${var.customer_id}
