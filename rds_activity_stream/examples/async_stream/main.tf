@@ -11,7 +11,7 @@ module "async_stream" {
 # Network
 #
 module "vpc" {
-  source = "github.com/cds-snc/terraform-modules//vpc?ref=v9.2.7"
+  source = "github.com/cds-snc/terraform-modules//vpc?ref=v9.3.1"
   name   = "async-stream"
 
   enable_flow_log                  = true
@@ -30,7 +30,7 @@ module "vpc" {
 # Database
 #
 module "database" {
-  source = "github.com/cds-snc/terraform-modules//rds?ref=v9.2.7"
+  source = "github.com/cds-snc/terraform-modules//rds?ref=v9.3.1"
   name   = "async-stream"
 
   database_name  = "test"

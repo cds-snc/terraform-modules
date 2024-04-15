@@ -43,7 +43,7 @@
 resource "random_uuid" "bucket_suffix" {}
 
 module "s3" {
-  source            = "github.com/cds-snc/terraform-modules//S3?ref=v9.2.7"
+  source            = "github.com/cds-snc/terraform-modules//S3?ref=v9.3.1"
   bucket_name       = "cds-conformance-pack-${random_uuid.bucket_suffix.result}"
   billing_tag_value = var.billing_tag_value
 }
