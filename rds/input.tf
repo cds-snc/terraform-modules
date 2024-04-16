@@ -15,6 +15,12 @@ variable "name" {
   type        = string
 }
 
+variable "cloudwatch_log_exports_retention_in_days" {
+  description = "(Optional, default 7) The number of days to store exported database logs in the CloudWatch log group."
+  type        = number
+  default     = 7
+}
+
 variable "database_name" {
   type        = string
   description = "(Required) The name of the database to be created inside the cluster."
