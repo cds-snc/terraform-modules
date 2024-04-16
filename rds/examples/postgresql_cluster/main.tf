@@ -32,24 +32,15 @@ module "postgresql_cluster_vpc" {
   source = "../../../vpc/"
   name   = "postgresql-cluster"
 
-  high_availability = true
-  enable_flow_log   = false
-  block_ssh         = true
-  block_rdp         = true
-  enable_eip        = false
+  enable_flow_log                  = true
+  availability_zones               = 2
+  cidrsubnet_newbits               = 8
+  single_nat_gateway               = true
+  allow_https_request_out          = true
+  allow_https_request_out_response = true
+  allow_https_request_in           = true
+  allow_https_request_in_response  = true
 
   billing_tag_key   = "Business Unit"
   billing_tag_value = "Terratest"
-}
-
-output "rds_cluster_id" {
-  value = module.postgresql_cluster.rds_cluster_id
-}
-
-output "vpc_id" {
-  value = module.postgresql_cluster_vpc.vpc_id
-}
-
-output "private_subnet_ids" {
-  value = module.postgresql_cluster_vpc.private_subnet_ids
 }
