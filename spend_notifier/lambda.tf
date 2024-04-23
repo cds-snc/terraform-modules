@@ -10,7 +10,7 @@ data "archive_file" "spend_notifier" {
 resource "aws_lambda_function" "spend_notifier" {
   function_name = "spend_notifier"
   role          = aws_iam_role.spend_notifier.arn
-  runtime       = "nodejs16.x"
+  runtime       = "nodejs18.x"
   handler       = "spend_notifier.handler"
   memory_size   = 512
 
