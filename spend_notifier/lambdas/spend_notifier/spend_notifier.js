@@ -1,7 +1,10 @@
 /* Lambda function to get the total cost of the AWS account and send a message to a Slack channel with the total cost. */
 
-const AWS = require('aws-sdk');
-const costexplorer = new AWS.CostExplorer({ region: 'us-east-1' });
+const { STSClient, GetCallerIdentityCommand } = require("@aws-sdk/client-sts");
+const { CostExplorerClient, GetCostAndUsageCommand } = require("@aws-sdk/client-cost-explorer");
+
+const costExplorerClient = new CostExplorerClient({ region: "us-east-1" });
+const stsClient = new STSClient({ region: "us-east-1" });
 
 const https = require('https')
 
@@ -69,8 +72,8 @@ exports.handler = async (event) => {
 
 // return the current account id
 async function getCurrentAccount() {
-  const sts = new AWS.STS();
-  const data = await sts.getCallerIdentity({}).promise();
+  const command = new GetCallerIdentityCommand({});
+  const data = await stsClient.send(command);
   return data.Account;
 }
 
@@ -91,7 +94,8 @@ async function getAccountCost() {
       }]
   };
 
-  const result = await costexplorer.getCostAndUsage(params).promise();
+  const command = new GetCostAndUsageCommand(params);
+  const result = await costExplorerClient.send(command);
   return result["ResultsByTime"][0]["Groups"].reduce((acc, curr) => {
     acc[curr["Keys"][0]] = parseFloat(curr["Metrics"]["UnblendedCost"]["Amount"]);
     return acc;
