@@ -78,3 +78,4 @@ No modules.
 | Name | Description |
 |------|-------------|
 | <a name="output_lambda_arn"></a> [lambda\_arn](#output\_lambda\_arn) | The ARN of the Lambda function. |
+| <a name="output_lambda_name"></a> [lambda\_name](#output\_lambda\_name) | The name of the Lambda function. |
