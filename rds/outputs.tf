@@ -8,8 +8,12 @@ output "rds_cluster_id" {
   value       = aws_rds_cluster.cluster.id
 }
 
+output "rds_cluster_endpoint" {
+  value = aws_rds_cluster.cluster.endpoint
+}
+
 output "proxy_connection_string_arn" {
-  description = "The arn for the connectionstring to the RDS proxy"
+  description = "The ARN for the connection string to the RDS proxy"
   value       = aws_secretsmanager_secret.proxy_connection_string.arn
 }
 
