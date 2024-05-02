@@ -45,7 +45,7 @@ data "aws_iam_policy_document" "read_connection_string" {
       test     = "StringEquals"
       variable = "kms:ViaService"
       values = [
-        "secretsmanager.ca-central-1.amazonaws.com"
+        "secretsmanager.${local.region}.amazonaws.com"
       ]
     }
   }
