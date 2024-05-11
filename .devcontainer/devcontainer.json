@@ -1,20 +1,20 @@
 {
 	"name": "terraform-modules",
-	"image": "mcr.microsoft.com/devcontainers/go:bullseye",
+	"image": "mcr.microsoft.com/devcontainers/go:bullseye@sha256:b5cb2370830939288eb0acf31b30db16efd1e4a782d24d4cf16c8e925fccacee",
 	"containerEnv": {
 		"SHELL": "/bin/zsh"
 	},	
 	"features": {
-		"ghcr.io/devcontainers/features/docker-in-docker:2": {},
-		"ghcr.io/devcontainers/features/python:1": {
+		"ghcr.io/devcontainers/features/docker-in-docker:2@sha256:23ae11a86089da5f0b98a6edd603f91831802b7f2d5ef1e104e1b94a3beb546c": {},
+		"ghcr.io/devcontainers/features/python:1@sha256:bf021f1800543f08bf029c449a3f25341be782b620802befa1f8e6ee51cf6cf6": {
 			"version": "3.12",
 			"installTools": "false"
 		},
-		"ghcr.io/devcontainers/features/terraform:1": {
+		"ghcr.io/devcontainers/features/terraform:1@sha256:403fe3406aaf4618d9ca5b79cd1bd4a3576eac8816b18419650ab2f87026bb09": {
 			"version": "1.7.0",
 			"terragrunt": "0.31.1"
 		},
-		"ghcr.io/dhoeric/features/terraform-docs:1": {
+		"ghcr.io/dhoeric/features/terraform-docs:1@sha256:eb0c7b50809a020fa74ba924999caaf1bd2b43783ec1589775447dbca557623b": {
 			"version": "latest"
 		},
 		"node": {
