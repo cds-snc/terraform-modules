@@ -21,6 +21,7 @@
 			"version": "lts",
 			"nodeGypDependencies": true
 		},
+		"ghcr.io/devcontainers/features/aws-cli:1": {},		
 		"azure-cli": "latest"
 
 	},
