@@ -50,7 +50,7 @@ resource "aws_cloudfront_distribution" "simple_static_website" {
 
     # Function association 
     dynamic "function_association" {
-      for_each = var.cloudfront_function_association
+      for_each = var.function_association
 
       content {
         event_type   = lookup(function_association.value, "event_type", null)
