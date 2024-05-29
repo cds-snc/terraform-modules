@@ -40,6 +40,16 @@ variable "lambda_function_association" {
   }
 }
 
+variable "function_association" {
+  description = "(Optional) Map containing function association configuration, that trigers a cloudfront function with specific actions. A maximum of 2 can be specified."
+  type        = list(map(string))
+  default     = []
+  validation {
+    condition     = length(var.function_association) <= 2
+    error_message = "No more than 2 function associations can be specified."
+  }
+}
+
 variable "s3_bucket_name" {
   description = "(Optional, default '') Name of the S3 bucket.  If not specified the domain_name_source + a random number will be used."
   type        = string
