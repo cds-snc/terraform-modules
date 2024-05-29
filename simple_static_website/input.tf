@@ -81,3 +81,9 @@ variable "force_destroy_s3_bucket" {
   type        = bool
   default     = false
 }
+
+variable "web_acl_arn" {
+  description = "(Optional, default '') ARN of the WAF Web ACL to associate with the CloudFront distribution (using version WAFv2)."
+  type        = string
+  default     = ""
+}
