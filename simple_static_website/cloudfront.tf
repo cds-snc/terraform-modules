@@ -86,5 +86,7 @@ resource "aws_cloudfront_distribution" "simple_static_website" {
     minimum_protocol_version = "TLSv1.2_2021"
   }
 
+  web_acl_id = var.web_acl_arn
+
   tags = local.common_tags
 }
