@@ -10,7 +10,7 @@ resource "aws_cloudfront_distribution" "simple_static_website" {
   http_version = "http2"
 
   origin {
-    domain_name = aws_s3_bucket.this.bucket_regional_domain_name
+    domain_name = aws_s3_bucket_website_configuration.this.website_endpoint
     origin_id   = "simple_static_website"
 
     s3_origin_config {
