@@ -10,7 +10,7 @@ resource "aws_cloudfront_distribution" "simple_static_website" {
   http_version = "http2"
 
   origin {
-    domain_name = aws_s3_bucket_website_configuration.this.website_endpoint
+    domain_name = aws_s3_bucket.this.bucket_regional_domain_name
     origin_id   = "simple_static_website"
 
     s3_origin_config {
@@ -65,12 +65,19 @@ resource "aws_cloudfront_distribution" "simple_static_website" {
   }
 
   dynamic "custom_error_response" {
-    for_each = var.single_page_app ? [403] : []
+    for_each = var.single_page_app ? [
+      {
+        error_code            = 403,
+        response_page_path    = "/${var.index_document}",
+        error_caching_min_ttl = 300,
+        response_code         = 200
+      }
+    ] : var.custom_error_responses
     content {
-      error_code            = 403
-      error_caching_min_ttl = 3600
-      response_code         = 200
-      response_page_path    = "/${var.index_document}"
+      error_code            = custom_error_response.value.error_code
+      error_caching_min_ttl = custom_error_response.value.error_caching_min_ttl != null ? custom_error_response.value.error_caching_min_ttl : 300
+      response_code         = custom_error_response.value.response_code != null ? custom_error_response.value.response_code : 200
+      response_page_path    = custom_error_response.value.response_page_path
     }
   }
 
