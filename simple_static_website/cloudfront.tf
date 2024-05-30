@@ -65,12 +65,19 @@ resource "aws_cloudfront_distribution" "simple_static_website" {
   }
 
   dynamic "custom_error_response" {
-    for_each = var.single_page_app ? [403] : []
+    for_each = var.single_page_app ? [
+      {
+        error_code            = 403,
+        response_page_path    = "/${var.index_document}",
+        error_caching_min_ttl = 300,
+        response_code         = 200
+      }
+    ] : var.custom_error_responses
     content {
-      error_code            = 403
-      error_caching_min_ttl = 3600
-      response_code         = 200
-      response_page_path    = "/${var.index_document}"
+      error_code            = custom_error_response.value.error_code
+      error_caching_min_ttl = custom_error_response.value.error_caching_min_ttl != null ? custom_error_response.value.error_caching_min_ttl : 300
+      response_code         = custom_error_response.value.response_code != null ? custom_error_response.value.response_code : 200
+      response_page_path    = custom_error_response.value.response_page_path
     }
   }
 

@@ -97,3 +97,13 @@ variable "web_acl_arn" {
   type        = string
   default     = null
 }
+
+variable "custom_error_responses" {
+  description = "(Optional) Map containing custom error responses.  The key is the HTTP error code and the value is the response page."
+  type = list(object({
+    error_code            = number
+    response_page_path    = optional(string)
+    error_caching_min_ttl = optional(number)
+  response_code = optional(number) }))
+  default = []
+}
