@@ -48,6 +48,16 @@ resource "aws_cloudfront_distribution" "simple_static_website" {
       }
     }
 
+    # Function association 
+    dynamic "function_association" {
+      for_each = var.function_association
+
+      content {
+        event_type   = lookup(function_association.value, "event_type", null)
+        function_arn = lookup(function_association.value, "function_arn", null)
+      }
+    }
+
     viewer_protocol_policy = "redirect-to-https"
     min_ttl                = 0
     default_ttl            = 86400
