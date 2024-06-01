@@ -5,23 +5,23 @@
 		"SHELL": "/bin/zsh"
 	},	
 	"features": {
-		"ghcr.io/devcontainers/features/docker-in-docker:2": {},
-		"ghcr.io/devcontainers/features/python:1": {
+		"ghcr.io/devcontainers/features/docker-in-docker:2@sha256:503f23cd692325b3cbb8c20a0ecfabb3444b0c786b363e0c82572bd7d71dc099": {},
+		"ghcr.io/devcontainers/features/python:1@sha256:d449aea663ea23ac4a7968719d5920dd57128f0429cd8e216849d5afe67651fb": {
 			"version": "3.12",
 			"installTools": "false"
 		},
-		"ghcr.io/devcontainers/features/terraform:1": {
+		"ghcr.io/devcontainers/features/terraform:1@sha256:403fe3406aaf4618d9ca5b79cd1bd4a3576eac8816b18419650ab2f87026bb09": {
 			"version": "1.7.0",
 			"terragrunt": "0.31.1"
 		},
-		"ghcr.io/dhoeric/features/terraform-docs:1": {
+		"ghcr.io/dhoeric/features/terraform-docs:1@sha256:eb0c7b50809a020fa74ba924999caaf1bd2b43783ec1589775447dbca557623b": {
 			"version": "latest"
 		},
 		"node": {
 			"version": "lts",
 			"nodeGypDependencies": true
 		},
-		"ghcr.io/devcontainers/features/aws-cli:1": {},		
+		"ghcr.io/devcontainers/features/aws-cli:1@sha256:8d39e89cc98291953fb03cf7ef540dc1a7c78c3162f0eee9b61c800e4838f807": {},		
 		"azure-cli": "latest"
 
 	},
