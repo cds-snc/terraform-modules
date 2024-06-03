@@ -85,8 +85,8 @@ resource "azurerm_sentinel_alert_rule_scheduled" "this" {
   dynamic "incident_configuration" {
     for_each = can(regex("PT5M", var.query_frequency)) ? [] : [1]
 
-    create_incident = var.incident_configuration.create_incident
     content {
+      create_incident = var.incident_configuration.create_incident
       grouping {
         enabled                 = true
         entity_matching_method  = var.incident_configuration.grouping.entity_matching_method
