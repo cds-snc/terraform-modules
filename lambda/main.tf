@@ -68,7 +68,7 @@ resource "aws_cloudwatch_log_group" "this" {
 }
 
 resource "aws_cloudwatch_query_definition" "lambda_statistics" {
-  name = "Lambda Statistics - ${var.name}"
+  name = "Lambda Statistics / ${var.name}"
 
   log_group_names = [
     aws_cloudwatch_log_group.this.name
