@@ -1,0 +1,8 @@
+skip-check:
+  - CKV_AWS_7   # KMS automatic key rotation not required
+  - CKV_AWS_50  # Lambda x-ray tracing not required
+  - CKV_AWS_115 # Lambda does not need reserved concurrency
+  - CKV_AWS_116 # Lambda DLQ not required
+  - CKV_AWS_117 # Lambda does not need to be in a VPC
+  - CKV_AWS_158 # CloudWatch encyption with default key is acceptable
+  

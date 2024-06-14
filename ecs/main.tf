@@ -33,13 +33,18 @@ resource "aws_ecs_cluster_capacity_providers" "this" {
   }
 }
 
+data "aws_ecs_cluster" "this" {
+  count        = var.create_cluster ? 0 : 1
+  cluster_name = var.cluster_name
+}
+
 ################################################################################
 # Service
 ################################################################################
 
 resource "aws_ecs_service" "this" {
   name             = var.service_name
-  cluster          = aws_ecs_cluster.this[0].id
+  cluster          = var.create_cluster ? aws_ecs_cluster.this[0].name : var.cluster_name
   task_definition  = aws_ecs_task_definition.this.arn
   platform_version = var.platform_version
   launch_type      = "FARGATE"
@@ -70,6 +75,14 @@ resource "aws_ecs_service" "this" {
     }
   }
 
+  dynamic "service_registries" {
+    for_each = var.service_discovery_enabled ? [1] : []
+    content {
+      registry_arn   = aws_service_discovery_service.this[0].arn
+      container_name = local.container_name
+    }
+  }
+
   lifecycle {
     ignore_changes = [
       desired_count, # Always ignored
@@ -87,8 +100,8 @@ resource "aws_ecs_task_definition" "this" {
   family                = local.task_definition_family
   cpu                   = var.task_cpu
   memory                = var.task_memory
-  execution_role_arn    = var.task_exec_role_arn != null ? var.task_exec_role_arn : aws_iam_role.this_task_exec.arn
-  task_role_arn         = var.task_role_arn != null ? var.task_role_arn : aws_iam_role.this_task.arn
+  execution_role_arn    = local.task_exec_role_arn
+  task_role_arn         = local.task_role_arn
   container_definitions = jsonencode([local.container_definition])
 
   network_mode             = "awsvpc"

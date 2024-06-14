@@ -34,6 +34,7 @@ terraform {
 data "aws_iam_policy_document" "s3_policy" {
   statement {
     actions   = ["s3:GetObject"]
+    effect    = "Allow"
     resources = ["${aws_s3_bucket.this.arn}/*"]
 
     principals {
@@ -51,7 +52,17 @@ resource "random_string" "suffix" {
 }
 
 resource "aws_s3_bucket" "this" {
-  bucket = var.s3_bucket_name == "" ? "${var.domain_name_source}-${random_string.suffix.result}" : var.s3_bucket_name
+  bucket        = var.s3_bucket_name == "" ? "${var.domain_name_source}-${random_string.suffix.result}" : var.s3_bucket_name
+  force_destroy = var.force_destroy_s3_bucket
+}
+
+resource "aws_s3_bucket_public_access_block" "this" {
+  bucket = aws_s3_bucket.this.id
+
+  block_public_acls       = true
+  block_public_policy     = true
+  ignore_public_acls      = true
+  restrict_public_buckets = true
 }
 
 resource "aws_s3_bucket_policy" "oai_policy" {

@@ -30,6 +30,26 @@ variable "domain_name_source" {
   }
 }
 
+variable "lambda_function_association" {
+  description = "(Optional) Map containing lambda function association configuration. A maximum of 4 can be specified."
+  type        = list(map(string))
+  default     = []
+  validation {
+    condition     = length(var.lambda_function_association) <= 4
+    error_message = "No more than 4 lambda function associations can be specified."
+  }
+}
+
+variable "function_association" {
+  description = "(Optional) Map containing function association configuration, that trigers a cloudfront function with specific actions. A maximum of 2 can be specified."
+  type        = list(map(string))
+  default     = []
+  validation {
+    condition     = length(var.function_association) <= 2
+    error_message = "No more than 2 function associations can be specified."
+  }
+}
+
 variable "s3_bucket_name" {
   description = "(Optional, default '') Name of the S3 bucket.  If not specified the domain_name_source + a random number will be used."
   type        = string
@@ -64,4 +84,26 @@ variable "cloudfront_query_string_forwarding" {
   description = "(Optional, default 'false') If true, query strings will be forwarded to the origin."
   type        = bool
   default     = false
+}
+
+variable "force_destroy_s3_bucket" {
+  description = "(Optional, default 'false') If true, the s3 bucket will be deleted even if it's full. Not advised for production use."
+  type        = bool
+  default     = false
+}
+
+variable "web_acl_arn" {
+  description = "(Optional, default null) ARN of the WAF Web ACL to associate with the CloudFront distribution (using version WAFv2)."
+  type        = string
+  default     = null
+}
+
+variable "custom_error_responses" {
+  description = "(Optional) Map containing custom error responses.  The key is the HTTP error code and the value is the response page."
+  type = list(object({
+    error_code            = number
+    response_page_path    = optional(string)
+    error_caching_min_ttl = optional(number)
+  response_code = optional(number) }))
+  default = []
 }

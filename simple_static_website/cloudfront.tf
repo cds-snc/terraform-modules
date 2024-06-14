@@ -38,6 +38,26 @@ resource "aws_cloudfront_distribution" "simple_static_website" {
       }
     }
 
+    dynamic "lambda_function_association" {
+      for_each = var.lambda_function_association
+
+      content {
+        event_type   = lookup(lambda_function_association.value, "event_type", null)
+        include_body = lookup(lambda_function_association.value, "include_body", false)
+        lambda_arn   = lookup(lambda_function_association.value, "lambda_arn", null)
+      }
+    }
+
+    # Function association 
+    dynamic "function_association" {
+      for_each = var.function_association
+
+      content {
+        event_type   = lookup(function_association.value, "event_type", null)
+        function_arn = lookup(function_association.value, "function_arn", null)
+      }
+    }
+
     viewer_protocol_policy = "redirect-to-https"
     min_ttl                = 0
     default_ttl            = 86400
@@ -45,12 +65,19 @@ resource "aws_cloudfront_distribution" "simple_static_website" {
   }
 
   dynamic "custom_error_response" {
-    for_each = var.single_page_app ? [403] : []
+    for_each = var.single_page_app ? [
+      {
+        error_code            = 403,
+        response_page_path    = "/${var.index_document}",
+        error_caching_min_ttl = 300,
+        response_code         = 200
+      }
+    ] : var.custom_error_responses
     content {
-      error_code            = 403
-      error_caching_min_ttl = 3600
-      response_code         = 200
-      response_page_path    = "/${var.index_document}"
+      error_code            = custom_error_response.value.error_code
+      error_caching_min_ttl = custom_error_response.value.error_caching_min_ttl != null ? custom_error_response.value.error_caching_min_ttl : 300
+      response_code         = custom_error_response.value.response_code != null ? custom_error_response.value.response_code : 200
+      response_page_path    = custom_error_response.value.response_page_path
     }
   }
 
@@ -65,6 +92,8 @@ resource "aws_cloudfront_distribution" "simple_static_website" {
     ssl_support_method       = "sni-only"
     minimum_protocol_version = "TLSv1.2_2021"
   }
+
+  web_acl_id = var.web_acl_arn
 
   tags = local.common_tags
 }

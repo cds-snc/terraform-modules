@@ -33,7 +33,7 @@ module "vpc" {
   source = "../../../vpc/"
   name   = "simple_cluster"
 
-  high_availability  = false
+  availability_zones = 1
   enable_flow_log    = false
   block_ssh          = true
   block_rdp          = true

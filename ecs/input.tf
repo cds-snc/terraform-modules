@@ -16,6 +16,12 @@ variable "cluster_name" {
 # CloudWatch Log Group
 ################################################################################
 
+variable "cloudwatch_log_group_append_service_name" {
+  description = "(Optional, default `true`) Determines whether to append the service name to the CloudWatch log group name"
+  type        = bool
+  default     = true
+}
+
 variable "cloudwatch_log_group_retention_in_days" {
   description = "(Optional, default `30`) Number of days to retain log events"
   type        = number
@@ -47,6 +53,12 @@ variable "container_name" {
   description = "(Optional, defaults to service_name) The default container name."
   type        = string
   default     = null
+}
+
+variable "container_command" {
+  description = "(Optional, defaults to []) The container command to use instead of the one specified in the container's Docker image."
+  type        = list(string)
+  default     = []
 }
 
 variable "container_host_port" {
@@ -81,6 +93,18 @@ variable "subnet_ids" {
 variable "security_group_ids" {
   description = "(Required) List of security groups to associate with the service"
   type        = list(string)
+}
+
+variable "service_discovery_enabled" {
+  description = "(Optional, false) Determines if service discovery should be enabled for the ECS service.  If enabled you must also provide a `service_discovery_namespace_id`."
+  type        = bool
+  default     = false
+}
+
+variable "service_discovery_namespace_id" {
+  description = "(Optional, no default) Service discovery namespace ID to associate with the service.  This will allow the service to be discovered by other services within the namespace."
+  type        = string
+  default     = null
 }
 
 ################################################################################

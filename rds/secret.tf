@@ -27,4 +27,3 @@ resource "aws_secretsmanager_secret_version" "proxy_connection_string" {
     "postgresql://${var.username}:${var.password}@${aws_db_proxy.proxy.endpoint}/${var.database_name}"
   )
 }
-

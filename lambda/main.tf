@@ -11,6 +11,7 @@ resource "aws_lambda_function" "this" {
   role                           = aws_iam_role.this.arn
   timeout                        = var.timeout
   memory_size                    = var.memory
+  publish                        = var.publish
   reserved_concurrent_executions = var.reserved_concurrent_executions
 
   dynamic "environment" {
@@ -67,10 +68,10 @@ resource "aws_cloudwatch_log_group" "this" {
 }
 
 resource "aws_cloudwatch_query_definition" "lambda_statistics" {
-  name = "Lambda Statistics - ${var.name}"
+  name = "Lambda Statistics / ${var.name}"
 
   log_group_names = [
-    "aws_cloudwatch_log_group.this"
+    aws_cloudwatch_log_group.this.name
   ]
 
   query_string = <<-QUERY
@@ -86,4 +87,12 @@ resource "aws_cloudwatch_query_definition" "lambda_statistics" {
     max(@memorySize) as memoryAllocated, (avg(@maxMemoryUsed)/max(@memorySize))*100 as percentageMemoryUsed
     by bin(1h) as timeFrame
   QUERY
+}
+
+resource "aws_lambda_alias" "this" {
+  count            = var.alias_name != "" ? 1 : 0
+  name             = var.alias_name
+  description      = "The most recently deployed version of the API"
+  function_name    = aws_lambda_function.this.function_name
+  function_version = aws_lambda_function.this.version
 }

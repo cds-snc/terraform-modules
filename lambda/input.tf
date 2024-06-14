@@ -109,6 +109,12 @@ variable "policies" {
   default     = []
 }
 
+variable "publish" {
+  type        = bool
+  default     = false
+  description = "(Optional, default 'false') Whether to publish creation/change as new Lambda Function Version."
+}
+
 variable "reserved_concurrent_executions" {
   type        = number
   default     = -1
@@ -143,4 +149,10 @@ variable "log_group_retention_period" {
   type        = number
   description = "(Optional) Override the retention period for the lambda log group"
   default     = 14
+}
+
+variable "alias_name" {
+  type        = string
+  description = "(Optional, default '') Lambda function's alias name"
+  default     = ""
 }

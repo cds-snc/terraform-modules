@@ -11,21 +11,27 @@ resource "aws_security_group" "rds_proxy" {
     Name = "${var.name}_rds_proxy_sg"
   })
 
-  ingress {
-    from_port = local.database_port
-    to_port   = local.database_port
-    protocol  = "TCP"
-    self      = true
-  }
-
-  egress {
-    from_port = local.database_port
-    to_port   = local.database_port
-    protocol  = "TCP"
-    self      = true
-  }
-
   lifecycle {
     create_before_destroy = true
   }
+}
+
+resource "aws_security_group_rule" "rds_proxy_ingress" {
+  description       = "Proxy ingress to the database"
+  type              = "ingress"
+  from_port         = local.database_port
+  to_port           = local.database_port
+  protocol          = "tcp"
+  self              = true
+  security_group_id = aws_security_group.rds_proxy.id
+}
+
+resource "aws_security_group_rule" "rds_proxy_egress" {
+  description       = "Proxy egress from the database"
+  type              = "egress"
+  from_port         = local.database_port
+  to_port           = local.database_port
+  protocol          = "tcp"
+  self              = true
+  security_group_id = aws_security_group.rds_proxy.id
 }

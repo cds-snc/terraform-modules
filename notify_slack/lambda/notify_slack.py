@@ -2,6 +2,7 @@
 Adopted from https://github.com/terraform-aws-modules/terraform-aws-notify-slack
 under Apache 2.0 license
 """
+
 from __future__ import print_function
 
 import json

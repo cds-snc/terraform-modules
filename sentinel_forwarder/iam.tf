@@ -52,6 +52,17 @@ data "aws_iam_policy_document" "sentinel_forwarder_lambda" {
       "*"
     ]
   }
+
+  statement {
+    effect = "Allow"
+    actions = [
+      "ssm:GetParameter",
+      "ssm:GetParameters",
+    ]
+    resources = [
+      aws_ssm_parameter.sentinel_forwarder_auth.arn
+    ]
+  }
 }
 
 resource "aws_iam_policy" "sentinel_forwarder_lambda_s3" {

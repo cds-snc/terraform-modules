@@ -63,4 +63,5 @@ No modules.
 
 | Name | Description |
 |------|-------------|
+| <a name="output_client_vpn_cloudwatch_log_group_name"></a> [client\_vpn\_cloudwatch\_log\_group\_name](#output\_client\_vpn\_cloudwatch\_log\_group\_name) | Client VPN's CloudWatch log group name |
 | <a name="output_client_vpn_security_group_id"></a> [client\_vpn\_security\_group\_id](#output\_client\_vpn\_security\_group\_id) | Client VPN's security group ID |

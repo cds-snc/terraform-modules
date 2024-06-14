@@ -1,6 +1,12 @@
 ###
 # Common tags
 ###
+variable "acl" {
+  description = "(Optional, defaults to 'private') ACL to apply to the bucket"
+  type        = string
+  default     = "private"
+}
+
 variable "billing_tag_key" {
   description = "(Optional) The name of the billing tag"
   type        = string
