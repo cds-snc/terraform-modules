@@ -26,19 +26,6 @@ variable "billing_tag_value" {
   type        = string
 }
 
-variable "client_vpn_saml_metadata_document" {
-  description = "(Required) The base64 encoded SAML metadata document for the Client VPN endpoint"
-  type        = string
-  sensitive   = true
-}
-
-variable "client_vpn_self_service_saml_metadata_document" {
-  description = "(Optional, default empty) The base64 encoded SAML metadata document for the Client VPN's self-service endpoint. The self_service_portal variable must be set to 'enabled' for this to take effect."
-  type        = string
-  default     = ""
-  sensitive   = true
-}
-
 variable "endpoint_name" {
   description = "(Required) The name of the VPN endpoint to create. It must only contain alphanumeric characters, hyphens and underscores."
   type        = string
