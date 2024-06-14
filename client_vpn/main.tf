@@ -36,7 +36,7 @@ resource "aws_ec2_client_vpn_endpoint" "this" {
     for_each = var.authentication_option == "certificate-authentication" ? [1] : []
     content {
       type                       = "certificate-authentication"
-      root_certificate_chain_arn = aws_acm_certificate.cert_vpn[0].arn
+      root_certificate_chain_arn = aws_acm_certificate.client_vpn[0].arn
     }
   }
 
@@ -110,14 +110,14 @@ resource "aws_cloudwatch_log_group" "this" {
 # Certificate based auth
 #
 
-resource "tls_private_key" "cert_vpn" {
+resource "tls_private_key" "client_vpn" {
   count    = var.authentication_option == "certificate-authentication" ? 1 : 0
   algorithm = "RSA"
 }
 
-resource "tls_self_signed_cert" "cert_vpn" {
+resource "tls_self_signed_cert" "client_vpn" {
   count    = var.authentication_option == "certificate-authentication" ? 1 : 0
-  private_key_pem = tls_private_key.cert_vpn[0].private_key_pem
+  private_key_pem = tls_private_key.client_vpn[0].private_key_pem
   validity_period_hours = 8760
 
   subject {
@@ -136,8 +136,8 @@ resource "tls_self_signed_cert" "cert_vpn" {
   ]
 }
 
-resource "aws_acm_certificate" "cert_vpn" {
+resource "aws_acm_certificate" "client_vpn" {
   count    = var.authentication_option == "certificate-authentication" ? 1 : 0
-  private_key      = tls_private_key.cert_vpn[0].private_key_pem
-  certificate_body = tls_self_signed_cert.cert_vpn[0].cert_pem
+  private_key      = tls_private_key.client_vpn[0].private_key_pem
+  certificate_body = tls_self_signed_cert.client_vpn[0].cert_pem
 }
