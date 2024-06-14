@@ -24,8 +24,9 @@ resource "aws_ec2_client_vpn_endpoint" "this" {
   dns_servers           = concat([local.dns_host], var.public_dns_servers)
 
   authentication_options {
-    type                           = "certificate-authentication"
-    root_certificate_chain_arn     = aws_acm_certificate.auth_cert.arn
+    type                           = "federated-authentication"
+    saml_provider_arn              = aws_iam_saml_provider.client_vpn.arn
+    self_service_saml_provider_arn = local.is_self_service ? aws_iam_saml_provider.client_vpn_self_service[0].arn : null
   }
 
   connection_log_options {
@@ -61,7 +62,7 @@ resource "aws_ec2_client_vpn_authorization_rule" "this_subnets" {
   for_each               = toset(var.subnet_cidr_blocks)
   client_vpn_endpoint_id = aws_ec2_client_vpn_endpoint.this.id
   target_network_cidr    = each.value
-  authorize_all_groups   = true
+  access_group_id        = var.access_group_id
   description            = "Rule name: ${each.value}"
 }
 
@@ -91,19 +92,4 @@ resource "aws_cloudwatch_log_group" "this" {
   name              = "/aws/client-vpn-endpoint/${var.endpoint_name}"
   retention_in_days = 14
   tags              = local.common_tags
-}
-
-resource "aws_acm_certificate" "auth_cert" {
-  private_key      = file("certs/server.key")
-  certificate_body = file("certs/server.crt")
-  certificate_chain = file("certs/ca.crt")
-
-  tags = {
-    Name       = "cds-snc-ca"
-    CostCenter = "cds-snc-ca"
-  }
-
-  lifecycle {
-    create_before_destroy = true
-  }
 }
