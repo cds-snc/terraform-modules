@@ -10,10 +10,6 @@
 * This module is based on the design of [fivexl/terraform-aws-client-vpn-endpoint](https://github.com/fivexl/terraform-aws-client-vpn-endpoint).
 */
 
-locals {
-  federated = var.authentication_option == "federated-authentication" ? true : false
-}
-
 resource "aws_ec2_client_vpn_endpoint" "this" {
   description            = var.endpoint_name
   vpc_id                 = var.vpc_id
@@ -75,7 +71,7 @@ resource "aws_ec2_client_vpn_authorization_rule" "this_internal_dns" {
 
 
 resource "aws_ec2_client_vpn_authorization_rule" "this_subnets_certificate" {
-  for_each               = local.federated ? [] : toset(var.subnet_cidr_blocks)
+  for_each               = var.authentication_option == "federated-authentication" ? [] : toset(var.subnet_cidr_blocks)
   client_vpn_endpoint_id = aws_ec2_client_vpn_endpoint.this.id
   target_network_cidr    = each.value
   authorize_all_groups   = true
@@ -84,7 +80,7 @@ resource "aws_ec2_client_vpn_authorization_rule" "this_subnets_certificate" {
 
 # Keeping the name this_subnets so that the resources don't have to be moved/recreated for existing installations
 resource "aws_ec2_client_vpn_authorization_rule" "this_subnets" {
-  for_each               = local.federated ? toset(var.subnet_cidr_blocks) : []
+  for_each               = var.authentication_option == "federated-authentication" ? toset(var.subnet_cidr_blocks) : []
   client_vpn_endpoint_id = aws_ec2_client_vpn_endpoint.this.id
   target_network_cidr    = each.value
   access_group_id        = var.access_group_id
