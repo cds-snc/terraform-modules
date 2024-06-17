@@ -82,6 +82,7 @@ resource "aws_ec2_client_vpn_authorization_rule" "this_subnets_certificate" {
   description            = "Rule name: ${each.value}"
 }
 
+# Keeping the name this_subnets so that the resources don't have to be moved/recreated for existing installations
 resource "aws_ec2_client_vpn_authorization_rule" "this_subnets" {
   for_each               = local.federated ? toset(var.subnet_cidr_blocks) : []
   client_vpn_endpoint_id = aws_ec2_client_vpn_endpoint.this.id
