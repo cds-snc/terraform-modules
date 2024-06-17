@@ -27,7 +27,7 @@ No modules.
 
 | Name | Type |
 |------|------|
-| [aws_acm_certificate.cert_vpn](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/acm_certificate) | resource |
+| [aws_acm_certificate.client_vpn](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/acm_certificate) | resource |
 | [aws_cloudwatch_log_group.this](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/cloudwatch_log_group) | resource |
 | [aws_ec2_client_vpn_authorization_rule.this_internal_dns](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/ec2_client_vpn_authorization_rule) | resource |
 | [aws_ec2_client_vpn_authorization_rule.this_subnets](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/ec2_client_vpn_authorization_rule) | resource |
@@ -37,8 +37,8 @@ No modules.
 | [aws_iam_saml_provider.client_vpn_self_service](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/iam_saml_provider) | resource |
 | [aws_security_group.this](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/security_group) | resource |
 | [aws_security_group_rule.egress_all](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/security_group_rule) | resource |
-| [tls_private_key.cert_vpn](https://registry.terraform.io/providers/hashicorp/tls/latest/docs/resources/private_key) | resource |
-| [tls_self_signed_cert.cert_vpn](https://registry.terraform.io/providers/hashicorp/tls/latest/docs/resources/self_signed_cert) | resource |
+| [tls_private_key.client_vpn](https://registry.terraform.io/providers/hashicorp/tls/latest/docs/resources/private_key) | resource |
+| [tls_self_signed_cert.client_vpn](https://registry.terraform.io/providers/hashicorp/tls/latest/docs/resources/self_signed_cert) | resource |
 
 ## Inputs
 
@@ -68,9 +68,7 @@ No modules.
 
 | Name | Description |
 |------|-------------|
+| <a name="output_client_vpn_certificate_pem"></a> [client\_vpn\_certificate\_pem](#output\_client\_vpn\_certificate\_pem) | Client VPN's certificate PEM |
 | <a name="output_client_vpn_cloudwatch_log_group_name"></a> [client\_vpn\_cloudwatch\_log\_group\_name](#output\_client\_vpn\_cloudwatch\_log\_group\_name) | Client VPN's CloudWatch log group name |
+| <a name="output_client_vpn_private_key_pem"></a> [client\_vpn\_private\_key\_pem](#output\_client\_vpn\_private\_key\_pem) | Client VPN's private key PEM |
 | <a name="output_client_vpn_security_group_id"></a> [client\_vpn\_security\_group\_id](#output\_client\_vpn\_security\_group\_id) | Client VPN's security group ID |
-| <a name="output_gha_vpn_certificate_pem"></a> [gha\_vpn\_certificate\_pem](#output\_gha\_vpn\_certificate\_pem) | Github Action VPN's certificate PEM |
-| <a name="output_gha_vpn_cloudwatch_log_group_name"></a> [gha\_vpn\_cloudwatch\_log\_group\_name](#output\_gha\_vpn\_cloudwatch\_log\_group\_name) | Github Action VPN's CloudWatch log group name |
-| <a name="output_gha_vpn_private_key_pem"></a> [gha\_vpn\_private\_key\_pem](#output\_gha\_vpn\_private\_key\_pem) | Github Action VPN's private key PEM |
-| <a name="output_gha_vpn_security_group_id"></a> [gha\_vpn\_security\_group\_id](#output\_gha\_vpn\_security\_group\_id) | Github Action VPN's security group ID |
