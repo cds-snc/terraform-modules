@@ -3,6 +3,7 @@ provider "aws" {
 }
 
 variables {
+  authentication_option                          = "federated-authentication"
   endpoint_name                                  = "vpn"
   access_group_id                                = "12345678-abcd-1234-efgh-123456789012"
   banner_text                                    = "I like private networks"

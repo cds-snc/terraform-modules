@@ -10,6 +10,10 @@
 * This module is based on the design of [fivexl/terraform-aws-client-vpn-endpoint](https://github.com/fivexl/terraform-aws-client-vpn-endpoint).
 */
 
+locals {
+  federated = var.authentication_option == "federated-authentication" ? true : false
+}
+
 resource "aws_ec2_client_vpn_endpoint" "this" {
   description            = var.endpoint_name
   vpc_id                 = var.vpc_id
@@ -70,11 +74,19 @@ resource "aws_ec2_client_vpn_authorization_rule" "this_internal_dns" {
 }
 
 
-resource "aws_ec2_client_vpn_authorization_rule" "this_subnets" {
-  for_each               = toset(var.subnet_cidr_blocks)
+resource "aws_ec2_client_vpn_authorization_rule" "this_subnets_certificate" {
+  for_each               = local.federated ? [] : toset(var.subnet_cidr_blocks)
   client_vpn_endpoint_id = aws_ec2_client_vpn_endpoint.this.id
   target_network_cidr    = each.value
   authorize_all_groups   = true
+  description            = "Rule name: ${each.value}"
+}
+
+resource "aws_ec2_client_vpn_authorization_rule" "this_subnets_federated" {
+  for_each               = local.federated ? toset(var.subnet_cidr_blocks) : []
+  client_vpn_endpoint_id = aws_ec2_client_vpn_endpoint.this.id
+  target_network_cidr    = each.value
+  access_group_id        = var.access_group_id
   description            = "Rule name: ${each.value}"
 }
 
@@ -111,13 +123,13 @@ resource "aws_cloudwatch_log_group" "this" {
 #
 
 resource "tls_private_key" "client_vpn" {
-  count     = var.authentication_option == "certificate-authentication" ? 1 : 0
+  count    = var.authentication_option == "certificate-authentication" ? 1 : 0
   algorithm = "RSA"
 }
 
 resource "tls_self_signed_cert" "client_vpn" {
-  count                 = var.authentication_option == "certificate-authentication" ? 1 : 0
-  private_key_pem       = tls_private_key.client_vpn[0].private_key_pem
+  count    = var.authentication_option == "certificate-authentication" ? 1 : 0
+  private_key_pem = tls_private_key.client_vpn[0].private_key_pem
   validity_period_hours = 8760
 
   subject {
@@ -137,7 +149,7 @@ resource "tls_self_signed_cert" "client_vpn" {
 }
 
 resource "aws_acm_certificate" "client_vpn" {
-  count            = var.authentication_option == "certificate-authentication" ? 1 : 0
+  count    = var.authentication_option == "certificate-authentication" ? 1 : 0
   private_key      = tls_private_key.client_vpn[0].private_key_pem
   certificate_body = tls_self_signed_cert.client_vpn[0].cert_pem
 }
