@@ -123,13 +123,13 @@ resource "aws_cloudwatch_log_group" "this" {
 #
 
 resource "tls_private_key" "client_vpn" {
-  count    = var.authentication_option == "certificate-authentication" ? 1 : 0
+  count     = var.authentication_option == "certificate-authentication" ? 1 : 0
   algorithm = "RSA"
 }
 
 resource "tls_self_signed_cert" "client_vpn" {
-  count    = var.authentication_option == "certificate-authentication" ? 1 : 0
-  private_key_pem = tls_private_key.client_vpn[0].private_key_pem
+  count                 = var.authentication_option == "certificate-authentication" ? 1 : 0
+  private_key_pem       = tls_private_key.client_vpn[0].private_key_pem
   validity_period_hours = 8760
 
   subject {
@@ -149,7 +149,7 @@ resource "tls_self_signed_cert" "client_vpn" {
 }
 
 resource "aws_acm_certificate" "client_vpn" {
-  count    = var.authentication_option == "certificate-authentication" ? 1 : 0
+  count            = var.authentication_option == "certificate-authentication" ? 1 : 0
   private_key      = tls_private_key.client_vpn[0].private_key_pem
   certificate_body = tls_self_signed_cert.client_vpn[0].cert_pem
 }
