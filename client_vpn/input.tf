@@ -118,7 +118,7 @@ variable "authentication_option" {
 }
 
 variable "client_vpn_saml_metadata_document" {
-  description = "(Required) The base64 encoded SAML metadata document for the Client VPN endpoint"
+  description = "(Optional, default empty) The base64 encoded SAML metadata document for the Client VPN endpoint"
   type        = string
   default     = ""
   sensitive   = true
