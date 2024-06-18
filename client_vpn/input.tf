@@ -111,7 +111,12 @@ variable "authentication_option" {
   description = "(Optional, default 'federated-authentication') The authentication option to use for the VPN endpoint.  Valid values are 'federated-authentication' or 'certificate-authentication'."
   type        = string
   default     = "federated-authentication"
+  validation {
+    condition     = contains(["federated-authentication", "certificate-authentication"], var.authentication_option)
+    error_message = "The authentication option must be either 'federated-authentication' or 'certificate-authentication'."
+  } 
 }
+
 variable "client_vpn_saml_metadata_document" {
   description = "(Required) The base64 encoded SAML metadata document for the Client VPN endpoint"
   type        = string
