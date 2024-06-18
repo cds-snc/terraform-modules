@@ -114,7 +114,7 @@ variable "authentication_option" {
   validation {
     condition     = contains(["federated-authentication", "certificate-authentication"], var.authentication_option)
     error_message = "The authentication option must be either 'federated-authentication' or 'certificate-authentication'."
-  } 
+  }
 }
 
 variable "client_vpn_saml_metadata_document" {
