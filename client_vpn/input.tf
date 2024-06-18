@@ -130,3 +130,15 @@ variable "client_vpn_self_service_saml_metadata_document" {
   default     = ""
   sensitive   = true
 }
+
+variable "common_name" {
+  description = "(Optional, default 'cds-snc.ca') The common name to use for the VPN client certificate."
+  type        = string
+  default     = "cds-snc.ca"
+}
+
+variable "organization" {
+  description = "(Optional, default 'Canadian Digital Service') The organization to use for the VPN client certificate."
+  type        = string
+  default     = "Canadian Digital Service"
+}

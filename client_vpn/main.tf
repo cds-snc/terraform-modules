@@ -130,8 +130,8 @@ resource "tls_self_signed_cert" "client_vpn" {
   validity_period_hours = 8760
 
   subject {
-    common_name  = "cds-snc.ca"
-    organization = "Canadian Digital Service"
+    common_name  = var.common_name
+    organization = var.organization
   }
 
   allowed_uses = [
