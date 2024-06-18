@@ -16,8 +16,8 @@ run "default" {
   command = plan
 
   assert {
-    condition     = strcontains(aws_iam_saml_provider.client_vpn.saml_metadata_document, "https://portal.sso.ca-central-1.amazonaws.com/saml/logout/abcdef")
-    error_message = "aws_iam_saml_provider.client_vpn.saml_metadata_document did not match expected value"
+    condition     = strcontains(aws_iam_saml_provider.client_vpn[0].saml_metadata_document, "https://portal.sso.ca-central-1.amazonaws.com/saml/logout/abcdef")
+    error_message = "aws_iam_saml_provider.client_vpn[0].saml_metadata_document did not match expected value"
   }
 
   assert {

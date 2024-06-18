@@ -23,10 +23,21 @@ resource "aws_ec2_client_vpn_endpoint" "this" {
   security_group_ids    = [aws_security_group.this.id]
   dns_servers           = concat([local.dns_host], var.public_dns_servers)
 
-  authentication_options {
-    type                           = "federated-authentication"
-    saml_provider_arn              = aws_iam_saml_provider.client_vpn.arn
-    self_service_saml_provider_arn = local.is_self_service ? aws_iam_saml_provider.client_vpn_self_service[0].arn : null
+  dynamic "authentication_options" {
+    for_each = var.authentication_option == "federated-authentication" ? [1] : []
+    content {
+      type                           = "federated-authentication"
+      saml_provider_arn              = aws_iam_saml_provider.client_vpn[0].arn
+      self_service_saml_provider_arn = local.is_self_service ? aws_iam_saml_provider.client_vpn_self_service[0].arn : null
+    }
+  }
+
+  dynamic "authentication_options" {
+    for_each = var.authentication_option == "certificate-authentication" ? [1] : []
+    content {
+      type                       = "certificate-authentication"
+      root_certificate_chain_arn = aws_acm_certificate.client_vpn[0].arn
+    }
   }
 
   connection_log_options {
@@ -58,8 +69,18 @@ resource "aws_ec2_client_vpn_authorization_rule" "this_internal_dns" {
   description            = "Authorization for ${var.endpoint_name} to DNS"
 }
 
+
+resource "aws_ec2_client_vpn_authorization_rule" "this_subnets_certificate" {
+  for_each               = var.authentication_option == "federated-authentication" ? [] : toset(var.subnet_cidr_blocks)
+  client_vpn_endpoint_id = aws_ec2_client_vpn_endpoint.this.id
+  target_network_cidr    = each.value
+  authorize_all_groups   = true
+  description            = "Rule name: ${each.value}"
+}
+
+# Keeping the name this_subnets so that the resources don't have to be moved/recreated for existing installations
 resource "aws_ec2_client_vpn_authorization_rule" "this_subnets" {
-  for_each               = toset(var.subnet_cidr_blocks)
+  for_each               = var.authentication_option == "federated-authentication" ? toset(var.subnet_cidr_blocks) : []
   client_vpn_endpoint_id = aws_ec2_client_vpn_endpoint.this.id
   target_network_cidr    = each.value
   access_group_id        = var.access_group_id
@@ -92,4 +113,40 @@ resource "aws_cloudwatch_log_group" "this" {
   name              = "/aws/client-vpn-endpoint/${var.endpoint_name}"
   retention_in_days = 14
   tags              = local.common_tags
+}
+
+#
+# Certificate based auth
+#
+
+resource "tls_private_key" "client_vpn" {
+  count     = var.authentication_option == "certificate-authentication" ? 1 : 0
+  algorithm = "RSA"
+}
+
+resource "tls_self_signed_cert" "client_vpn" {
+  count                 = var.authentication_option == "certificate-authentication" ? 1 : 0
+  private_key_pem       = tls_private_key.client_vpn[0].private_key_pem
+  validity_period_hours = 8760
+
+  subject {
+    common_name  = var.common_name
+    organization = var.organization
+  }
+
+  allowed_uses = [
+    "key_encipherment",
+    "digital_signature",
+    "server_auth",
+    "ipsec_end_system",
+    "ipsec_tunnel",
+    "any_extended",
+    "cert_signing",
+  ]
+}
+
+resource "aws_acm_certificate" "client_vpn" {
+  count            = var.authentication_option == "certificate-authentication" ? 1 : 0
+  private_key      = tls_private_key.client_vpn[0].private_key_pem
+  certificate_body = tls_self_signed_cert.client_vpn[0].cert_pem
 }

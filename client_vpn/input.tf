@@ -26,19 +26,6 @@ variable "billing_tag_value" {
   type        = string
 }
 
-variable "client_vpn_saml_metadata_document" {
-  description = "(Required) The base64 encoded SAML metadata document for the Client VPN endpoint"
-  type        = string
-  sensitive   = true
-}
-
-variable "client_vpn_self_service_saml_metadata_document" {
-  description = "(Optional, default empty) The base64 encoded SAML metadata document for the Client VPN's self-service endpoint. The self_service_portal variable must be set to 'enabled' for this to take effect."
-  type        = string
-  default     = ""
-  sensitive   = true
-}
-
 variable "endpoint_name" {
   description = "(Required) The name of the VPN endpoint to create. It must only contain alphanumeric characters, hyphens and underscores."
   type        = string
@@ -119,4 +106,39 @@ variable "vpc_cidr_block" {
 variable "vpc_id" {
   description = "(Required) ID of the VPC to associate with the VPN endpoint."
   type        = string
+}
+variable "authentication_option" {
+  description = "(Optional, default 'federated-authentication') The authentication option to use for the VPN endpoint.  Valid values are 'federated-authentication' or 'certificate-authentication'."
+  type        = string
+  default     = "federated-authentication"
+  validation {
+    condition     = contains(["federated-authentication", "certificate-authentication"], var.authentication_option)
+    error_message = "The authentication option must be either 'federated-authentication' or 'certificate-authentication'."
+  }
+}
+
+variable "client_vpn_saml_metadata_document" {
+  description = "(Optional, default empty) The base64 encoded SAML metadata document for the Client VPN endpoint"
+  type        = string
+  default     = ""
+  sensitive   = true
+}
+
+variable "client_vpn_self_service_saml_metadata_document" {
+  description = "(Optional, default empty) The base64 encoded SAML metadata document for the Client VPN's self-service endpoint. The self_service_portal variable must be set to 'enabled' for this to take effect."
+  type        = string
+  default     = ""
+  sensitive   = true
+}
+
+variable "common_name" {
+  description = "(Optional, default 'cds-snc.ca') The common name to use for the VPN client certificate."
+  type        = string
+  default     = "cds-snc.ca"
+}
+
+variable "organization" {
+  description = "(Optional, default 'Canadian Digital Service') The organization to use for the VPN client certificate."
+  type        = string
+  default     = "Canadian Digital Service"
 }
