@@ -16,6 +16,6 @@ output "client_vpn_private_key_pem" {
 
 output "client_vpn_certificate_pem" {
   description = "Client VPN's certificate PEM"
-  value       = var.authentication_option == "certificate-authentication" ? tls_private_key.client_vpn[0].private_key_pem : null
+  value       = var.authentication_option == "certificate-authentication" ? tls_self_signed_cert.client_vpn[0].cert_pem : null
   sensitive   = true
 }
