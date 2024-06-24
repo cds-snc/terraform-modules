@@ -10,7 +10,9 @@ locals {
     image           = var.container_image
     healthCheck     = length(var.container_health_check) > 0 ? var.container_health_check : null
     linuxParameters = length(var.container_linux_parameters) > 0 ? var.container_linux_parameters : null
-    mountPoints     = length(var.container_mount_points) > 0 ? var.container_mount_points : null
+    mountPoints     = length(var.container_mount_points) > 0 ? var.container_mount_points : []
+    systemControls  = length(var.container_system_controls) > 0 ? var.container_system_controls : []
+    volumesFrom     = length(var.container_volumes_from) > 0 ? var.container_volumes_from : []
 
     portMappings = var.container_host_port != null && var.container_port != null ? [{
       hostPort : var.container_host_port,
