@@ -175,7 +175,7 @@ variable "autoscaling_policies" {
 variable "container_cpu" {
   description = "(Optional, no default) The number of cpu units to reserve for the container. This is optional for tasks using Fargate launch type and the total amount of `cpu` of all containers in a task will need to be lower than the task-level cpu value"
   type        = number
-  default     = null
+  default     = 0
 }
 
 variable "container_memory" {
@@ -200,9 +200,9 @@ variable "container_environment" {
 }
 
 variable "container_essential" {
-  description = "(Optional, no default) If the `essential` parameter of a container is marked as `true`, and that container fails or stops for any reason, all other containers that are part of the task are stopped"
+  description = "(Optional, default `true`) If the `essential` parameter of a container is marked as `true`, and that container fails or stops for any reason, all other containers that are part of the task are stopped"
   type        = bool
-  default     = null
+  default     = true
 }
 
 variable "container_health_check" {
@@ -221,6 +221,7 @@ variable "container_linux_parameters" {
   type        = any
   default = {
     capabilities : {
+      add : []
       drop : ["ALL"]
     }
   }
@@ -245,12 +246,27 @@ variable "container_secrets" {
   default = []
 }
 
+variable "container_system_controls" {
+  description = "(Optional, no default) A list of namespace kernel parameters to set in the container."
+  type        = list(string)
+  default     = []
+}
+
 variable "container_ulimits" {
   description = "(Optional, no default) The ulimits of the container"
   type = list(object({
     name      = string
     softLimit = number
     hardLimit = number
+  }))
+  default = []
+}
+
+variable "container_volumes_from" {
+  description = "(Optional, no default) Data volumes to mount from another container."
+  type = list(object({
+    sourceContainer = string
+    readOnly        = bool
   }))
   default = []
 }
