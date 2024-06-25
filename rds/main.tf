@@ -103,11 +103,23 @@ resource "aws_db_proxy" "proxy" {
   vpc_security_group_ids = local.security_group_ids
   vpc_subnet_ids         = var.subnet_ids
 
+  # Default proxy authentication user
   auth {
     auth_scheme = "SECRETS"
     description = "The database connection string"
     iam_auth    = "DISABLED"
     secret_arn  = aws_secretsmanager_secret.connection_string.arn
+  }
+
+  # Additional proxy authentication users
+  dynamic "auth" {
+    for_each = var.proxy_secret_auth_arns
+    content {
+      auth_scheme = "SECRETS"
+      description = "Additional proxy authentication"
+      iam_auth    = "DISABLED"
+      secret_arn  = auth.value
+    }
   }
 
   tags = merge(local.common_tags, {

@@ -28,7 +28,7 @@ data "aws_iam_policy_document" "read_connection_string" {
       "secretsmanager:DescribeSecret",
       "secretsmanager:ListSecretVersionIds"
     ]
-    resources = [aws_secretsmanager_secret.connection_string.arn]
+    resources = concat([aws_secretsmanager_secret.connection_string.arn], var.proxy_secret_auth_arns)
   }
   statement {
     sid       = 1

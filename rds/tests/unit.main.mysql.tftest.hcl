@@ -173,4 +173,9 @@ run "mysql_cluster" {
     condition     = local.database_port == 3306
     error_message = "Local database port did not match expected value"
   }
+
+  assert {
+    condition     = length(aws_db_proxy.proxy.auth) == 1
+    error_message = "RDS proxy auth length did not match expected value"
+  }
 }

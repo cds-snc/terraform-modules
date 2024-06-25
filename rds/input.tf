@@ -186,6 +186,11 @@ variable "upgrade_immediately" {
 ###
 # Proxy Configuration
 ###
+variable "proxy_secret_auth_arns" {
+  type        = list(string)
+  description = "(Optional, default none) A list of secret ARNs that contain authentication credentials for the proxy. View the `aws_secretsmanager_secret_version.connection_string` resource for the secret format. Note that these must be database users that already exist."
+  default     = []
+}
 
 variable "proxy_log_retention_in_days" {
   type        = number
