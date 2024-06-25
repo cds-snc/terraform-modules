@@ -57,8 +57,8 @@ resource "aws_s3_bucket" "this" {
 
   lifecycle {
     ignore_changes = [
-      tags["version"],
-      tags_all["version"]
+      tags["Version"],
+      tags_all["Version"]
     ]
   }
 }
