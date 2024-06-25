@@ -200,4 +200,9 @@ run "postgres_cluster" {
     condition     = aws_rds_cluster.cluster.iam_database_authentication_enabled == false
     error_message = "IAM database authentication enabled did not match expected value"
   }
+
+  assert {
+    condition     = length(aws_db_proxy.proxy.auth) == 1
+    error_message = "RDS proxy auth length did not match expected value"
+  }
 }
