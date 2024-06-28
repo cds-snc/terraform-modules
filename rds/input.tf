@@ -108,6 +108,12 @@ variable "snapshot_identifier" {
   default     = null
 }
 
+variable "use_proxy" {
+  type        = bool
+  description = "(Optional, default 'true') This flag determines if an RDS proxy should be created for the cluster."
+  default     = true
+}
+
 ###
 # Common tags
 ###

@@ -1,5 +1,5 @@
 /* # RDS Cluster
-* This module will create an RDS Cluster behind an RDS Proxy to manage connections.
+* This module will create an RDS Cluster with an optional RDS Proxy to manage connections.
 */
 
 resource "random_string" "random" {
@@ -88,18 +88,16 @@ resource "aws_db_subnet_group" "rds" {
 # RDS Proxy
 ###
 
-locals {
-  proxy_name = "${var.name}-proxy"
-}
-
 resource "aws_db_proxy" "proxy" {
+  count = var.use_proxy ? 1 : 0
+
   name                = local.proxy_name
   debug_logging       = var.proxy_debug_logging
   engine_family       = local.engine_family
   idle_client_timeout = 1800
   require_tls         = true
 
-  role_arn               = aws_iam_role.rds_proxy.arn
+  role_arn               = aws_iam_role.rds_proxy[0].arn
   vpc_security_group_ids = local.security_group_ids
   vpc_subnet_ids         = var.subnet_ids
 
@@ -108,7 +106,7 @@ resource "aws_db_proxy" "proxy" {
     auth_scheme = "SECRETS"
     description = "The database connection string"
     iam_auth    = "DISABLED"
-    secret_arn  = aws_secretsmanager_secret.connection_string.arn
+    secret_arn  = aws_secretsmanager_secret.connection_string[0].arn
   }
 
   # Additional proxy authentication users
@@ -128,12 +126,16 @@ resource "aws_db_proxy" "proxy" {
 }
 
 resource "aws_db_proxy_default_target_group" "this" {
-  db_proxy_name = aws_db_proxy.proxy.name
+  count = var.use_proxy ? 1 : 0
+
+  db_proxy_name = aws_db_proxy.proxy[0].name
 }
 
 resource "aws_db_proxy_target" "target" {
-  db_proxy_name         = aws_db_proxy.proxy.name
-  target_group_name     = aws_db_proxy_default_target_group.this.name
+  count = var.use_proxy ? 1 : 0
+
+  db_proxy_name         = aws_db_proxy.proxy[0].name
+  target_group_name     = aws_db_proxy_default_target_group.this[0].name
   db_cluster_identifier = aws_rds_cluster.cluster.id
 }
 
@@ -154,4 +156,3 @@ resource "aws_db_event_subscription" "rds_sg_events_alerts" {
     "failure",
   ]
 }
-
