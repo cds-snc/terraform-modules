@@ -142,12 +142,12 @@ run "postgres_cluster" {
   }
 
   assert {
-    condition     = aws_db_proxy.proxy.engine_family == "POSTGRESQL"
+    condition     = aws_db_proxy.proxy[0].engine_family == "POSTGRESQL"
     error_message = "DB proxy engine family did not match expected value"
   }
 
   assert {
-    condition     = aws_db_proxy.proxy.vpc_subnet_ids == toset(["subnet1234"])
+    condition     = aws_db_proxy.proxy[0].vpc_subnet_ids == toset(["subnet1234"])
     error_message = "DB proxy subnet IDs did not match expected value"
   }
 
@@ -202,7 +202,7 @@ run "postgres_cluster" {
   }
 
   assert {
-    condition     = length(aws_db_proxy.proxy.auth) == 1
+    condition     = length(aws_db_proxy.proxy[0].auth) == 1
     error_message = "RDS proxy auth length did not match expected value"
   }
 }

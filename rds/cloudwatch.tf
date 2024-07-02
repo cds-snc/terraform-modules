@@ -1,4 +1,6 @@
 resource "aws_cloudwatch_log_group" "proxy" {
+  count = var.use_proxy ? 1 : 0
+
   name              = "/aws/rds/proxy/${local.proxy_name}"
   retention_in_days = var.proxy_log_retention_in_days
 

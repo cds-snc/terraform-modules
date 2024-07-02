@@ -130,22 +130,22 @@ run "mysql_cluster" {
   }
 
   assert {
-    condition     = aws_db_proxy.proxy.engine_family == "MYSQL"
+    condition     = aws_db_proxy.proxy[0].engine_family == "MYSQL"
     error_message = "DB proxy engine family did not match expected value"
   }
 
   assert {
-    condition     = aws_db_proxy.proxy.vpc_subnet_ids == toset(["subnet1234", "subnet5678"])
+    condition     = aws_db_proxy.proxy[0].vpc_subnet_ids == toset(["subnet1234", "subnet5678"])
     error_message = "DB proxy subnet IDs did not match expected value"
   }
 
   assert {
-    condition     = aws_db_proxy_default_target_group.this.db_proxy_name == "mysql-proxy"
+    condition     = aws_db_proxy_default_target_group.this[0].db_proxy_name == "mysql-proxy"
     error_message = "DB proxy default target group proxy name did not match expected value"
   }
 
   assert {
-    condition     = aws_db_proxy_target.target.db_proxy_name == "mysql-proxy"
+    condition     = aws_db_proxy_target.target[0].db_proxy_name == "mysql-proxy"
     error_message = "DB proxy target proxy name did not match expected value"
   }
 
@@ -175,7 +175,7 @@ run "mysql_cluster" {
   }
 
   assert {
-    condition     = length(aws_db_proxy.proxy.auth) == 1
+    condition     = length(aws_db_proxy.proxy[0].auth) == 1
     error_message = "RDS proxy auth length did not match expected value"
   }
 }

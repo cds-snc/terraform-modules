@@ -1,10 +1,14 @@
 resource "aws_iam_role" "rds_proxy" {
+  count = var.use_proxy ? 1 : 0
+
   name               = "${var.name}_rds_proxy"
   tags               = local.common_tags
-  assume_role_policy = data.aws_iam_policy_document.assume_role.json
+  assume_role_policy = data.aws_iam_policy_document.assume_role[0].json
 }
 
 data "aws_iam_policy_document" "assume_role" {
+  count = var.use_proxy ? 1 : 0
+
   statement {
     sid     = "RDSAssume"
     effect  = "Allow"
@@ -18,6 +22,8 @@ data "aws_iam_policy_document" "assume_role" {
 }
 
 data "aws_iam_policy_document" "read_connection_string" {
+  count = var.use_proxy ? 1 : 0
+
   statement {
     sid    = 0
     effect = "Allow"
@@ -28,7 +34,7 @@ data "aws_iam_policy_document" "read_connection_string" {
       "secretsmanager:DescribeSecret",
       "secretsmanager:ListSecretVersionIds"
     ]
-    resources = concat([aws_secretsmanager_secret.connection_string.arn], var.proxy_secret_auth_arns)
+    resources = concat([aws_secretsmanager_secret.connection_string[0].arn], var.proxy_secret_auth_arns)
   }
   statement {
     sid       = 1
@@ -52,13 +58,17 @@ data "aws_iam_policy_document" "read_connection_string" {
 }
 
 resource "aws_iam_policy" "read_connection_string" {
+  count = var.use_proxy ? 1 : 0
+
   name   = "${var.name}ReadConnectionString"
   path   = "/"
-  policy = data.aws_iam_policy_document.read_connection_string.json
+  policy = data.aws_iam_policy_document.read_connection_string[0].json
   tags   = local.common_tags
 }
 
 resource "aws_iam_role_policy_attachment" "read_connection_string" {
-  role       = aws_iam_role.rds_proxy.name
-  policy_arn = aws_iam_policy.read_connection_string.arn
+  count = var.use_proxy ? 1 : 0
+
+  role       = aws_iam_role.rds_proxy[0].name
+  policy_arn = aws_iam_policy.read_connection_string[0].arn
 }
