@@ -30,9 +30,9 @@ run "plan" {
     container_host_port = 8080
     lb_target_group_arn = "arn:aws:elasticloadbalancing:ca-central-1:123456789012:targetgroup/tg1/1234567890"
     lb_target_group_arns = [{
-      lb_target_group_arn = "arn:aws:elasticloadbalancing:ca-central-1:123456789012:targetgroup/tg2/1234567890"
-      container_name      = "nginx-proxy"
-      container_host_port = 8081
+      target_group_arn = "arn:aws:elasticloadbalancing:ca-central-1:123456789012:targetgroup/tg2/1234567890"
+      container_name   = "nginx-proxy"
+      container_host   = 8081
     }]
   }
 

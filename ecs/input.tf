@@ -88,9 +88,9 @@ variable "lb_target_group_arn" {
 variable "lb_target_group_arns" {
   description = "(Optional, no default) The load_balancer configuration block.  Use when advanced load balancer configuration is required (e.g. multiple target groups or containers)."
   type = list(object({
-    lb_target_group_arn = string
-    container_name      = string
-    container_host_port = number
+    target_group_arn = string
+    container_name   = string
+    container_port   = number
   }))
   default = []
 }
