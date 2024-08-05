@@ -21,6 +21,57 @@ run "setup" {
   }
 }
 
+run "plan" {
+  command = plan
+
+  variables {
+    subnet_ids          = ["subnet-12345678"]
+    security_group_ids  = ["sg-12345678"]
+    container_host_port = 8080
+    lb_target_group_arn = "arn:aws:elasticloadbalancing:ca-central-1:123456789012:targetgroup/tg1/1234567890"
+    lb_target_group_arns = [{
+      lb_target_group_arn = "arn:aws:elasticloadbalancing:ca-central-1:123456789012:targetgroup/tg2/1234567890"
+      container_name      = "nginx-proxy"
+      container_host_port = 8081
+    }]
+  }
+
+  assert {
+    condition     = length(aws_ecs_service.this.load_balancer) == 2
+    error_message = "Unexpected load_balancer length"
+  }
+
+  assert {
+    condition     = [for lb in aws_ecs_service.this.load_balancer : lb][0].target_group_arn == "arn:aws:elasticloadbalancing:ca-central-1:123456789012:targetgroup/tg1/1234567890"
+    error_message = "Unexpected target_group_arn value"
+  }
+
+  assert {
+    condition     = [for lb in aws_ecs_service.this.load_balancer : lb][0].container_name == "nginx"
+    error_message = "Unexpected container_name value"
+  }
+
+  assert {
+    condition     = [for lb in aws_ecs_service.this.load_balancer : lb][0].container_port == 8080
+    error_message = "Unexpected container_port value"
+  }
+
+  assert {
+    condition     = [for lb in aws_ecs_service.this.load_balancer : lb][1].target_group_arn == "arn:aws:elasticloadbalancing:ca-central-1:123456789012:targetgroup/tg2/1234567890"
+    error_message = "Unexpected target_group_arn value"
+  }
+
+  assert {
+    condition     = [for lb in aws_ecs_service.this.load_balancer : lb][1].container_name == "nginx-proxy"
+    error_message = "Unexpected container_name value"
+  }
+
+  assert {
+    condition     = [for lb in aws_ecs_service.this.load_balancer : lb][1].container_port == 8081
+    error_message = "Unexpected container_port value"
+  }
+}
+
 run "apply" {
   # Smoke test to validate that the module can successfully be applied
   variables {

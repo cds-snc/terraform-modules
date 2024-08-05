@@ -85,6 +85,16 @@ variable "lb_target_group_arn" {
   default     = null
 }
 
+variable "lb_target_group_arns" {
+  description = "(Optional, no default) The load_balancer configuration block.  Use when advanced load balancer configuration is required (e.g. multiple target groups or containers)."
+  type = list(object({
+    lb_target_group_arn = string
+    container_name      = string
+    container_host_port = number
+  }))
+  default = []
+}
+
 variable "subnet_ids" {
   description = "(Required) List of subnets to associate with the service"
   type        = list(string)
