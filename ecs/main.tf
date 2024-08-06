@@ -66,12 +66,23 @@ resource "aws_ecs_service" "this" {
     assign_public_ip = false
   }
 
+  # Simple load balancer configuration
   dynamic "load_balancer" {
     for_each = var.lb_target_group_arn != null ? [1] : []
     content {
       target_group_arn = var.lb_target_group_arn
       container_name   = local.container_name
       container_port   = var.container_host_port
+    }
+  }
+
+  # Advanced load balancer configuration
+  dynamic "load_balancer" {
+    for_each = var.lb_target_group_arns
+    content {
+      target_group_arn = load_balancer.value.target_group_arn
+      container_name   = load_balancer.value.container_name
+      container_port   = load_balancer.value.container_port
     }
   }
 
