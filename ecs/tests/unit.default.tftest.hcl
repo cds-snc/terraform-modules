@@ -32,7 +32,7 @@ run "plan" {
     lb_target_group_arns = [{
       target_group_arn = "arn:aws:elasticloadbalancing:ca-central-1:123456789012:targetgroup/tg2/1234567890"
       container_name   = "nginx-proxy"
-      container_host   = 8081
+      container_port   = 8081
     }]
   }
 
