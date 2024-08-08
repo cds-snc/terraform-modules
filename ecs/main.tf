@@ -45,7 +45,7 @@ data "aws_ecs_cluster" "this" {
 resource "aws_ecs_service" "this" {
   name             = var.service_name
   cluster          = var.create_cluster ? aws_ecs_cluster.this[0].name : var.cluster_name
-  task_definition  = aws_ecs_task_definition.this.arn
+  task_definition  = aws_ecs_task_definition.this.family # No revision, always use latest ACTIVE task definition
   platform_version = var.platform_version
   launch_type      = "FARGATE"
   propagate_tags   = "SERVICE"
@@ -148,8 +148,6 @@ resource "aws_ecs_task_definition" "this" {
       }
     }
   }
-
-
 
   tags = local.common_tags
 }
