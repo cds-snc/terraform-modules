@@ -43,6 +43,12 @@ variable "service_name" {
   type        = string
 }
 
+variable "service_use_latest_task_def" {
+  description = "(Optional, default false) Should the ECS service always use the latest ACTIVE task definition?  Set to `true` if the task definition is managed outside of Terraform (e.g. CI/CD workflow that deploys changes by updating the task definition)."
+  type        = bool
+  default     = false
+}
+
 variable "platform_version" {
   description = "(Optional, default `LATEST`) Platform version on which to run your service. Defaults to `LATEST`"
   type        = string
