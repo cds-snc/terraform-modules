@@ -45,7 +45,7 @@ data "aws_ecs_cluster" "this" {
 resource "aws_ecs_service" "this" {
   name             = var.service_name
   cluster          = var.create_cluster ? aws_ecs_cluster.this[0].name : var.cluster_name
-  task_definition  = "${aws_ecs_task_definition.this.family}${ var.service_use_latest_task_def ? "" : ":${aws_ecs_task_definition.this.revision}"}"
+  task_definition  = "${aws_ecs_task_definition.this.family}${var.service_use_latest_task_def ? "" : ":${aws_ecs_task_definition.this.revision}"}"
   platform_version = var.platform_version
   launch_type      = "FARGATE"
   propagate_tags   = "SERVICE"
