@@ -19,3 +19,8 @@ output "client_vpn_certificate_pem" {
   value       = var.authentication_option == "certificate-authentication" ? tls_self_signed_cert.client_vpn[0].cert_pem : null
   sensitive   = true
 }
+
+output "client_vpn_endpoint_id" {
+  description = "Client VPN's endpoint ID"
+  value       = aws_ec2_client_vpn_endpoint.this.id
+}
