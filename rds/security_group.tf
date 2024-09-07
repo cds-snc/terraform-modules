@@ -13,6 +13,9 @@ resource "aws_security_group" "rds" {
 
   lifecycle {
     create_before_destroy = true
+    ignore_changes = [
+      description
+    ]
   }
 }
 
