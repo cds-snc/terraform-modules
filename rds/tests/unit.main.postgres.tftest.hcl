@@ -15,6 +15,7 @@ variables {
 
   backup_retention_period = 7
   preferred_backup_window = "01:00-03:00"
+  security_group_name     = "custom_postgres_rds_sg"
 
   enabled_cloudwatch_logs_exports = ["audit", "error", "general", "slowquery", "postgresql"]
 
@@ -204,5 +205,10 @@ run "postgres_cluster" {
   assert {
     condition     = length(aws_db_proxy.proxy[0].auth) == 1
     error_message = "RDS proxy auth length did not match expected value"
+  }
+
+  assert {
+    condition     = aws_security_group.rds.name == "custom_postgres_rds_sg"
+    error_message = "RDS security group name did not match expected value"
   }
 }

@@ -163,6 +163,12 @@ variable "subnet_ids" {
   type        = set(string)
 }
 
+variable "security_group_name" {
+  description = "(Optional, default '') The name of the security group to create for the RDS cluster."
+  type        = string
+  default     = ""
+}
+
 ###
 # Database Admin User
 ###
