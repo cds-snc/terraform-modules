@@ -15,7 +15,7 @@ locals {
 
   security_group_desc_target = var.use_proxy ? "proxy" : "application"
   security_group_ids         = distinct(concat([aws_security_group.rds.id], var.security_group_ids))
-  security_group_name        = var.security_group_name != "" ? var.security_group_name : (var.use_proxy ? "${var.name}_rds_proxy_sg" : "${var.name}_rds_sg")
+  security_group_name        = var.use_proxy ? "${var.name}_rds_proxy_sg" : "${var.name}_rds_sg"
 
   # Configure the database logs that are exported to CloudWatch.  Default to none for MySQL and `postgresql` for Postgres if no values are specified
   enabled_cloudwatch_logs_exports = length(var.enabled_cloudwatch_logs_exports) > 0 ? var.enabled_cloudwatch_logs_exports : (local.is_mysql ? [] : ["postgresql"])

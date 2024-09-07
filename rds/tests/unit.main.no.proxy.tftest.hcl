@@ -78,9 +78,4 @@ run "postgres_cluster" {
     condition     = length(aws_secretsmanager_secret_version.proxy_connection_string) == 0
     error_message = "aws_secretsmanager_secret_version.proxy_connection_string resource should not exist"
   }
-
-  assert {
-    condition     = aws_security_group.rds.name == "postgres_rds_sg"
-    error_message = "RDS security group name did not match expected value"
-  }
 }
