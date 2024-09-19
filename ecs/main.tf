@@ -45,7 +45,7 @@ data "aws_ecs_cluster" "this" {
 resource "aws_ecs_service" "this" {
   name             = var.service_name
   cluster          = var.create_cluster ? aws_ecs_cluster.this[0].name : var.cluster_name
-  task_definition  = var.service_use_latest_task_def ? aws_ecs_task_definition.this.family : aws_ecs_task_definition.this.arn
+  task_definition  = var.service_use_latest_task_def ? "${aws_ecs_task_definition.this.family}:${max(aws_ecs_task_definition.this.revision, data.aws_ecs_task_definition.latest[0].revision)}" : aws_ecs_task_definition.this.arn
   platform_version = var.platform_version
   launch_type      = "FARGATE"
   propagate_tags   = "SERVICE"
@@ -106,6 +106,11 @@ resource "aws_ecs_service" "this" {
 ################################################################################
 # Task Definition  
 ################################################################################
+
+data "aws_ecs_task_definition" "latest" {
+  count           = var.service_use_latest_task_def ? 0 : 1
+  task_definition = aws_ecs_task_definition.this.family
+}
 
 resource "aws_ecs_task_definition" "this" {
   family                = local.task_definition_family
