@@ -2,12 +2,15 @@ import tempfile
 import os
 
 from unittest.mock import patch, MagicMock
+
+os.environ["AWS_DEFAULT_REGION"] = "ca-central-1"
+os.environ["ATHENA_OUTPUT_BUCKET"] = "test_bucket"
+os.environ["WAF_IP_SET_ID"] = "test_ip_set_id"
+os.environ["WAF_IP_SET_NAME"] = "test_ip_set_name"
+
 import blocklist
 
 
-@patch("blocklist.ATHENA_OUTPUT_BUCKET", "test_bucket")
-@patch("blocklist.WAF_IP_SET_ID", "test_ip_set_id")
-@patch("blocklist.WAF_IP_SET_NAME", "test_ip_set_name")
 @patch("blocklist.athena_client")
 @patch("blocklist.waf_client")
 def test_handler_with_ips_to_block(mock_waf_client, mock_athena_client):
@@ -45,9 +48,6 @@ def test_handler_with_ips_to_block(mock_waf_client, mock_athena_client):
     )
 
 
-@patch("blocklist.ATHENA_OUTPUT_BUCKET", "test_bucket")
-@patch("blocklist.WAF_IP_SET_ID", "test_ip_set_id")
-@patch("blocklist.WAF_IP_SET_NAME", "test_ip_set_name")
 @patch("blocklist.athena_client")
 @patch("blocklist.waf_client")
 def test_handler_with_no_ips_to_block(mock_waf_client, mock_athena_client):
@@ -72,9 +72,6 @@ def test_handler_with_no_ips_to_block(mock_waf_client, mock_athena_client):
     mock_waf_client.update_ip_set.assert_not_called()
 
 
-@patch("blocklist.ATHENA_OUTPUT_BUCKET", "test_bucket")
-@patch("blocklist.WAF_IP_SET_ID", "test_ip_set_id")
-@patch("blocklist.WAF_IP_SET_NAME", "test_ip_set_name")
 @patch("blocklist.athena_client")
 @patch("blocklist.waf_client")
 def test_handler_athena_query_failure(mock_waf_client, mock_athena_client):
