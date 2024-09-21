@@ -3,7 +3,7 @@ This module creates a WAF IP blocklist that is automatically updated on a user-d
 
 The automatic update is based on a service's WAF logs where an IP address exceeds the block threshold in a 24 hour period.
 
-The IP block is temporary and the IP address will be removed once it has been at lesat 24 hours since it has exceeded
+The IP block is temporary and the IP address will be removed once it has been at least 24 hours since it has exceeded
 the block threshold.
 
 ## Requirements
