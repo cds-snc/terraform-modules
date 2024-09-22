@@ -20,6 +20,7 @@ jobs:
           - rds_activity_stream/lambda
           - schedule_shutdown/lambda
           - sentinel_forwarder/wrapper
+          - waf_ip_blocklist/lambda
     
     steps:
       - name: Checkout
@@ -71,6 +72,7 @@ jobs:
           - S3_log_bucket
           - sentinel_forwarder   
           - vpc
+          - waf_ip_blocklist
 
     steps:
       - name: Checkout

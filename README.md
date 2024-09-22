@@ -41,6 +41,7 @@
 - [Spend Notifier](spend_notifier)
 - [User login alarm](user_login_alarm)
 - [VPC](vpc)
+- [WAF IP blocklist](waf_ip_blocklist)
 
 ## What is this repo?
 
