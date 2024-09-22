@@ -13,6 +13,7 @@ waf_client = boto3.client("wafv2")
 
 # Required
 ATHENA_OUTPUT_BUCKET = os.environ["ATHENA_OUTPUT_BUCKET"]
+ATHENA_WORKGROUP = os.environ["ATHENA_WORKGROUP"]
 WAF_IP_SET_ID = os.environ["WAF_IP_SET_ID"]
 WAF_IP_SET_NAME = os.environ["WAF_IP_SET_NAME"]
 
@@ -30,7 +31,7 @@ def handler(_event, _context):
         "./query.sql", ATHENA_TABLE, WAF_RULE_IDS_SKIP, BLOCK_THRESHOLD
     )
     query_execution_id = start_athena_query(
-        query, ATHENA_DATABASE, ATHENA_OUTPUT_BUCKET
+        query, ATHENA_DATABASE, ATHENA_OUTPUT_BUCKET, ATHENA_WORKGROUP
     )
     ip_addresses = get_query_results(query_execution_id)
 
@@ -52,12 +53,13 @@ def get_query_from_file(file_path, waf_logs_table, waf_rule_ids_skip, block_thre
         return query
 
 
-def start_athena_query(query, athena_database, athena_output_bucket):
+def start_athena_query(query, athena_database, athena_output_bucket, athena_workgroup):
     """Start Athena query execution"""
     response = athena_client.start_query_execution(
         QueryString=query,
         QueryExecutionContext={"Database": athena_database},
         ResultConfiguration={"OutputLocation": f"s3://{athena_output_bucket}/"},
+        WorkGroup=athena_workgroup,
     )
     return response["QueryExecutionId"]
 
@@ -101,6 +103,12 @@ def update_waf_ip_set(ip_addresses, waf_ip_set_name, waf_ip_set_id, waf_scope):
     response = waf_client.get_ip_set(
         Name=waf_ip_set_name, Scope=waf_scope, Id=waf_ip_set_id
     )
+
+    # Truncate the IP address list if it has more than 10,000 addresses.
+    # This is the max number of addresses an IP set can hold.
+    if len(ip_addresses) > 10000:
+        print(f"Reducing {len(ip_addresses)} address to 10,000 addresses.")
+        ip_addresses = ip_addresses[:10000]
 
     # Update the IP set with new addresses
     waf_client.update_ip_set(

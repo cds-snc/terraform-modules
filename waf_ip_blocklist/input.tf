@@ -9,10 +9,21 @@ variable "athena_query_results_bucket" {
   type        = string
 }
 
+variable "athena_query_source_bucket" {
+  description = "(Required) The name of the S3 bucket where the source data for the Athena query lives."
+  type        = string
+}
+
 variable "athena_waf_table_name" {
   description = "(Optional, default 'waf_logs') The name of the WAF logs table in the Athena database."
   type        = string
   default     = "waf_logs"
+}
+
+variable "athena_workgroup_name" {
+  description = "(Optional, default 'primary') The name of the Athena workgroup."
+  type        = string
+  default     = "primary"
 }
 
 variable "billing_tag_key" {

@@ -1,6 +1,7 @@
 
 locals {
   athena_query_results_bucket_arn = "arn:aws:s3:::${var.athena_query_results_bucket}"
+  athena_query_source_bucket_arn  = "arn:aws:s3:::${var.athena_query_source_bucket}"
   blocklist_name                  = "ipv4_blocklist_${var.service_name}"
 
   common_tags = {

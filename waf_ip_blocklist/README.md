@@ -38,9 +38,11 @@ No modules.
 | [aws_caller_identity.current](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/data-sources/caller_identity) | data source |
 | [aws_iam_policy_document.assume_role_policy](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/data-sources/iam_policy_document) | data source |
 | [aws_iam_policy_document.athena](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/data-sources/iam_policy_document) | data source |
-| [aws_iam_policy_document.cloudwatch_policy](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/data-sources/iam_policy_document) | data source |
+| [aws_iam_policy_document.cloudwatch](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/data-sources/iam_policy_document) | data source |
 | [aws_iam_policy_document.combined](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/data-sources/iam_policy_document) | data source |
-| [aws_iam_policy_document.s3](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/data-sources/iam_policy_document) | data source |
+| [aws_iam_policy_document.s3_read](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/data-sources/iam_policy_document) | data source |
+| [aws_iam_policy_document.s3_write](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/data-sources/iam_policy_document) | data source |
+| [aws_iam_policy_document.waf_ip_set](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/data-sources/iam_policy_document) | data source |
 | [aws_region.current](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/data-sources/region) | data source |
 
 ## Inputs
@@ -49,7 +51,9 @@ No modules.
 |------|-------------|------|---------|:--------:|
 | <a name="input_athena_database_name"></a> [athena\_database\_name](#input\_athena\_database\_name) | (Optional, default 'access\_logs') The name of the Athena database where the WAF logs table exists. | `string` | `"access_logs"` | no |
 | <a name="input_athena_query_results_bucket"></a> [athena\_query\_results\_bucket](#input\_athena\_query\_results\_bucket) | (Required) The name of the S3 bucket where the Athena query results are stored. | `string` | n/a | yes |
+| <a name="input_athena_query_source_bucket"></a> [athena\_query\_source\_bucket](#input\_athena\_query\_source\_bucket) | (Required) The name of the S3 bucket where the source data for the Athena query lives. | `string` | n/a | yes |
 | <a name="input_athena_waf_table_name"></a> [athena\_waf\_table\_name](#input\_athena\_waf\_table\_name) | (Optional, default 'waf\_logs') The name of the WAF logs table in the Athena database. | `string` | `"waf_logs"` | no |
+| <a name="input_athena_workgroup_name"></a> [athena\_workgroup\_name](#input\_athena\_workgroup\_name) | (Optional, default 'primary') The name of the Athena workgroup. | `string` | `"primary"` | no |
 | <a name="input_billing_tag_key"></a> [billing\_tag\_key](#input\_billing\_tag\_key) | (Optional, default 'CostCentre') The name of the billing tag | `string` | `"CostCentre"` | no |
 | <a name="input_billing_tag_value"></a> [billing\_tag\_value](#input\_billing\_tag\_value) | (Required) The value of the billing tag | `string` | n/a | yes |
 | <a name="input_service_name"></a> [service\_name](#input\_service\_name) | (Required) The name of the service | `string` | n/a | yes |
@@ -63,3 +67,5 @@ No modules.
 | Name | Description |
 |------|-------------|
 | <a name="output_ipv4_blocklist_arn"></a> [ipv4\_blocklist\_arn](#output\_ipv4\_blocklist\_arn) | The ARN of the IP blocklist |
+| <a name="output_ipv4_lambda_cloudwatch_log_group_arn"></a> [ipv4\_lambda\_cloudwatch\_log\_group\_arn](#output\_ipv4\_lambda\_cloudwatch\_log\_group\_arn) | The ARN of the CloudWatch Log Group for the IPv4 blocklist Lambda |
+| <a name="output_ipv4_lambda_cloudwatch_log_group_name"></a> [ipv4\_lambda\_cloudwatch\_log\_group\_name](#output\_ipv4\_lambda\_cloudwatch\_log\_group\_name) | The name of the CloudWatch Log Group for the IPv4 blocklist Lambda |

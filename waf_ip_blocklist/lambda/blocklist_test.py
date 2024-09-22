@@ -5,6 +5,7 @@ from unittest.mock import patch, MagicMock
 
 os.environ["AWS_DEFAULT_REGION"] = "ca-central-1"
 os.environ["ATHENA_OUTPUT_BUCKET"] = "test_bucket"
+os.environ["ATHENA_WORKGROUP"] = "test_workgroup"
 os.environ["WAF_IP_SET_ID"] = "test_ip_set_id"
 os.environ["WAF_IP_SET_NAME"] = "test_ip_set_name"
 
@@ -36,9 +37,18 @@ def test_handler_with_ips_to_block(mock_waf_client, mock_athena_client):
     blocklist.handler(None, None)
 
     # Verify
-    mock_athena_client.start_query_execution.assert_called_once()
-    mock_athena_client.get_query_execution.assert_called_once()
-    mock_athena_client.get_query_results.assert_called_once()
+    mock_athena_client.start_query_execution.assert_called_once_with(
+        QueryString="-- List of IP addresses that have been blocked by WAF\nSELECT \n    httpRequest.clientIp,\n    COUNT(*) as count\nFROM \n    waf_logs\nWHERE \n    action = 'BLOCK'\n    AND terminatingruleid NOT IN ('') \n    AND from_unixtime(timestamp/1000) >= date_add('day', -1, current_timestamp)\nGROUP BY \n    httpRequest.clientIp\nHAVING COUNT(*) > 20\nORDER BY count DESC",
+        QueryExecutionContext={"Database": "access_logs"},
+        ResultConfiguration={"OutputLocation": "s3://test_bucket/"},
+        WorkGroup="test_workgroup",
+    )
+    mock_athena_client.get_query_execution.assert_called_once_with(
+        QueryExecutionId="test_query_id"
+    )
+    mock_athena_client.get_query_results.assert_called_once_with(
+        QueryExecutionId="test_query_id"
+    )
     mock_waf_client.update_ip_set.assert_called_once_with(
         Name="test_ip_set_name",
         Scope="REGIONAL",
@@ -66,8 +76,15 @@ def test_handler_with_no_ips_to_block(mock_waf_client, mock_athena_client):
     blocklist.handler(None, None)
 
     # Verify
-    mock_athena_client.start_query_execution.assert_called_once()
-    mock_athena_client.get_query_execution.assert_called_once()
+    mock_athena_client.start_query_execution.assert_called_once_with(
+        QueryString="-- List of IP addresses that have been blocked by WAF\nSELECT \n    httpRequest.clientIp,\n    COUNT(*) as count\nFROM \n    waf_logs\nWHERE \n    action = 'BLOCK'\n    AND terminatingruleid NOT IN ('') \n    AND from_unixtime(timestamp/1000) >= date_add('day', -1, current_timestamp)\nGROUP BY \n    httpRequest.clientIp\nHAVING COUNT(*) > 20\nORDER BY count DESC",
+        QueryExecutionContext={"Database": "access_logs"},
+        ResultConfiguration={"OutputLocation": "s3://test_bucket/"},
+        WorkGroup="test_workgroup",
+    )
+    mock_athena_client.get_query_execution.assert_called_once_with(
+        QueryExecutionId="test_query_id"
+    )
     mock_athena_client.get_query_results.assert_called_once()
     mock_waf_client.update_ip_set.assert_not_called()
 

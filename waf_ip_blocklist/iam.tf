@@ -30,14 +30,16 @@ data "aws_iam_policy_document" "assume_role_policy" {
 data "aws_iam_policy_document" "combined" {
   source_policy_documents = concat([
     data.aws_iam_policy_document.athena.json,
-    data.aws_iam_policy_document.cloudwatch_policy.json,
-    data.aws_iam_policy_document.s3.json
+    data.aws_iam_policy_document.cloudwatch.json,
+    data.aws_iam_policy_document.s3_read.json,
+    data.aws_iam_policy_document.s3_write.json,
+    data.aws_iam_policy_document.waf_ip_set.json,
   ])
 }
 
-data "aws_iam_policy_document" "cloudwatch_policy" {
+data "aws_iam_policy_document" "cloudwatch" {
   statement {
-    sid    = "CloudWatchAccess"
+    sid    = "CloudWatchWriteAccess"
     effect = "Allow"
     actions = [
       "logs:CreateLogStream",
@@ -51,6 +53,7 @@ data "aws_iam_policy_document" "cloudwatch_policy" {
 
 data "aws_iam_policy_document" "athena" {
   statement {
+    sid    = "AthenaQueryAccess"
     effect = "Allow"
     actions = [
       "athena:StartQueryExecution",
@@ -58,11 +61,12 @@ data "aws_iam_policy_document" "athena" {
       "athena:GetQueryExecution"
     ]
     resources = [
-      "arn:aws:athena:${local.region}:${local.account_id}:workgroup/default"
+      "arn:aws:athena:${local.region}:${local.account_id}:workgroup/${var.athena_workgroup_name}"
     ]
   }
 
   statement {
+    sid    = "AthenaReadAccess"
     effect = "Allow"
     actions = [
       "athena:ListDatabases",
@@ -74,20 +78,67 @@ data "aws_iam_policy_document" "athena" {
       "arn:aws:athena:${local.region}:${local.account_id}:catalog/AwsDataCatalog/database/${var.athena_database_name}/table/${var.athena_waf_table_name}"
     ]
   }
-}
 
-data "aws_iam_policy_document" "s3" {
   statement {
-    sid    = "CloudWatchAccess"
+    sid    = "GlueReadAccess"
     effect = "Allow"
     actions = [
-      "s3:GetObject",
-      "s3:PutObject",
-      "s3:ListBucket"
+      "glue:GetDatabase",
+      "glue:GetTable",
+      "glue:GetPartitions"
     ]
     resources = [
+      "arn:aws:glue:${local.region}:${local.account_id}:catalog",
+      "arn:aws:glue:${local.region}:${local.account_id}:database/${var.athena_database_name}",
+      "arn:aws:glue:${local.region}:${local.account_id}:table/${var.athena_database_name}/${var.athena_waf_table_name}"
+    ]
+  }
+}
+
+data "aws_iam_policy_document" "s3_read" {
+  statement {
+    sid    = "S3ReadAccess"
+    effect = "Allow"
+    actions = [
+      "s3:GetBucketLocation",
+      "s3:GetObject",
+      "s3:ListBucket",
+      "s3:ListBucketMultipartUploads",
+      "s3:ListMultipartUploadParts",
+      "s3:AbortMultipartUpload",
+    ]
+    resources = [
+      local.athena_query_source_bucket_arn,
+      "${local.athena_query_source_bucket_arn}/*",
       local.athena_query_results_bucket_arn,
       "${local.athena_query_results_bucket_arn}/*",
+    ]
+  }
+}
+
+data "aws_iam_policy_document" "s3_write" {
+  statement {
+    sid    = "S3WriteAccess"
+    effect = "Allow"
+    actions = [
+      "s3:PutObject"
+    ]
+    resources = [
+      "${local.athena_query_results_bucket_arn}/*",
+    ]
+  }
+}
+
+data "aws_iam_policy_document" "waf_ip_set" {
+  statement {
+    sid    = "WAFIPSetUpdate"
+    effect = "Allow"
+    actions = [
+      "wafv2:GetIPSet",
+      "wafv2:UpdateIPSet"
+    ]
+    resources = [
+      aws_wafv2_ip_set.ipv4_blocklist.arn
     ]
   }
 }
