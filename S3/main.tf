@@ -62,7 +62,7 @@ resource "aws_s3_bucket" "this" {
 
       # Several blocks - transition
       dynamic "transition" {
-        for_each = length(keys(lookup(lifecycle_rule.value, "transition", []))) == 0 ? [] : lookup(lifecycle_rule.value, "transition", [])
+        for_each = length(lookup(lifecycle_rule.value, "transition", [])) == 0 ? [] : lifecycle_rule.value.transition
 
         content {
           date          = try(transition.value.date, null)
