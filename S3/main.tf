@@ -60,6 +60,16 @@ resource "aws_s3_bucket" "this" {
         }
       }
 
+      # Several blocks - transition
+      dynamic "transition" {
+        for_each = try(flatten([rule.value.transition]), [])
+
+        content {
+          date          = try(transition.value.date, null)
+          days          = try(transition.value.days, null)
+          storage_class = transition.value.storage_class
+        }
+      }
     }
   }
 
