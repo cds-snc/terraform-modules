@@ -68,6 +68,20 @@ variable "hosted_zone_id" {
   default     = ""
 }
 
+variable "is_create_certificate" {
+  description = "(Optional, default 'true') Should the ACM certificate be created by the module?  If false, a certificate with the specified acm_certificate_arn must exist."
+  type        = bool
+  default     = true
+}
+
+
+variable "is_create_hosted_zone" {
+  description = "(Optional, default 'true') Should the hosted zone be created by the module?  If false, a hosted zone with the specified hosted_zone_id must exist."
+  type        = bool
+  default     = true
+}
+
+
 variable "index_document" {
   description = "(Optional, default 'index.html') The name of the index document."
   type        = string
