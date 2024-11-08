@@ -36,7 +36,7 @@ No modules.
 | <a name="input_billing_tag_value"></a> [billing\_tag\_value](#input\_billing\_tag\_value) | (Required) The value of the billing tag | `string` | n/a | yes |
 | <a name="input_bucket_name"></a> [bucket\_name](#input\_bucket\_name) | (Required) The name of the s3 bucket the state is being kept in | `string` | n/a | yes |
 | <a name="input_lock_table_name"></a> [lock\_table\_name](#input\_lock\_table\_name) | (Optional) The name of the table the locks for the state file are in | `string` | `"terraform-state-lock-dynamo"` | no |
-| <a name="input_policy_name"></a> [policy\_name](#input\_policy\_name) | (Optional) The name of the policy that will be attached to the role.<br>    **Please Note:** This is only needed to be set if the default value conflicts with an existing policy name in this account. | `string` | `"TFPlan"` | no |
+| <a name="input_policy_name"></a> [policy\_name](#input\_policy\_name) | (Optional) The name of the policy that will be attached to the role.<br/>    **Please Note:** This is only needed to be set if the default value conflicts with an existing policy name in this account. | `string` | `"TFPlan"` | no |
 | <a name="input_region"></a> [region](#input\_region) | (Optional) The region the resources are in | `string` | `"ca-central-1"` | no |
 | <a name="input_role_name"></a> [role\_name](#input\_role\_name) | (Required) The name of the role to attach the policy to | `string` | n/a | yes |
 
