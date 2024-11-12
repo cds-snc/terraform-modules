@@ -58,7 +58,7 @@ resource "random_string" "bucket_suffix" {
 }
 
 module "activity_stream_bucket" {
-  source            = "github.com/cds-snc/terraform-modules//S3?ref=v9.6.7"
+  source            = "github.com/cds-snc/terraform-modules//S3?ref=v9.6.8"
   bucket_name       = "${var.rds_stream_name}-${local.resource_name_suffix}-${random_string.bucket_suffix.result}"
   billing_tag_value = var.billing_tag_value
 

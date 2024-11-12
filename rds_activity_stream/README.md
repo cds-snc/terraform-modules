@@ -23,7 +23,7 @@ No requirements.
 
 | Name | Source | Version |
 |------|--------|---------|
-| <a name="module_activity_stream_bucket"></a> [activity\_stream\_bucket](#module\_activity\_stream\_bucket) | github.com/cds-snc/terraform-modules//S3 | v9.6.7 |
+| <a name="module_activity_stream_bucket"></a> [activity\_stream\_bucket](#module\_activity\_stream\_bucket) | github.com/cds-snc/terraform-modules//S3 | v9.6.8 |
 
 ## Resources
 

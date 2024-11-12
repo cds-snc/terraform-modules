@@ -14,7 +14,7 @@ resource "random_id" "upload_bucket" {
 }
 
 module "upload_bucket_one" {
-  source            = "github.com/cds-snc/terraform-modules//S3?ref=v9.6.7"
+  source            = "github.com/cds-snc/terraform-modules//S3?ref=v9.6.8"
   bucket_name       = "an-existing-upload-bucket-${random_id.upload_bucket.hex}"
   billing_tag_value = "terratest"
 
@@ -24,7 +24,7 @@ module "upload_bucket_one" {
 }
 
 module "upload_bucket_two" {
-  source            = "github.com/cds-snc/terraform-modules//S3?ref=v9.6.7"
+  source            = "github.com/cds-snc/terraform-modules//S3?ref=v9.6.8"
   bucket_name       = "another-existing-upload-bucket-${random_id.upload_bucket.hex}"
   billing_tag_value = "terratest"
 
