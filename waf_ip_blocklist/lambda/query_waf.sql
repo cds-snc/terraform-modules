@@ -3,10 +3,10 @@ SELECT
     httpRequest.clientIp,
     COUNT(*) as count
 FROM 
-    {waf_logs_table}
+    {log_table}
 WHERE 
     action = 'BLOCK'
-    AND terminatingruleid NOT IN ({waf_rule_ids_skip}) 
+    AND terminatingruleid NOT IN ({skip_list}) 
     AND from_unixtime(timestamp/1000) >= date_add('day', -1, current_timestamp)
 GROUP BY 
     httpRequest.clientIp

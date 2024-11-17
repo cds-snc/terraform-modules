@@ -14,6 +14,12 @@ variable "athena_query_source_bucket" {
   type        = string
 }
 
+variable "athena_lb_table_name" {
+  description = "(Optional, default 'lb_logs') The name of the Load Balancer logs table in the Athena database."
+  type        = string
+  default     = "lb_logs"
+}
+
 variable "athena_waf_table_name" {
   description = "(Optional, default 'waf_logs') The name of the WAF logs table in the Athena database."
   type        = string
@@ -35,6 +41,18 @@ variable "billing_tag_key" {
 variable "billing_tag_value" {
   description = "(Required) The value of the billing tag"
   type        = string
+}
+
+variable "query_lb" {
+  description = "(Optional, default true) Should the Load Balancer logs be queried for 4xx responses?"
+  type        = bool
+  default     = true
+}
+
+variable "query_waf" {
+  description = "(Optional, default true) Should the WAF logs be queried for BLOCK responses?"
+  type        = bool
+  default     = true
 }
 
 variable "service_name" {

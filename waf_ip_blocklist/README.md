@@ -50,12 +50,15 @@ No modules.
 | Name | Description | Type | Default | Required |
 |------|-------------|------|---------|:--------:|
 | <a name="input_athena_database_name"></a> [athena\_database\_name](#input\_athena\_database\_name) | (Optional, default 'access\_logs') The name of the Athena database where the WAF logs table exists. | `string` | `"access_logs"` | no |
+| <a name="input_athena_lb_table_name"></a> [athena\_lb\_table\_name](#input\_athena\_lb\_table\_name) | (Optional, default 'lb\_logs') The name of the Load Balancer logs table in the Athena database. | `string` | `"lb_logs"` | no |
 | <a name="input_athena_query_results_bucket"></a> [athena\_query\_results\_bucket](#input\_athena\_query\_results\_bucket) | (Required) The name of the S3 bucket where the Athena query results are stored. | `string` | n/a | yes |
 | <a name="input_athena_query_source_bucket"></a> [athena\_query\_source\_bucket](#input\_athena\_query\_source\_bucket) | (Required) The name of the S3 bucket where the source data for the Athena query lives. | `string` | n/a | yes |
 | <a name="input_athena_waf_table_name"></a> [athena\_waf\_table\_name](#input\_athena\_waf\_table\_name) | (Optional, default 'waf\_logs') The name of the WAF logs table in the Athena database. | `string` | `"waf_logs"` | no |
 | <a name="input_athena_workgroup_name"></a> [athena\_workgroup\_name](#input\_athena\_workgroup\_name) | (Optional, default 'primary') The name of the Athena workgroup. | `string` | `"primary"` | no |
 | <a name="input_billing_tag_key"></a> [billing\_tag\_key](#input\_billing\_tag\_key) | (Optional, default 'CostCentre') The name of the billing tag | `string` | `"CostCentre"` | no |
 | <a name="input_billing_tag_value"></a> [billing\_tag\_value](#input\_billing\_tag\_value) | (Required) The value of the billing tag | `string` | n/a | yes |
+| <a name="input_query_lb"></a> [query\_lb](#input\_query\_lb) | (Optional, default true) Should the Load Balancer logs be queried for 4xx responses? | `bool` | `true` | no |
+| <a name="input_query_waf"></a> [query\_waf](#input\_query\_waf) | (Optional, default true) Should the WAF logs be queried for BLOCK responses? | `bool` | `true` | no |
 | <a name="input_service_name"></a> [service\_name](#input\_service\_name) | (Required) The name of the service | `string` | n/a | yes |
 | <a name="input_waf_block_threshold"></a> [waf\_block\_threshold](#input\_waf\_block\_threshold) | (Optional, default 20) The threshold of blocked requests for adding an IP address to the blocklist | `number` | `20` | no |
 | <a name="input_waf_ip_blocklist_update_schedule"></a> [waf\_ip\_blocklist\_update\_schedule](#input\_waf\_ip\_blocklist\_update\_schedule) | (Optional, default 'rate(2 hours)') The schedule expression for updating the WAF IP blocklist | `string` | `"rate(2 hours)"` | no |

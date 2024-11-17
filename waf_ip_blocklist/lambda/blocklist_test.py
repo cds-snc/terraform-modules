@@ -1,7 +1,7 @@
 import tempfile
 import os
 
-from unittest.mock import patch, MagicMock
+from unittest.mock import call, patch
 
 os.environ["AWS_DEFAULT_REGION"] = "ca-central-1"
 os.environ["ATHENA_OUTPUT_BUCKET"] = "test_bucket"
@@ -16,44 +16,72 @@ import blocklist
 @patch("blocklist.waf_client")
 def test_handler_with_ips_to_block(mock_waf_client, mock_athena_client):
     # Setup
-    mock_athena_client.start_query_execution.return_value = {
-        "QueryExecutionId": "test_query_id"
-    }
+    mock_athena_client.start_query_execution.side_effect = [
+        {"QueryExecutionId": "test_query_lb_id"},
+        {"QueryExecutionId": "test_query_waf_id"},
+    ]
     mock_athena_client.get_query_execution.return_value = {
         "QueryExecution": {"Status": {"State": "SUCCEEDED"}}
     }
-    mock_athena_client.get_query_results.return_value = {
-        "ResultSet": {
-            "Rows": [
-                {"Data": [{"VarCharValue": "header"}]},
-                {"Data": [{"VarCharValue": "192.168.1.1"}]},
-                {"Data": [{"VarCharValue": "192.168.1.2"}]},
-            ]
-        }
-    }
+    mock_athena_client.get_query_results.side_effect = [
+        {
+            "ResultSet": {
+                "Rows": [
+                    {"Data": [{"VarCharValue": "header"}]},
+                    {"Data": [{"VarCharValue": "192.168.1.1"}]},
+                    {"Data": [{"VarCharValue": "192.168.1.2"}]},
+                ]
+            }
+        },
+        {
+            "ResultSet": {
+                "Rows": [
+                    {"Data": [{"VarCharValue": "header"}]},
+                    {"Data": [{"VarCharValue": "192.168.1.1"}]},
+                    {"Data": [{"VarCharValue": "192.168.1.3"}]},
+                ]
+            }
+        },
+    ]
     mock_waf_client.get_ip_set.return_value = {"LockToken": "test_lock_token"}
 
     # Execute
     blocklist.handler(None, None)
 
     # Verify
-    mock_athena_client.start_query_execution.assert_called_once_with(
-        QueryString="-- List of IP addresses that have been blocked by WAF\nSELECT \n    httpRequest.clientIp,\n    COUNT(*) as count\nFROM \n    waf_logs\nWHERE \n    action = 'BLOCK'\n    AND terminatingruleid NOT IN ('') \n    AND from_unixtime(timestamp/1000) >= date_add('day', -1, current_timestamp)\nGROUP BY \n    httpRequest.clientIp\nHAVING COUNT(*) > 20\nORDER BY count DESC",
-        QueryExecutionContext={"Database": "access_logs"},
-        ResultConfiguration={"OutputLocation": "s3://test_bucket/"},
-        WorkGroup="test_workgroup",
+    mock_athena_client.start_query_execution.assert_has_calls(
+        [
+            call(
+                QueryString="-- List of IP addresses that have triggered 4xx HTTP responses\nSELECT\n    client_ip,\n    COUNT(*) as count\nFROM\n    lb_logs\nWHERE\n    (\n        elb_status_code = 403\n        OR target_status_code LIKE '4__'\n    )\n    AND from_iso8601_timestamp(time) >= date_add('day', -1, current_timestamp)\nGROUP BY\n    client_ip\nHAVING COUNT(*) > 20\nORDER BY count DESC",
+                QueryExecutionContext={"Database": "access_logs"},
+                ResultConfiguration={"OutputLocation": "s3://test_bucket/"},
+                WorkGroup="test_workgroup",
+            ),
+            call(
+                QueryString="-- List of IP addresses that have been blocked by WAF\nSELECT \n    httpRequest.clientIp,\n    COUNT(*) as count\nFROM \n    waf_logs\nWHERE \n    action = 'BLOCK'\n    AND terminatingruleid NOT IN ('') \n    AND from_unixtime(timestamp/1000) >= date_add('day', -1, current_timestamp)\nGROUP BY \n    httpRequest.clientIp\nHAVING COUNT(*) > 20\nORDER BY count DESC",
+                QueryExecutionContext={"Database": "access_logs"},
+                ResultConfiguration={"OutputLocation": "s3://test_bucket/"},
+                WorkGroup="test_workgroup",
+            ),
+        ]
     )
-    mock_athena_client.get_query_execution.assert_called_once_with(
-        QueryExecutionId="test_query_id"
+    mock_athena_client.get_query_execution.assert_has_calls(
+        [
+            call(QueryExecutionId="test_query_lb_id"),
+            call(QueryExecutionId="test_query_waf_id"),
+        ]
     )
-    mock_athena_client.get_query_results.assert_called_once_with(
-        QueryExecutionId="test_query_id"
+    mock_athena_client.get_query_results.assert_has_calls(
+        [
+            call(QueryExecutionId="test_query_lb_id"),
+            call(QueryExecutionId="test_query_waf_id"),
+        ]
     )
     mock_waf_client.update_ip_set.assert_called_once_with(
         Name="test_ip_set_name",
         Scope="REGIONAL",
         Id="test_ip_set_id",
-        Addresses=["192.168.1.1/32", "192.168.1.2/32"],
+        Addresses=["192.168.1.1/32", "192.168.1.2/32", "192.168.1.3/32"],
         LockToken="test_lock_token",
     )
 
@@ -62,9 +90,10 @@ def test_handler_with_ips_to_block(mock_waf_client, mock_athena_client):
 @patch("blocklist.waf_client")
 def test_handler_with_no_ips_to_block(mock_waf_client, mock_athena_client):
     # Setup
-    mock_athena_client.start_query_execution.return_value = {
-        "QueryExecutionId": "test_query_id"
-    }
+    mock_athena_client.start_query_execution.side_effect = [
+        {"QueryExecutionId": "test_query_lb_id"},
+        {"QueryExecutionId": "test_query_waf_id"},
+    ]
     mock_athena_client.get_query_execution.return_value = {
         "QueryExecution": {"Status": {"State": "SUCCEEDED"}}
     }
@@ -76,16 +105,68 @@ def test_handler_with_no_ips_to_block(mock_waf_client, mock_athena_client):
     blocklist.handler(None, None)
 
     # Verify
-    mock_athena_client.start_query_execution.assert_called_once_with(
-        QueryString="-- List of IP addresses that have been blocked by WAF\nSELECT \n    httpRequest.clientIp,\n    COUNT(*) as count\nFROM \n    waf_logs\nWHERE \n    action = 'BLOCK'\n    AND terminatingruleid NOT IN ('') \n    AND from_unixtime(timestamp/1000) >= date_add('day', -1, current_timestamp)\nGROUP BY \n    httpRequest.clientIp\nHAVING COUNT(*) > 20\nORDER BY count DESC",
-        QueryExecutionContext={"Database": "access_logs"},
-        ResultConfiguration={"OutputLocation": "s3://test_bucket/"},
-        WorkGroup="test_workgroup",
+    mock_athena_client.start_query_execution.assert_has_calls(
+        [
+            call(
+                QueryString="-- List of IP addresses that have triggered 4xx HTTP responses\nSELECT\n    client_ip,\n    COUNT(*) as count\nFROM\n    lb_logs\nWHERE\n    (\n        elb_status_code = 403\n        OR target_status_code LIKE '4__'\n    )\n    AND from_iso8601_timestamp(time) >= date_add('day', -1, current_timestamp)\nGROUP BY\n    client_ip\nHAVING COUNT(*) > 20\nORDER BY count DESC",
+                QueryExecutionContext={"Database": "access_logs"},
+                ResultConfiguration={"OutputLocation": "s3://test_bucket/"},
+                WorkGroup="test_workgroup",
+            ),
+            call(
+                QueryString="-- List of IP addresses that have been blocked by WAF\nSELECT \n    httpRequest.clientIp,\n    COUNT(*) as count\nFROM \n    waf_logs\nWHERE \n    action = 'BLOCK'\n    AND terminatingruleid NOT IN ('') \n    AND from_unixtime(timestamp/1000) >= date_add('day', -1, current_timestamp)\nGROUP BY \n    httpRequest.clientIp\nHAVING COUNT(*) > 20\nORDER BY count DESC",
+                QueryExecutionContext={"Database": "access_logs"},
+                ResultConfiguration={"OutputLocation": "s3://test_bucket/"},
+                WorkGroup="test_workgroup",
+            ),
+        ]
     )
-    mock_athena_client.get_query_execution.assert_called_once_with(
-        QueryExecutionId="test_query_id"
+    mock_athena_client.get_query_execution.assert_has_calls(
+        [
+            call(QueryExecutionId="test_query_lb_id"),
+            call(QueryExecutionId="test_query_waf_id"),
+        ]
     )
-    mock_athena_client.get_query_results.assert_called_once()
+    assert mock_athena_client.get_query_results.call_count == 2
+    mock_waf_client.update_ip_set.assert_not_called()
+
+
+@patch("blocklist.athena_client")
+@patch("blocklist.waf_client")
+@patch("blocklist.QUERY_WAF", False)
+def test_handler_with_only_lb_query(mock_waf_client, mock_athena_client):
+    # Setup
+    mock_athena_client.start_query_execution.side_effect = [
+        {"QueryExecutionId": "test_query_lb_id"},
+        {"QueryExecutionId": "test_query_waf_id"},
+    ]
+    mock_athena_client.get_query_execution.return_value = {
+        "QueryExecution": {"Status": {"State": "SUCCEEDED"}}
+    }
+    mock_athena_client.get_query_results.return_value = {
+        "ResultSet": {"Rows": [{"Data": [{"VarCharValue": "header"}]}]}
+    }
+
+    # Execute
+    blocklist.handler(None, None)
+
+    # Verify
+    mock_athena_client.start_query_execution.assert_has_calls(
+        [
+            call(
+                QueryString="-- List of IP addresses that have triggered 4xx HTTP responses\nSELECT\n    client_ip,\n    COUNT(*) as count\nFROM\n    lb_logs\nWHERE\n    (\n        elb_status_code = 403\n        OR target_status_code LIKE '4__'\n    )\n    AND from_iso8601_timestamp(time) >= date_add('day', -1, current_timestamp)\nGROUP BY\n    client_ip\nHAVING COUNT(*) > 20\nORDER BY count DESC",
+                QueryExecutionContext={"Database": "access_logs"},
+                ResultConfiguration={"OutputLocation": "s3://test_bucket/"},
+                WorkGroup="test_workgroup",
+            )
+        ]
+    )
+    mock_athena_client.get_query_execution.assert_has_calls(
+        [
+            call(QueryExecutionId="test_query_lb_id"),
+        ]
+    )
+    assert mock_athena_client.get_query_results.call_count == 1
     mock_waf_client.update_ip_set.assert_not_called()
 
 
@@ -116,20 +197,20 @@ def test_handler_athena_query_failure(mock_waf_client, mock_athena_client):
 
 def test_get_query_from_file_with_multiple_rule_ids():
     # Setup
-    query_template = "SELECT * FROM {waf_logs_table} WHERE rule_id NOT IN ({waf_rule_ids_skip}) AND count > {block_threshold};"
+    query_template = "SELECT * FROM {log_table} WHERE rule_id NOT IN ({skip_list}) AND count > {block_threshold};"
     with tempfile.NamedTemporaryFile(
         delete=False, mode="w", encoding="utf-8"
     ) as temp_file:
         temp_file.write(query_template)
         temp_file_path = temp_file.name
 
-    waf_logs_table = "test_table"
-    waf_rule_ids_skip = ["rule1", "rule2"]
+    log_table = "test_table"
+    skip_list = ["rule1", "rule2"]
     block_threshold = "10"
 
     # Execute
     query = blocklist.get_query_from_file(
-        temp_file_path, waf_logs_table, waf_rule_ids_skip, block_threshold
+        temp_file_path, log_table, skip_list, block_threshold
     )
 
     # Verify
@@ -142,20 +223,20 @@ def test_get_query_from_file_with_multiple_rule_ids():
 
 def test_get_query_from_file_with_empty_rule_ids():
     # Setup
-    query_template = "SELECT * FROM {waf_logs_table} WHERE rule_id NOT IN ({waf_rule_ids_skip}) AND count > {block_threshold};"
+    query_template = "SELECT * FROM {log_table} WHERE rule_id NOT IN ({skip_list}) AND count > {block_threshold};"
     with tempfile.NamedTemporaryFile(
         delete=False, mode="w", encoding="utf-8"
     ) as temp_file:
         temp_file.write(query_template)
         temp_file_path = temp_file.name
 
-    waf_logs_table = "test_table"
-    waf_rule_ids_skip = []
+    log_table = "test_table"
+    skip_list = []
     block_threshold = "10"
 
     # Execute
     query = blocklist.get_query_from_file(
-        temp_file_path, waf_logs_table, waf_rule_ids_skip, block_threshold
+        temp_file_path, log_table, skip_list, block_threshold
     )
 
     # Verify
@@ -168,20 +249,20 @@ def test_get_query_from_file_with_empty_rule_ids():
 
 def test_get_query_from_file_with_single_rule_id():
     # Setup
-    query_template = "SELECT * FROM {waf_logs_table} WHERE rule_id NOT IN ({waf_rule_ids_skip}) AND count > {block_threshold};"
+    query_template = "SELECT * FROM {log_table} WHERE rule_id NOT IN ({skip_list}) AND count > {block_threshold};"
     with tempfile.NamedTemporaryFile(
         delete=False, mode="w", encoding="utf-8"
     ) as temp_file:
         temp_file.write(query_template)
         temp_file_path = temp_file.name
 
-    waf_logs_table = "test_table"
-    waf_rule_ids_skip = ["rule1"]
+    log_table = "test_table"
+    skip_list = ["rule1"]
     block_threshold = "10"
 
     # Execute
     query = blocklist.get_query_from_file(
-        temp_file_path, waf_logs_table, waf_rule_ids_skip, block_threshold
+        temp_file_path, log_table, skip_list, block_threshold
     )
 
     # Verify
