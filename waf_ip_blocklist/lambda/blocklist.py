@@ -19,7 +19,7 @@ WAF_IP_SET_NAME = os.environ["WAF_IP_SET_NAME"]
 
 # Optional
 ATHENA_DATABASE = os.getenv("ATHENA_DATABASE", "access_logs")
-ATHENA_LB_TABLE = os.getenv("ATHENA_WAF_TABLE", "lb_logs")
+ATHENA_LB_TABLE = os.getenv("ATHENA_LB_TABLE", "lb_logs")
 ATHENA_WAF_TABLE = os.getenv("ATHENA_WAF_TABLE", "waf_logs")
 BLOCK_THRESHOLD = os.getenv("BLOCK_THRESHOLD", "20")
 QUERY_LB = os.getenv("QUERY_LB", "true") == "true"
