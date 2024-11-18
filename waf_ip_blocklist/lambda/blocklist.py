@@ -48,6 +48,7 @@ def handler(_event, _context):
                 query, ATHENA_DATABASE, ATHENA_OUTPUT_BUCKET, ATHENA_WORKGROUP
             )
             ip_addresses.update(get_query_results(query_execution_id))
+            print(f"Found following {ip_addresses}")
 
     if ip_addresses:
         update_waf_ip_set(
