@@ -2,7 +2,7 @@
 * # WAF IP blocklist
 * This module creates a WAF IP blocklist that is automatically updated on a user-defined schedule. 
 * 
-* The automatic update is based on a service's WAF logs where an IP address exceeds the block threshold in a 24 hour period.
+* The automatic update is based on a service's WAF and load balancer logs where an IP address exceeds the block threshold in a 24 hour period.
 *
 * The IP block is temporary and the IP address will be removed once it has been at least 24 hours since it has exceeded
 * the block threshold.
@@ -46,9 +46,12 @@ resource "aws_lambda_function" "ipv4_blocklist" {
     variables = {
       ATHENA_OUTPUT_BUCKET = var.athena_query_results_bucket
       ATHENA_DATABASE      = var.athena_database_name
-      ATHENA_TABLE         = var.athena_waf_table_name
+      ATHENA_LB_TABLE      = var.athena_lb_table_name
+      ATHENA_WAF_TABLE     = var.athena_waf_table_name
       ATHENA_WORKGROUP     = var.athena_workgroup_name
       BLOCK_THRESHOLD      = var.waf_block_threshold
+      QUERY_LB             = var.query_lb
+      QUERY_WAF            = var.query_waf
       WAF_IP_SET_ID        = aws_wafv2_ip_set.ipv4_blocklist.id
       WAF_IP_SET_NAME      = aws_wafv2_ip_set.ipv4_blocklist.name
       WAF_RULE_IDS_SKIP    = join(",", var.waf_rule_ids_skip)
@@ -72,8 +75,13 @@ data "archive_file" "ipv4_blocklist" {
   }
 
   source {
-    content  = file("${path.module}/lambda/query.sql")
-    filename = "query.sql"
+    content  = file("${path.module}/lambda/query_lb.sql")
+    filename = "query_lb.sql"
+  }
+
+  source {
+    content  = file("${path.module}/lambda/query_waf.sql")
+    filename = "query_waf.sql"
   }
 
   output_path = "/tmp/blocklist.zip"

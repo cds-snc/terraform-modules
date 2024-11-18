@@ -75,7 +75,7 @@ data "aws_iam_policy_document" "athena" {
     ]
     resources = [
       "arn:aws:athena:${local.region}:${local.account_id}:catalog/AwsDataCatalog/database/${var.athena_database_name}",
-      "arn:aws:athena:${local.region}:${local.account_id}:catalog/AwsDataCatalog/database/${var.athena_database_name}/table/${var.athena_waf_table_name}"
+      "arn:aws:athena:${local.region}:${local.account_id}:catalog/AwsDataCatalog/database/${var.athena_database_name}/table/*"
     ]
   }
 
@@ -90,7 +90,7 @@ data "aws_iam_policy_document" "athena" {
     resources = [
       "arn:aws:glue:${local.region}:${local.account_id}:catalog",
       "arn:aws:glue:${local.region}:${local.account_id}:database/${var.athena_database_name}",
-      "arn:aws:glue:${local.region}:${local.account_id}:table/${var.athena_database_name}/${var.athena_waf_table_name}"
+      "arn:aws:glue:${local.region}:${local.account_id}:table/${var.athena_database_name}/*"
     ]
   }
 }
