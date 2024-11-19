@@ -127,12 +127,25 @@ def update_waf_ip_set(ip_addresses, waf_ip_set_name, waf_ip_set_id, waf_scope):
         print(f"Reducing {len(ip_addresses)} address to 10,000 addresses.")
         ip_addresses = ip_addresses[:10000]
 
+    # Check if new addresses have been added to the list of existing addresses.
+    # This is useful to monitor the number of new IPs added to the blocklist
+    # and to set up alarms if the number of new IPs added is too high
+    existing_addresses = response["IPSet"]["Addresses"]
+    new_addresses = [f"{ip}/32" for ip in ip_addresses]
+
+    for ip in new_addresses:
+        if ip not in existing_addresses:
+            # Do not modify message below as it is used to drive a cloudwatch metric
+            print("[Metric] - New IP added to WAF IP Set")
+
+
+
     # Update the IP set with new addresses
     waf_client.update_ip_set(
         Name=waf_ip_set_name,
         Scope=waf_scope,
         Id=waf_ip_set_id,
-        Addresses=[f"{ip}/32" for ip in ip_addresses],
+        Addresses=new_addresses,
         LockToken=response["LockToken"],
     )
 
