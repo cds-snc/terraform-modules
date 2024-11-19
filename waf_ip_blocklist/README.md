@@ -72,3 +72,5 @@ No modules.
 | <a name="output_ipv4_blocklist_arn"></a> [ipv4\_blocklist\_arn](#output\_ipv4\_blocklist\_arn) | The ARN of the IP blocklist |
 | <a name="output_ipv4_lambda_cloudwatch_log_group_arn"></a> [ipv4\_lambda\_cloudwatch\_log\_group\_arn](#output\_ipv4\_lambda\_cloudwatch\_log\_group\_arn) | The ARN of the CloudWatch Log Group for the IPv4 blocklist Lambda |
 | <a name="output_ipv4_lambda_cloudwatch_log_group_name"></a> [ipv4\_lambda\_cloudwatch\_log\_group\_name](#output\_ipv4\_lambda\_cloudwatch\_log\_group\_name) | The name of the CloudWatch Log Group for the IPv4 blocklist Lambda |
+| <a name="output_ipv4_new_blocked_ip_metric_filter_name"></a> [ipv4\_new\_blocked\_ip\_metric\_filter\_name](#output\_ipv4\_new\_blocked\_ip\_metric\_filter\_name) | The name of the Cloudwatch Metric Filter that tracks the adding of new IPs to the block list |
+| <a name="output_ipv4_new_blocked_ip_metric_filter_namespace"></a> [ipv4\_new\_blocked\_ip\_metric\_filter\_namespace](#output\_ipv4\_new\_blocked\_ip\_metric\_filter\_name) | The namespace of the Cloudwatch Metric Filter that tracks the adding of new IPs to the block list
