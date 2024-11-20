@@ -28,6 +28,7 @@ No modules.
 | [aws_cloudwatch_event_rule.ipv4_blocklist](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/cloudwatch_event_rule) | resource |
 | [aws_cloudwatch_event_target.ipv4_blocklist](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/cloudwatch_event_target) | resource |
 | [aws_cloudwatch_log_group.ipv4_blocklist](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/cloudwatch_log_group) | resource |
+| [aws_cloudwatch_log_metric_filter.ip_added_to_block_list](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/cloudwatch_log_metric_filter) | resource |
 | [aws_iam_policy.ipv4_blocklist](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/iam_policy) | resource |
 | [aws_iam_role.ipv4_blocklist](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/iam_role) | resource |
 | [aws_iam_role_policy_attachment.ipv4_blocklist](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/iam_role_policy_attachment) | resource |
@@ -72,5 +73,5 @@ No modules.
 | <a name="output_ipv4_blocklist_arn"></a> [ipv4\_blocklist\_arn](#output\_ipv4\_blocklist\_arn) | The ARN of the IP blocklist |
 | <a name="output_ipv4_lambda_cloudwatch_log_group_arn"></a> [ipv4\_lambda\_cloudwatch\_log\_group\_arn](#output\_ipv4\_lambda\_cloudwatch\_log\_group\_arn) | The ARN of the CloudWatch Log Group for the IPv4 blocklist Lambda |
 | <a name="output_ipv4_lambda_cloudwatch_log_group_name"></a> [ipv4\_lambda\_cloudwatch\_log\_group\_name](#output\_ipv4\_lambda\_cloudwatch\_log\_group\_name) | The name of the CloudWatch Log Group for the IPv4 blocklist Lambda |
-| <a name="output_ipv4_new_blocked_ip_metric_filter_name"></a> [ipv4\_new\_blocked\_ip\_metric\_filter\_name](#output\_ipv4\_new\_blocked\_ip\_metric\_filter\_name) | The name of the Cloudwatch Metric Filter that tracks the adding of new IPs to the block list |
-| <a name="output_ipv4_new_blocked_ip_metric_filter_namespace"></a> [ipv4\_new\_blocked\_ip\_metric\_filter\_namespace](#output\_ipv4\_new\_blocked\_ip\_metric\_filter\_name) | The namespace of the Cloudwatch Metric Filter that tracks the adding of new IPs to the block list
+| <a name="output_ipv4_new_blocked_ip_metric_filter_name"></a> [ipv4\_new\_blocked\_ip\_metric\_filter\_name](#output\_ipv4\_new\_blocked\_ip\_metric\_filter\_name) | The metric filter name for the number of new blocked IPs |
+| <a name="output_ipv4_new_blocked_ip_metric_filter_namespace"></a> [ipv4\_new\_blocked\_ip\_metric\_filter\_namespace](#output\_ipv4\_new\_blocked\_ip\_metric\_filter\_namespace) | The metric filter namespace for the number of new blocked IPs |
