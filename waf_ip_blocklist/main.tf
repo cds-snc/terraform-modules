@@ -115,3 +115,21 @@ resource "aws_lambda_permission" "ipv4_blocklist" {
   function_name = aws_lambda_function.ipv4_blocklist.function_name
   source_arn    = aws_cloudwatch_event_rule.ipv4_blocklist.arn
 }
+
+
+#
+# Metrics for actions that are taken on the blocklist
+#
+
+resource "aws_cloudwatch_log_metric_filter" "ip_added_to_block_list" {
+  name           = "IpAddedToBlockList"
+  pattern        = "\"[Metric] - New IP added to WAF IP Set\""
+  log_group_name = aws_cloudwatch_log_group.ipv4_blocklist.name
+
+  metric_transformation {
+    name          = "IpAddedToBlockList"
+    namespace     = "CDS_Platform"
+    value         = "1"
+    default_value = "0"
+  }
+}

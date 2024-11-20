@@ -14,7 +14,7 @@ import blocklist
 
 @patch("blocklist.athena_client")
 @patch("blocklist.waf_client")
-def test_handler_with_ips_to_block(mock_waf_client, mock_athena_client):
+def test_handler_with_ips_to_block(mock_waf_client, mock_athena_client, capsys):
     # Setup
     mock_athena_client.start_query_execution.side_effect = [
         {"QueryExecutionId": "test_query_lb_id"},
@@ -43,7 +43,10 @@ def test_handler_with_ips_to_block(mock_waf_client, mock_athena_client):
             }
         },
     ]
-    mock_waf_client.get_ip_set.return_value = {"LockToken": "test_lock_token"}
+    mock_waf_client.get_ip_set.return_value = {
+        "IPSet": {"Addresses": ["192.168.1.1/32"]},
+        "LockToken": "test_lock_token",
+    }
 
     # Execute
     blocklist.handler(None, None)
@@ -84,6 +87,11 @@ def test_handler_with_ips_to_block(mock_waf_client, mock_athena_client):
         Addresses=["192.168.1.1/32", "192.168.1.2/32", "192.168.1.3/32"],
         LockToken="test_lock_token",
     )
+
+    captured = capsys.readouterr()
+    all_console_logs = captured.out.split("\n")
+
+    assert all_console_logs.count("[Metric] - New IP added to WAF IP Set") == 2
 
 
 @patch("blocklist.athena_client")
