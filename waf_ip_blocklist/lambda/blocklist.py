@@ -138,8 +138,6 @@ def update_waf_ip_set(ip_addresses, waf_ip_set_name, waf_ip_set_id, waf_scope):
             # Do not modify message below as it is used to drive a cloudwatch metric
             print("[Metric] - New IP added to WAF IP Set")
 
-
-
     # Update the IP set with new addresses
     waf_client.update_ip_set(
         Name=waf_ip_set_name,
