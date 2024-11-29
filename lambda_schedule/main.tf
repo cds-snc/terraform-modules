@@ -2,20 +2,22 @@
 * # Lambda schedule
 *
 * Runs a Lambda function on a schedule using an AWS CloudWatch event rule.
+*
+* :warning: If you have the module create the ECR (default behaviour), the first apply of this module will fail until a `latest` tagged Docker image has been pushed to the ECR (:chicken: vs :egg:).
 */
 
-module "this" {
+module "this_lambda" {
   source = "github.com/cds-snc/terraform-modules//lambda?ref=v10.0.0"
 
   name      = var.lambda_name
-  image_uri = var.lambda_image_uri
-  ecr_arn   = var.lambda_ecr_arn
+  image_uri = "${var.create_ecr_repository ? aws_ecr_repository.this[0].repository_url : var.lambda_image_uri}:${var.lambda_image_tag}"
+  ecr_arn   = var.create_ecr_repository ? aws_ecr_repository.this[0].arn : var.lambda_ecr_arn
 
   timeout               = var.lambda_timeout
   memory                = var.lambda_memory
   environment_variables = var.lambda_environment_variables
   vpc                   = var.lambda_vpc_config
-  policies              = var.s3_arn_write_path ? [data.aws_iam_policy_document.s3_write[0].json] : []
+  policies              = var.s3_arn_write_path != null ? [data.aws_iam_policy_document.s3_write[0].json] : []
 
   billing_tag_key   = var.billing_tag_key
   billing_tag_value = var.billing_tag_value
@@ -23,7 +25,7 @@ module "this" {
 
 # Allow write to the specified S3 bucket path
 data "aws_iam_policy_document" "s3_write" {
-  count = var.s3_arn_write_path ? 1 : 0
+  count = var.s3_arn_write_path != null ? 1 : 0
 
   statement {
     effect = "Allow"
@@ -48,7 +50,7 @@ resource "aws_cloudwatch_event_rule" "this" {
 
 resource "aws_cloudwatch_event_target" "this" {
   rule      = aws_cloudwatch_event_rule.this.name
-  arn       = module.lambda.lambda_arn
+  arn       = module.this_lambda.function_arn
   target_id = var.lambda_name
 }
 

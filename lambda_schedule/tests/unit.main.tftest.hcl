@@ -3,6 +3,8 @@ provider "aws" {
 }
 
 variables {
+  lambda_name                = "test"
+  lambda_schedule_expression = "rate(1 day)"
 }
 
 run "test_case" {

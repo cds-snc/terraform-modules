@@ -9,20 +9,34 @@ variable "billing_tag_value" {
   type        = string
 }
 
+variable "create_ecr_repository" {
+  description = "(Optional, default true) Whether to create an ECR repository for the Lambda image"
+  type        = bool
+  default     = true
+}
+
 variable "lambda_ecr_arn" {
-  description = "(Required) The ARN of the ECR repository containing the Lambda image"
+  description = "(Optional, defaults to null) The ARN of the ECR repository containing the Lambda image"
   type        = string
+  default     = null
 }
 
 variable "lambda_environment_variables" {
-  description = "(Optional, default {}) Environment variables for the Lambda function"
+  description = "(Optional, defaults to empty map) Environment variables for the Lambda function"
   type        = map(string)
   default     = {}
 }
 
-variable "lambda_image_uri" {
-  description = "(Required) The URI (and optionally tag) of the Docker image for the Lambda function"
+variable "lambda_image_tag" {
+  description = "(Optional, defaults to 'latest') The image tag to use for the Lambda function"
   type        = string
+  default     = "latest"
+}
+
+variable "lambda_image_uri" {
+  description = "(Optional, defaults to null) The URI (and optionally tag) of the Docker image for the Lambda function"
+  type        = string
+  default     = null
 }
 
 variable "lambda_memory" {
@@ -68,7 +82,10 @@ variable "lambda_vpc_config" {
     subnet_ids         = list(string)
     security_group_ids = list(string)
   })
-  default = null
+  default = {
+    subnet_ids         = []
+    security_group_ids = []
+  }
 }
 
 variable "s3_arn_write_path" {
@@ -77,7 +94,7 @@ variable "s3_arn_write_path" {
   default     = null
 
   validation {
-    condition     = can(regex("arn:aws:s3:::[^/]+/.*", var.s3_arn_write_path))
+    condition     = var.s3_arn_write_path == null || can(regex("arn:aws:s3:::[^/]+/.*", var.s3_arn_write_path))
     error_message = "The S3 ARN must be in the format 'arn:aws:s3:::bucket-name/path/*'"
   }
 }
