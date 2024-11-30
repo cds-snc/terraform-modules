@@ -25,6 +25,7 @@
 - [Github Open ID Connect](gh_oidc_role)
 - [Lambda](lambda)
 - [Lambda response](lambda_response)
+- [Lambda schedule](lambda_schedule)
 - [Notify New IAM user](notify_new_iam_user)
 - [Notify Slack](notify_slack)
 - [RDS](rds)
@@ -66,7 +67,7 @@ This repo is a collection of modules made by folks at CDS. It is a collection of
 To reference modules in this repo use the following `source` setting:
 
 ```hcl
-  source = "github.com/cds-snc/terraform-modules//>>Module Namae>>?ref=<<version>>
+  source = "github.com/cds-snc/terraform-modules//>>Module Name>>?ref=<<version>>
 ```
 
 for instance the user_login_alarm module resource v0.0.1 would look like the following:

@@ -62,6 +62,7 @@ jobs:
           - client_vpn
           - ecs
           - gh_oidc_role
+          - lambda_schedule
           - notify_slack
           - S3_scan_object
           - schedule_shutdown
