@@ -10,14 +10,14 @@ module "this_lambda" {
   source = "github.com/cds-snc/terraform-modules//lambda?ref=v10.0.0"
 
   name      = var.lambda_name
-  image_uri = "${var.create_ecr_repository ? aws_ecr_repository.this[0].repository_url : var.lambda_image_uri}:${var.lambda_image_tag}"
-  ecr_arn   = var.create_ecr_repository ? aws_ecr_repository.this[0].arn : var.lambda_ecr_arn
+  image_uri = local.lambda_image_uri
+  ecr_arn   = local.lambda_ecr_arn
 
   timeout               = var.lambda_timeout
   memory                = var.lambda_memory
   environment_variables = var.lambda_environment_variables
   vpc                   = var.lambda_vpc_config
-  policies              = var.s3_arn_write_path != null ? [data.aws_iam_policy_document.s3_write[0].json] : []
+  policies              = local.policies
 
   billing_tag_key   = var.billing_tag_key
   billing_tag_value = var.billing_tag_value
