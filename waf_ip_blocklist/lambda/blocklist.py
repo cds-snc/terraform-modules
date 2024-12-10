@@ -133,10 +133,13 @@ def update_waf_ip_set(ip_addresses, waf_ip_set_name, waf_ip_set_id, waf_scope):
     existing_addresses = response["IPSet"]["Addresses"]
     new_addresses = [f"{ip}/32" for ip in ip_addresses]
 
+    new_ips = 0
+
     for ip in new_addresses:
         if ip not in existing_addresses:
             # Do not modify message below as it is used to drive a cloudwatch metric
             print("[Metric] - New IP added to WAF IP Set")
+            new_ips += 1
 
     # Update the IP set with new addresses
     waf_client.update_ip_set(
@@ -147,4 +150,6 @@ def update_waf_ip_set(ip_addresses, waf_ip_set_name, waf_ip_set_id, waf_scope):
         LockToken=response["LockToken"],
     )
 
-    print(f"Updated WAF IP set with {len(ip_addresses)} new IPs.")
+    print(
+        f"Updated WAF IP set with {new_ips} new IPs for a total of {len(ip_addresses)} blocked IPs."
+    )
