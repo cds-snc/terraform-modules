@@ -150,4 +150,6 @@ def update_waf_ip_set(ip_addresses, waf_ip_set_name, waf_ip_set_id, waf_scope):
         LockToken=response["LockToken"],
     )
 
-    print(f"Updated WAF IP set with {new_ips} new IPs for a total of {len(ip_addresses)} blocked IPs.")
+    print(
+        f"Updated WAF IP set with {new_ips} new IPs for a total of {len(ip_addresses)} blocked IPs."
+    )
