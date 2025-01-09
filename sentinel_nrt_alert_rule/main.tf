@@ -61,11 +61,11 @@ resource "azurerm_sentinel_alert_rule_nrt" "this" {
     }
   }
 
-  dynamic "incident_configuration" {
+  dynamic "incident" {
     for_each = [1]
 
     content {
-      create_incident = var.incident_configuration.create_incident
+      create_incident_enabled = var.incident_configuration.create_incident
       grouping {
         enabled                 = var.incident_configuration.grouping.enabled
         entity_matching_method  = var.incident_configuration.grouping.entity_matching_method
