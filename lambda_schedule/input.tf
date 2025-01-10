@@ -55,6 +55,12 @@ variable "lambda_name" {
   type        = string
 }
 
+variable "lambda_policies" {
+  description = "(Optional, default empty list) IAM JSON policies for the Lambda function"
+  type        = list(string)
+  default     = []
+}
+
 variable "lambda_schedule_expression" {
   description = "Schedule expression (cron or rate) for triggering the Lambda"
   type        = string
