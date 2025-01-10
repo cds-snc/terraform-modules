@@ -44,6 +44,7 @@ No requirements.
 | <a name="input_lambda_image_uri"></a> [lambda\_image\_uri](#input\_lambda\_image\_uri) | (Optional, defaults to null) The URI (and optionally tag) of the Docker image for the Lambda function | `string` | `null` | no |
 | <a name="input_lambda_memory"></a> [lambda\_memory](#input\_lambda\_memory) | (Optional, default 1024) The memory size for the Lambda function in MB | `number` | `1024` | no |
 | <a name="input_lambda_name"></a> [lambda\_name](#input\_lambda\_name) | (Required) The name of the Lambda function | `string` | n/a | yes |
+| <a name="input_lambda_policies"></a> [lambda\_policies](#input\_lambda\_policies) | (Optional, default empty list) IAM JSON policies for the Lambda function | `list(string)` | `[]` | no |
 | <a name="input_lambda_schedule_expression"></a> [lambda\_schedule\_expression](#input\_lambda\_schedule\_expression) | Schedule expression (cron or rate) for triggering the Lambda | `string` | n/a | yes |
 | <a name="input_lambda_timeout"></a> [lambda\_timeout](#input\_lambda\_timeout) | (Optional, default 15 seconds) The timeout for the Lambda function in seconds | `number` | `15` | no |
 | <a name="input_lambda_vpc_config"></a> [lambda\_vpc\_config](#input\_lambda\_vpc\_config) | (Optional, default null) VPC configuration for the Lambda function | <pre>object({<br/>    subnet_ids         = list(string)<br/>    security_group_ids = list(string)<br/>  })</pre> | <pre>{<br/>  "security_group_ids": [],<br/>  "subnet_ids": []<br/>}</pre> | no |
