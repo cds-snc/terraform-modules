@@ -48,6 +48,12 @@ variable "environment_variables" {
   default = []
 }
 
+variable "github_personal_access_token" {
+  description = "(Required) GitHub personal access token to allow the CodeBuild runner to the target GitHub repository."
+  type        = string
+  sensitive   = true
+}
+
 variable "github_repository_url" {
   description = "(Required) GitHub repository URL for the CodeBuild source."
   type        = string
