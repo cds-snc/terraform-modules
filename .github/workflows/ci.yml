@@ -60,6 +60,7 @@ jobs:
         module:
           - athena_access_logs
           - client_vpn
+          - codebuild_github_runner
           - ecs
           - gh_oidc_role
           - lambda_schedule

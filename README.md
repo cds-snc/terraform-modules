@@ -17,6 +17,7 @@
 - [AWS Government of Canada password policy](aws_goc_password_policy)
 - [CDS Conformance Pack](cds_conformance_pack)
 - [Client VPN](client_vpn)
+- [CodeBuild GitHub runner](codebuild_github_runner)
 - [Empty log group alarm](empty_log_group_alarm)
 - [ECS](ecs)
 - [Exposed IAM Credentials disabler](exposed_iam_credentials_disabler)
