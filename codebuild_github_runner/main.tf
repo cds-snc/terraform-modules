@@ -3,6 +3,8 @@
 *
 * Creates an AWS CodeBuild project that allows you to self-host serverless GitHub action runners.
 *
+* OAuth authentication with GitHub and the webhook to trigger this runner must be configured manually in the AWS console as the AWS CodeBuild API does not support OAuth configuration.
+*
 * Inspiration for this module was taken from [cloudandthings/terraform-aws-github-runners](https://github.com/cloudandthings/terraform-aws-github-runners)
 */
 
