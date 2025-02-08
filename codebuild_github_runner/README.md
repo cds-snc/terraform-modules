@@ -1,7 +1,20 @@
 # CodeBuild GitHub runner
-
 Creates an AWS CodeBuild project that allows you to self-host serverless GitHub action runners.
 
+## Authentication
+It is recommended that you create a [fine-grained personal access token (PAT)](https://docs.github.com/en/authentication/keeping-your-account-and-data-secure/managing-your-personal-access-tokens#creating-a-fine-grained-personal-access-token) so that you can scope the permissions down to only what is required. The PAT should have the following permissions:
+
+- `Actions (read/write)`: required
+- `Administration (read/write)`: required
+- `Commit statuses (read/write)`: required
+- `Contents (read/write)`: optional, depends on runner tasks
+- `Metadata (read)`: required
+- `Pull requests (read/write)`: optional, depends on runner tasks
+- `Secrets (read)`: optional, depends on runner tasks
+- `Variables (read)`: optional, depends on runner tasks
+- `Webhooks (read/write)`: required
+
+## Credit
 Inspiration for this module was taken from [cloudandthings/terraform-aws-github-runners](https://github.com/cloudandthings/terraform-aws-github-runners)
 
 ## Requirements
@@ -43,7 +56,7 @@ No modules.
 | <a name="input_environment_image_pull_credentials_type"></a> [environment\_image\_pull\_credentials\_type](#input\_environment\_image\_pull\_credentials\_type) | (Optional, default 'CODEBUILD') Image pull credentials type for the CodeBuild environment. | `string` | `"CODEBUILD"` | no |
 | <a name="input_environment_type"></a> [environment\_type](#input\_environment\_type) | (Optional, default 'LINUX\_CONTAINER') Environment type for the CodeBuild project. | `string` | `"LINUX_CONTAINER"` | no |
 | <a name="input_environment_variables"></a> [environment\_variables](#input\_environment\_variables) | (Optional, default []) Environment variables for the CodeBuild project. | <pre>list(object({<br/>    name  = string<br/>    value = string<br/>  }))</pre> | `[]` | no |
-| <a name="input_github_personal_access_token"></a> [github\_personal\_access\_token](#input\_github\_personal\_access\_token) | (Required) GitHub personal access token to allow the CodeBuild runner to the target GitHub repository. | `string` | n/a | yes |
+| <a name="input_github_personal_access_token"></a> [github\_personal\_access\_token](#input\_github\_personal\_access\_token) | (Required) GitHub personal access token to allow the CodeBuild runner access to the target GitHub repository. | `string` | n/a | yes |
 | <a name="input_github_repository_url"></a> [github\_repository\_url](#input\_github\_repository\_url) | (Required) GitHub repository URL for the CodeBuild source. | `string` | n/a | yes |
 | <a name="input_project_name"></a> [project\_name](#input\_project\_name) | (Required) Name of the CodeBuild project. | `string` | n/a | yes |
 | <a name="input_queued_timeout"></a> [queued\_timeout](#input\_queued\_timeout) | (Optional, default '5') Queued timeout for the CodeBuild project. | `number` | `5` | no |

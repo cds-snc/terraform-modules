@@ -1,8 +1,21 @@
 /* 
 * # CodeBuild GitHub runner
-*
 * Creates an AWS CodeBuild project that allows you to self-host serverless GitHub action runners.
 *
+* ## Authentication
+* It is recommended that you create a [fine-grained personal access token (PAT)](https://docs.github.com/en/authentication/keeping-your-account-and-data-secure/managing-your-personal-access-tokens#creating-a-fine-grained-personal-access-token) so that you can scope the permissions down to only what is required. The PAT should have the following permissions:
+*
+* - `Actions (read/write)`: required
+* - `Administration (read/write)`: required
+* - `Commit statuses (read/write)`: required
+* - `Contents (read/write)`: optional, depends on runner tasks
+* - `Metadata (read)`: required
+* - `Pull requests (read/write)`: optional, depends on runner tasks
+* - `Secrets (read)`: optional, depends on runner tasks
+* - `Variables (read)`: optional, depends on runner tasks
+* - `Webhooks (read/write)`: required
+*
+* ## Credit
 * Inspiration for this module was taken from [cloudandthings/terraform-aws-github-runners](https://github.com/cloudandthings/terraform-aws-github-runners)
 */
 
