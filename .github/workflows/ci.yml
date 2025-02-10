@@ -35,7 +35,7 @@ jobs:
 
       - name: Setup Python
         if: steps.changes.outputs.module == 'true'
-        uses: actions/setup-python@0b93645e9fea7318ecaed2b359559ac225c90a2b # v5.3.0
+        uses: actions/setup-python@42375524e23c412d93fb67b49958b491fce71c38 # v5.4.0
         with:
           python-version: "3.11"
 
@@ -89,7 +89,7 @@ jobs:
 
       - name: Configure AWS credentials using OIDC
         if: steps.changes.outputs.module == 'true'
-        uses: aws-actions/configure-aws-credentials@e3dd6a429d7300a6a4c196c26e071d42e0343502 # v4.0.2
+        uses: aws-actions/configure-aws-credentials@4fc4975a852c8cd99761e2de1f4ba73402e44dd9 # v4.0.3
         with:
           role-to-assume: arn:aws:iam::124044056575:role/terraform-modules-test
           role-session-name: TFTest
