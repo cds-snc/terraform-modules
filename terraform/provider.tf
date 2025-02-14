@@ -8,7 +8,7 @@ terraform {
 
   backend "s3" {
     bucket       = "tfstate-cds-snc-terraform-modules"
-    key          = "terraform-modules/terraform.tfstate"
+    key          = "terraform-modules-tfstate/terraform.tfstate"
     region       = "ca-central-1"
     encrypt      = true
     use_lockfile = true
