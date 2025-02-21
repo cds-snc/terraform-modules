@@ -31,7 +31,7 @@ module "test_documentdb" {
   source              = "../../"
   enable              = true
   billing_code        = "billing_code_test"
-  subnet_ids          = aws_subnet.private_subnets[*].id 
+  subnet_ids          = aws_subnet.private_subnets[*].id
   database_name       = "test-db"
   master_username     = "test"
   master_password     = "another_test"
