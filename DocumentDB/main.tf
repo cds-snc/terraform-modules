@@ -44,8 +44,6 @@ resource "aws_docdb_cluster" "this" {
   engine_version                  = var.engine_version
 
   tags = local.common_tags
-
-  depends_on = [aws_docdb_cluster_parameter_group.this]
 }
 
 # DocumentDB instance

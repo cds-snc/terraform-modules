@@ -116,7 +116,6 @@ variable "instance_class" {
 variable "subnet_ids" {
   description = "(Required) List of VPC subnet IDs."
   type        = list(string)
-  default     = [""]
 }
 
 variable "enable" {

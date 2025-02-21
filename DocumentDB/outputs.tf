@@ -2,7 +2,7 @@
 
 output "docdb_cluster_id" {
   description = "The document db cluster id"
-  value       = aws_docdb_cluster.this[0].id
+  value       = var.enable ? aws_docdb_cluster.this[0].id : null
 }
 
 output "cluster_name" {
