@@ -65,6 +65,8 @@ resource "aws_kms_alias" "docdb_kms_alias" {
   name          = "alias/docdb-key"
   target_key_id = aws_kms_key.docdb_kms.id
 }
+
+# Instance of DocumentDB
 module "test_secured_documentdb" {
   source                 = "./../"
   enable                 = true

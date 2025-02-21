@@ -27,6 +27,7 @@ resource "aws_subnet" "private_subnets" {
   }
 }
 
+# Instance of DocumentDB
 module "test_documentdb" {
   source              = "../../"
   enable              = true
