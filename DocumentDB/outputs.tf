@@ -7,22 +7,22 @@ output "docdb_cluster_id" {
 
 output "cluster_name" {
   description = "The document db cluster name"
-  value       = aws_docdb_cluster.this[0].cluster_identifier
+  value       = var.enable ? aws_docdb_cluster.this[0].cluster_identifier:null
 
 }
 
 output "docdb_cluster_arn" {
   description = "The document db cluster arn"
-  value       = aws_docdb_cluster.this[0].arn
+  value       = var.enable ? aws_docdb_cluster.this[0].arn : null
 }
 
 output "docdb_port" {
   description = "The document db port"
-  value       = aws_docdb_cluster.this[0].port
+  value       = var.enable ? aws_docdb_cluster.this[0].port:null
 }
 
 output "docdb_endpoint" {
   description = "The document db endpoint"
   sensitive   = true
-  value       = aws_docdb_cluster.this[0].endpoint
+  value       = var.enable ? aws_docdb_cluster.this[0].endpoint:null
 }
