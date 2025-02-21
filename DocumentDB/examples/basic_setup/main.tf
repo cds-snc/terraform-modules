@@ -27,6 +27,19 @@ resource "aws_subnet" "private_subnets" {
   }
 }
 
+# Create a KMS key for encryption
+resource "aws_kms_key" "docdb_kms" {
+  description             = "KMS key for DocumentDB encryption"
+  enable_key_rotation     = true
+  deletion_window_in_days = 30
+}
+
+# Create an alias for the KMS key
+resource "aws_kms_alias" "docdb_kms_alias" {
+  name          = "alias/docdb-key"
+  target_key_id = aws_kms_key.docdb_kms.id
+}
+
 # Instance of DocumentDB
 module "test_documentdb" {
   source              = "../../"
@@ -38,5 +51,7 @@ module "test_documentdb" {
   master_password     = "another_test"
   instance_class      = "db.t3.medium"
   cluster_size        = "1"
+  storage_encrypted   = true
+  kms_key_id          = aws_kms_key.docdb_kms.arn
   deletion_protection = true
 }

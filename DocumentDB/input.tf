@@ -62,7 +62,7 @@ variable "deletion_protection" {
 variable "storage_encrypted" {
   type        = bool
   description = "(Optional, default is `false`). Determines if the DB cluster is encrypted."
-  default     = false
+  default     = true
 }
 
 variable "kms_key_id" {
