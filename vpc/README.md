@@ -18,8 +18,19 @@ High Availability mode deploys in each AZ in a region. This is what you should c
 **Please Note:** This should not be used in a PBMM Production environment.
 
 Single Zone mode deployes in the first AZ in a region that is found by the availability lookup. This will work for if you want to save money in dev.
+
 ![Diagram of the Single Zone architecture](./docs/single\_zone.png)
 
+### Breaking change with v9.0.0
+If you upgrade to v9.0.0 or above from a lower version, the ```high_availability``` flag is deprecated and no longer available. You will need to do the following in order to upgrade to a higher version:
+1. Remove the ```high_availability``` flag 
+2. Instead add the following to your code:
+  ```
+    availability_zones = 3
+    cidrsubnet_newbits = 8
+```
+3. Run terraform/terragrunt plan. You should have no changes in your infrastucture.
+   
 ## Requirements
 
 | Name | Version |
