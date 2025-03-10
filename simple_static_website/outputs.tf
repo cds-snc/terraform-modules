@@ -17,3 +17,8 @@ output "route_53_hosted_zone_id" {
   description = "The Route53 hosted zone ID."
   value       = var.is_create_hosted_zone ? aws_route53_zone.hosted_zone[0].zone_id : var.hosted_zone_id
 }
+
+output "cloudfront_distribution_id" {
+  description = "The AWS CloudFront Distribution ID."
+  value       = aws_cloudfront_distribution.simple_static_website.id
+}
