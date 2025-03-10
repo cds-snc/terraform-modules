@@ -33,7 +33,7 @@ jobs:
           # Check if there are any files to commit
           if [[ $(git status --porcelain) ]]; then
             # If there are, display the list of files and exit with a non-zero status code
-            echo "💩 The following files need to be committed:"
+            echo "💩 The following READMEs need to be rebuilt.  Run `make docs` to rebuild them and commit the changes."
             git status --porcelain
             git status --porcelain | sed -e 's/^M/**Modified**/' -e 's/^A/**Added**/' -e 's/^D/**Deleted**/' >> $GITHUB_STEP_SUMMARY
             echo "Changes found"
