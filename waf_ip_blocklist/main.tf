@@ -35,7 +35,7 @@ resource "aws_lambda_function" "ipv4_blocklist" {
 
   filename    = data.archive_file.ipv4_blocklist.output_path
   handler     = "blocklist.handler"
-  runtime     = "python3.11"
+  runtime     = "python3.13"
   timeout     = 300
   memory_size = 1024
 
