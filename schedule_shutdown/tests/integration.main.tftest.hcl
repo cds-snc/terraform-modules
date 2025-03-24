@@ -6,7 +6,7 @@ run "module_defaults" {
   command = apply
 
   assert {
-    condition     = aws_lambda_function.schedule.runtime == "python3.11"
+    condition     = aws_lambda_function.schedule.runtime == "python3.13"
     error_message = "Lambda runtime does not match expected value"
   }
 

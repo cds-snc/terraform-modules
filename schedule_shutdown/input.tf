@@ -22,9 +22,9 @@ variable "ecs_service_arns" {
 }
 
 variable "lambda_runtime" {
-  description = "(Optional, defaults to 3.11) The Python runtime to use for the lambda function."
+  description = "(Optional, defaults to 3.13) The Python runtime to use for the lambda function."
   type        = string
-  default     = "python3.11"
+  default     = "python3.13"
 }
 
 variable "rds_cluster_arns" {
