@@ -38,6 +38,7 @@ No requirements.
 | <a name="input_billing_tag_key"></a> [billing\_tag\_key](#input\_billing\_tag\_key) | (Optional, default 'CostCentre') The name of the billing tag | `string` | `"CostCentre"` | no |
 | <a name="input_billing_tag_value"></a> [billing\_tag\_value](#input\_billing\_tag\_value) | (Required) The value of the billing tag | `string` | n/a | yes |
 | <a name="input_create_ecr_repository"></a> [create\_ecr\_repository](#input\_create\_ecr\_repository) | (Optional, default true) Whether to create an ECR repository for the Lambda image | `bool` | `true` | no |
+| <a name="input_lambda_architectures"></a> [lambda\_architectures](#input\_lambda\_architectures) | (Optional, default ['x86\_64']) The architectures of the Lambda function | `list(string)` | <pre>[<br/>  "x86_64"<br/>]</pre> | no |
 | <a name="input_lambda_ecr_arn"></a> [lambda\_ecr\_arn](#input\_lambda\_ecr\_arn) | (Optional, defaults to null) The ARN of the ECR repository containing the Lambda image | `string` | `null` | no |
 | <a name="input_lambda_environment_variables"></a> [lambda\_environment\_variables](#input\_lambda\_environment\_variables) | (Optional, defaults to empty map) Environment variables for the Lambda function | `map(string)` | `{}` | no |
 | <a name="input_lambda_image_tag"></a> [lambda\_image\_tag](#input\_lambda\_image\_tag) | (Optional, defaults to 'latest') The image tag to use for the Lambda function | `string` | `"latest"` | no |
