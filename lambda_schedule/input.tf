@@ -15,6 +15,12 @@ variable "create_ecr_repository" {
   default     = true
 }
 
+variable "lambda_architectures" {
+  description = "(Optional, default ['x86_64']) The architectures of the Lambda function"
+  type        = list(string)
+  default     = ["x86_64"]
+}
+
 variable "lambda_ecr_arn" {
   description = "(Optional, defaults to null) The ARN of the ECR repository containing the Lambda image"
   type        = string

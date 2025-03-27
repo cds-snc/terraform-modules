@@ -15,6 +15,7 @@ module "this_lambda" {
 
   timeout               = var.lambda_timeout
   memory                = var.lambda_memory
+  architectures         = var.lambda_architectures
   environment_variables = var.lambda_environment_variables
   vpc                   = var.lambda_vpc_config
   policies              = local.policies
