@@ -37,7 +37,7 @@ jobs:
         aws-region: ${{ env.AWS_REGION }}
 
     - name: Terraform Plan
-      uses: cds-snc/terraform-plan@d79bcf0eccf632a0ad9e9193072b42c970766c5b # v3.3.1
+      uses: cds-snc/terraform-plan@7d4ab0010e76b09dfc1d8a343d2c7ddaa2b4df4f # v3.3.2
       with:
         comment-delete: true
         comment-title: "Terraform"
