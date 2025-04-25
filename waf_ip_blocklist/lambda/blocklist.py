@@ -22,6 +22,7 @@ ATHENA_DATABASE = os.getenv("ATHENA_DATABASE", "access_logs")
 ATHENA_LB_TABLE = os.getenv("ATHENA_LB_TABLE", "lb_logs")
 ATHENA_WAF_TABLE = os.getenv("ATHENA_WAF_TABLE", "waf_logs")
 BLOCK_THRESHOLD = os.getenv("BLOCK_THRESHOLD", "20")
+LB_STATUS_CODE_SKIP = os.getenv("LB_STATUS_CODE_SKIP", "").split(",")
 QUERY_LB = os.getenv("QUERY_LB", "true") == "true"
 QUERY_WAF = os.getenv("QUERY_WAF", "true") == "true"
 WAF_RULE_IDS_SKIP = os.getenv("WAF_RULE_IDS_SKIP", "").split(",")
@@ -31,7 +32,7 @@ WAF_SCOPE = os.getenv("WAF_SCOPE", "REGIONAL")
 def handler(_event, _context):
     """Query the WAF and LB logs and update the WAF IP set with the new IPs"""
     query_lb = get_query_from_file(
-        "./query_lb.sql", ATHENA_LB_TABLE, [], BLOCK_THRESHOLD
+        "./query_lb.sql", ATHENA_LB_TABLE, LB_STATUS_CODE_SKIP, BLOCK_THRESHOLD
     )
     query_waf = get_query_from_file(
         "./query_waf.sql", ATHENA_WAF_TABLE, WAF_RULE_IDS_SKIP, BLOCK_THRESHOLD

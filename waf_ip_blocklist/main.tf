@@ -50,6 +50,7 @@ resource "aws_lambda_function" "ipv4_blocklist" {
       ATHENA_WAF_TABLE     = var.athena_waf_table_name
       ATHENA_WORKGROUP     = var.athena_workgroup_name
       BLOCK_THRESHOLD      = var.waf_block_threshold
+      LB_STATUS_CODE_SKIP  = join(",", var.lb_status_code_skip)
       QUERY_LB             = var.query_lb
       QUERY_WAF            = var.query_waf
       WAF_IP_SET_ID        = aws_wafv2_ip_set.ipv4_blocklist.id
