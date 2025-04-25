@@ -43,6 +43,12 @@ variable "billing_tag_value" {
   type        = string
 }
 
+variable "lb_status_code_skip" {
+  description = "(Optional, default []) A list of Load Balancer status codes to ignore when adding an IP address to the blocklist"
+  type        = list(string)
+  default     = []
+}
+
 variable "query_lb" {
   description = "(Optional, default true) Should the Load Balancer logs be queried for 4xx responses?"
   type        = bool

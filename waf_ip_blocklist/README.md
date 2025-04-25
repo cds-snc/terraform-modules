@@ -58,6 +58,7 @@ No modules.
 | <a name="input_athena_workgroup_name"></a> [athena\_workgroup\_name](#input\_athena\_workgroup\_name) | (Optional, default 'primary') The name of the Athena workgroup. | `string` | `"primary"` | no |
 | <a name="input_billing_tag_key"></a> [billing\_tag\_key](#input\_billing\_tag\_key) | (Optional, default 'CostCentre') The name of the billing tag | `string` | `"CostCentre"` | no |
 | <a name="input_billing_tag_value"></a> [billing\_tag\_value](#input\_billing\_tag\_value) | (Required) The value of the billing tag | `string` | n/a | yes |
+| <a name="input_lb_status_code_skip"></a> [lb\_status\_code\_skip](#input\_lb\_status\_code\_skip) | (Optional, default []) A list of Load Balancer status codes to ignore when adding an IP address to the blocklist | `list(string)` | `[]` | no |
 | <a name="input_query_lb"></a> [query\_lb](#input\_query\_lb) | (Optional, default true) Should the Load Balancer logs be queried for 4xx responses? | `bool` | `true` | no |
 | <a name="input_query_waf"></a> [query\_waf](#input\_query\_waf) | (Optional, default true) Should the WAF logs be queried for BLOCK responses? | `bool` | `true` | no |
 | <a name="input_service_name"></a> [service\_name](#input\_service\_name) | (Required) The name of the service | `string` | n/a | yes |
