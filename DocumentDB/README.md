@@ -1,4 +1,3 @@
-<!-- BEGIN_TF_DOCS -->
 # DocumentDB
 
 ## Requirements
@@ -47,8 +46,9 @@ No modules.
 | <a name="input_master_username"></a> [master\_username](#input\_master\_username) | (Required) The username of the documentdb cluster. | `string` | n/a | yes |
 | <a name="input_parameters"></a> [parameters](#input\_parameters) | (Optional). List of parameters to apply to the DocumentDB database | <pre>list(object({<br/>    apply_method = optional(string)<br/>    name         = string<br/>    value        = string<br/>  }))</pre> | `[]` | no |
 | <a name="input_snapshot_identifier"></a> [snapshot\_identifier](#input\_snapshot\_identifier) | (Optional). Specifies whether or not to create this cluster from a snapshot. You can use either the name or ARN when specifying a DB cluster snapshot, or the ARN when specifying a DB snapshot. | `string` | `""` | no |
-| <a name="input_storage_encrypted"></a> [storage\_encrypted](#input\_storage\_encrypted) | (Optional, default is `false`). Determines if the DB cluster is encrypted. | `bool` | `false` | no |
-| <a name="input_subnet_ids"></a> [subnet\_ids](#input\_subnet\_ids) | (Required) List of VPC subnet IDs. | `list(string)` | <pre>[<br/>  ""<br/>]</pre> | no |
+| <a name="input_storage_encrypted"></a> [storage\_encrypted](#input\_storage\_encrypted) | (Optional, default is `false`). Determines if the DB cluster is encrypted. | `bool` | `true` | no |
+| <a name="input_storage_type"></a> [storage\_type](#input\_storage\_type) | (Optional, default `standard`) The storage type to associate with the DB cluster. Valid values: `standard`, `iopt1`. For more information on storage types, refer to https://docs.aws.amazon.com/documentdb/latest/developerguide/db-cluster-storage-configs.html. | `string` | `"standard"` | no |
+| <a name="input_subnet_ids"></a> [subnet\_ids](#input\_subnet\_ids) | (Required) List of VPC subnet IDs. | `list(string)` | n/a | yes |
 | <a name="input_vpc_security_group_ids"></a> [vpc\_security\_group\_ids](#input\_vpc\_security\_group\_ids) | (Optional). A list of VPC security group IDs to associate with the DocumentDB cluster. | `set(string)` | `null` | no |
 
 ## Outputs
@@ -60,4 +60,3 @@ No modules.
 | <a name="output_docdb_cluster_id"></a> [docdb\_cluster\_id](#output\_docdb\_cluster\_id) | The document db cluster id |
 | <a name="output_docdb_endpoint"></a> [docdb\_endpoint](#output\_docdb\_endpoint) | The document db endpoint |
 | <a name="output_docdb_port"></a> [docdb\_port](#output\_docdb\_port) | The document db port |
-<!-- END_TF_DOCS -->
