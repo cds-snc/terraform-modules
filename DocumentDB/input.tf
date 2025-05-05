@@ -113,6 +113,12 @@ variable "instance_class" {
   description = "(Required, default `db.t3.medium`) The instance class to use for the instance For more information on instance classes, refer to https://docs.aws.amazon.com/documentdb/latest/developerguide/db-instance-classes.html#db-instance-class-specs."
 }
 
+variable "storage_type" {
+  type        = string
+  default     = "standard"
+  description = "(Optional, default `standard`) The storage type to associate with the DB cluster. Valid values: `standard`, `iopt1`. For more information on storage types, refer to https://docs.aws.amazon.com/documentdb/latest/developerguide/db-cluster-storage-configs.html."
+}
+
 variable "subnet_ids" {
   description = "(Required) List of VPC subnet IDs."
   type        = list(string)
