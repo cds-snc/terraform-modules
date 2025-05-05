@@ -42,6 +42,7 @@ resource "aws_docdb_cluster" "this" {
   db_cluster_parameter_group_name = aws_docdb_cluster_parameter_group.this[0].name
   engine                          = var.engine
   engine_version                  = var.engine_version
+  storage_type                    = var.storage_type
 
   tags = local.common_tags
 }
