@@ -31,6 +31,11 @@ output "service_name" {
   value       = aws_ecs_service.this.name
 }
 
+output "service_port" {
+  description = "Port of the service"
+  value       = var.container_port
+}
+
 ################################################################################
 # Task
 ################################################################################
