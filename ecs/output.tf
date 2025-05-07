@@ -33,7 +33,7 @@ output "service_name" {
 
 output "service_port" {
   description = "Port of the service"
-  value       = var.container_port
+  value       = var.container_port == null ? "" : var.container_port
 }
 
 ################################################################################
