@@ -119,6 +119,7 @@ No requirements.
 | <a name="output_cluster_name"></a> [cluster\_name](#output\_cluster\_name) | Name that identifies the cluster |
 | <a name="output_service_id"></a> [service\_id](#output\_service\_id) | ARN that identifies the service |
 | <a name="output_service_name"></a> [service\_name](#output\_service\_name) | Name of the service |
+| <a name="output_service_port"></a> [service\_port](#output\_service\_port) | Port of the service |
 | <a name="output_task_definition_arn"></a> [task\_definition\_arn](#output\_task\_definition\_arn) | Full ARN of the Task Definition (including both `family` and `revision`) |
 | <a name="output_task_definition_family"></a> [task\_definition\_family](#output\_task\_definition\_family) | The unique name of the task definition |
 | <a name="output_task_definition_revision"></a> [task\_definition\_revision](#output\_task\_definition\_revision) | Revision of the task in a particular family |
