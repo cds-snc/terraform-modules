@@ -6,6 +6,10 @@ The automatic update is based on a service's WAF and load balancer logs where an
 The IP block is temporary and the IP address will be removed once it has been at least 24 hours since it has exceeded
 the block threshold.
 
+## CloudFront WAF
+If you are using CloudFront, you need to set the `waf_scope` variable to `CLOUDFRONT`.  You must also pass a `us-east-1` provider to the
+module as the WAF IP set needs to be in `us-east-1` to work with CloudFront.
+
 ## Requirements
 
 No requirements.
@@ -54,6 +58,7 @@ No modules.
 | <a name="input_athena_lb_table_name"></a> [athena\_lb\_table\_name](#input\_athena\_lb\_table\_name) | (Optional, default 'lb\_logs') The name of the Load Balancer logs table in the Athena database. | `string` | `"lb_logs"` | no |
 | <a name="input_athena_query_results_bucket"></a> [athena\_query\_results\_bucket](#input\_athena\_query\_results\_bucket) | (Required) The name of the S3 bucket where the Athena query results are stored. | `string` | n/a | yes |
 | <a name="input_athena_query_source_bucket"></a> [athena\_query\_source\_bucket](#input\_athena\_query\_source\_bucket) | (Required) The name of the S3 bucket where the source data for the Athena query lives. | `string` | n/a | yes |
+| <a name="input_athena_region"></a> [athena\_region](#input\_athena\_region) | (Optional, default '') The AWS region where the Athena workgroup exists.  If left blank, this defaults to the current region. | `string` | `""` | no |
 | <a name="input_athena_waf_table_name"></a> [athena\_waf\_table\_name](#input\_athena\_waf\_table\_name) | (Optional, default 'waf\_logs') The name of the WAF logs table in the Athena database. | `string` | `"waf_logs"` | no |
 | <a name="input_athena_workgroup_name"></a> [athena\_workgroup\_name](#input\_athena\_workgroup\_name) | (Optional, default 'primary') The name of the Athena workgroup. | `string` | `"primary"` | no |
 | <a name="input_billing_tag_key"></a> [billing\_tag\_key](#input\_billing\_tag\_key) | (Optional, default 'CostCentre') The name of the billing tag | `string` | `"CostCentre"` | no |

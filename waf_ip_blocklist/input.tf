@@ -20,6 +20,12 @@ variable "athena_lb_table_name" {
   default     = "lb_logs"
 }
 
+variable "athena_region" {
+  description = "(Optional, default '') The AWS region where the Athena workgroup exists.  If left blank, this defaults to the current region."
+  type        = string
+  default     = ""
+}
+
 variable "athena_waf_table_name" {
   description = "(Optional, default 'waf_logs') The name of the WAF logs table in the Athena database."
   type        = string

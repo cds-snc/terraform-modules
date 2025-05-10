@@ -6,6 +6,10 @@
 *
 * The IP block is temporary and the IP address will be removed once it has been at least 24 hours since it has exceeded
 * the block threshold.
+*
+* ## CloudFront WAF
+* If you are using CloudFront, you need to set the `waf_scope` variable to `CLOUDFRONT`.  You must also pass a `us-east-1` provider to the
+* module as the WAF IP set needs to be in `us-east-1` to work with CloudFront.
 */
 
 #

@@ -1,4 +1,3 @@
-
 module "simple" {
   source = "../../"
 
@@ -9,3 +8,18 @@ module "simple" {
   billing_tag_value           = "test-app"
 }
 
+module "cloudfront" {
+  source = "../../"
+
+  service_name                = "test-app"
+  athena_query_results_bucket = "test-app-athena-bucket"
+  athena_query_source_bucket  = "test-app-waf-logs-bucket"
+  billing_tag_value           = "test-app"
+
+  waf_scope     = "CLOUDFRONT"
+  athena_region = "ca-central-1"
+
+  providers = {
+    aws = aws.us-east-1
+  }
+}
