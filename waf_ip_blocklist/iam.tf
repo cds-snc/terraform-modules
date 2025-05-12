@@ -61,7 +61,7 @@ data "aws_iam_policy_document" "athena" {
       "athena:GetQueryExecution"
     ]
     resources = [
-      "arn:aws:athena:${local.region}:${local.account_id}:workgroup/${var.athena_workgroup_name}"
+      "arn:aws:athena:${local.athena_region}:${local.account_id}:workgroup/${var.athena_workgroup_name}"
     ]
   }
 
@@ -74,8 +74,8 @@ data "aws_iam_policy_document" "athena" {
       "athena:GetTableMetadata"
     ]
     resources = [
-      "arn:aws:athena:${local.region}:${local.account_id}:catalog/AwsDataCatalog/database/${var.athena_database_name}",
-      "arn:aws:athena:${local.region}:${local.account_id}:catalog/AwsDataCatalog/database/${var.athena_database_name}/table/*"
+      "arn:aws:athena:${local.athena_region}:${local.account_id}:catalog/AwsDataCatalog/database/${var.athena_database_name}",
+      "arn:aws:athena:${local.athena_region}:${local.account_id}:catalog/AwsDataCatalog/database/${var.athena_database_name}/table/*"
     ]
   }
 
@@ -88,9 +88,9 @@ data "aws_iam_policy_document" "athena" {
       "glue:GetPartitions"
     ]
     resources = [
-      "arn:aws:glue:${local.region}:${local.account_id}:catalog",
-      "arn:aws:glue:${local.region}:${local.account_id}:database/${var.athena_database_name}",
-      "arn:aws:glue:${local.region}:${local.account_id}:table/${var.athena_database_name}/*"
+      "arn:aws:glue:${local.athena_region}:${local.account_id}:catalog",
+      "arn:aws:glue:${local.athena_region}:${local.account_id}:database/${var.athena_database_name}",
+      "arn:aws:glue:${local.athena_region}:${local.account_id}:table/${var.athena_database_name}/*"
     ]
   }
 }
