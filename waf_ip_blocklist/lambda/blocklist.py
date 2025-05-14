@@ -8,11 +8,9 @@ import os
 import time
 import boto3
 
-athena_client = boto3.client("athena")
-waf_client = boto3.client("wafv2")
-
 # Required
 ATHENA_OUTPUT_BUCKET = os.environ["ATHENA_OUTPUT_BUCKET"]
+ATHENA_REGION = os.environ["ATHENA_REGION"]
 ATHENA_WORKGROUP = os.environ["ATHENA_WORKGROUP"]
 WAF_IP_SET_ID = os.environ["WAF_IP_SET_ID"]
 WAF_IP_SET_NAME = os.environ["WAF_IP_SET_NAME"]
@@ -27,6 +25,9 @@ QUERY_LB = os.getenv("QUERY_LB", "true") == "true"
 QUERY_WAF = os.getenv("QUERY_WAF", "true") == "true"
 WAF_RULE_IDS_SKIP = os.getenv("WAF_RULE_IDS_SKIP", "").split(",")
 WAF_SCOPE = os.getenv("WAF_SCOPE", "REGIONAL")
+
+athena_client = boto3.client("athena", region_name=ATHENA_REGION)
+waf_client = boto3.client("wafv2")
 
 
 def handler(_event, _context):
