@@ -51,6 +51,7 @@ resource "aws_lambda_function" "ipv4_blocklist" {
       ATHENA_OUTPUT_BUCKET = var.athena_query_results_bucket
       ATHENA_DATABASE      = var.athena_database_name
       ATHENA_LB_TABLE      = var.athena_lb_table_name
+      ATHENA_REGION        = local.athena_region
       ATHENA_WAF_TABLE     = var.athena_waf_table_name
       ATHENA_WORKGROUP     = var.athena_workgroup_name
       BLOCK_THRESHOLD      = var.waf_block_threshold

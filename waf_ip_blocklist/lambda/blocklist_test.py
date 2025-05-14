@@ -5,6 +5,7 @@ from unittest.mock import call, patch
 
 os.environ["AWS_DEFAULT_REGION"] = "ca-central-1"
 os.environ["ATHENA_OUTPUT_BUCKET"] = "test_bucket"
+os.environ["ATHENA_REGION"] = "ca-central-1"
 os.environ["ATHENA_WORKGROUP"] = "test_workgroup"
 os.environ["WAF_IP_SET_ID"] = "test_ip_set_id"
 os.environ["WAF_IP_SET_NAME"] = "test_ip_set_name"
