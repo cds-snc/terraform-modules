@@ -7,7 +7,7 @@
 */
 
 module "this_lambda" {
-  source = "github.com/cds-snc/terraform-modules//lambda?ref=v10.4.2"
+  source = "github.com/cds-snc/terraform-modules//lambda?ref=v10.4.6"
 
   name      = var.lambda_name
   image_uri = local.lambda_image_uri
