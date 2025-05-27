@@ -56,7 +56,7 @@ def test_handler_with_ips_to_block(mock_waf_client, mock_athena_client, capsys):
     mock_athena_client.start_query_execution.assert_has_calls(
         [
             call(
-                QueryString="-- List of IP addresses that have triggered 4xx HTTP responses\nSELECT\n    client_ip,\n    COUNT(*) as count\nFROM\n    lb_logs\nWHERE\n    (\n        elb_status_code = 403\n        OR target_status_code LIKE '4__'\n    )\n    AND target_status_code NOT IN ('')\n    AND from_iso8601_timestamp(time) >= date_add('day', -1, current_timestamp)\nGROUP BY\n    client_ip\nHAVING COUNT(*) > 20\nORDER BY count DESC",
+                QueryString="-- List of IP addresses that have triggered 4xx HTTP responses\nSELECT\n    client_ip,\n    COUNT(*) as count\nFROM\n    lb_logs\nWHERE\n    (\n        elb_status_code = 403\n        OR target_status_code LIKE '4__'\n        OR target_status_code LIKE '5__'\n    )\n    AND target_status_code NOT IN ('')\n    AND from_iso8601_timestamp(time) >= date_add('day', -1, current_timestamp)\nGROUP BY\n    client_ip\nHAVING COUNT(*) > 20\nORDER BY count DESC",
                 QueryExecutionContext={"Database": "access_logs"},
                 ResultConfiguration={"OutputLocation": "s3://test_bucket/"},
                 WorkGroup="test_workgroup",
@@ -117,7 +117,7 @@ def test_handler_with_no_ips_to_block(mock_waf_client, mock_athena_client):
     mock_athena_client.start_query_execution.assert_has_calls(
         [
             call(
-                QueryString="-- List of IP addresses that have triggered 4xx HTTP responses\nSELECT\n    client_ip,\n    COUNT(*) as count\nFROM\n    lb_logs\nWHERE\n    (\n        elb_status_code = 403\n        OR target_status_code LIKE '4__'\n    )\n    AND target_status_code NOT IN ('')\n    AND from_iso8601_timestamp(time) >= date_add('day', -1, current_timestamp)\nGROUP BY\n    client_ip\nHAVING COUNT(*) > 20\nORDER BY count DESC",
+                QueryString="-- List of IP addresses that have triggered 4xx HTTP responses\nSELECT\n    client_ip,\n    COUNT(*) as count\nFROM\n    lb_logs\nWHERE\n    (\n        elb_status_code = 403\n        OR target_status_code LIKE '4__'\n        OR target_status_code LIKE '5__'\n    )\n    AND target_status_code NOT IN ('')\n    AND from_iso8601_timestamp(time) >= date_add('day', -1, current_timestamp)\nGROUP BY\n    client_ip\nHAVING COUNT(*) > 20\nORDER BY count DESC",
                 QueryExecutionContext={"Database": "access_logs"},
                 ResultConfiguration={"OutputLocation": "s3://test_bucket/"},
                 WorkGroup="test_workgroup",
@@ -163,7 +163,7 @@ def test_handler_with_only_lb_query(mock_waf_client, mock_athena_client):
     mock_athena_client.start_query_execution.assert_has_calls(
         [
             call(
-                QueryString="-- List of IP addresses that have triggered 4xx HTTP responses\nSELECT\n    client_ip,\n    COUNT(*) as count\nFROM\n    lb_logs\nWHERE\n    (\n        elb_status_code = 403\n        OR target_status_code LIKE '4__'\n    )\n    AND target_status_code NOT IN ('')\n    AND from_iso8601_timestamp(time) >= date_add('day', -1, current_timestamp)\nGROUP BY\n    client_ip\nHAVING COUNT(*) > 20\nORDER BY count DESC",
+                QueryString="-- List of IP addresses that have triggered 4xx HTTP responses\nSELECT\n    client_ip,\n    COUNT(*) as count\nFROM\n    lb_logs\nWHERE\n    (\n        elb_status_code = 403\n        OR target_status_code LIKE '4__'\n        OR target_status_code LIKE '5__'\n    )\n    AND target_status_code NOT IN ('')\n    AND from_iso8601_timestamp(time) >= date_add('day', -1, current_timestamp)\nGROUP BY\n    client_ip\nHAVING COUNT(*) > 20\nORDER BY count DESC",
                 QueryExecutionContext={"Database": "access_logs"},
                 ResultConfiguration={"OutputLocation": "s3://test_bucket/"},
                 WorkGroup="test_workgroup",

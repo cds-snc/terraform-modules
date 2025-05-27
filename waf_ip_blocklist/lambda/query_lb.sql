@@ -8,6 +8,7 @@ WHERE
     (
         elb_status_code = 403
         OR target_status_code LIKE '4__'
+        OR target_status_code LIKE '5__'
     )
     AND target_status_code NOT IN ({skip_list})
     AND from_iso8601_timestamp(time) >= date_add('day', -1, current_timestamp)
