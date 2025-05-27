@@ -56,7 +56,7 @@ variable "lb_status_code_skip" {
 }
 
 variable "query_lb" {
-  description = "(Optional, default true) Should the Load Balancer logs be queried for 4xx responses?"
+  description = "(Optional, default true) Should the Load Balancer logs be queried for 4xx and 5xx responses?"
   type        = bool
   default     = true
 }
