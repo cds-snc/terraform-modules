@@ -23,6 +23,7 @@
 - [ECS](ecs)
 - [Exposed IAM Credentials disabler](exposed_iam_credentials_disabler)
 - [GuardDuty](guardduty)
+- [GuardDuty Malware Protection for S3](guardduty_malware_s3)
 - [GuardDuty member](guardduty_member)
 - [Github Open ID Connect](gh_oidc_role)
 - [Lambda](lambda)
