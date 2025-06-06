@@ -63,6 +63,7 @@ jobs:
           - client_vpn
           - codebuild_github_runner
           - ecs
+          - guardduty_malware_s3
           - gh_oidc_role
           - lambda_schedule
           - notify_slack
