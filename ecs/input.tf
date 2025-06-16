@@ -12,6 +12,12 @@ variable "cluster_name" {
   type        = string
 }
 
+variable "cluster_capacity_provider" {
+  description = "(Optional, default `FARGATE`) The capacity provider to use for the ECS cluster. Defaults to `FARGATE`"
+  type        = string
+  default     = "FARGATE"
+}
+
 ################################################################################
 # CloudWatch Log Group
 ################################################################################
