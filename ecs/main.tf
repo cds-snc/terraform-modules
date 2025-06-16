@@ -24,10 +24,10 @@ resource "aws_ecs_cluster_capacity_providers" "this" {
   count        = var.create_cluster ? 1 : 0
   cluster_name = aws_ecs_cluster.this[0].name
 
-  capacity_providers = ["FARGATE"]
+  capacity_providers = [var.cluster_capacity_provider]
 
   default_capacity_provider_strategy {
-    capacity_provider = "FARGATE"
+    capacity_provider = var.cluster_capacity_provider
     weight            = 1
     base              = 1
   }
