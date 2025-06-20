@@ -102,6 +102,16 @@ variable "entity_mapping" {
   }))
   description = "(Optional) The entity mapping of the alert rule."
   default     = []
+
+  validation {
+    condition = alltrue([
+      for entity in var.entity_mapping : alltrue([
+        for field in entity.field_mapping : can(regex("^[a-zA-Z0-9]*$", field.column_name))
+      ])
+    ])
+    error_message = "'column_name'in entity mapping can only contain alphanumeric characters (a-z, A-Z, 0-9)."
+  }
+
 }
 
 variable "custom_details" {
