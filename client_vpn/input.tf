@@ -142,3 +142,25 @@ variable "organization" {
   type        = string
   default     = "Canadian Digital Service"
 }
+
+variable "certificate_validity_period" {
+  description = "(Optional, default 8760) The validity period of the VPN client certificate in hours."
+  type        = number
+  default     = 8760
+
+  validation {
+    condition     = var.certificate_validity_period > 0
+    error_message = "The certificate_validity_period must be greater than 0."
+  }
+}
+
+variable "certificate_early_renewal_period" {
+  description = "(Optional, default 672) The early renewal period for the VPN client certificate in hours."
+  type        = number
+  default     = 672
+
+  validation {
+    condition     = var.certificate_early_renewal_period > 0
+    error_message = "The certificate_early_renewal_period must be greater than 0."
+  }
+}
