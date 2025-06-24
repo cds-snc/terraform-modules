@@ -127,7 +127,8 @@ resource "tls_private_key" "client_vpn" {
 resource "tls_self_signed_cert" "client_vpn" {
   count                 = var.authentication_option == "certificate-authentication" ? 1 : 0
   private_key_pem       = tls_private_key.client_vpn[0].private_key_pem
-  validity_period_hours = 8760
+  validity_period_hours = var.certificate_validity_period
+  early_renewal_hours   = var.certificate_early_renewal_period
 
   subject {
     common_name  = var.common_name
