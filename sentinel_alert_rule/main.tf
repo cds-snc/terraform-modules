@@ -67,20 +67,21 @@ resource "azurerm_sentinel_alert_rule_scheduled" "this" {
     }
   }
 
-  dynamic "incident_configuration" {
+  dynamic "incident" {
     for_each = [1]
 
     content {
-      create_incident = var.incident_configuration.create_incident
+      create_incident_enabled = var.incident_configuration.create_incident
       grouping {
         enabled                 = var.query_frequency != "PT5M" ? true : var.incident_configuration.grouping.enabled
         entity_matching_method  = var.incident_configuration.grouping.entity_matching_method
-        group_by_alert_details  = var.incident_configuration.grouping.group_by_alert_details
-        group_by_custom_details = var.incident_configuration.grouping.group_by_custom_details
-        group_by_entities       = var.incident_configuration.grouping.group_by_entities
+        by_alert_details        = var.incident_configuration.grouping.group_by_alert_details
+        by_custom_details       = var.incident_configuration.grouping.group_by_custom_details
+        by_entities             = var.incident_configuration.grouping.group_by_entities
         lookback_duration       = var.incident_configuration.grouping.lookback_duration
         reopen_closed_incidents = var.incident_configuration.grouping.reopen_closed_incidents
       }
     }
   }
+
 }
