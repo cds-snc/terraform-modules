@@ -106,10 +106,10 @@ variable "entity_mapping" {
   validation {
     condition = alltrue([
       for entity in var.entity_mapping : alltrue([
-        for field in entity.field_mapping : can(regex("^[a-zA-Z_][a-zA-Z0-9]*$", field.column_name))
+        for field in entity.field_mapping : can(regex("^[a-zA-Z_][a-zA-Z0-9-_]*$", field.column_name))
       ])
     ])
-    error_message = "The 'column_name' in entity mapping must start with a letter or underscore, and contain only alphanumeric characters (a-z, A-Z, 0-9)."
+    error_message = "The 'column_name' in entity mapping must start with a letter or underscore, and contain alphanumeric characters (a-z, A-Z, 0-9) or '-' and '_'."
   }
 
 }
