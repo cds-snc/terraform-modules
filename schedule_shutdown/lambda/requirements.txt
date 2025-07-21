@@ -1,5 +1,5 @@
 black==24.10.0 
-boto3==1.38.43
+boto3==1.39.4
 coverage==7.9.2
 pylint==3.3.7
 pytest==8.4.1
