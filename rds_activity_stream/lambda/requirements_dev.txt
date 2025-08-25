@@ -1,4 +1,4 @@
 black==24.10.0
-pylint==3.3.7
+pylint==3.3.8
 pytest==8.4.1
 pytest-env==1.1.5
