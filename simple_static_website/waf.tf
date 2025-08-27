@@ -58,7 +58,7 @@ resource "aws_wafv2_web_acl" "default" {
 
   rule {
     name     = "RateLimit"
-    priority = 40
+    priority = 3
 
     action {
       block {}
