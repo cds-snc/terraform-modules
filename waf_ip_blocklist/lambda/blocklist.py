@@ -162,6 +162,7 @@ def update_waf_ip_set(ip_addresses, waf_ip_set_name, waf_ip_set_id, waf_scope):
 
 
 def recursive_entity_search(data):
+    """Recursively search through a list of entities to see if one matches GoC"""
     if isinstance(data, list):
         registrants = [d for d in data if "registrant" in d["roles"]]
         top_level_result = any(
@@ -177,11 +178,13 @@ def recursive_entity_search(data):
         return top_level_result
     if isinstance(data, dict) and "entities" in data:
         return recursive_entity_search(data["entities"])
+    return None
 
 
 def gc_ip(ip):
+    """Check if IP is owned by Government of Canada"""
     api_url = f"https://rdap.arin.net/registry/ip/{ip}"
-    response = requests.get(api_url).json()
+    response = requests.get(api_url, timeout=5).json()
     entities = response["entities"]
 
     return recursive_entity_search(entities)
