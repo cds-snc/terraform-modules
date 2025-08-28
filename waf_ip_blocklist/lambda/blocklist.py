@@ -139,8 +139,6 @@ def update_waf_ip_set(ip_addresses, waf_ip_set_name, waf_ip_set_id, waf_scope):
     existing_addresses = response["IPSet"]["Addresses"]
     new_addresses = [f"{ip}/32" for ip in ip_addresses]
 
-
-
     new_ips = 0
 
     for ip in new_addresses:
@@ -164,9 +162,11 @@ def update_waf_ip_set(ip_addresses, waf_ip_set_name, waf_ip_set_id, waf_scope):
 
 
 def recursive_entity_search(data):
-    if isinstance(data,list): 
-        registrants = [d for d in data if "registrant" in d['roles']]
-        top_level_result = any(entity.get('handle') == 'SSC-299' for entity in registrants)
+    if isinstance(data, list):
+        registrants = [d for d in data if "registrant" in d["roles"]]
+        top_level_result = any(
+            entity.get("handle") == "SSC-299" for entity in registrants
+        )
         if not top_level_result:
             # Go deeper and see if there are any other entities associated with this record
             for entity in registrants:
@@ -180,7 +180,7 @@ def recursive_entity_search(data):
 
 
 def gc_ip(ip):
-    api_url=f"https://rdap.arin.net/registry/ip/{ip}"
+    api_url = f"https://rdap.arin.net/registry/ip/{ip}"
     response = requests.get(api_url).json()
     entities = response["entities"]
 
