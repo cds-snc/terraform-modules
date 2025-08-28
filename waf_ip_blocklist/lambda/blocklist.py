@@ -7,6 +7,7 @@ last 24 hours.
 import os
 import time
 import boto3
+import requests
 
 # Required
 ATHENA_OUTPUT_BUCKET = os.environ["ATHENA_OUTPUT_BUCKET"]
@@ -129,11 +130,16 @@ def update_waf_ip_set(ip_addresses, waf_ip_set_name, waf_ip_set_id, waf_scope):
         print(f"Reducing {len(ip_addresses)} address to 10,000 addresses.")
         ip_addresses = ip_addresses[:10000]
 
+    # Remove any ip addresses known to be owned by the Government of Canada
+    ip_addresses = [ip for ip in ip_addresses if not gc_ip(ip)]
+
     # Check if new addresses have been added to the list of existing addresses.
     # This is useful to monitor the number of new IPs added to the blocklist
     # and to set up alarms if the number of new IPs added is too high
     existing_addresses = response["IPSet"]["Addresses"]
     new_addresses = [f"{ip}/32" for ip in ip_addresses]
+
+
 
     new_ips = 0
 
@@ -155,3 +161,27 @@ def update_waf_ip_set(ip_addresses, waf_ip_set_name, waf_ip_set_id, waf_scope):
     print(
         f"Updated WAF IP set with {new_ips} new IPs for a total of {len(ip_addresses)} blocked IPs."
     )
+
+
+def recursive_entity_search(data):
+    if isinstance(data,list): 
+        registrants = [d for d in data if "registrant" in d['roles']]
+        top_level_result = any(entity.get('handle') == 'SSC-299' for entity in registrants)
+        if not top_level_result:
+            # Go deeper and see if there are any other entities associated with this record
+            for entity in registrants:
+                top_level_result = top_level_result or recursive_entity_search(entity)
+                # short circuit once we hit a positive identification
+                if top_level_result:
+                    return top_level_result
+        return top_level_result
+    if isinstance(data, dict) and "entities" in data:
+        return recursive_entity_search(data["entities"])
+
+
+def gc_ip(ip):
+    api_url=f"https://rdap.arin.net/registry/ip/{ip}"
+    response = requests.get(api_url).json()
+    entities = response["entities"]
+
+    return recursive_entity_search(entities)

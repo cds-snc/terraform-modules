@@ -2,3 +2,4 @@ black==24.10.0
 boto3==1.40.11
 pylint==3.3.8
 pytest==8.4.1
+requests==2.32.5

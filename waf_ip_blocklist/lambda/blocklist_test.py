@@ -31,6 +31,7 @@ def test_handler_with_ips_to_block(mock_waf_client, mock_athena_client, capsys):
                     {"Data": [{"VarCharValue": "header"}]},
                     {"Data": [{"VarCharValue": "192.168.1.1"}]},
                     {"Data": [{"VarCharValue": "192.168.1.2"}]},
+                    {"Data": [{"VarCharValue": "198.103.1.2"}]},
                 ]
             }
         },
@@ -40,6 +41,7 @@ def test_handler_with_ips_to_block(mock_waf_client, mock_athena_client, capsys):
                     {"Data": [{"VarCharValue": "header"}]},
                     {"Data": [{"VarCharValue": "192.168.1.1"}]},
                     {"Data": [{"VarCharValue": "192.168.1.3"}]},
+                    {"Data": [{"VarCharValue": "205.193.1.2"}]},
                 ]
             }
         },
