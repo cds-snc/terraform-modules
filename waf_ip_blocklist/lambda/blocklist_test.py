@@ -1,7 +1,8 @@
 import tempfile
 import os
+import json
 
-from unittest.mock import call, patch
+from unittest.mock import call, patch, Mock, MagicMock
 
 os.environ["AWS_DEFAULT_REGION"] = "ca-central-1"
 os.environ["ATHENA_OUTPUT_BUCKET"] = "test_bucket"
@@ -284,3 +285,213 @@ def test_get_query_from_file_with_single_rule_id():
 
     # Cleanup
     os.remove(temp_file_path)
+
+
+def test_recursive_entity_search_with_list_and_goc_handle():
+    """Test recursive_entity_search with a list containing GoC handle"""
+    test_data = [
+        {"roles": ["registrant"], "handle": "SSC-299"},
+        {"roles": ["admin"], "handle": "OTHER-123"},
+    ]
+
+    result = blocklist.recursive_entity_search(test_data)
+    assert result is True
+
+
+def test_recursive_entity_search_with_list_without_goc_handle():
+    """Test recursive_entity_search with a list not containing GoC handle"""
+    test_data = [
+        {"roles": ["registrant"], "handle": "OTHER-123"},
+        {"roles": ["admin"], "handle": "ANOTHER-456"},
+    ]
+
+    result = blocklist.recursive_entity_search(test_data)
+    assert result is False
+
+
+def test_recursive_entity_search_with_nested_entities():
+    """Test recursive_entity_search with nested entities containing GoC handle"""
+    test_data = [
+        {
+            "roles": ["registrant"],
+            "handle": "OTHER-123",
+            "entities": [{"roles": ["registrant"], "handle": "SSC-299"}],
+        }
+    ]
+
+    result = blocklist.recursive_entity_search(test_data)
+    assert result is True
+
+
+def test_recursive_entity_search_with_dict_containing_entities():
+    """Test recursive_entity_search with dict containing entities key"""
+    test_data = {"entities": [{"roles": ["registrant"], "handle": "SSC-299"}]}
+
+    result = blocklist.recursive_entity_search(test_data)
+    assert result is True
+
+
+def test_recursive_entity_search_with_empty_list():
+    """Test recursive_entity_search with empty list"""
+    test_data = []
+
+    result = blocklist.recursive_entity_search(test_data)
+    assert result is False
+
+
+def test_recursive_entity_search_with_none():
+    """Test recursive_entity_search with None input"""
+    result = blocklist.recursive_entity_search(None)
+    assert result is False
+
+
+def test_recursive_entity_search_with_no_registrants():
+    """Test recursive_entity_search with list containing no registrants"""
+    test_data = [
+        {"roles": ["admin"], "handle": "SSC-299"},
+        {"roles": ["tech"], "handle": "OTHER-123"},
+    ]
+
+    result = blocklist.recursive_entity_search(test_data)
+    assert result is False
+
+
+def test_recursive_entity_search_with_missing_roles():
+    """Test recursive_entity_search with entities missing roles field"""
+    test_data = [
+        {"handle": "SSC-299"},  # Missing roles field
+        {"roles": ["admin"], "handle": "OTHER-123"},
+    ]
+
+    result = blocklist.recursive_entity_search(test_data)
+    assert result is False
+
+
+@patch("blocklist.create_retrying_request")
+def test_gc_ip_success_with_goc_ip(mock_create_session):
+    """Test gc_ip with successful response indicating GoC IP"""
+    # Setup mock response
+    mock_response = Mock()
+    mock_response.ok = True
+    mock_response.json.return_value = {
+        "entities": [{"roles": ["registrant"], "handle": "SSC-299"}]
+    }
+
+    # Setup mock session
+    mock_session = Mock()
+    mock_session.get.return_value = mock_response
+    mock_create_session.return_value = mock_session
+
+    # Test
+    result = blocklist.gc_ip("192.168.1.1")
+
+    # Verify
+    assert result is True
+    mock_create_session.assert_called_once_with(total_retries=5, backoff_factor=1)
+    mock_session.get.assert_called_once_with(
+        "https://rdap.arin.net/registry/ip/192.168.1.1", timeout=5
+    )
+
+
+@patch("blocklist.create_retrying_request")
+def test_gc_ip_success_with_non_goc_ip(mock_create_session):
+    """Test gc_ip with successful response indicating non-GoC IP"""
+    # Setup mock response
+    mock_response = Mock()
+    mock_response.ok = True
+    mock_response.json.return_value = {
+        "entities": [{"roles": ["registrant"], "handle": "OTHER-123"}]
+    }
+
+    # Setup mock session
+    mock_session = Mock()
+    mock_session.get.return_value = mock_response
+    mock_create_session.return_value = mock_session
+
+    # Test
+    result = blocklist.gc_ip("8.8.8.8")
+
+    # Verify
+    assert result is False
+
+
+@patch("blocklist.create_retrying_request")
+def test_gc_ip_http_error(mock_create_session):
+    """Test gc_ip with HTTP error response"""
+    # Setup mock response
+    mock_response = Mock()
+    mock_response.ok = False
+    mock_response.status_code = 404
+
+    # Setup mock session
+    mock_session = Mock()
+    mock_session.get.return_value = mock_response
+    mock_create_session.return_value = mock_session
+
+    # Test
+    result = blocklist.gc_ip("192.168.1.1")
+
+    # Verify
+    assert result is False
+
+
+@patch("blocklist.create_retrying_request")
+def test_gc_ip_request_exception(mock_create_session, capsys):
+    """Test gc_ip with request exception"""
+    # Setup mock session to raise exception
+    mock_session = Mock()
+    mock_session.get.side_effect = blocklist.requests.exceptions.RequestException(
+        "Connection error"
+    )
+    mock_create_session.return_value = mock_session
+
+    # Test
+    result = blocklist.gc_ip("192.168.1.1")
+
+    # Verify
+    assert result is False
+    captured = capsys.readouterr()
+    assert (
+        "Could not successfully retrieve information about IP 192.168.1.1"
+        in captured.out
+    )
+
+
+@patch("blocklist.create_retrying_request")
+def test_gc_ip_no_entities_in_response(mock_create_session):
+    """Test gc_ip when response has no entities"""
+    # Setup mock response
+    mock_response = Mock()
+    mock_response.ok = True
+    mock_response.json.return_value = {"other_field": "value"}
+
+    # Setup mock session
+    mock_session = Mock()
+    mock_session.get.return_value = mock_response
+    mock_create_session.return_value = mock_session
+
+    # Test
+    result = blocklist.gc_ip("192.168.1.1")
+
+    # Verify
+    assert result is False
+
+
+@patch("blocklist.create_retrying_request")
+def test_gc_ip_entities_is_none(mock_create_session):
+    """Test gc_ip when entities field is None"""
+    # Setup mock response
+    mock_response = Mock()
+    mock_response.ok = True
+    mock_response.json.return_value = {"entities": None}
+
+    # Setup mock session
+    mock_session = Mock()
+    mock_session.get.return_value = mock_response
+    mock_create_session.return_value = mock_session
+
+    # Test
+    result = blocklist.gc_ip("192.168.1.1")
+
+    # Verify
+    assert result is False

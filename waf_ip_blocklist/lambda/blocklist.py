@@ -166,7 +166,7 @@ def update_waf_ip_set(ip_addresses, waf_ip_set_name, waf_ip_set_id, waf_scope):
 def recursive_entity_search(data):
     """Recursively search through a list of entities to see if one matches GoC"""
     if isinstance(data, list):
-        registrants = [d for d in data if "registrant" in d["roles"]]
+        registrants = [d for d in data if "registrant" in d.get("roles", [])]
         top_level_result = any(
             entity.get("handle") == "SSC-299" for entity in registrants
         )
@@ -180,7 +180,7 @@ def recursive_entity_search(data):
         return top_level_result
     if isinstance(data, dict) and "entities" in data:
         return recursive_entity_search(data["entities"])
-    return None
+    return False
 
 
 def create_retrying_request(
@@ -211,10 +211,11 @@ def gc_ip(ip):
         api_url = f"https://rdap.arin.net/registry/ip/{ip}"
         is_gc_ip = False
         response = session.get(api_url, timeout=5)
-        record = response.json()["entities"]
-        if record is not None:
-            is_gc_ip = recursive_entity_search(record)
+        if response.ok:
+            record = response.json().get("entities")
+            if record is not None:
+                is_gc_ip = recursive_entity_search(record)
         return is_gc_ip
-    except response.exceptions.RequestException:
-        print(f"Could not sucessfully retrieve information about IP {ip}")
+    except requests.exceptions.RequestException:
+        print(f"Could not successfully retrieve information about IP {ip}")
         return False
