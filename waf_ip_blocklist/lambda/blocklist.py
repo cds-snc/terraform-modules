@@ -8,6 +8,8 @@ import os
 import time
 import boto3
 import requests
+from requests.adapters import HTTPAdapter
+from urllib3.util.retry import Retry
 
 # Required
 ATHENA_OUTPUT_BUCKET = os.environ["ATHENA_OUTPUT_BUCKET"]
@@ -181,10 +183,38 @@ def recursive_entity_search(data):
     return None
 
 
+def create_retrying_request(
+    total_retries=3,
+    backoff_factor=0.5,
+    status_forcelist=(500, 502, 503, 504),
+    allowed_methods=("GET"),
+):
+    """
+    Creates a requests session with retry logic.
+    """
+    retry_strategy = Retry(
+        total=total_retries,
+        backoff_factor=backoff_factor,
+        status_forcelist=status_forcelist,
+        allowed_methods=allowed_methods,
+    )
+    adapter = HTTPAdapter(max_retries=retry_strategy)
+    session = requests.Session()
+    session.mount("https://", adapter)
+    return session
+
+
 def gc_ip(ip):
     """Check if IP is owned by Government of Canada"""
-    api_url = f"https://rdap.arin.net/registry/ip/{ip}"
-    response = requests.get(api_url, timeout=5).json()
-    entities = response["entities"]
-
-    return recursive_entity_search(entities)
+    session = create_retrying_request(total_retries=5, backoff_factor=1)
+    try:
+        api_url = f"https://rdap.arin.net/registry/ip/{ip}"
+        is_gc_ip = False
+        response = session.get(api_url, timeout=5)
+        record = response.json()["entities"]
+        if record is not None:
+            is_gc_ip = recursive_entity_search(record)
+        return is_gc_ip
+    except response.exceptions.RequestException:
+        print(f"Could not sucessfully retrieve information about IP {ip}")
+        return False
