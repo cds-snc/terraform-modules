@@ -7,6 +7,9 @@ last 24 hours.
 import os
 import time
 import boto3
+import requests
+from requests.adapters import HTTPAdapter
+from urllib3.util.retry import Retry
 
 # Required
 ATHENA_OUTPUT_BUCKET = os.environ["ATHENA_OUTPUT_BUCKET"]
@@ -129,6 +132,9 @@ def update_waf_ip_set(ip_addresses, waf_ip_set_name, waf_ip_set_id, waf_scope):
         print(f"Reducing {len(ip_addresses)} address to 10,000 addresses.")
         ip_addresses = ip_addresses[:10000]
 
+    # Remove any ip addresses known to be owned by the Government of Canada
+    ip_addresses = [ip for ip in ip_addresses if not gc_ip(ip)]
+
     # Check if new addresses have been added to the list of existing addresses.
     # This is useful to monitor the number of new IPs added to the blocklist
     # and to set up alarms if the number of new IPs added is too high
@@ -155,3 +161,61 @@ def update_waf_ip_set(ip_addresses, waf_ip_set_name, waf_ip_set_id, waf_scope):
     print(
         f"Updated WAF IP set with {new_ips} new IPs for a total of {len(ip_addresses)} blocked IPs."
     )
+
+
+def recursive_entity_search(data):
+    """Recursively search through a list of entities to see if one matches GoC"""
+    if isinstance(data, list):
+        registrants = [d for d in data if "registrant" in d.get("roles", [])]
+        top_level_result = any(
+            entity.get("handle") == "SSC-299" for entity in registrants
+        )
+        if not top_level_result:
+            # Go deeper and see if there are any other entities associated with this record
+            for entity in registrants:
+                top_level_result = top_level_result or recursive_entity_search(entity)
+                # short circuit once we hit a positive identification
+                if top_level_result:
+                    return top_level_result
+        return top_level_result
+    if isinstance(data, dict) and "entities" in data:
+        return recursive_entity_search(data["entities"])
+    return False
+
+
+def create_retrying_request(
+    total_retries=3,
+    backoff_factor=0.5,
+    status_forcelist=(500, 502, 503, 504),
+    allowed_methods=("GET"),
+):
+    """
+    Creates a requests session with retry logic.
+    """
+    retry_strategy = Retry(
+        total=total_retries,
+        backoff_factor=backoff_factor,
+        status_forcelist=status_forcelist,
+        allowed_methods=allowed_methods,
+    )
+    adapter = HTTPAdapter(max_retries=retry_strategy)
+    session = requests.Session()
+    session.mount("https://", adapter)
+    return session
+
+
+def gc_ip(ip):
+    """Check if IP is owned by Government of Canada"""
+    session = create_retrying_request(total_retries=5, backoff_factor=1)
+    try:
+        api_url = f"https://rdap.arin.net/registry/ip/{ip}"
+        is_gc_ip = False
+        response = session.get(api_url, timeout=5)
+        if response.ok:
+            record = response.json().get("entities")
+            if record is not None:
+                is_gc_ip = recursive_entity_search(record)
+        return is_gc_ip
+    except requests.exceptions.RequestException:
+        print(f"Could not successfully retrieve information about IP {ip}")
+        return False
