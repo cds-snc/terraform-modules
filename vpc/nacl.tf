@@ -31,6 +31,30 @@ resource "aws_network_acl_rule" "block_rdp" {
   to_port        = 3389
 }
 
+resource "aws_network_acl_rule" "block_ssh_egress" {
+  count          = var.block_ssh ? 1 : 0
+  network_acl_id = aws_network_acl.main.id
+  rule_number    = 52
+  egress         = true
+  protocol       = "tcp"
+  rule_action    = "deny"
+  cidr_block     = "0.0.0.0/0"
+  from_port      = 22
+  to_port        = 22
+}
+
+resource "aws_network_acl_rule" "block_rdp_egress" {
+  count          = var.block_rdp ? 1 : 0
+  network_acl_id = aws_network_acl.main.id
+  rule_number    = 53
+  egress         = true
+  protocol       = "tcp"
+  rule_action    = "deny"
+  cidr_block     = "0.0.0.0/0"
+  from_port      = 3389
+  to_port        = 3389
+}
+
 # Allow an HTTPS request out of the VPC
 resource "aws_network_acl_rule" "https_request_egress_443" {
   count          = var.allow_https_request_out ? 1 : 0
