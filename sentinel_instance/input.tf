@@ -25,3 +25,9 @@ variable "retention_in_days" {
   type        = number
   default     = 120
 }
+
+variable "enable_log_analytics_lock" {
+  description = "Whether to enable a lock on the Log Analytics Workspace."
+  type        = bool
+  default     = true
+}
