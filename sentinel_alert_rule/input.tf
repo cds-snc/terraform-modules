@@ -127,7 +127,7 @@ variable "incident_configuration" {
     create_incident = true
 
     grouping = {
-      enabled                 = false
+      enabled                 = true 
       entity_matching_method  = "AllEntities"
       group_by_alert_details  = []
       group_by_custom_details = []
