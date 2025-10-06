@@ -73,7 +73,7 @@ resource "azurerm_sentinel_alert_rule_scheduled" "this" {
     content {
       create_incident_enabled = var.incident_configuration.create_incident
       grouping {
-        enabled                 = var.query_frequency != "PT5M" ? true : var.incident_configuration.grouping.enabled
+        enabled                 = var.incident_configuration.grouping.enabled
         entity_matching_method  = var.incident_configuration.grouping.entity_matching_method
         by_alert_details        = var.incident_configuration.grouping.group_by_alert_details
         by_custom_details       = var.incident_configuration.grouping.group_by_custom_details
