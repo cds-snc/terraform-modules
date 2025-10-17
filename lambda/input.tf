@@ -156,9 +156,3 @@ variable "alias_name" {
   description = "(Optional, default '') Lambda function's alias name"
   default     = ""
 }
-
-variable "lifecycle_ignore_changes" {
-  type        = list(string)
-  description = "(Optional) List of attributes to ignore changes for in the Lambda function lifecycle. Defaults to ['image_uri'] since deployments typically happen outside of Terraform."
-  default     = ["image_uri"]
-}

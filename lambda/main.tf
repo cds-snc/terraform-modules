@@ -30,9 +30,11 @@ resource "aws_lambda_function" "this" {
     subnet_ids         = var.vpc.subnet_ids
   }
 
-  # This can be configured via var.lifecycle_ignore_changes. It defaults to ignoring image_uri
+  # We don't deploy through terraform, we just set the image_uri once
   lifecycle {
-    ignore_changes = coalesce(var.lifecycle_ignore_changes, [])
+    ignore_changes = [
+      image_uri,
+    ]
   }
 
   dynamic "dead_letter_config" {
