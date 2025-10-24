@@ -23,26 +23,6 @@ data "aws_iam_policy_document" "limit_tagging" {
   count = var.s3_upload_bucket_policy_create ? length(local.upload_buckets) : 0
 
   statement {
-    effect = "Deny"
-    principals {
-      type        = "AWS"
-      identifiers = ["*"]
-    }
-    actions = [
-      "s3:DeleteObjectTagging",
-      "s3:DeleteObjectVersionTagging",
-      "s3:PutObjectTagging",
-      "s3:PutObjectVersionTagging"
-    ]
-    resources = [local.upload_buckets[count.index].arn_items]
-    condition {
-      test     = "StringNotLike"
-      variable = "aws:PrincipalArn"
-      values   = [local.scan_files_assume_role_arn]
-    }
-  }
-
-  statement {
     effect = "Allow"
     principals {
       type        = "AWS"
