@@ -210,24 +210,6 @@ run "default_apply" {
           {
             "Action" : [
               "s3:PutObjectVersionTagging",
-              "s3:PutObjectTagging",
-              "s3:DeleteObjectVersionTagging",
-              "s3:DeleteObjectTagging"
-            ],
-            "Condition" : {
-              "StringNotLike" : {
-                "aws:PrincipalArn" : "arn:aws:iam::${run.setup.account_id}:role/ScanFilesGetObjects"
-              }
-            },
-            "Effect" : "Deny",
-            "Principal" : {
-              "AWS" : "*"
-            },
-            "Resource" : "arn:aws:s3:::${run.setup.scan_files_bucket_id}/*"
-          },
-          {
-            "Action" : [
-              "s3:PutObjectVersionTagging",
               "s3:PutObjectTagging"
             ],
             "Effect" : "Allow",
