@@ -57,6 +57,21 @@ resource "aws_lambda_function_url" "redirector" {
   authorization_type = "NONE"
 }
 
+resource "aws_lambda_permission" "redirector_invoke_function_url" {
+  statement_id           = "AllowInvokeFunctionUrl-${local.lambda_function_name}"
+  action                 = "lambda:InvokeFunctionUrl"
+  function_name          = aws_lambda_function.redirector.function_name
+  function_url_auth_type = "NONE"
+  principal              = "*"
+}
+
+resource "aws_lambda_permission" "redirector_invoke_function" {
+  statement_id  = "AllowInvokeFunction-${local.lambda_function_name}"
+  action        = "lambda:InvokeFunction"
+  function_name = aws_lambda_function.redirector.function_name
+  principal     = "*"
+}
+
 #
 # Function IAM role
 #
