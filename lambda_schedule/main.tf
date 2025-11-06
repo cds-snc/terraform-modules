@@ -7,7 +7,7 @@
 */
 
 module "this_lambda" {
-  source = "github.com/cds-snc/terraform-modules//lambda?ref=v10.8.3"
+  source = "github.com/cds-snc/terraform-modules//lambda?ref=v10.8.5"
 
   name      = var.lambda_name
   image_uri = local.lambda_image_uri
@@ -19,6 +19,7 @@ module "this_lambda" {
   environment_variables = var.lambda_environment_variables
   vpc                   = var.lambda_vpc_config
   policies              = local.policies
+  assume_role_policies  = var.assume_role_policies
 
   billing_tag_key   = var.billing_tag_key
   billing_tag_value = var.billing_tag_value

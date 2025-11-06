@@ -110,3 +110,9 @@ variable "s3_arn_write_path" {
     error_message = "The S3 ARN must be in the format 'arn:aws:s3:::bucket-name/path/*'"
   }
 }
+
+variable "assume_role_policies" {
+  type        = list(string)
+  description = "(Optional, default empty list) List of additional IAM policy documents to add to the Lambda's assume role policy. These are combined with the default Lambda service principal policy."
+  default     = []
+}
