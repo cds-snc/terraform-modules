@@ -156,3 +156,9 @@ variable "alias_name" {
   description = "(Optional, default '') Lambda function's alias name"
   default     = ""
 }
+
+variable "assume_role_policies" {
+  type        = list(string)
+  description = "(Optional) List of additional IAM policy documents (as JSON strings) to add to the assume role policy. These are combined with the default Lambda service principal policy."
+  default     = []
+}

@@ -37,6 +37,7 @@ No modules.
 | [aws_lambda_permission.sns](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/lambda_permission) | resource |
 | [aws_s3_bucket_notification.this](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/s3_bucket_notification) | resource |
 | [aws_iam_policy.lambda_insights](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/data-sources/iam_policy) | data source |
+| [aws_iam_policy_document.combined_assume_role](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/data-sources/iam_policy_document) | data source |
 | [aws_iam_policy_document.non_vpc_policies](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/data-sources/iam_policy_document) | data source |
 | [aws_iam_policy_document.service_principal](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/data-sources/iam_policy_document) | data source |
 | [aws_iam_policy_document.vpc_policies](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/data-sources/iam_policy_document) | data source |
@@ -50,6 +51,7 @@ No modules.
 | <a name="input_allow_s3_execution"></a> [allow\_s3\_execution](#input\_allow\_s3\_execution) | (Optional) Allow S3 to execute the lambda | `bool` | `false` | no |
 | <a name="input_api_gateway_source_arn"></a> [api\_gateway\_source\_arn](#input\_api\_gateway\_source\_arn) | (Optional) The api gateway rest point that can call the lambda | `string` | `""` | no |
 | <a name="input_architectures"></a> [architectures](#input\_architectures) | (Optional) The architectures that the lambda can run on | `list(any)` | <pre>[<br/>  "x86_64"<br/>]</pre> | no |
+| <a name="input_assume_role_policies"></a> [assume\_role\_policies](#input\_assume\_role\_policies) | (Optional) List of additional IAM policy documents (as JSON strings) to add to the assume role policy. These are combined with the default Lambda service principal policy. | `list(string)` | `[]` | no |
 | <a name="input_billing_tag_key"></a> [billing\_tag\_key](#input\_billing\_tag\_key) | (Optional, default 'CostCentre') The name of the billing tag | `string` | `"CostCentre"` | no |
 | <a name="input_billing_tag_value"></a> [billing\_tag\_value](#input\_billing\_tag\_value) | (Required) The value of the billing tag | `string` | n/a | yes |
 | <a name="input_bucket"></a> [bucket](#input\_bucket) | (Optional) S3 bucket that is triggering the lambda | <pre>object({<br/>    id  = string<br/>    arn = string<br/>  })</pre> | <pre>{<br/>  "arn": "",<br/>  "id": ""<br/>}</pre> | no |
