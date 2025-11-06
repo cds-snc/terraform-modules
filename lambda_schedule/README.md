@@ -18,7 +18,7 @@ No requirements.
 
 | Name | Source | Version |
 |------|--------|---------|
-| <a name="module_this_lambda"></a> [this\_lambda](#module\_this\_lambda) | github.com/cds-snc/terraform-modules//lambda | v10.8.3 |
+| <a name="module_this_lambda"></a> [this\_lambda](#module\_this\_lambda) | github.com/cds-snc/terraform-modules//lambda | v10.8.5 |
 
 ## Resources
 
@@ -35,6 +35,7 @@ No requirements.
 
 | Name | Description | Type | Default | Required |
 |------|-------------|------|---------|:--------:|
+| <a name="input_assume_role_policies"></a> [assume\_role\_policies](#input\_assume\_role\_policies) | (Optional, default empty list) List of additional IAM policy documents to add to the Lambda's assume role policy. These are combined with the default Lambda service principal policy. | `list(string)` | `[]` | no |
 | <a name="input_billing_tag_key"></a> [billing\_tag\_key](#input\_billing\_tag\_key) | (Optional, default 'CostCentre') The name of the billing tag | `string` | `"CostCentre"` | no |
 | <a name="input_billing_tag_value"></a> [billing\_tag\_value](#input\_billing\_tag\_value) | (Required) The value of the billing tag | `string` | n/a | yes |
 | <a name="input_create_ecr_repository"></a> [create\_ecr\_repository](#input\_create\_ecr\_repository) | (Optional, default true) Whether to create an ECR repository for the Lambda image | `bool` | `true` | no |
