@@ -19,7 +19,7 @@ module "this_lambda" {
   environment_variables = var.lambda_environment_variables
   vpc                   = var.lambda_vpc_config
   policies              = local.policies
-  assume_role_policies  = var.assume_role_policies
+  assume_role_policies  = var.lambda_assume_role_policies
 
   billing_tag_key   = var.billing_tag_key
   billing_tag_value = var.billing_tag_value
