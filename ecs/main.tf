@@ -117,7 +117,7 @@ resource "aws_ecs_task_definition" "this" {
   memory                = var.task_memory
   execution_role_arn    = local.task_exec_role_arn
   task_role_arn         = local.task_role_arn
-  container_definitions = jsonencode([local.container_definition])
+  container_definitions = concat(var.container_definitions, [local.container_definition])
 
   network_mode             = "awsvpc"
   requires_compatibilities = ["FARGATE"]

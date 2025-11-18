@@ -85,6 +85,21 @@ variable "container_port" {
   default     = null
 }
 
+variable "container_definitions" {
+  description = "(Optional, no default) Full JSON container definitions to use in addition to the module provided container definition. This allows for the use of init and sidecar containers."
+  type        = list(string)
+  default     = []
+}
+
+variable "container_depends_on" {
+  description = "(Optional, no default) A list of dependencies defined for the default container startup."
+  type = list(object({
+    containerName = string
+    condition     = string
+  }))
+  default = []
+}
+
 variable "enable_execute_command" {
   description = "(Optional, default `false`) Allow for execution of arbitrary commands against the ECS tasks. Defaults to `false`"
   type        = bool
