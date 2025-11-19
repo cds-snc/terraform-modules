@@ -23,7 +23,7 @@ locals {
     logConfiguration = {
       logDriver = "awslogs",
       options = {
-        awslogs-region        = data.aws_region.current.name,
+        awslogs-region        = data.aws_region.current.region,
         awslogs-group         = aws_cloudwatch_log_group.this.name,
         awslogs-stream-prefix = "task"
       }
@@ -37,5 +37,5 @@ locals {
   }
 
   # Strip out all null values, ECS API will provide defaults in place of null/empty values
-  container_definition = jsonencode({ for k, v in local.definition : k => v if v != null })
+  container_definition = { for k, v in local.definition : k => v if v != null }
 }

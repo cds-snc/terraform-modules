@@ -87,7 +87,7 @@ variable "container_port" {
 
 variable "container_definitions" {
   description = "(Optional, no default) Full JSON container definitions to use in addition to the module provided container definition. This allows for the use of init and sidecar containers."
-  type        = list(string)
+  type        = list(any)
   default     = []
 }
 
