@@ -33,6 +33,7 @@ locals {
     environment            = length(var.container_environment) > 0 ? var.container_environment : null
     secrets                = length(var.container_secrets) > 0 ? var.container_secrets : null
     ulimits                = length(var.container_ulimits) > 0 ? var.container_ulimits : null
+    dependsOn              = length(var.container_depends_on) > 0 ? var.container_depends_on : null
   }
 
   # Strip out all null values, ECS API will provide defaults in place of null/empty values

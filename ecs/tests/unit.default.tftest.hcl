@@ -28,6 +28,24 @@ run "plan" {
     subnet_ids          = ["subnet-12345678"]
     security_group_ids  = ["sg-12345678"]
     container_host_port = 8080
+    container_definitions = [
+      jsonencode({
+        name      = "init"
+        image     = "nginx:latest"
+        essential = false
+      }),
+      jsonencode({
+        name      = "test"
+        image     = "nginx:latest"
+        essential = false
+        cpu       = 128
+        memory    = 256
+      })
+    ]
+    container_depends_on = [{
+      containerName = "init"
+      condition     = "SUCCESS"
+    }]
     lb_target_group_arn = "arn:aws:elasticloadbalancing:ca-central-1:123456789012:targetgroup/tg1/1234567890"
     lb_target_group_arns = [{
       target_group_arn = "arn:aws:elasticloadbalancing:ca-central-1:123456789012:targetgroup/tg2/1234567890"
@@ -69,6 +87,11 @@ run "plan" {
   assert {
     condition     = [for lb in aws_ecs_service.this.load_balancer : lb][1].container_port == 8081
     error_message = "Unexpected container_port value"
+  }
+
+  assert {
+    condition     = aws_ecs_task_definition.this.container_definitions == "[{\"essential\":false,\"image\":\"nginx:latest\",\"name\":\"init\"},{\"dependsOn\":[{\"condition\":\"SUCCESS\",\"containerName\":\"init\"}],\"essential\":true,\"image\":\"nginx:latest\",\"linuxParameters\":{\"capabilities\":{\"add\":[],\"drop\":[\"ALL\"]}},\"logConfiguration\":{\"logDriver\":\"awslogs\",\"options\":{\"awslogs-group\":\"/aws/ecs/simple_cluster/nginx\",\"awslogs-region\":\"ca-central-1\",\"awslogs-stream-prefix\":\"task\"}},\"mountPoints\":[],\"name\":\"nginx\",\"readonlyRootFilesystem\":true,\"systemControls\":[],\"volumesFrom\":[]},{\"cpu\":128,\"essential\":false,\"image\":\"nginx:latest\",\"memory\":256,\"name\":\"test\"}]"
+    error_message = "Unexpected container_definitions value"
   }
 }
 
