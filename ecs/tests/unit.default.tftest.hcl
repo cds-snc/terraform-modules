@@ -28,11 +28,20 @@ run "plan" {
     subnet_ids          = ["subnet-12345678"]
     security_group_ids  = ["sg-12345678"]
     container_host_port = 8080
-    container_definitions = [{
-      name      = "init"
-      image     = "nginx:latest"
-      essential = false
-    }]
+    container_definitions = [
+      jsonencode({
+        name      = "init"
+        image     = "nginx:latest"
+        essential = false
+      }),
+      jsonencode({
+        name      = "test"
+        image     = "nginx:latest"
+        essential = false
+        cpu       = 128
+        memory    = 256
+      })
+    ]
     container_depends_on = [{
       containerName = "init"
       condition     = "SUCCESS"
@@ -81,7 +90,7 @@ run "plan" {
   }
 
   assert {
-    condition     = aws_ecs_task_definition.this.container_definitions == "[{\"essential\":false,\"image\":\"nginx:latest\",\"name\":\"init\"},{\"dependsOn\":[{\"condition\":\"SUCCESS\",\"containerName\":\"init\"}],\"essential\":true,\"image\":\"nginx:latest\",\"linuxParameters\":{\"capabilities\":{\"add\":[],\"drop\":[\"ALL\"]}},\"logConfiguration\":{\"logDriver\":\"awslogs\",\"options\":{\"awslogs-group\":\"/aws/ecs/simple_cluster/nginx\",\"awslogs-region\":\"ca-central-1\",\"awslogs-stream-prefix\":\"task\"}},\"mountPoints\":[],\"name\":\"nginx\",\"readonlyRootFilesystem\":true,\"systemControls\":[],\"volumesFrom\":[]}]"
+    condition     = aws_ecs_task_definition.this.container_definitions == "[{\"essential\":false,\"image\":\"nginx:latest\",\"name\":\"init\"},{\"dependsOn\":[{\"condition\":\"SUCCESS\",\"containerName\":\"init\"}],\"essential\":true,\"image\":\"nginx:latest\",\"linuxParameters\":{\"capabilities\":{\"add\":[],\"drop\":[\"ALL\"]}},\"logConfiguration\":{\"logDriver\":\"awslogs\",\"options\":{\"awslogs-group\":\"/aws/ecs/simple_cluster/nginx\",\"awslogs-region\":\"ca-central-1\",\"awslogs-stream-prefix\":\"task\"}},\"mountPoints\":[],\"name\":\"nginx\",\"readonlyRootFilesystem\":true,\"systemControls\":[],\"volumesFrom\":[]},{\"cpu\":128,\"essential\":false,\"image\":\"nginx:latest\",\"memory\":256,\"name\":\"test\"}]"
     error_message = "Unexpected container_definitions value"
   }
 }
