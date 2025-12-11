@@ -1,15 +1,10 @@
 /** 
-* # Notify Slack
-*
-* This module creates a Lambda function posts messages to a Slack channel when a CloudWatch alarm changes state.
-*
-* ## Setup
-*
-* 1. Create a [Slack App with an incoming webhook](https://api.slack.com/messaging/webhooks) for the channel you'd like to post in.
-* 1. Create one or more SNS Topics and subscribe them to this module's Lambda ARN output.
-* 1. Setup CloudWatch Alarms that send their state changes to the SNS Topics.
-*
-* The above is shown in the [full setup example](./examples/full).
+* # DEPRECATED — Notify Slack
+* 
+* ⚠️ This module is DEPRECATED (2025-12-11). Do not use for new projects.
+* 
+* Replacement: use the `sns` module in this repo and add an `aws_sns_topic_subscription` to your Slack webhook.
+* Full migration guide: MIGRATION.md
 *
 * ## Credit
 *

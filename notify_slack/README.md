@@ -1,4 +1,9 @@
-# Notify Slack
+# DEPRECATED — Notify Slack
+
+⚠️ This module is DEPRECATED (2025-12-11). Do not use for new projects.
+
+Replacement: use the `sns` module in this repo and add an `aws_sns_topic_subscription` to your Slack webhook.
+Full migration guide: MIGRATION.md
 
 This module creates a Lambda function posts messages to a Slack channel when a CloudWatch alarm changes state.
 
