@@ -6,6 +6,7 @@ This module is deprecated. Follow the steps below to migrate to the recommended 
 
 - Keep the SNS topic managed by our `sns` module (handles KMS, tags, naming).
 - Create an `aws_sns_topic_subscription` with `protocol = "https"` and `endpoint = <your_slack_webhook>`.
+- For CDS members, use the SRE Bot's `/sre webhooks help` command in Slack. It'll show you how to look for existing webhooks or to create a new one.
 - Optionally move Terraform state to the new configuration to avoid resource recreation.
 
 ## Example (module usage)
