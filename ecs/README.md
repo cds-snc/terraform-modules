@@ -37,8 +37,8 @@ No requirements.
 | [aws_iam_role_policy_attachment.this_task](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/iam_role_policy_attachment) | resource |
 | [aws_iam_role_policy_attachment.this_task_exec](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/iam_role_policy_attachment) | resource |
 | [aws_service_discovery_service.this](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/service_discovery_service) | resource |
+| [aws_ssm_parameter.container_image_deployed](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/ssm_parameter) | resource |
 | [aws_ecs_cluster.this](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/data-sources/ecs_cluster) | data source |
-| [aws_ecs_task_definition.this_latest](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/data-sources/ecs_task_definition) | data source |
 | [aws_iam_policy_document.this_task_assume](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/data-sources/iam_policy_document) | data source |
 | [aws_iam_policy_document.this_task_combined](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/data-sources/iam_policy_document) | data source |
 | [aws_iam_policy_document.this_task_exec_assume](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/data-sources/iam_policy_document) | data source |
@@ -46,6 +46,7 @@ No requirements.
 | [aws_iam_policy_document.this_task_exec_ecr](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/data-sources/iam_policy_document) | data source |
 | [aws_iam_policy_document.this_task_exec_logs](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/data-sources/iam_policy_document) | data source |
 | [aws_region.current](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/data-sources/region) | data source |
+| [aws_ssm_parameter.container_image_deployed](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/data-sources/ssm_parameter) | data source |
 
 ## Inputs
 
@@ -62,13 +63,14 @@ No requirements.
 | <a name="input_cluster_name"></a> [cluster\_name](#input\_cluster\_name) | (Required) Name of the cluster (up to 255 letters, numbers, hyphens, and underscores) | `string` | n/a | yes |
 | <a name="input_container_command"></a> [container\_command](#input\_container\_command) | (Optional, defaults to []) The container command to use instead of the one specified in the container's Docker image. | `list(string)` | `[]` | no |
 | <a name="input_container_cpu"></a> [container\_cpu](#input\_container\_cpu) | (Optional, no default) The number of cpu units to reserve for the container. This is optional for tasks using Fargate launch type and the total amount of `cpu` of all containers in a task will need to be lower than the task-level cpu value | `number` | `0` | no |
-| <a name="input_container_definitions"></a> [container\_definitions](#input\_container\_definitions) | (Optional, no default) Full JSON container definitions to use in addition to the module provided container definition. This allows for the use of init and sidecar containers. | `tuple([any])` | `[]` | no |
+| <a name="input_container_definitions"></a> [container\_definitions](#input\_container\_definitions) | (Optional, no default) List of JSON encoded container definitions to use in addition to the module provided container definition. This allows for the use of sidecar and init containers. | `list(string)` | `[]` | no |
 | <a name="input_container_depends_on"></a> [container\_depends\_on](#input\_container\_depends\_on) | (Optional, no default) A list of dependencies defined for the default container startup. | <pre>list(object({<br/>    containerName = string<br/>    condition     = string<br/>  }))</pre> | `[]` | no |
 | <a name="input_container_environment"></a> [container\_environment](#input\_container\_environment) | (Optional, no default) The environment variables to pass to the container | <pre>list(object({<br/>    name  = string<br/>    value = string<br/>  }))</pre> | `[]` | no |
 | <a name="input_container_essential"></a> [container\_essential](#input\_container\_essential) | (Optional, default `true`) If the `essential` parameter of a container is marked as `true`, and that container fails or stops for any reason, all other containers that are part of the task are stopped | `bool` | `true` | no |
 | <a name="input_container_health_check"></a> [container\_health\_check](#input\_container\_health\_check) | (Optional, no default) The container health check command and associated configuration parameters for the container. See [HealthCheck](https://docs.aws.amazon.com/AmazonECS/latest/APIReference/API_HealthCheck.html) | `any` | `{}` | no |
 | <a name="input_container_host_port"></a> [container\_host\_port](#input\_container\_host\_port) | (Optional, no default) The exposed port of the container used by the load balancer | `number` | `null` | no |
 | <a name="input_container_image"></a> [container\_image](#input\_container\_image) | (Required) The image used to start a container. This string is passed directly to the Docker daemon. By default, images in the Docker Hub registry are available. Other repositories are specified with either `repository-url/image:tag` or `repository-url/image@digest` | `string` | n/a | yes |
+| <a name="input_container_image_track_deployed"></a> [container\_image\_track\_deployed](#input\_container\_image\_track\_deployed) | (Optional, default `false`) If `true`, the container image will be retrieved from SSM Parameter Store instead of using the value provided in `container_image`. This allows for CI/CD workflows to update the container image by updating the SSM parameter. | `bool` | `false` | no |
 | <a name="input_container_linux_parameters"></a> [container\_linux\_parameters](#input\_container\_linux\_parameters) | (Optional, drop all capabilities) Linux-specific modifications that are applied to the container, such as Linux kernel capabilities. For more information see [KernelCapabilities](https://docs.aws.amazon.com/AmazonECS/latest/APIReference/API_KernelCapabilities.html) | `any` | <pre>{<br/>  "capabilities": {<br/>    "add": [],<br/>    "drop": [<br/>      "ALL"<br/>    ]<br/>  }<br/>}</pre> | no |
 | <a name="input_container_memory"></a> [container\_memory](#input\_container\_memory) | (Optional, no default) The amount (in MiB) of memory to present to the container. If your container attempts to exceed the memory specified here, the container is killed. The total amount of memory reserved for all containers within a task must be lower than the task `memory` value, if one is specified | `number` | `null` | no |
 | <a name="input_container_mount_points"></a> [container\_mount\_points](#input\_container\_mount\_points) | (Optional, no default) The mount points for data volumes in the container | <pre>list(object({<br/>    containerPath = string<br/>    sourceVolume  = string<br/>    readOnly      = bool<br/>  }))</pre> | `[]` | no |
@@ -124,6 +126,7 @@ No requirements.
 | <a name="output_service_id"></a> [service\_id](#output\_service\_id) | ARN that identifies the service |
 | <a name="output_service_name"></a> [service\_name](#output\_service\_name) | Name of the service |
 | <a name="output_service_port"></a> [service\_port](#output\_service\_port) | Port of the service |
+| <a name="output_task_container_image_ssm_parameter_name"></a> [task\_container\_image\_ssm\_parameter\_name](#output\_task\_container\_image\_ssm\_parameter\_name) | SSM Parameter name where the container image is stored |
 | <a name="output_task_definition_arn"></a> [task\_definition\_arn](#output\_task\_definition\_arn) | Full ARN of the Task Definition (including both `family` and `revision`) |
 | <a name="output_task_definition_family"></a> [task\_definition\_family](#output\_task\_definition\_family) | The unique name of the task definition |
 | <a name="output_task_definition_revision"></a> [task\_definition\_revision](#output\_task\_definition\_revision) | Revision of the task in a particular family |

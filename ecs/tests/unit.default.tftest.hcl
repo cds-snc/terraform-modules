@@ -102,5 +102,7 @@ run "apply" {
     security_group_ids = [run.setup.security_group_id]
     task_role_arn      = run.setup.task_role_arn
     task_exec_role_arn = run.setup.task_exec_role_arn
+
+    container_image_track_deployed = true
   }
 }
