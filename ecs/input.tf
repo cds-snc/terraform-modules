@@ -253,6 +253,12 @@ variable "container_image" {
   type        = string
 }
 
+variable "container_image_track_deployed" {
+  description = "(Optional, default `false`) If `true`, the container image will be retrieved from SSM Parameter Store instead of using the value provided in `container_image`. This allows for CI/CD workflows to update the container image by updating the SSM parameter."
+  type        = bool
+  default     = false
+}
+
 variable "container_linux_parameters" {
   description = "(Optional, drop all capabilities) Linux-specific modifications that are applied to the container, such as Linux kernel capabilities. For more information see [KernelCapabilities](https://docs.aws.amazon.com/AmazonECS/latest/APIReference/API_KernelCapabilities.html)"
   type        = any

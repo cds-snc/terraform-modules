@@ -7,7 +7,7 @@ locals {
     cpu             = var.container_cpu
     memory          = var.container_memory
     essential       = var.container_essential
-    image           = var.container_image
+    image           = var.container_image_track_deployed ? nonsensitive(data.aws_ssm_parameter.container_image_deployed[0].value) : var.container_image
     healthCheck     = length(var.container_health_check) > 0 ? var.container_health_check : null
     linuxParameters = length(var.container_linux_parameters) > 0 ? var.container_linux_parameters : null
     mountPoints     = length(var.container_mount_points) > 0 ? var.container_mount_points : []

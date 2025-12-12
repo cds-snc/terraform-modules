@@ -65,6 +65,11 @@ output "task_role_arn" {
   value       = local.task_role_arn
 }
 
+output "task_container_image_ssm_parameter_name" {
+  description = "SSM Parameter name where the container image is stored"
+  value       = var.container_image_track_deployed ? aws_ssm_parameter.container_image_deployed[0].name : null
+}
+
 ################################################################################
 # CloudWatch Log Group
 ################################################################################
