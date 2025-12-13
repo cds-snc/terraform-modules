@@ -29,5 +29,4 @@ resource "aws_sns_topic_subscription" "slack" {
   topic_arn            = module.alerts_sns.sns_arn
   protocol             = "https"
   endpoint             = var.slack_webhook_url
-  raw_message_delivery = true
 }
