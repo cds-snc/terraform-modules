@@ -16,6 +16,7 @@ jobs:
       fail-fast: false
       matrix:
         module:
+          - auto_revoke_sg_rules/functions
           - notify_slack/lambda
           - rds_activity_stream/lambda
           - schedule_shutdown/lambda
