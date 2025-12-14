@@ -12,6 +12,6 @@ test:
 
 .PHONY: \
 	fmt \
-	install	\
+	install \
 	lint \
 	test
