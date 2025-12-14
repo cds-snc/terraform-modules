@@ -47,7 +47,7 @@ def revoke_security_group_ingress(event_detail):
     request_parameters = event_detail["requestParameters"]
 
     # Build the normalized IP permission JSON struture.
-    ip_permissions = normalize_paramter_names(
+    ip_permissions = normalize_parameter_names(
         request_parameters["ipPermissions"]["items"]
     )
 
@@ -65,7 +65,7 @@ def revoke_security_group_ingress(event_detail):
 
 
 # ===============================================================================
-def normalize_paramter_names(ip_items):
+def normalize_parameter_names(ip_items):
     """Normalize parameter names from CloudWatch event format to EC2 API format."""
     # Start building the permissions items list.
     new_ip_items = []

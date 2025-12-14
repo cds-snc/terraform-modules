@@ -180,7 +180,7 @@ class TestSgChangeAutoResponse(unittest.TestCase):
         assert result is None
 
     def test_normalize_parameter_names_ipv4(self):
-        """Test normalize_paramter_names with IPv4 ranges"""
+        """Test normalize_parameter_names with IPv4 ranges"""
         ip_items = [
             {
                 "ipProtocol": "tcp",
@@ -194,7 +194,7 @@ class TestSgChangeAutoResponse(unittest.TestCase):
 
         import sg_change_auto_response
 
-        result = sg_change_auto_response.normalize_paramter_names(ip_items)
+        result = sg_change_auto_response.normalize_parameter_names(ip_items)
 
         assert len(result) == 1
         assert result[0]["IpProtocol"] == "tcp"
@@ -206,7 +206,7 @@ class TestSgChangeAutoResponse(unittest.TestCase):
         assert result[0]["IpRanges"][1]["CidrIp"] == "192.168.0.0/16"
 
     def test_normalize_parameter_names_ipv6(self):
-        """Test normalize_paramter_names with IPv6 ranges"""
+        """Test normalize_parameter_names with IPv6 ranges"""
         ip_items = [
             {
                 "ipProtocol": "tcp",
@@ -218,7 +218,7 @@ class TestSgChangeAutoResponse(unittest.TestCase):
 
         import sg_change_auto_response
 
-        result = sg_change_auto_response.normalize_paramter_names(ip_items)
+        result = sg_change_auto_response.normalize_parameter_names(ip_items)
 
         assert len(result) == 1
         assert result[0]["IpProtocol"] == "tcp"
