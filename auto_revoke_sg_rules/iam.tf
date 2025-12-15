@@ -35,6 +35,15 @@ resource "aws_iam_role_policy" "security_group_modification" {
       },
       {
         Action = [
+          "kms:Decrypt",
+          "kms:GenerateDataKey*"
+        ]
+        Effect   = "Allow"
+        Sid      = "AllowKMSDecrypt"
+        Resource = "arn:aws:kms:${local.region}:${local.account_id}:key/*"
+      },
+      {
+        Action = [
           "sns:Publish"
         ]
         Effect   = "Allow"
