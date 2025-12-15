@@ -37,7 +37,7 @@ resource "aws_lambda_function" "sentinel_forwarder" {
 
   filename    = data.archive_file.sentinel_forwarder.output_path
   handler     = "sentinel_forwarder.lambda_handler"
-  runtime     = "python3.9"
+  runtime     = "python3.13"
   timeout     = 30
   memory_size = 128
 

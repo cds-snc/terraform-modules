@@ -22,7 +22,7 @@ resource "aws_lambda_function" "security_group_change_auto_response" {
   description   = "Responds to security group changes"
   role          = aws_iam_role.group_change_auto_response_role.arn
   handler       = "sg_change_auto_response.lambda_handler"
-  runtime       = "python3.9"
+  runtime       = "python3.13"
   timeout       = 60
 
   filename         = data.archive_file.sg_change_auto_response.output_path
