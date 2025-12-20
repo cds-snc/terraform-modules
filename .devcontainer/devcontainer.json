@@ -1,6 +1,6 @@
 {
 	"name": "terraform-modules",
-	"image": "mcr.microsoft.com/devcontainers/go:bullseye@sha256:e49f849099bb11fd4bf8a543cda9c31ca33206a2efc47ea34a36951e3e558678",
+	"image": "mcr.microsoft.com/devcontainers/go:bullseye@sha256:18b3d63e0f91a48cbc2a5131077f2f136a45fb7c90484c0e90641cb5472cea4f",
 	"containerEnv": {
 		"SHELL": "/bin/zsh"
 	},	
