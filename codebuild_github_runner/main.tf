@@ -65,12 +65,21 @@ resource "aws_codebuild_project" "this" {
     git_submodules_config {
       fetch_submodules = true
     }
+
+    dynamic "auth" {
+      for_each = local.is_github_codeconnection ? [1] : []
+      content {
+        type     = "CODECONNECTIONS"
+        resource = data.aws_codestarconnections_connection.github_connection[0].arn
+      }
+    }
   }
 
   tags = local.common_tags
 }
 
 resource "aws_codebuild_source_credential" "this" {
+  count       = local.is_github_pat ? 1 : 0
   auth_type   = "PERSONAL_ACCESS_TOKEN"
   server_type = "GITHUB"
   token       = var.github_personal_access_token
@@ -85,8 +94,6 @@ resource "aws_codebuild_webhook" "this" {
       pattern = "WORKFLOW_JOB_QUEUED"
     }
   }
-
-  depends_on = [aws_codebuild_source_credential.this]
 }
 
 resource "aws_cloudwatch_log_group" "this" {

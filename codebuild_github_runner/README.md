@@ -41,6 +41,7 @@ No modules.
 | [aws_codebuild_webhook.this](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/codebuild_webhook) | resource |
 | [aws_iam_role.this](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/iam_role) | resource |
 | [aws_iam_role_policy.this](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/iam_role_policy) | resource |
+| [aws_codestarconnections_connection.github_connection](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/data-sources/codestarconnections_connection) | data source |
 | [aws_iam_policy_document.this](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/data-sources/iam_policy_document) | data source |
 | [aws_iam_policy_document.this_assume](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/data-sources/iam_policy_document) | data source |
 
@@ -56,7 +57,8 @@ No modules.
 | <a name="input_environment_image_pull_credentials_type"></a> [environment\_image\_pull\_credentials\_type](#input\_environment\_image\_pull\_credentials\_type) | (Optional, default 'CODEBUILD') Image pull credentials type for the CodeBuild environment. | `string` | `"CODEBUILD"` | no |
 | <a name="input_environment_type"></a> [environment\_type](#input\_environment\_type) | (Optional, default 'LINUX\_CONTAINER') Environment type for the CodeBuild project. | `string` | `"LINUX_CONTAINER"` | no |
 | <a name="input_environment_variables"></a> [environment\_variables](#input\_environment\_variables) | (Optional, default []) Environment variables for the CodeBuild project. | <pre>list(object({<br/>    name  = string<br/>    value = string<br/>  }))</pre> | `[]` | no |
-| <a name="input_github_personal_access_token"></a> [github\_personal\_access\_token](#input\_github\_personal\_access\_token) | (Required) GitHub personal access token to allow the CodeBuild runner access to the target GitHub repository. | `string` | n/a | yes |
+| <a name="input_github_codeconnection_name"></a> [github\_codeconnection\_name](#input\_github\_codeconnection\_name) | (Optional) Name of the GitHub Code Star connection to GitHub. | `string` | `""` | no |
+| <a name="input_github_personal_access_token"></a> [github\_personal\_access\_token](#input\_github\_personal\_access\_token) | (Optional) GitHub personal access token to allow the CodeBuild runner access to the target GitHub repository. | `string` | `""` | no |
 | <a name="input_github_repository_url"></a> [github\_repository\_url](#input\_github\_repository\_url) | (Required) GitHub repository URL for the CodeBuild source. | `string` | n/a | yes |
 | <a name="input_project_name"></a> [project\_name](#input\_project\_name) | (Required) Name of the CodeBuild project. | `string` | n/a | yes |
 | <a name="input_queued_timeout"></a> [queued\_timeout](#input\_queued\_timeout) | (Optional, default '5') Queued timeout for the CodeBuild project. | `number` | `5` | no |
