@@ -8,7 +8,6 @@ import os
 import boto3
 import connector  # pylint: disable=import-error
 
-
 AWS_REGION = os.getenv("AWS_REGION")
 SENTINEL_AUTH_PARAMS_ARN = os.getenv("SENTINEL_AUTH_PARAMS_ARN")
 
