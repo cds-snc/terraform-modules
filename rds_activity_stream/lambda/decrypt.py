@@ -4,6 +4,7 @@ Kinesis Firehose Lambda function to process RDS activity stream records.  This i
 the example provided by AWS:
 https://docs.aws.amazon.com/AmazonRDS/latest/AuroraUserGuide/DBActivityStreams.Monitoring.html#DBActivityStreams.CodeExample
 """
+
 import base64
 import json
 import logging

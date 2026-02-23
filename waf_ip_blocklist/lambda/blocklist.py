@@ -1,6 +1,6 @@
 """
-This Lambda function queries the WAF logs in Amazon Athena and updates the 
-WAF IP set with the IP addresses that have met the BLOCK threshold in the 
+This Lambda function queries the WAF logs in Amazon Athena and updates the
+WAF IP set with the IP addresses that have met the BLOCK threshold in the
 last 24 hours.
 """
 
