@@ -11,7 +11,7 @@ resource "random_id" "upload_bucket" {
 }
 
 module "upload_bucket" {
-  source            = "github.com/cds-snc/terraform-modules//S3?ref=v9.6.8"
+  source            = "github.com/cds-snc/terraform-modules//S3?ref=v10.11.0"
   bucket_name       = "an-existing-upload-bucket-${random_id.upload_bucket.hex}"
   billing_tag_value = "terratest"
 
