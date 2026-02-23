@@ -18,7 +18,7 @@ No requirements.
 
 | Name | Source | Version |
 |------|--------|---------|
-| <a name="module_this_lambda"></a> [this\_lambda](#module\_this\_lambda) | github.com/cds-snc/terraform-modules//lambda | v10.10.2 |
+| <a name="module_this_lambda"></a> [this\_lambda](#module\_this\_lambda) | github.com/cds-snc/terraform-modules//lambda | v10.11.0 |
 
 ## Resources
 
