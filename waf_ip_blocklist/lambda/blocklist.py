@@ -4,12 +4,12 @@ WAF IP set with the IP addresses that have met the BLOCK threshold in the
 last 24 hours.
 """
 
+import json
 import os
 import time
+import urllib.error
+import urllib.request
 import boto3
-import requests
-from requests.adapters import HTTPAdapter
-from urllib3.util.retry import Retry
 
 # Required
 ATHENA_OUTPUT_BUCKET = os.environ["ATHENA_OUTPUT_BUCKET"]
@@ -163,6 +163,49 @@ def update_waf_ip_set(ip_addresses, waf_ip_set_name, waf_ip_set_id, waf_scope):
     )
 
 
+class _Response:  # pylint: disable=too-few-public-methods
+    """Minimal response wrapper around a urllib HTTP response."""
+
+    def __init__(self, response):
+        self._body = response.read()
+        self.status = getattr(response, "status", getattr(response, "code", 0))
+        self.ok = 200 <= self.status < 300
+
+    def json(self):
+        """Return the response body parsed as JSON."""
+        return json.loads(self._body)
+
+
+class _RetryingSession:  # pylint: disable=too-few-public-methods
+    """urllib-based session with retry logic for transient server errors."""
+
+    def __init__(
+        self, total_retries=3, backoff_factor=0.5, status_forcelist=(500, 502, 503, 504)
+    ):
+        self.total_retries = total_retries
+        self.backoff_factor = backoff_factor
+        self.status_forcelist = status_forcelist
+
+    def get(self, url, timeout=None):
+        """Perform a GET request with retry logic for transient server errors."""
+        last_error = None
+        for attempt in range(self.total_retries + 1):
+            if attempt > 0:
+                time.sleep(self.backoff_factor * (2 ** (attempt - 1)))
+            try:
+                with urllib.request.urlopen(url, timeout=timeout) as resp:  # nosec B310
+                    if resp.status not in self.status_forcelist:
+                        return _Response(resp)
+                    last_error = OSError(f"HTTP {resp.status}")
+            except urllib.error.HTTPError as exc:
+                if exc.code not in self.status_forcelist:
+                    return _Response(exc)
+                last_error = exc
+            except urllib.error.URLError as exc:
+                last_error = exc
+        raise last_error if last_error else OSError("Request failed")
+
+
 def recursive_entity_search(data):
     """Recursively search through a list of entities to see if one matches GoC"""
     if isinstance(data, list):
@@ -187,21 +230,15 @@ def create_retrying_request(
     total_retries=3,
     backoff_factor=0.5,
     status_forcelist=(500, 502, 503, 504),
-    allowed_methods=("GET"),
 ):
     """
-    Creates a requests session with retry logic.
+    Creates a session with retry logic using only the standard library.
     """
-    retry_strategy = Retry(
-        total=total_retries,
+    return _RetryingSession(
+        total_retries=total_retries,
         backoff_factor=backoff_factor,
         status_forcelist=status_forcelist,
-        allowed_methods=allowed_methods,
     )
-    adapter = HTTPAdapter(max_retries=retry_strategy)
-    session = requests.Session()
-    session.mount("https://", adapter)
-    return session
 
 
 def gc_ip(ip):
@@ -216,6 +253,6 @@ def gc_ip(ip):
             if record is not None:
                 is_gc_ip = recursive_entity_search(record)
         return is_gc_ip
-    except requests.exceptions.RequestException:
+    except (urllib.error.URLError, OSError):
         print(f"Could not successfully retrieve information about IP {ip}")
         return False

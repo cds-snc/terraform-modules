@@ -1,6 +1,8 @@
+import io
 import tempfile
 import os
 import json
+import urllib.error
 
 from unittest.mock import call, patch, Mock, MagicMock
 
@@ -440,9 +442,7 @@ def test_gc_ip_request_exception(mock_create_session, capsys):
     """Test gc_ip with request exception"""
     # Setup mock session to raise exception
     mock_session = Mock()
-    mock_session.get.side_effect = blocklist.requests.exceptions.RequestException(
-        "Connection error"
-    )
+    mock_session.get.side_effect = urllib.error.URLError("Connection error")
     mock_create_session.return_value = mock_session
 
     # Test
@@ -495,3 +495,223 @@ def test_gc_ip_entities_is_none(mock_create_session):
 
     # Verify
     assert result is False
+
+
+# ==============================
+# Tests for _Response
+# ==============================
+
+
+def test_response_ok_true_for_200_status():
+    """Test _Response.ok is True for a 200 status"""
+    mock_resp = Mock()
+    mock_resp.read.return_value = b'{"key": "value"}'
+    mock_resp.status = 200
+
+    response = blocklist._Response(mock_resp)
+
+    assert response.ok is True
+    assert response.status == 200
+
+
+def test_response_ok_false_for_non_2xx_status():
+    """Test _Response.ok is False for a 404 status"""
+    mock_resp = Mock()
+    mock_resp.read.return_value = b"Not Found"
+    mock_resp.status = 404
+
+    response = blocklist._Response(mock_resp)
+
+    assert response.ok is False
+    assert response.status == 404
+
+
+def test_response_ok_true_at_boundary_299():
+    """Test _Response.ok is True at status 299"""
+    mock_resp = Mock()
+    mock_resp.read.return_value = b"{}"
+    mock_resp.status = 299
+
+    response = blocklist._Response(mock_resp)
+
+    assert response.ok is True
+
+
+def test_response_uses_code_attribute_when_status_missing():
+    """Test _Response falls back to the 'code' attribute when 'status' is absent"""
+    mock_resp = Mock(spec=["read", "code"])
+    mock_resp.read.return_value = b"{}"
+    mock_resp.code = 403
+
+    response = blocklist._Response(mock_resp)
+
+    assert response.status == 403
+    assert response.ok is False
+
+
+def test_response_json_parses_body():
+    """Test _Response.json() returns the parsed JSON body"""
+    mock_resp = Mock()
+    mock_resp.read.return_value = b'{"ip": "192.168.1.1", "entities": []}'
+    mock_resp.status = 200
+
+    response = blocklist._Response(mock_resp)
+
+    assert response.json() == {"ip": "192.168.1.1", "entities": []}
+
+
+# ==============================
+# Tests for _RetryingSession
+# ==============================
+
+
+@patch("urllib.request.urlopen")
+def test_retrying_session_get_success_on_first_attempt(mock_urlopen):
+    """Test _RetryingSession.get() returns a _Response on a successful first request"""
+    mock_resp = Mock()
+    mock_resp.read.return_value = b'{"result": "ok"}'
+    mock_resp.status = 200
+    mock_ctx = MagicMock()
+    mock_ctx.__enter__.return_value = mock_resp
+    mock_urlopen.return_value = mock_ctx
+
+    session = blocklist._RetryingSession()
+    response = session.get("https://example.com", timeout=5)
+
+    assert response.ok is True
+    mock_urlopen.assert_called_once_with("https://example.com", timeout=5)
+
+
+@patch("blocklist.time.sleep")
+@patch("urllib.request.urlopen")
+def test_retrying_session_get_retries_on_server_error_then_succeeds(
+    mock_urlopen, mock_sleep
+):
+    """Test _RetryingSession.get() retries after a 500 and succeeds on next attempt"""
+    mock_error_resp = Mock()
+    mock_error_resp.status = 500
+    mock_error_ctx = MagicMock()
+    mock_error_ctx.__enter__.return_value = mock_error_resp
+
+    mock_ok_resp = Mock()
+    mock_ok_resp.read.return_value = b'{"result": "ok"}'
+    mock_ok_resp.status = 200
+    mock_ok_ctx = MagicMock()
+    mock_ok_ctx.__enter__.return_value = mock_ok_resp
+
+    mock_urlopen.side_effect = [mock_error_ctx, mock_ok_ctx]
+
+    session = blocklist._RetryingSession(total_retries=3, backoff_factor=0.5)
+    response = session.get("https://example.com")
+
+    assert response.ok is True
+    assert mock_urlopen.call_count == 2
+    mock_sleep.assert_called_once_with(0.5)
+
+
+@patch("blocklist.time.sleep")
+@patch("urllib.request.urlopen")
+def test_retrying_session_get_raises_after_all_retries_exhausted(
+    mock_urlopen, mock_sleep
+):
+    """Test _RetryingSession.get() raises OSError after all retries fail with 500"""
+    mock_error_resp = Mock()
+    mock_error_resp.status = 500
+    mock_ctx = MagicMock()
+    mock_ctx.__enter__.return_value = mock_error_resp
+    mock_urlopen.return_value = mock_ctx
+
+    session = blocklist._RetryingSession(total_retries=2, backoff_factor=0.5)
+
+    try:
+        session.get("https://example.com")
+        assert False, "Expected OSError to be raised"
+    except OSError as e:
+        assert "HTTP 500" in str(e)
+
+    assert mock_urlopen.call_count == 3  # initial + 2 retries
+    assert mock_sleep.call_count == 2
+
+
+@patch("urllib.request.urlopen")
+def test_retrying_session_get_returns_response_for_non_retry_http_error(mock_urlopen):
+    """Test _RetryingSession.get() returns _Response immediately for a 404 HTTPError"""
+    mock_urlopen.side_effect = urllib.error.HTTPError(
+        "https://example.com", 404, "Not Found", {}, io.BytesIO(b"Not Found")
+    )
+
+    session = blocklist._RetryingSession()
+    response = session.get("https://example.com")
+
+    assert response.ok is False
+    assert response.status == 404
+    mock_urlopen.assert_called_once()
+
+
+@patch("blocklist.time.sleep")
+@patch("urllib.request.urlopen")
+def test_retrying_session_get_retries_on_http_error_in_forcelist(
+    mock_urlopen, mock_sleep
+):
+    """Test _RetryingSession.get() retries on a 503 HTTPError and raises after exhaustion"""
+    mock_urlopen.side_effect = urllib.error.HTTPError(
+        "https://example.com", 503, "Service Unavailable", {}, io.BytesIO(b"error")
+    )
+
+    session = blocklist._RetryingSession(total_retries=2, backoff_factor=0.5)
+
+    try:
+        session.get("https://example.com")
+        assert False, "Expected exception to be raised"
+    except urllib.error.HTTPError:
+        pass
+
+    assert mock_urlopen.call_count == 3  # initial + 2 retries
+    assert mock_sleep.call_count == 2
+
+
+@patch("blocklist.time.sleep")
+@patch("urllib.request.urlopen")
+def test_retrying_session_get_retries_on_url_error_and_raises(mock_urlopen, mock_sleep):
+    """Test _RetryingSession.get() retries on URLError and raises after exhaustion"""
+    mock_urlopen.side_effect = urllib.error.URLError("Connection refused")
+
+    session = blocklist._RetryingSession(total_retries=2, backoff_factor=0.5)
+
+    try:
+        session.get("https://example.com")
+        assert False, "Expected exception to be raised"
+    except urllib.error.URLError:
+        pass
+
+    assert mock_urlopen.call_count == 3  # initial + 2 retries
+    assert mock_sleep.call_count == 2
+
+
+# ==============================
+# Tests for create_retrying_request
+# ==============================
+
+
+def test_create_retrying_request_returns_retrying_session_with_defaults():
+    """Test create_retrying_request returns a _RetryingSession with default parameters"""
+    session = blocklist.create_retrying_request()
+
+    assert isinstance(session, blocklist._RetryingSession)
+    assert session.total_retries == 3
+    assert session.backoff_factor == 0.5
+    assert session.status_forcelist == (500, 502, 503, 504)
+
+
+def test_create_retrying_request_applies_custom_parameters():
+    """Test create_retrying_request passes custom parameters to _RetryingSession"""
+    session = blocklist.create_retrying_request(
+        total_retries=5,
+        backoff_factor=1.0,
+        status_forcelist=(500, 503),
+    )
+
+    assert isinstance(session, blocklist._RetryingSession)
+    assert session.total_retries == 5
+    assert session.backoff_factor == 1.0
+    assert session.status_forcelist == (500, 503)
