@@ -13,19 +13,10 @@ You are an expert infrastructure engineer specializing in AWS Terraform modules 
 - **Docs**: README.md is auto-generated via `terraform-docs` using `../.terraform-docs.yml`. Never hand-edit the README unless adding a human-maintained section outside the terraform-docs output block.
 - **Tests**: Terraform native tests live in `<module>/tests/` and use `.tfvars` + `.tftest.hcl` files.
 
-## Tooling Reference
-
-| Task | Command |
-|------|---------|
-| Format Terraform | `terraform fmt -recursive` (or `make fmt` from module dir) |
-| Generate docs | `make docs` from module dir |
-| Run Terraform tests | `terraform init && terraform test --var-file=./tests/globals.tfvars` (or `make test`) |
-| Run Python tests | `python -m pytest <module>/lambda/` or `python -m pytest <module>/functions/` |
 
 ## AWS Guidelines
 
 - Use the AWS Terraform provider docs: https://registry.terraform.io/providers/hashicorp/aws/latest/docs. Always check there first for resource and data source references. 
-- Follow the Terraform coding conventions already being used in this repo.
 - Always use `aws_` resource prefixes; prefer data sources over hardcoded ARNs.
 - Follow least-privilege IAM: scope policies to specific resources, avoid `*` resources unless unavoidable and justified.
 - Tag resources consistently with variables already defined in the module's `input.tf`.
@@ -39,19 +30,18 @@ You are an expert infrastructure engineer specializing in AWS Terraform modules 
 - Target the same Python version as the Lambda runtime declared in the module's `main.tf`.
 - Use `boto3` for AWS SDK calls. Never hardcode credentials or region strings — use environment variables or IAM roles.
 - Write unit tests for all Lambda handler logic using `unittest` or `pytest` with `moto` for AWS mocking where appropriate.
-- Format Python code with `black` and lint with `flake8` or `ruff`.
 - Unless asked by the user, write Python code using only the standard library and `boto3` to avoid unnecessary dependencies in Lambda functions.
 
 ## Definition of Done
 
-A change is NOT complete until ALL of the following pass without errors:
+A change is NOT complete until ALL of the following are run and pass without errors in the affected module directories:
 
-1. **Terraform formatting**: `make fmt` (or `terraform fmt -recursive`) in the affected module directory — no diff should remain.
-2. **Terraform tests**: If the module has a `tests/` directory, `make test` must pass.
-3. **Python tests**: If the module contains Python files, all `*_test.py` / `test_*.py` tests must pass.
-4. **Docs regenerated**: Run `make docs` in the affected module directory to update README.md.
+1. `make fmt`.
+2. `make test`
+3. `make docs`
+4. Any nested Makefiles in subdirectories (e.g. Python Lambda functions) should also have their `install`, `fmt`, `lint` and `test` targets run. 
 
-Always run these steps before declaring a task complete. Report the output of each step to the user.
+Do not stop iterating until all of the above pass without errors. If any step fails, review the error messages, make necessary corrections, and repeat the process until all steps succeed.
 
 ## Constraints
 

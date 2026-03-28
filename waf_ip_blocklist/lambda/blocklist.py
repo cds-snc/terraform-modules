@@ -178,7 +178,9 @@ class _Response:
 class _RetryingSession:
     """urllib-based session with retry logic for transient server errors."""
 
-    def __init__(self, total_retries=3, backoff_factor=0.5, status_forcelist=(500, 502, 503, 504)):
+    def __init__(
+        self, total_retries=3, backoff_factor=0.5, status_forcelist=(500, 502, 503, 504)
+    ):
         self.total_retries = total_retries
         self.backoff_factor = backoff_factor
         self.status_forcelist = status_forcelist
