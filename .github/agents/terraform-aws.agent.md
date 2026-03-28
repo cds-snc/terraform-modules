@@ -39,9 +39,15 @@ A change is NOT complete until ALL of the following are run and pass without err
 1. `make fmt`.
 2. `make test`
 3. `make docs`
-4. Any nested Makefiles in subdirectories (e.g. Python Lambda functions) should also have their `install`, `fmt`, `lint` and `test` targets run. 
 
-Do not stop iterating until all of the above pass without errors. If any step fails, review the error messages, make necessary corrections, and repeat the process until all steps succeed.
+If there is a nested Python Lambda function directory, also run these targets in its Makefile:
+
+1. `make install`
+2. `make fmt`
+3. `make lint`
+4. `make test`
+
+Do not stop iterating until all of the above steps pass without errors. If any step fails, review the error messages, make necessary corrections, and repeat the process until all steps succeed.
 
 ## Constraints
 

@@ -571,7 +571,9 @@ def test_retrying_session_get_success_on_first_attempt(mock_urlopen):
     mock_resp = Mock()
     mock_resp.read.return_value = b'{"result": "ok"}'
     mock_resp.status = 200
-    mock_urlopen.return_value = mock_resp
+    mock_ctx = MagicMock()
+    mock_ctx.__enter__.return_value = mock_resp
+    mock_urlopen.return_value = mock_ctx
 
     session = blocklist._RetryingSession()
     response = session.get("https://example.com", timeout=5)
@@ -588,12 +590,16 @@ def test_retrying_session_get_retries_on_server_error_then_succeeds(
     """Test _RetryingSession.get() retries after a 500 and succeeds on next attempt"""
     mock_error_resp = Mock()
     mock_error_resp.status = 500
+    mock_error_ctx = MagicMock()
+    mock_error_ctx.__enter__.return_value = mock_error_resp
 
     mock_ok_resp = Mock()
     mock_ok_resp.read.return_value = b'{"result": "ok"}'
     mock_ok_resp.status = 200
+    mock_ok_ctx = MagicMock()
+    mock_ok_ctx.__enter__.return_value = mock_ok_resp
 
-    mock_urlopen.side_effect = [mock_error_resp, mock_ok_resp]
+    mock_urlopen.side_effect = [mock_error_ctx, mock_ok_ctx]
 
     session = blocklist._RetryingSession(total_retries=3, backoff_factor=0.5)
     response = session.get("https://example.com")
@@ -611,7 +617,9 @@ def test_retrying_session_get_raises_after_all_retries_exhausted(
     """Test _RetryingSession.get() raises OSError after all retries fail with 500"""
     mock_error_resp = Mock()
     mock_error_resp.status = 500
-    mock_urlopen.return_value = mock_error_resp
+    mock_ctx = MagicMock()
+    mock_ctx.__enter__.return_value = mock_error_resp
+    mock_urlopen.return_value = mock_ctx
 
     session = blocklist._RetryingSession(total_retries=2, backoff_factor=0.5)
 

@@ -163,7 +163,7 @@ def update_waf_ip_set(ip_addresses, waf_ip_set_name, waf_ip_set_id, waf_scope):
     )
 
 
-class _Response:
+class _Response:  # pylint: disable=too-few-public-methods
     """Minimal response wrapper around a urllib HTTP response."""
 
     def __init__(self, response):
@@ -172,10 +172,11 @@ class _Response:
         self.ok = 200 <= self.status < 300
 
     def json(self):
+        """Return the response body parsed as JSON."""
         return json.loads(self._body)
 
 
-class _RetryingSession:
+class _RetryingSession:  # pylint: disable=too-few-public-methods
     """urllib-based session with retry logic for transient server errors."""
 
     def __init__(
@@ -186,15 +187,16 @@ class _RetryingSession:
         self.status_forcelist = status_forcelist
 
     def get(self, url, timeout=None):
+        """Perform a GET request with retry logic for transient server errors."""
         last_error = None
         for attempt in range(self.total_retries + 1):
             if attempt > 0:
                 time.sleep(self.backoff_factor * (2 ** (attempt - 1)))
             try:
-                resp = urllib.request.urlopen(url, timeout=timeout)  # nosec B310
-                if resp.status not in self.status_forcelist:
-                    return _Response(resp)
-                last_error = OSError(f"HTTP {resp.status}")
+                with urllib.request.urlopen(url, timeout=timeout) as resp:  # nosec B310
+                    if resp.status not in self.status_forcelist:
+                        return _Response(resp)
+                    last_error = OSError(f"HTTP {resp.status}")
             except urllib.error.HTTPError as exc:
                 if exc.code not in self.status_forcelist:
                     return _Response(exc)
@@ -228,7 +230,6 @@ def create_retrying_request(
     total_retries=3,
     backoff_factor=0.5,
     status_forcelist=(500, 502, 503, 504),
-    allowed_methods=("GET"),
 ):
     """
     Creates a session with retry logic using only the standard library.
