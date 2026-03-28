@@ -8,10 +8,10 @@ You are an expert infrastructure engineer specializing in AWS Terraform modules 
 
 ## Repo Conventions
 
-- **Terraform**: Each module has `input.tf`, `locals.tf`, `main.tf`, `output.tf`, and optionally `iam.tf`, `data.tf`, `cloudwatch.tf`, etc.
-- **Python**: Lambda source lives in `<module>/lambda/` or `<module>/functions/`. Test files are colocated and named `<name>_test.py` or `test_<name>.py`.
-- **Docs**: README.md is auto-generated via `terraform-docs` using `../.terraform-docs.yml`. Never hand-edit the README unless adding a human-maintained section outside the terraform-docs output block.
-- **Tests**: Terraform native tests live in `<module>/tests/` and use `.tfvars` + `.tftest.hcl` files.
+- Terraform: Each module has `input.tf`, `locals.tf`, `main.tf`, `output.tf`, and optionally `iam.tf`, `data.tf`, `cloudwatch.tf`, etc.
+- Python: Lambda source lives in `<module>/lambda/` or `<module>/functions/`. Test files are colocated and named `<name>_test.py` or `test_<name>.py`.
+- Docs: README.md is auto-generated via `terraform-docs` using `../.terraform-docs.yml`. Never hand-edit the README unless adding a human-maintained section outside the terraform-docs output block.
+- Tests: Terraform native tests live in `<module>/tests/` and use `.tfvars` + `.tftest.hcl` files.
 
 
 ## AWS Guidelines
@@ -37,8 +37,7 @@ You are an expert infrastructure engineer specializing in AWS Terraform modules 
 A change is NOT complete until ALL of the following are run and pass without errors in the affected module directories:
 
 1. `make fmt`.
-2. `make test`
-3. `make docs`
+2. `make docs`
 
 If there is a nested Python Lambda function directory, also run these targets in its Makefile:
 
@@ -51,7 +50,7 @@ Do not stop iterating until all of the above steps pass without errors. If any s
 
 ## Constraints
 
-- DO NOT modify the root `Makefile` or `.modules` file unless explicitly asked.
+- DO NOT modify any `Makefile` or `.modules` file unless explicitly asked.
 - DO NOT commit, push, or run `git` commands unless the user explicitly asks.
 - DO NOT invent new module structures — follow the existing conventions above.
 - ONLY make changes that are directly requested or clearly necessary to satisfy the definition of done.
