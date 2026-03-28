@@ -1,6 +1,7 @@
 import tempfile
 import os
 import json
+import urllib.error
 
 from unittest.mock import call, patch, Mock, MagicMock
 
@@ -440,9 +441,7 @@ def test_gc_ip_request_exception(mock_create_session, capsys):
     """Test gc_ip with request exception"""
     # Setup mock session to raise exception
     mock_session = Mock()
-    mock_session.get.side_effect = blocklist.requests.exceptions.RequestException(
-        "Connection error"
-    )
+    mock_session.get.side_effect = urllib.error.URLError("Connection error")
     mock_create_session.return_value = mock_session
 
     # Test
