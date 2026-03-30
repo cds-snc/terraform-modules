@@ -4,12 +4,15 @@ WAF IP set with the IP addresses that have met the BLOCK threshold in the
 last 24 hours.
 """
 
+import json
+import logging
 import os
 import time
+import urllib.error
+import urllib.request
 import boto3
-import requests
-from requests.adapters import HTTPAdapter
-from urllib3.util.retry import Retry
+
+logging.getLogger().setLevel(logging.INFO)
 
 # Required
 ATHENA_OUTPUT_BUCKET = os.environ["ATHENA_OUTPUT_BUCKET"]
@@ -35,30 +38,34 @@ waf_client = boto3.client("wafv2")
 
 def handler(_event, _context):
     """Query the WAF and LB logs and update the WAF IP set with the new IPs"""
-    query_lb = get_query_from_file(
-        "./query_lb.sql", ATHENA_LB_TABLE, LB_STATUS_CODE_SKIP, BLOCK_THRESHOLD
-    )
-    query_waf = get_query_from_file(
-        "./query_waf.sql", ATHENA_WAF_TABLE, WAF_RULE_IDS_SKIP, BLOCK_THRESHOLD
-    )
-
-    ip_addresses = set()
-    queries_to_execute = [
-        (QUERY_LB, query_lb),
-        (QUERY_WAF, query_waf),
-    ]
-    for do_query, query in queries_to_execute:
-        if do_query:
-            query_execution_id = start_athena_query(
-                query, ATHENA_DATABASE, ATHENA_OUTPUT_BUCKET, ATHENA_WORKGROUP
-            )
-            ip_addresses.update(get_query_results(query_execution_id))
-            print(f"Found following {ip_addresses}")
-
-    if ip_addresses:
-        update_waf_ip_set(
-            sorted(ip_addresses), WAF_IP_SET_NAME, WAF_IP_SET_ID, WAF_SCOPE
+    try:
+        query_lb = get_query_from_file(
+            "./query_lb.sql", ATHENA_LB_TABLE, LB_STATUS_CODE_SKIP, BLOCK_THRESHOLD
         )
+        query_waf = get_query_from_file(
+            "./query_waf.sql", ATHENA_WAF_TABLE, WAF_RULE_IDS_SKIP, BLOCK_THRESHOLD
+        )
+
+        ip_addresses = set()
+        queries_to_execute = [
+            (QUERY_LB, query_lb),
+            (QUERY_WAF, query_waf),
+        ]
+        for do_query, query in queries_to_execute:
+            if do_query:
+                query_execution_id = start_athena_query(
+                    query, ATHENA_DATABASE, ATHENA_OUTPUT_BUCKET, ATHENA_WORKGROUP
+                )
+                ip_addresses.update(get_query_results(query_execution_id))
+                logging.info("Found following %s", ip_addresses)
+
+        if ip_addresses:
+            update_waf_ip_set(
+                sorted(ip_addresses), WAF_IP_SET_NAME, WAF_IP_SET_ID, WAF_SCOPE
+            )
+    except Exception as e:
+        logging.error("Error processing WAF IP blocklist: %s", e)
+        raise
 
 
 def get_query_from_file(file_path, log_table, skip_list, block_threshold):
@@ -71,19 +78,23 @@ def get_query_from_file(file_path, log_table, skip_list, block_threshold):
             skip_list=joined_skip_list,
             block_threshold=block_threshold,
         )
-        print(query)
+        logging.info(query)
         return query
 
 
 def start_athena_query(query, athena_database, athena_output_bucket, athena_workgroup):
     """Start Athena query execution"""
-    response = athena_client.start_query_execution(
-        QueryString=query,
-        QueryExecutionContext={"Database": athena_database},
-        ResultConfiguration={"OutputLocation": f"s3://{athena_output_bucket}/"},
-        WorkGroup=athena_workgroup,
-    )
-    return response["QueryExecutionId"]
+    try:
+        response = athena_client.start_query_execution(
+            QueryString=query,
+            QueryExecutionContext={"Database": athena_database},
+            ResultConfiguration={"OutputLocation": f"s3://{athena_output_bucket}/"},
+            WorkGroup=athena_workgroup,
+        )
+        return response["QueryExecutionId"]
+    except Exception as e:
+        logging.error("Failed to start Athena query: %s", e)
+        raise
 
 
 def get_query_results(query_execution_id):
@@ -91,27 +102,44 @@ def get_query_results(query_execution_id):
     status = "RUNNING"
     timeout = 120
     while status in ["RUNNING", "QUEUED"]:
-        response = athena_client.get_query_execution(
-            QueryExecutionId=query_execution_id
-        )
+        try:
+            response = athena_client.get_query_execution(
+                QueryExecutionId=query_execution_id
+            )
+        except Exception as e:
+            logging.error(
+                "Failed to poll Athena query execution %s: %s", query_execution_id, e
+            )
+            raise
         status = response["QueryExecution"]["Status"]["State"]
         if status in ["FAILED", "CANCELLED"]:
-            raise RuntimeError(
-                f"Query failed: {response['QueryExecution']['Status']['StateChangeReason']}"
+            error_reason = response["QueryExecution"]["Status"]["StateChangeReason"]
+            logging.error(
+                "Athena query %s failed: %s", query_execution_id, error_reason
             )
+            raise RuntimeError(f"Query failed: {error_reason}")
 
         if status == "SUCCEEDED":
             break
 
-        print(f"Query status: {status}, will wait another {timeout} seconds...")
+        logging.info(
+            "Query status: %s, will wait another %d seconds...", status, timeout
+        )
         time.sleep(2)
 
         timeout -= 2
         if timeout < 0:
+            logging.error("Athena query %s timed out", query_execution_id)
             raise RuntimeError("Athena query timed out")
 
     # Fetch results
-    result = athena_client.get_query_results(QueryExecutionId=query_execution_id)
+    try:
+        result = athena_client.get_query_results(QueryExecutionId=query_execution_id)
+    except Exception as e:
+        logging.error(
+            "Failed to retrieve Athena query results for %s: %s", query_execution_id, e
+        )
+        raise
     ip_addresses = []
     for row in result["ResultSet"]["Rows"][1:]:  # Skip header
         ip_addresses.append(row["Data"][0]["VarCharValue"])
@@ -122,14 +150,18 @@ def get_query_results(query_execution_id):
 def update_waf_ip_set(ip_addresses, waf_ip_set_name, waf_ip_set_id, waf_scope):
     """Update the WAF IP set with the given IP addresses"""
     # Get the current IP set
-    response = waf_client.get_ip_set(
-        Name=waf_ip_set_name, Scope=waf_scope, Id=waf_ip_set_id
-    )
+    try:
+        response = waf_client.get_ip_set(
+            Name=waf_ip_set_name, Scope=waf_scope, Id=waf_ip_set_id
+        )
+    except Exception as e:
+        logging.error("Failed to get WAF IP set %s: %s", waf_ip_set_name, e)
+        raise
 
     # Truncate the IP address list if it has more than 10,000 addresses.
     # This is the max number of addresses an IP set can hold.
     if len(ip_addresses) > 10000:
-        print(f"Reducing {len(ip_addresses)} address to 10,000 addresses.")
+        logging.info("Reducing %d address to 10,000 addresses.", len(ip_addresses))
         ip_addresses = ip_addresses[:10000]
 
     # Remove any ip addresses known to be owned by the Government of Canada
@@ -146,21 +178,70 @@ def update_waf_ip_set(ip_addresses, waf_ip_set_name, waf_ip_set_id, waf_scope):
     for ip in new_addresses:
         if ip not in existing_addresses:
             # Do not modify message below as it is used to drive a cloudwatch metric
-            print("[Metric] - New IP added to WAF IP Set")
+            logging.info("[Metric] - New IP added to WAF IP Set")
             new_ips += 1
 
     # Update the IP set with new addresses
-    waf_client.update_ip_set(
-        Name=waf_ip_set_name,
-        Scope=waf_scope,
-        Id=waf_ip_set_id,
-        Addresses=new_addresses,
-        LockToken=response["LockToken"],
+    try:
+        waf_client.update_ip_set(
+            Name=waf_ip_set_name,
+            Scope=waf_scope,
+            Id=waf_ip_set_id,
+            Addresses=new_addresses,
+            LockToken=response["LockToken"],
+        )
+    except Exception as e:
+        logging.error("Failed to update WAF IP set %s: %s", waf_ip_set_name, e)
+        raise
+
+    logging.info(
+        "Updated WAF IP set with %d new IPs for a total of %d blocked IPs.",
+        new_ips,
+        len(ip_addresses),
     )
 
-    print(
-        f"Updated WAF IP set with {new_ips} new IPs for a total of {len(ip_addresses)} blocked IPs."
-    )
+
+class _Response:  # pylint: disable=too-few-public-methods
+    """Minimal response wrapper around a urllib HTTP response."""
+
+    def __init__(self, response):
+        self._body = response.read()
+        self.status = getattr(response, "status", getattr(response, "code", 0))
+        self.ok = 200 <= self.status < 300
+
+    def json(self):
+        """Return the response body parsed as JSON."""
+        return json.loads(self._body)
+
+
+class _RetryingSession:  # pylint: disable=too-few-public-methods
+    """urllib-based session with retry logic for transient server errors."""
+
+    def __init__(
+        self, total_retries=3, backoff_factor=0.5, status_forcelist=(500, 502, 503, 504)
+    ):
+        self.total_retries = total_retries
+        self.backoff_factor = backoff_factor
+        self.status_forcelist = status_forcelist
+
+    def get(self, url, timeout=None):
+        """Perform a GET request with retry logic for transient server errors."""
+        last_error = None
+        for attempt in range(self.total_retries + 1):
+            if attempt > 0:
+                time.sleep(self.backoff_factor * (2 ** (attempt - 1)))
+            try:
+                with urllib.request.urlopen(url, timeout=timeout) as resp:  # nosec B310
+                    if resp.status not in self.status_forcelist:
+                        return _Response(resp)
+                    last_error = OSError(f"HTTP {resp.status}")
+            except urllib.error.HTTPError as exc:
+                if exc.code not in self.status_forcelist:
+                    return _Response(exc)
+                last_error = exc
+            except urllib.error.URLError as exc:
+                last_error = exc
+        raise last_error if last_error else OSError("Request failed")
 
 
 def recursive_entity_search(data):
@@ -187,21 +268,15 @@ def create_retrying_request(
     total_retries=3,
     backoff_factor=0.5,
     status_forcelist=(500, 502, 503, 504),
-    allowed_methods=("GET"),
 ):
     """
-    Creates a requests session with retry logic.
+    Creates a session with retry logic using only the standard library.
     """
-    retry_strategy = Retry(
-        total=total_retries,
+    return _RetryingSession(
+        total_retries=total_retries,
         backoff_factor=backoff_factor,
         status_forcelist=status_forcelist,
-        allowed_methods=allowed_methods,
     )
-    adapter = HTTPAdapter(max_retries=retry_strategy)
-    session = requests.Session()
-    session.mount("https://", adapter)
-    return session
 
 
 def gc_ip(ip):
@@ -216,6 +291,6 @@ def gc_ip(ip):
             if record is not None:
                 is_gc_ip = recursive_entity_search(record)
         return is_gc_ip
-    except requests.exceptions.RequestException:
-        print(f"Could not successfully retrieve information about IP {ip}")
+    except (urllib.error.URLError, OSError):
+        logging.error("Could not successfully retrieve information about IP %s", ip)
         return False
