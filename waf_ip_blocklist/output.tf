@@ -13,6 +13,16 @@ output "ipv4_lambda_cloudwatch_log_group_name" {
   value       = aws_cloudwatch_log_group.ipv4_blocklist.name
 }
 
+output "ipv4_lambda_function_arn" {
+  description = "The ARN of the Lambda function for the IPv4 blocklist"
+  value       = aws_lambda_function.ipv4_blocklist.arn
+}
+
+output "ipv4_lambda_function_name" {
+  description = "The name of the Lambda function for the IPv4 blocklist"
+  value       = aws_lambda_function.ipv4_blocklist.function_name
+}
+
 output "ipv4_new_blocked_ip_metric_filter_name" {
   description = "The metric filter name for the number of new blocked IPs"
   value       = aws_cloudwatch_log_metric_filter.ip_added_to_block_list.metric_transformation[0].name

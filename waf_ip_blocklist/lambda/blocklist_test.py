@@ -1,4 +1,5 @@
 import io
+import logging
 import tempfile
 import os
 import json
@@ -18,7 +19,7 @@ import blocklist
 
 @patch("blocklist.athena_client")
 @patch("blocklist.waf_client")
-def test_handler_with_ips_to_block(mock_waf_client, mock_athena_client, capsys):
+def test_handler_with_ips_to_block(mock_waf_client, mock_athena_client, caplog):
     # Setup
     mock_athena_client.start_query_execution.side_effect = [
         {"QueryExecutionId": "test_query_lb_id"},
@@ -55,7 +56,8 @@ def test_handler_with_ips_to_block(mock_waf_client, mock_athena_client, capsys):
     }
 
     # Execute
-    blocklist.handler(None, None)
+    with caplog.at_level(logging.INFO):
+        blocklist.handler(None, None)
 
     # Verify
     mock_athena_client.start_query_execution.assert_has_calls(
@@ -94,10 +96,7 @@ def test_handler_with_ips_to_block(mock_waf_client, mock_athena_client, capsys):
         LockToken="test_lock_token",
     )
 
-    captured = capsys.readouterr()
-    all_console_logs = captured.out.split("\n")
-
-    assert all_console_logs.count("[Metric] - New IP added to WAF IP Set") == 2
+    assert caplog.messages.count("[Metric] - New IP added to WAF IP Set") == 2
 
 
 @patch("blocklist.athena_client")
@@ -438,7 +437,7 @@ def test_gc_ip_http_error(mock_create_session):
 
 
 @patch("blocklist.create_retrying_request")
-def test_gc_ip_request_exception(mock_create_session, capsys):
+def test_gc_ip_request_exception(mock_create_session, caplog):
     """Test gc_ip with request exception"""
     # Setup mock session to raise exception
     mock_session = Mock()
@@ -446,14 +445,14 @@ def test_gc_ip_request_exception(mock_create_session, capsys):
     mock_create_session.return_value = mock_session
 
     # Test
-    result = blocklist.gc_ip("192.168.1.1")
+    with caplog.at_level(logging.ERROR):
+        result = blocklist.gc_ip("192.168.1.1")
 
     # Verify
     assert result is False
-    captured = capsys.readouterr()
     assert (
         "Could not successfully retrieve information about IP 192.168.1.1"
-        in captured.out
+        in caplog.text
     )
 
 
