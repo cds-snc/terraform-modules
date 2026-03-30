@@ -44,7 +44,7 @@ resource "aws_iam_role_policy_attachment" "vpc_metrics_flow_logs_write_policy_at
 
 resource "aws_iam_policy" "vpc_metrics_flow_logs_write_policy" {
   count       = var.enable_flow_log ? 1 : 0
-  name        = "VpcMetricsFlowLogsWrite"
+  name        = "${var.name}_VpcMetricsFlowLogsWrite"
   description = "IAM policy for writing flow logs in CloudWatch"
   path        = "/"
   policy      = data.aws_iam_policy_document.vpc_metrics_flow_logs_write[0].json
@@ -52,7 +52,6 @@ resource "aws_iam_policy" "vpc_metrics_flow_logs_write_policy" {
 }
 
 data "aws_iam_policy_document" "vpc_metrics_flow_logs_write" {
-
   count = var.enable_flow_log ? 1 : 0
   statement {
     effect = "Allow"
