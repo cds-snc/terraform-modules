@@ -79,5 +79,7 @@ No modules.
 | <a name="output_ipv4_blocklist_arn"></a> [ipv4\_blocklist\_arn](#output\_ipv4\_blocklist\_arn) | The ARN of the IP blocklist |
 | <a name="output_ipv4_lambda_cloudwatch_log_group_arn"></a> [ipv4\_lambda\_cloudwatch\_log\_group\_arn](#output\_ipv4\_lambda\_cloudwatch\_log\_group\_arn) | The ARN of the CloudWatch Log Group for the IPv4 blocklist Lambda |
 | <a name="output_ipv4_lambda_cloudwatch_log_group_name"></a> [ipv4\_lambda\_cloudwatch\_log\_group\_name](#output\_ipv4\_lambda\_cloudwatch\_log\_group\_name) | The name of the CloudWatch Log Group for the IPv4 blocklist Lambda |
+| <a name="output_ipv4_lambda_function_arn"></a> [ipv4\_lambda\_function\_arn](#output\_ipv4\_lambda\_function\_arn) | The ARN of the Lambda function for the IPv4 blocklist |
+| <a name="output_ipv4_lambda_function_name"></a> [ipv4\_lambda\_function\_name](#output\_ipv4\_lambda\_function\_name) | The name of the Lambda function for the IPv4 blocklist |
 | <a name="output_ipv4_new_blocked_ip_metric_filter_name"></a> [ipv4\_new\_blocked\_ip\_metric\_filter\_name](#output\_ipv4\_new\_blocked\_ip\_metric\_filter\_name) | The metric filter name for the number of new blocked IPs |
 | <a name="output_ipv4_new_blocked_ip_metric_filter_namespace"></a> [ipv4\_new\_blocked\_ip\_metric\_filter\_namespace](#output\_ipv4\_new\_blocked\_ip\_metric\_filter\_namespace) | The metric filter namespace for the number of new blocked IPs |
