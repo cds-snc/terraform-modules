@@ -10,6 +10,11 @@ the block threshold.
 If you are using CloudFront, you need to set the `waf_scope` variable to `CLOUDFRONT`.  You must also pass a `us-east-1` provider to the
 module as the WAF IP set needs to be in `us-east-1` to work with CloudFront.
 
+## :warning: Alarms
+This module does not create alarms but you should use its outputs to do this:
+- `ipv4_lambda_function_name`: use this to detect the published AWS/Lambda function `Errors` metric.
+- `ipv4_lambda_cloudwatch_log_group_name`: create a metric filter and alarm alarms based on the `ERROR` log pattern.
+
 ## Requirements
 
 No requirements.
