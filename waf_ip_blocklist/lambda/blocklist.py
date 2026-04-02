@@ -78,7 +78,7 @@ def get_query_from_file(file_path, log_table, skip_list, block_threshold):
             skip_list=joined_skip_list,
             block_threshold=block_threshold,
         )
-        logging.info(query)
+        logging.info("Executing Athena query:\n%s", query)
         return query
 
 
@@ -123,7 +123,9 @@ def get_query_results(query_execution_id):
             break
 
         logging.info(
-            "Query status: %s, will wait another %d seconds...", status, timeout
+            "Query status: %s, waiting 2 seconds (%d seconds remaining before timeout)...",
+            status,
+            timeout,
         )
         time.sleep(2)
 
@@ -161,11 +163,17 @@ def update_waf_ip_set(ip_addresses, waf_ip_set_name, waf_ip_set_id, waf_scope):
     # Truncate the IP address list if it has more than 10,000 addresses.
     # This is the max number of addresses an IP set can hold.
     if len(ip_addresses) > 10000:
-        logging.info("Reducing %d address to 10,000 addresses.", len(ip_addresses))
+        logging.info("Reducing %d addresses to 10,000 addresses.", len(ip_addresses))
         ip_addresses = ip_addresses[:10000]
 
     # Remove any ip addresses known to be owned by the Government of Canada
+    pre_gc_count = len(ip_addresses)
     ip_addresses = [ip for ip in ip_addresses if not gc_ip(ip)]
+    logging.info(
+        "Removed %d GC-owned IPs from blocklist; %d IPs remaining.",
+        pre_gc_count - len(ip_addresses),
+        len(ip_addresses),
+    )
 
     # Check if new addresses have been added to the list of existing addresses.
     # This is useful to monitor the number of new IPs added to the blocklist
@@ -229,7 +237,15 @@ class _RetryingSession:  # pylint: disable=too-few-public-methods
         last_error = None
         for attempt in range(self.total_retries + 1):
             if attempt > 0:
-                time.sleep(self.backoff_factor * (2 ** (attempt - 1)))
+                delay = self.backoff_factor * (2 ** (attempt - 1))
+                logging.info(
+                    "Retrying request (attempt %d/%d) after %.1fs: %s",
+                    attempt + 1,
+                    self.total_retries + 1,
+                    delay,
+                    url,
+                )
+                time.sleep(delay)
             try:
                 with urllib.request.urlopen(url, timeout=timeout) as resp:  # nosec B310
                     if resp.status not in self.status_forcelist:
@@ -284,13 +300,27 @@ def gc_ip(ip):
     session = create_retrying_request(total_retries=5, backoff_factor=1)
     try:
         api_url = f"https://rdap.arin.net/registry/ip/{ip}"
+        logging.info("Checking RDAP ownership for IP %s", ip)
         is_gc_ip = False
         response = session.get(api_url, timeout=5)
         if response.ok:
             record = response.json().get("entities")
-            if record is not None:
+            if record is None:
+                logging.info("No entities found in RDAP response for IP %s", ip)
+            else:
                 is_gc_ip = recursive_entity_search(record)
+        else:
+            logging.info(
+                "RDAP lookup for IP %s returned non-OK status %s; skipping GC check",
+                ip,
+                response.status,
+            )
+        logging.info("IP %s identified as GC-owned: %s", ip, is_gc_ip)
         return is_gc_ip
-    except (urllib.error.URLError, OSError):
-        logging.error("Could not successfully retrieve information about IP %s", ip)
+    except (urllib.error.URLError, OSError) as e:
+        logging.error(
+            "Could not successfully retrieve information about IP %s: %s",
+            ip,
+            e,
+        )
         return False
