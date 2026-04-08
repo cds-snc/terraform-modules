@@ -10,8 +10,8 @@ import os
 import time
 import urllib.error
 import urllib.request
-import boto3
 import socket
+import boto3
 
 logging.getLogger().setLevel(logging.INFO)
 
@@ -164,7 +164,8 @@ def update_waf_ip_set(ip_addresses, waf_ip_set_name, waf_ip_set_id, waf_scope):
     # Truncate the IP address list if it has more than 10,000 addresses.
     # This is the max number of addresses an IP set can hold.
     if len(ip_addresses) > 10000:
-        # Logging as error because this could potentially mean that there is something going on (attack, major bug in the service that lives underneath the firewall)
+        # Logging as error because this could potentially mean that there is something
+        # going on (attack, major bug in the service that lives underneath the firewall)
         logging.error("Reducing %d addresses to 10,000 addresses.", len(ip_addresses))
         ip_addresses = ip_addresses[:10000]
 
