@@ -10,6 +10,7 @@ import os
 import time
 import urllib.error
 import urllib.request
+import socket
 import boto3
 
 logging.getLogger().setLevel(logging.INFO)
@@ -163,7 +164,9 @@ def update_waf_ip_set(ip_addresses, waf_ip_set_name, waf_ip_set_id, waf_scope):
     # Truncate the IP address list if it has more than 10,000 addresses.
     # This is the max number of addresses an IP set can hold.
     if len(ip_addresses) > 10000:
-        logging.info("Reducing %d addresses to 10,000 addresses.", len(ip_addresses))
+        # Logging as error because this could potentially mean that there is something
+        # going on (attack, major bug in the service that lives underneath the firewall)
+        logging.error("Reducing %d addresses to 10,000 addresses.", len(ip_addresses))
         ip_addresses = ip_addresses[:10000]
 
     # Remove any ip addresses known to be owned by the Government of Canada
@@ -255,7 +258,7 @@ class _RetryingSession:  # pylint: disable=too-few-public-methods
                 if exc.code not in self.status_forcelist:
                     return _Response(exc)
                 last_error = exc
-            except urllib.error.URLError as exc:
+            except (urllib.error.URLError, socket.timeout, TimeoutError) as exc:
                 last_error = exc
         raise last_error if last_error else OSError("Request failed")
 

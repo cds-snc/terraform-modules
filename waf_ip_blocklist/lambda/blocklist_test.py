@@ -2,8 +2,8 @@ import io
 import logging
 import tempfile
 import os
-import json
 import urllib.error
+import socket
 
 from unittest.mock import call, patch, Mock, MagicMock
 
@@ -685,6 +685,49 @@ def test_retrying_session_get_retries_on_url_error_and_raises(mock_urlopen, mock
 
     assert mock_urlopen.call_count == 3  # initial + 2 retries
     assert mock_sleep.call_count == 2
+
+
+@patch("blocklist.time.sleep")
+@patch("urllib.request.urlopen")
+def test_retrying_session_get_retries_on_timeout_and_raises(mock_urlopen, mock_sleep):
+    """Test _RetryingSession.get() retries on timeout and raises after all retries fail"""
+    mock_urlopen.side_effect = socket.timeout("Request timed out")
+
+    session = blocklist._RetryingSession(total_retries=2, backoff_factor=0.5)
+
+    try:
+        session.get("https://example.com")
+        assert False, "Expected exception to be raised"
+    except socket.timeout:
+        pass
+
+    assert mock_urlopen.call_count == 3  # initial + 2 retries
+    assert mock_sleep.call_count == 2
+
+
+@patch("blocklist.time.sleep")
+@patch("urllib.request.urlopen")
+def test_retrying_session_get_retries_on_urlerror_timeout_then_succeeds(
+    mock_urlopen, mock_sleep
+):
+    """Test _RetryingSession.get() retries after a URLError (timeout) and succeeds on next attempt"""
+    mock_urlopen.side_effect = [
+        urllib.error.URLError("Request timed out"),
+        MagicMock(
+            __enter__=MagicMock(
+                return_value=MagicMock(
+                    status=200, read=MagicMock(return_value=b'{"result": "ok"}')
+                )
+            )
+        ),
+    ]
+
+    session = blocklist._RetryingSession(total_retries=3, backoff_factor=0.5)
+    response = session.get("https://example.com")
+
+    assert response.ok is True
+    assert mock_urlopen.call_count == 2
+    mock_sleep.assert_called_once_with(0.5)
 
 
 # ==============================
