@@ -23,7 +23,7 @@ CREATE EXTERNAL TABLE IF NOT EXISTS `${database_name}.${table_name}`(
   `requestbodysize` int, 
   `requestbodysizeinspectedbywaf` int)
   PARTITIONED BY ( 
-   `hour` string)
+   `day` string)
 ROW FORMAT SERDE 
   'org.openx.data.jsonserde.JsonSerDe' 
 STORED AS INPUTFORMAT 
@@ -34,9 +34,9 @@ LOCATION
   '${bucket_location}'
 TBLPROPERTIES (
   'projection.enabled'='true',
-  'projection.hour.format'='yyyy/MM/dd/HH',
-  'projection.hour.interval'='1',
-  'projection.hour.interval.unit'='hours',
-  'projection.hour.range'='2020/01/01/00,NOW',
-  'projection.hour.type'='date',
-  'storage.location.template'='${bucket_location}/${hour}')
+  'projection.day.format'='yyyy/MM/dd',
+  'projection.day.interval'='1',
+  'projection.day.interval.unit'='days',
+  'projection.day.range'='2024/01/01,NOW',
+  'projection.day.type'='date',
+  'storage.location.template'='${bucket_location}/${day}')
