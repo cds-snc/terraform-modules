@@ -42,16 +42,26 @@ def handler(_event, _context):
     """Query the WAF and LB logs and update the WAF IP set with the new IPs"""
     try:
         now = datetime.now(timezone.utc)
-        day_partition_filter = ",".join([
-            f"'{(now - timedelta(days=1)).strftime('%Y/%m/%d')}'",
-            f"'{now.strftime('%Y/%m/%d')}'",
-        ])
+        day_partition_filter = ",".join(
+            [
+                f"'{(now - timedelta(days=1)).strftime('%Y/%m/%d')}'",
+                f"'{now.strftime('%Y/%m/%d')}'",
+            ]
+        )
 
         query_lb = get_query_from_file(
-            "./query_lb.sql", ATHENA_LB_TABLE, LB_STATUS_CODE_SKIP, BLOCK_THRESHOLD, day_partition_filter
+            "./query_lb.sql",
+            ATHENA_LB_TABLE,
+            LB_STATUS_CODE_SKIP,
+            BLOCK_THRESHOLD,
+            day_partition_filter,
         )
         query_waf = get_query_from_file(
-            "./query_waf.sql", ATHENA_WAF_TABLE, WAF_RULE_IDS_SKIP, BLOCK_THRESHOLD, day_partition_filter
+            "./query_waf.sql",
+            ATHENA_WAF_TABLE,
+            WAF_RULE_IDS_SKIP,
+            BLOCK_THRESHOLD,
+            day_partition_filter,
         )
 
         ip_addresses = set()
@@ -76,7 +86,9 @@ def handler(_event, _context):
         raise
 
 
-def get_query_from_file(file_path, log_table, skip_list, block_threshold, day_partition_filter):
+def get_query_from_file(
+    file_path, log_table, skip_list, block_threshold, day_partition_filter
+):
     """Read the query from a file"""
     with open(file_path, "r", encoding="utf-8") as file:
         query_template = file.read()
