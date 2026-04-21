@@ -11,7 +11,8 @@ import time
 import urllib.error
 import urllib.request
 import socket
-from datetime import datetime, timedelta, timezone
+import datetime as datetime_module
+from datetime import timedelta, timezone
 import boto3
 
 logging.getLogger().setLevel(logging.INFO)
@@ -41,7 +42,7 @@ waf_client = boto3.client("wafv2")
 def handler(_event, _context):
     """Query the WAF and LB logs and update the WAF IP set with the new IPs"""
     try:
-        now = datetime.now(timezone.utc)
+        now = datetime_module.datetime.now(timezone.utc)
         day_partition_filter = ",".join(
             [
                 f"'{(now - timedelta(days=1)).strftime('%Y/%m/%d')}'",

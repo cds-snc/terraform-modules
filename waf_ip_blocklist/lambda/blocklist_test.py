@@ -4,6 +4,7 @@ import tempfile
 import os
 import urllib.error
 import socket
+from datetime import datetime, timezone
 
 from unittest.mock import call, patch, Mock, MagicMock
 
@@ -17,10 +18,14 @@ os.environ["WAF_IP_SET_NAME"] = "test_ip_set_name"
 import blocklist
 
 
+@patch("blocklist.datetime_module")
 @patch("blocklist.athena_client")
 @patch("blocklist.waf_client")
-def test_handler_with_ips_to_block(mock_waf_client, mock_athena_client, caplog):
+def test_handler_with_ips_to_block(
+    mock_waf_client, mock_athena_client, mock_datetime, caplog
+):
     # Setup
+    mock_datetime.datetime.now.return_value = datetime(2026, 4, 21, 12, 0, 0, tzinfo=timezone.utc)
     mock_athena_client.start_query_execution.side_effect = [
         {"QueryExecutionId": "test_query_lb_id"},
         {"QueryExecutionId": "test_query_waf_id"},
@@ -63,13 +68,13 @@ def test_handler_with_ips_to_block(mock_waf_client, mock_athena_client, caplog):
     mock_athena_client.start_query_execution.assert_has_calls(
         [
             call(
-                QueryString="-- List of IP addresses that have triggered 4xx HTTP responses\nSELECT\n    client_ip,\n    COUNT(*) as count\nFROM\n    lb_logs\nWHERE\n    (\n        elb_status_code = 403\n        OR target_status_code LIKE '4__'\n        OR target_status_code LIKE '5__'\n    )\n    AND target_status_code NOT IN ('')\n    AND from_iso8601_timestamp(time) >= date_add('day', -1, current_timestamp)\nGROUP BY\n    client_ip\nHAVING COUNT(*) > 20\nORDER BY count DESC",
+                QueryString="-- List of IP addresses that have triggered 4xx HTTP responses\nSELECT\n    client_ip,\n    COUNT(*) as count\nFROM\n    lb_logs\nWHERE\n    (\n        elb_status_code = 403\n        OR target_status_code LIKE '4__'\n        OR target_status_code LIKE '5__'\n    )\n    AND target_status_code NOT IN ('')\n    AND day IN ('2026/04/20','2026/04/21')\n    AND from_iso8601_timestamp(time) >= date_add('day', -1, current_timestamp)\nGROUP BY\n    client_ip\nHAVING COUNT(*) > 20\nORDER BY count DESC",
                 QueryExecutionContext={"Database": "access_logs"},
                 ResultConfiguration={"OutputLocation": "s3://test_bucket/"},
                 WorkGroup="test_workgroup",
             ),
             call(
-                QueryString="-- List of IP addresses that have been blocked by WAF\nSELECT \n    httpRequest.clientIp,\n    COUNT(*) as count\nFROM \n    waf_logs\nWHERE \n    action = 'BLOCK'\n    AND terminatingruleid NOT IN ('') \n    AND from_unixtime(timestamp/1000) >= date_add('day', -1, current_timestamp)\nGROUP BY \n    httpRequest.clientIp\nHAVING COUNT(*) > 20\nORDER BY count DESC",
+                QueryString="-- List of IP addresses that have been blocked by WAF\nSELECT \n    httpRequest.clientIp,\n    COUNT(*) as count\nFROM \n    waf_logs\nWHERE \n    action = 'BLOCK'\n    AND terminatingruleid NOT IN ('') \n    AND day IN ('2026/04/20','2026/04/21')\n    AND from_unixtime(timestamp/1000) >= date_add('day', -1, current_timestamp)\nGROUP BY \n    httpRequest.clientIp\nHAVING COUNT(*) > 20\nORDER BY count DESC",
                 QueryExecutionContext={"Database": "access_logs"},
                 ResultConfiguration={"OutputLocation": "s3://test_bucket/"},
                 WorkGroup="test_workgroup",
@@ -99,10 +104,12 @@ def test_handler_with_ips_to_block(mock_waf_client, mock_athena_client, caplog):
     assert caplog.messages.count("[Metric] - New IP added to WAF IP Set") == 2
 
 
+@patch("blocklist.datetime_module")
 @patch("blocklist.athena_client")
 @patch("blocklist.waf_client")
-def test_handler_with_no_ips_to_block(mock_waf_client, mock_athena_client):
+def test_handler_with_no_ips_to_block(mock_waf_client, mock_athena_client, mock_datetime):
     # Setup
+    mock_datetime.datetime.now.return_value = datetime(2026, 4, 21, 12, 0, 0, tzinfo=timezone.utc)
     mock_athena_client.start_query_execution.side_effect = [
         {"QueryExecutionId": "test_query_lb_id"},
         {"QueryExecutionId": "test_query_waf_id"},
@@ -121,13 +128,13 @@ def test_handler_with_no_ips_to_block(mock_waf_client, mock_athena_client):
     mock_athena_client.start_query_execution.assert_has_calls(
         [
             call(
-                QueryString="-- List of IP addresses that have triggered 4xx HTTP responses\nSELECT\n    client_ip,\n    COUNT(*) as count\nFROM\n    lb_logs\nWHERE\n    (\n        elb_status_code = 403\n        OR target_status_code LIKE '4__'\n        OR target_status_code LIKE '5__'\n    )\n    AND target_status_code NOT IN ('')\n    AND from_iso8601_timestamp(time) >= date_add('day', -1, current_timestamp)\nGROUP BY\n    client_ip\nHAVING COUNT(*) > 20\nORDER BY count DESC",
+                QueryString="-- List of IP addresses that have triggered 4xx HTTP responses\nSELECT\n    client_ip,\n    COUNT(*) as count\nFROM\n    lb_logs\nWHERE\n    (\n        elb_status_code = 403\n        OR target_status_code LIKE '4__'\n        OR target_status_code LIKE '5__'\n    )\n    AND target_status_code NOT IN ('')\n    AND day IN ('2026/04/20','2026/04/21')\n    AND from_iso8601_timestamp(time) >= date_add('day', -1, current_timestamp)\nGROUP BY\n    client_ip\nHAVING COUNT(*) > 20\nORDER BY count DESC",
                 QueryExecutionContext={"Database": "access_logs"},
                 ResultConfiguration={"OutputLocation": "s3://test_bucket/"},
                 WorkGroup="test_workgroup",
             ),
             call(
-                QueryString="-- List of IP addresses that have been blocked by WAF\nSELECT \n    httpRequest.clientIp,\n    COUNT(*) as count\nFROM \n    waf_logs\nWHERE \n    action = 'BLOCK'\n    AND terminatingruleid NOT IN ('') \n    AND from_unixtime(timestamp/1000) >= date_add('day', -1, current_timestamp)\nGROUP BY \n    httpRequest.clientIp\nHAVING COUNT(*) > 20\nORDER BY count DESC",
+                QueryString="-- List of IP addresses that have been blocked by WAF\nSELECT \n    httpRequest.clientIp,\n    COUNT(*) as count\nFROM \n    waf_logs\nWHERE \n    action = 'BLOCK'\n    AND terminatingruleid NOT IN ('') \n    AND day IN ('2026/04/20','2026/04/21')\n    AND from_unixtime(timestamp/1000) >= date_add('day', -1, current_timestamp)\nGROUP BY \n    httpRequest.clientIp\nHAVING COUNT(*) > 20\nORDER BY count DESC",
                 QueryExecutionContext={"Database": "access_logs"},
                 ResultConfiguration={"OutputLocation": "s3://test_bucket/"},
                 WorkGroup="test_workgroup",
@@ -144,11 +151,13 @@ def test_handler_with_no_ips_to_block(mock_waf_client, mock_athena_client):
     mock_waf_client.update_ip_set.assert_not_called()
 
 
+@patch("blocklist.datetime_module")
 @patch("blocklist.athena_client")
 @patch("blocklist.waf_client")
 @patch("blocklist.QUERY_WAF", False)
-def test_handler_with_only_lb_query(mock_waf_client, mock_athena_client):
+def test_handler_with_only_lb_query(mock_waf_client, mock_athena_client, mock_datetime):
     # Setup
+    mock_datetime.datetime.now.return_value = datetime(2026, 4, 21, 12, 0, 0, tzinfo=timezone.utc)
     mock_athena_client.start_query_execution.side_effect = [
         {"QueryExecutionId": "test_query_lb_id"},
         {"QueryExecutionId": "test_query_waf_id"},
@@ -167,7 +176,7 @@ def test_handler_with_only_lb_query(mock_waf_client, mock_athena_client):
     mock_athena_client.start_query_execution.assert_has_calls(
         [
             call(
-                QueryString="-- List of IP addresses that have triggered 4xx HTTP responses\nSELECT\n    client_ip,\n    COUNT(*) as count\nFROM\n    lb_logs\nWHERE\n    (\n        elb_status_code = 403\n        OR target_status_code LIKE '4__'\n        OR target_status_code LIKE '5__'\n    )\n    AND target_status_code NOT IN ('')\n    AND from_iso8601_timestamp(time) >= date_add('day', -1, current_timestamp)\nGROUP BY\n    client_ip\nHAVING COUNT(*) > 20\nORDER BY count DESC",
+                QueryString="-- List of IP addresses that have triggered 4xx HTTP responses\nSELECT\n    client_ip,\n    COUNT(*) as count\nFROM\n    lb_logs\nWHERE\n    (\n        elb_status_code = 403\n        OR target_status_code LIKE '4__'\n        OR target_status_code LIKE '5__'\n    )\n    AND target_status_code NOT IN ('')\n    AND day IN ('2026/04/20','2026/04/21')\n    AND from_iso8601_timestamp(time) >= date_add('day', -1, current_timestamp)\nGROUP BY\n    client_ip\nHAVING COUNT(*) > 20\nORDER BY count DESC",
                 QueryExecutionContext={"Database": "access_logs"},
                 ResultConfiguration={"OutputLocation": "s3://test_bucket/"},
                 WorkGroup="test_workgroup",
@@ -223,7 +232,7 @@ def test_get_query_from_file_with_multiple_rule_ids():
 
     # Execute
     query = blocklist.get_query_from_file(
-        temp_file_path, log_table, skip_list, block_threshold
+        temp_file_path, log_table, skip_list, block_threshold, "'2026/04/20','2026/04/21'"
     )
 
     # Verify
@@ -249,7 +258,7 @@ def test_get_query_from_file_with_empty_rule_ids():
 
     # Execute
     query = blocklist.get_query_from_file(
-        temp_file_path, log_table, skip_list, block_threshold
+        temp_file_path, log_table, skip_list, block_threshold, "'2026/04/20','2026/04/21'"
     )
 
     # Verify
@@ -275,7 +284,7 @@ def test_get_query_from_file_with_single_rule_id():
 
     # Execute
     query = blocklist.get_query_from_file(
-        temp_file_path, log_table, skip_list, block_threshold
+        temp_file_path, log_table, skip_list, block_threshold, "'2026/04/20','2026/04/21'"
     )
 
     # Verify
