@@ -34,9 +34,24 @@ CREATE EXTERNAL TABLE IF NOT EXISTS `${database_name}.${table_name}` (
     classification_reason string,
     conn_trace_id string
     )
+    PARTITIONED BY
+    (
+        day STRING
+    )
     ROW FORMAT SERDE 'org.apache.hadoop.hive.serde2.RegexSerDe'
     WITH SERDEPROPERTIES (
     'serialization.format' = '1',
     'input.regex' = 
-'([^ ]*) ([^ ]*) ([^ ]*) ([^ ]*):([0-9]*) ([^ ]*)[:-]([0-9]*) ([-.0-9]*) ([-.0-9]*) ([-.0-9]*) (|[-0-9]*) (-|[-0-9]*) ([-0-9]*) ([-0-9]*) \"([^ ]*) (.*) (- |[^ ]*)\" \"([^\"]*)\" ([A-Z0-9-_]+) ([A-Za-z0-9.-]*) ([^ ]*) \"([^\"]*)\" \"([^\"]*)\" \"([^\"]*)\" ([-.0-9]*) ([^ ]*) \"([^\"]*)\" \"([^\"]*)\" \"([^ ]*)\" \"([^\s]+?)\" \"([^\s]+)\" \"([^ ]*)\" \"([^ ]*)\" ?([^ ]*)?( .*)?')
-    LOCATION '${bucket_location}';
+'([^ ]*) ([^ ]*) ([^ ]*) ([^ ]*):([0-9]*) ([^ ]*)[:-]([0-9]*) ([-.0-9]*) ([-.0-9]*) ([-.0-9]*) (|[-0-9]*) (-|[-0-9]*) ([-0-9]*) ([-0-9]*) \"([^ ]*) (.*) (- |[^ ]*)\" \"([^\"]*)\" ([A-Z0-9-_]+) ([A-Za-z0-9.-]*) ([^ ]*) \"([^\"]*)\" \"([^\"]*)\" \"([^\"]*)\" ([-.0-9]*) ([^ ]*) \"([^\"]*)\" \"([^\"]*)\" \"([^ ]*)\" \"([^\\s]+?)\" \"([^\\s]+)\" \"([^ ]*)\" \"([^ ]*)\" ?([^ ]*)? ?( .*)?'
+    )
+    LOCATION '${bucket_location}'
+    TBLPROPERTIES
+    (
+        "projection.enabled" = "true",
+        "projection.day.type" = "date",
+        "projection.day.range" = "2024/01/01,NOW",
+        "projection.day.format" = "yyyy/MM/dd",
+        "projection.day.interval" = "1",
+        "projection.day.interval.unit" = "DAYS",
+        "storage.location.template" = "${bucket_location}/${day}"
+    )
