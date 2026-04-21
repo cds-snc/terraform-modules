@@ -25,7 +25,9 @@ def test_handler_with_ips_to_block(
     mock_waf_client, mock_athena_client, mock_datetime, caplog
 ):
     # Setup
-    mock_datetime.datetime.now.return_value = datetime(2026, 4, 21, 12, 0, 0, tzinfo=timezone.utc)
+    mock_datetime.datetime.now.return_value = datetime(
+        2026, 4, 21, 12, 0, 0, tzinfo=timezone.utc
+    )
     mock_athena_client.start_query_execution.side_effect = [
         {"QueryExecutionId": "test_query_lb_id"},
         {"QueryExecutionId": "test_query_waf_id"},
@@ -107,9 +109,13 @@ def test_handler_with_ips_to_block(
 @patch("blocklist.datetime_module")
 @patch("blocklist.athena_client")
 @patch("blocklist.waf_client")
-def test_handler_with_no_ips_to_block(mock_waf_client, mock_athena_client, mock_datetime):
+def test_handler_with_no_ips_to_block(
+    mock_waf_client, mock_athena_client, mock_datetime
+):
     # Setup
-    mock_datetime.datetime.now.return_value = datetime(2026, 4, 21, 12, 0, 0, tzinfo=timezone.utc)
+    mock_datetime.datetime.now.return_value = datetime(
+        2026, 4, 21, 12, 0, 0, tzinfo=timezone.utc
+    )
     mock_athena_client.start_query_execution.side_effect = [
         {"QueryExecutionId": "test_query_lb_id"},
         {"QueryExecutionId": "test_query_waf_id"},
@@ -157,7 +163,9 @@ def test_handler_with_no_ips_to_block(mock_waf_client, mock_athena_client, mock_
 @patch("blocklist.QUERY_WAF", False)
 def test_handler_with_only_lb_query(mock_waf_client, mock_athena_client, mock_datetime):
     # Setup
-    mock_datetime.datetime.now.return_value = datetime(2026, 4, 21, 12, 0, 0, tzinfo=timezone.utc)
+    mock_datetime.datetime.now.return_value = datetime(
+        2026, 4, 21, 12, 0, 0, tzinfo=timezone.utc
+    )
     mock_athena_client.start_query_execution.side_effect = [
         {"QueryExecutionId": "test_query_lb_id"},
         {"QueryExecutionId": "test_query_waf_id"},
@@ -232,7 +240,11 @@ def test_get_query_from_file_with_multiple_rule_ids():
 
     # Execute
     query = blocklist.get_query_from_file(
-        temp_file_path, log_table, skip_list, block_threshold, "'2026/04/20','2026/04/21'"
+        temp_file_path,
+        log_table,
+        skip_list,
+        block_threshold,
+        "'2026/04/20','2026/04/21'",
     )
 
     # Verify
@@ -258,7 +270,11 @@ def test_get_query_from_file_with_empty_rule_ids():
 
     # Execute
     query = blocklist.get_query_from_file(
-        temp_file_path, log_table, skip_list, block_threshold, "'2026/04/20','2026/04/21'"
+        temp_file_path,
+        log_table,
+        skip_list,
+        block_threshold,
+        "'2026/04/20','2026/04/21'",
     )
 
     # Verify
@@ -284,7 +300,11 @@ def test_get_query_from_file_with_single_rule_id():
 
     # Execute
     query = blocklist.get_query_from_file(
-        temp_file_path, log_table, skip_list, block_threshold, "'2026/04/20','2026/04/21'"
+        temp_file_path,
+        log_table,
+        skip_list,
+        block_threshold,
+        "'2026/04/20','2026/04/21'",
     )
 
     # Verify
