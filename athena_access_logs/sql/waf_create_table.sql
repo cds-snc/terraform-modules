@@ -39,4 +39,4 @@ TBLPROPERTIES (
   'projection.day.interval.unit'='days',
   'projection.day.range'='2024/01/01,NOW',
   'projection.day.type'='date',
-  'storage.location.template'='${bucket_location}/${day}')
+  'storage.location.template'='${bucket_location}/$${day}')
