@@ -53,5 +53,5 @@ CREATE EXTERNAL TABLE IF NOT EXISTS `${database_name}.${table_name}` (
         "projection.day.format" = "yyyy/MM/dd",
         "projection.day.interval" = "1",
         "projection.day.interval.unit" = "DAYS",
-        "storage.location.template" = "${bucket_location}/${day}"
+        "storage.location.template" = "${bucket_location}/$${day}"
     )
