@@ -7,6 +7,7 @@ FROM
 WHERE 
     action = 'BLOCK'
     AND terminatingruleid NOT IN ({skip_list}) 
+    AND day IN ({day_partition_filter})
     AND from_unixtime(timestamp/1000) >= date_add('day', -1, current_timestamp)
 GROUP BY 
     httpRequest.clientIp

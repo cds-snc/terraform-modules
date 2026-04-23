@@ -11,6 +11,8 @@ import time
 import urllib.error
 import urllib.request
 import socket
+import datetime as datetime_module
+from datetime import timedelta, timezone
 import boto3
 
 logging.getLogger().setLevel(logging.INFO)
@@ -40,11 +42,27 @@ waf_client = boto3.client("wafv2")
 def handler(_event, _context):
     """Query the WAF and LB logs and update the WAF IP set with the new IPs"""
     try:
+        now = datetime_module.datetime.now(timezone.utc)
+        day_partition_filter = ",".join(
+            [
+                f"'{(now - timedelta(days=1)).strftime('%Y/%m/%d')}'",
+                f"'{now.strftime('%Y/%m/%d')}'",
+            ]
+        )
+
         query_lb = get_query_from_file(
-            "./query_lb.sql", ATHENA_LB_TABLE, LB_STATUS_CODE_SKIP, BLOCK_THRESHOLD
+            "./query_lb.sql",
+            ATHENA_LB_TABLE,
+            LB_STATUS_CODE_SKIP,
+            BLOCK_THRESHOLD,
+            day_partition_filter,
         )
         query_waf = get_query_from_file(
-            "./query_waf.sql", ATHENA_WAF_TABLE, WAF_RULE_IDS_SKIP, BLOCK_THRESHOLD
+            "./query_waf.sql",
+            ATHENA_WAF_TABLE,
+            WAF_RULE_IDS_SKIP,
+            BLOCK_THRESHOLD,
+            day_partition_filter,
         )
 
         ip_addresses = set()
@@ -69,7 +87,9 @@ def handler(_event, _context):
         raise
 
 
-def get_query_from_file(file_path, log_table, skip_list, block_threshold):
+def get_query_from_file(
+    file_path, log_table, skip_list, block_threshold, day_partition_filter
+):
     """Read the query from a file"""
     with open(file_path, "r", encoding="utf-8") as file:
         query_template = file.read()
@@ -78,6 +98,7 @@ def get_query_from_file(file_path, log_table, skip_list, block_threshold):
             log_table=log_table,
             skip_list=joined_skip_list,
             block_threshold=block_threshold,
+            day_partition_filter=day_partition_filter,
         )
         logging.info("Executing Athena query:\n%s", query)
         return query
