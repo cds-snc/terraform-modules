@@ -60,4 +60,5 @@ No requirements.
 | <a name="output_ecr_repository_url"></a> [ecr\_repository\_url](#output\_ecr\_repository\_url) | The URL of the ECR repository for the Lambda image |
 | <a name="output_lambda_function_arn"></a> [lambda\_function\_arn](#output\_lambda\_function\_arn) | The ARN of the Lambda function |
 | <a name="output_lambda_function_cloudwatch_log_group_name"></a> [lambda\_function\_cloudwatch\_log\_group\_name](#output\_lambda\_function\_cloudwatch\_log\_group\_name) | The name of the CloudWatch log group for the Lambda function |
+| <a name="output_lambda_function_name"></a> [lambda\_function\_name](#output\_lambda\_function\_name) | Name of the Lambda function. |
 | <a name="output_lambda_function_role_arn"></a> [lambda\_function\_role\_arn](#output\_lambda\_function\_role\_arn) | The IAM role ARN of the Lambda function |

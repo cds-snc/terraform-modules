@@ -18,6 +18,11 @@ output "lambda_function_cloudwatch_log_group_name" {
   value       = "/aws/lambda/${module.this_lambda.function_name}"
 }
 
+output "lambda_function_name" {
+  description = "Name of the Lambda function."
+  value       = module.this_lambda.function_name
+}
+
 output "lambda_function_role_arn" {
   description = "The IAM role ARN of the Lambda function"
   value       = module.this_lambda.function_role_arn
