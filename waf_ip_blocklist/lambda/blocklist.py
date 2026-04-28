@@ -10,6 +10,7 @@ import os
 import time
 import urllib.error
 import urllib.request
+import requests
 import socket
 import datetime as datetime_module
 from datetime import timedelta, timezone
