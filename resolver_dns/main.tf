@@ -81,11 +81,12 @@ resource "aws_route53_resolver_firewall_rule_group" "firewall_rules" {
 resource "aws_route53_resolver_firewall_rule" "allowed" {
   count = var.firewall_enabled ? 1 : 0
 
-  name                    = "AllowedDomains"
-  action                  = "ALLOW"
-  firewall_domain_list_id = aws_route53_resolver_firewall_domain_list.allowed[0].id
-  firewall_rule_group_id  = aws_route53_resolver_firewall_rule_group.firewall_rules[0].id
-  priority                = 100
+  name                               = "AllowedDomains"
+  action                             = "ALLOW"
+  firewall_domain_list_id            = aws_route53_resolver_firewall_domain_list.allowed[0].id
+  firewall_rule_group_id             = aws_route53_resolver_firewall_rule_group.firewall_rules[0].id
+  firewall_domain_redirection_action = var.firewall_domain_redirection_action
+  priority                           = 100
 }
 
 resource "aws_route53_resolver_firewall_rule" "blocked" {

@@ -43,6 +43,7 @@ No modules.
 | <a name="input_allowed_domains"></a> [allowed\_domains](#input\_allowed\_domains) | (Optional) List of domains to allow through the DNS firewall.  Required if `firewall_enabled` is true. | `list(string)` | <pre>[<br/>  "*."<br/>]</pre> | no |
 | <a name="input_billing_tag_key"></a> [billing\_tag\_key](#input\_billing\_tag\_key) | (Optional, default 'CostCentre') The name of the billing tag | `string` | `"CostCentre"` | no |
 | <a name="input_billing_tag_value"></a> [billing\_tag\_value](#input\_billing\_tag\_value) | (Required) The value of the billing tag | `string` | n/a | yes |
+| <a name="input_firewall_domain_redirection_action"></a> [firewall\_domain\_redirection\_action](#input\_firewall\_domain\_redirection\_action) | (Optional) Controls how CNAME redirection chains are evaluated by the allow rule. INSPECT\_REDIRECTION\_DOMAIN checks every domain in the chain; TRUST\_REDIRECTION\_DOMAIN only checks the originally queried domain. | `string` | `"INSPECT_REDIRECTION_DOMAIN"` | no |
 | <a name="input_firewall_enabled"></a> [firewall\_enabled](#input\_firewall\_enabled) | (Optional) Should the resolver DNS firewall be enabled | `bool` | `false` | no |
 | <a name="input_vpc_id"></a> [vpc\_id](#input\_vpc\_id) | (Required) The ID of the VPC to associate the query log and firewall with | `string` | n/a | yes |
 
