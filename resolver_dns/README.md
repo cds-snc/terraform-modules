@@ -44,6 +44,7 @@ No modules.
 | <a name="input_billing_tag_key"></a> [billing\_tag\_key](#input\_billing\_tag\_key) | (Optional, default 'CostCentre') The name of the billing tag | `string` | `"CostCentre"` | no |
 | <a name="input_billing_tag_value"></a> [billing\_tag\_value](#input\_billing\_tag\_value) | (Required) The value of the billing tag | `string` | n/a | yes |
 | <a name="input_firewall_enabled"></a> [firewall\_enabled](#input\_firewall\_enabled) | (Optional) Should the resolver DNS firewall be enabled | `bool` | `false` | no |
+| <a name="input_trust_redirection_domain_enabled"></a> [trust\_redirection\_domain\_enabled](#input\_trust\_redirection\_domain\_enabled) | (Optional) When true, sets the firewall_domain_redirection_action to TRUST_REDIRECTION_DOMAIN on the allow rule. When false, each domain in the CNAME redirection chain is checked against the firewall rules. When true, only the originally queried domain is checked and any domains it redirects to are automatically trusted. | `bool` | `false` | no |
 | <a name="input_vpc_id"></a> [vpc\_id](#input\_vpc\_id) | (Required) The ID of the VPC to associate the query log and firewall with | `string` | n/a | yes |
 
 ## Outputs

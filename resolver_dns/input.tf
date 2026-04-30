@@ -28,6 +28,12 @@ variable "firewall_enabled" {
   default     = false
 }
 
+variable "trust_redirection_domain_enabled" {
+  description = "(Optional) When true, sets the firewall_domain_redirection_action to TRUST_REDIRECTION_DOMAIN on the allow rule. When false, each domain in the CNAME redirection chain is checked against the firewall rules. When true, only the originally queried domain is checked and any domains it redirects to are automatically trusted."
+  type        = bool
+  default     = false
+}
+
 variable "vpc_id" {
   description = "(Required) The ID of the VPC to associate the query log and firewall with"
   type        = string
