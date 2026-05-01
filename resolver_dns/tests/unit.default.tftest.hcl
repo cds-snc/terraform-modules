@@ -54,6 +54,62 @@ run "invalid_firewall_domain_redirection_action" {
   ]
 }
 
+run "default_block_action" {
+  command = plan
+
+  variables {
+    vpc_id           = run.setup.vpc_id
+    firewall_enabled = true
+    allowed_domains  = ["canada.ca.", "*.amazonaws.com."]
+  }
+
+  assert {
+    condition     = aws_route53_resolver_firewall_rule.blocked[0].action == "BLOCK"
+    error_message = "aws_route53_resolver_firewall_rule.blocked[0].action did not match expected value"
+  }
+
+  assert {
+    condition     = aws_route53_resolver_firewall_rule.blocked[0].block_response == "NODATA"
+    error_message = "aws_route53_resolver_firewall_rule.blocked[0].block_response did not match expected value"
+  }
+}
+
+run "alert_block_action" {
+  command = plan
+
+  variables {
+    vpc_id           = run.setup.vpc_id
+    firewall_enabled = true
+    allowed_domains  = ["canada.ca.", "*.amazonaws.com."]
+    block_action     = "ALERT"
+  }
+
+  assert {
+    condition     = aws_route53_resolver_firewall_rule.blocked[0].action == "ALERT"
+    error_message = "aws_route53_resolver_firewall_rule.blocked[0].action did not match expected value"
+  }
+
+  assert {
+    condition     = aws_route53_resolver_firewall_rule.blocked[0].block_response == null
+    error_message = "aws_route53_resolver_firewall_rule.blocked[0].block_response should be null when block_action is ALERT"
+  }
+}
+
+run "invalid_block_action" {
+  command = plan
+
+  variables {
+    vpc_id           = run.setup.vpc_id
+    firewall_enabled = true
+    allowed_domains  = ["canada.ca.", "*.amazonaws.com."]
+    block_action     = "DENY"
+  }
+
+  expect_failures = [
+    var.block_action,
+  ]
+}
+
 run "apply" {
   # Smoke test to validate that the module can successfully be applied
   variables {

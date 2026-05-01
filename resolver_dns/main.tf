@@ -93,8 +93,8 @@ resource "aws_route53_resolver_firewall_rule" "blocked" {
   count = var.firewall_enabled ? 1 : 0
 
   name                    = "BlockedDomains"
-  action                  = "BLOCK"
-  block_response          = "NODATA"
+  action                  = var.block_action
+  block_response          = var.block_action == "BLOCK" ? "NODATA" : null
   firewall_domain_list_id = aws_route53_resolver_firewall_domain_list.blocked[0].id
   firewall_rule_group_id  = aws_route53_resolver_firewall_rule_group.firewall_rules[0].id
   priority                = 200

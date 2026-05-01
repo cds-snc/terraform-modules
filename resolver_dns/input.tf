@@ -22,6 +22,17 @@ variable "billing_tag_value" {
   type        = string
 }
 
+variable "block_action" {
+  description = "(Optional) Action to take for blocked domains. BLOCK prevents resolution; ALERT only logs the query without blocking."
+  type        = string
+  default     = "BLOCK"
+
+  validation {
+    condition     = contains(["BLOCK", "ALERT"], var.block_action)
+    error_message = "Valid values are BLOCK and ALERT."
+  }
+}
+
 variable "firewall_enabled" {
   description = "(Optional) Should the resolver DNS firewall be enabled"
   type        = bool
