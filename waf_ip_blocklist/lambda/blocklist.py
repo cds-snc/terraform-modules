@@ -321,7 +321,7 @@ def create_retrying_request(
 
 def gc_ip(ip):
     """Check if IP is owned by Government of Canada"""
-    session = create_retrying_request(total_retries=5, backoff_factor=1)
+    session = create_retrying_request(total_retries=6, backoff_factor=3)
     try:
         api_url = f"https://rdap.arin.net/registry/ip/{ip}"
         logging.info("Checking RDAP ownership for IP %s", ip)
@@ -342,7 +342,9 @@ def gc_ip(ip):
         logging.info("IP %s identified as GC-owned: %s", ip, is_gc_ip)
         return is_gc_ip
     except (urllib.error.URLError, OSError) as e:
-        logging.error(
+        # Updating to warning as this is not preventing a blocklist update and is being caused
+        # by the registry lookup intermittently failing.
+        logging.warning(
             "Could not successfully retrieve information about IP %s: %s",
             ip,
             e,

@@ -417,7 +417,7 @@ def test_gc_ip_success_with_goc_ip(mock_create_session):
 
     # Verify
     assert result is True
-    mock_create_session.assert_called_once_with(total_retries=5, backoff_factor=1)
+    mock_create_session.assert_called_once_with(total_retries=6, backoff_factor=3)
     mock_session.get.assert_called_once_with(
         "https://rdap.arin.net/registry/ip/192.168.1.1", timeout=5
     )
@@ -474,7 +474,7 @@ def test_gc_ip_request_exception(mock_create_session, caplog):
     mock_create_session.return_value = mock_session
 
     # Test
-    with caplog.at_level(logging.ERROR):
+    with caplog.at_level(logging.WARNING):
         result = blocklist.gc_ip("192.168.1.1")
 
     # Verify
