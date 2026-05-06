@@ -2,7 +2,7 @@ resource "aws_secretsmanager_secret" "connection_string" {
   count = var.use_proxy ? 1 : 0
 
   name = "${var.name}-${random_string.random.result}"
-  tags = local.common_tags
+  tags = merge(local.common_tags, local.cbrid_tags)
 }
 
 
@@ -22,7 +22,7 @@ resource "aws_secretsmanager_secret" "proxy_connection_string" {
   count = var.use_proxy ? 1 : 0
 
   name = "${var.name}-${random_string.random.result}-proxy-connection-string"
-  tags = local.common_tags
+  tags = merge(local.common_tags, local.cbrid_tags)
 }
 
 resource "aws_secretsmanager_secret_version" "proxy_connection_string" {
