@@ -48,6 +48,8 @@ No modules.
 | <a name="input_object_lock_configuration"></a> [object\_lock\_configuration](#input\_object\_lock\_configuration) | (Optional, Forces new resource) Map containing S3 object locking configuration. | `any` | `{}` | no |
 | <a name="input_replication_configuration"></a> [replication\_configuration](#input\_replication\_configuration) | (Optional) Map containing cross-region replication configuration. | `any` | `{}` | no |
 | <a name="input_restrict_public_buckets"></a> [restrict\_public\_buckets](#input\_restrict\_public\_buckets) | (Optional, default 'true') Only the bucket owner and AWS Services can access this buckets if it has a public policy. | `bool` | `true` | no |
+| <a name="input_ssc_cbrid_tag_key"></a> [ssc\_cbrid\_tag\_key](#input\_ssc\_cbrid\_tag\_key) | (Required: default 'ssc\_cbrid') The name of the SSC CBRID tag | `string` | `"ssc_cbrid"` | no |
+| <a name="input_ssc_cbrid_tag_value"></a> [ssc\_cbrid\_tag\_value](#input\_ssc\_cbrid\_tag\_value) | (Required: default '22DH') The value of the SSC CBRID tag | `string` | `"22DH"` | no |
 | <a name="input_tags"></a> [tags](#input\_tags) | (Optional) A mapping of tags to assign to the bucket. | `map(string)` | `{}` | no |
 | <a name="input_versioning"></a> [versioning](#input\_versioning) | (Optional) Map containing versioning configuration. | `map(string)` | `{}` | no |
 
