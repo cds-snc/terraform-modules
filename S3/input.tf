@@ -18,6 +18,18 @@ variable "billing_tag_value" {
   type        = string
 }
 
+variable "ssc_cbrid_tag_key" {
+  description = "(Required: default 'ssc_cbrid') The name of the SSC CBRID tag"
+  type        = string
+  default     = "ssc_cbrid"
+}
+
+variable "ssc_cbrid_tag_value" {
+  description = "(Required: default '22DH') The value of the SSC CBRID tag"
+  type        = string
+  default     = "22DH"
+}
+
 variable "critical_tag_key" {
   description = "(Optional) The name of the critical tag."
   type        = string
