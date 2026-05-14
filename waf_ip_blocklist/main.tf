@@ -45,7 +45,7 @@ resource "aws_lambda_function" "ipv4_blocklist" {
   filename    = data.archive_file.ipv4_blocklist.output_path
   handler     = "blocklist.handler"
   runtime     = "python3.13"
-  timeout     = 300
+  timeout     = 900
   memory_size = 1024
 
   role             = aws_iam_role.ipv4_blocklist.arn
