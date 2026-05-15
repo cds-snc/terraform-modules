@@ -82,7 +82,6 @@ jobs:
           - gh_oidc_role
           - lambda_schedule
           - notify_slack
-          - S3_scan_object
           - schedule_shutdown
           - rds
           - rds_activity_stream
