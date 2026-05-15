@@ -1,6 +1,6 @@
 # IAM Role for Lambda Function
 resource "aws_iam_role" "group_change_auto_response_role" {
-  name                = "group_change_auto_response_role"
+  name                = "group_change_auto_response_role1"
   managed_policy_arns = ["arn:aws:iam::aws:policy/service-role/AWSLambdaBasicExecutionRole"]
   assume_role_policy = jsonencode({
     Version = "2012-10-17"
