@@ -1,6 +1,6 @@
 # IAM Role for Lambda Function
-resource "aws_iam_role" "group_change_auto_response_role1" {
-  name                = "group_change_auto_response_role1"
+resource "aws_iam_role" "group_change_auto_response_role" {
+  name                = "group_change_auto_response_role"
   managed_policy_arns = ["arn:aws:iam::aws:policy/service-role/AWSLambdaBasicExecutionRole"]
   assume_role_policy = jsonencode({
     Version = "2012-10-17"
@@ -21,7 +21,7 @@ resource "aws_iam_role" "group_change_auto_response_role1" {
 # IAM Policy for Lambda Function
 resource "aws_iam_role_policy" "security_group_modification" {
   name = "security_group_modification"
-  role = aws_iam_role.group_change_auto_response_role1.id
+  role = aws_iam_role.group_change_auto_response_role.id
 
   policy = jsonencode({
     Version = "2012-10-17"
