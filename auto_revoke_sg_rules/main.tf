@@ -37,7 +37,7 @@ resource "aws_lambda_function" "security_group_change_auto_response" {
     }
   }
   depends_on = [
-    aws_iam_role.group_change_auto_response_role
+    aws_iam_role.group_change_auto_response_role1
   ]
 }
 
