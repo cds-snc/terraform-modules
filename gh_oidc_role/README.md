@@ -40,6 +40,8 @@ No modules.
 | <a name="input_oidc_exists"></a> [oidc\_exists](#input\_oidc\_exists) | (Optional, default true) If false, the OIDC provider will be created.<br/>    If you are not on the new Control Tower Landing zone you may need to set this to false as your account may not have an OIDC Github Identity Provider configured. | `bool` | `true` | no |
 | <a name="input_org_name"></a> [org\_name](#input\_org\_name) | (Optional)  The name of the org the workflow will be called from.<br/>    In the format of http://github.com/`org_name` | `string` | `"cds-snc"` | no |
 | <a name="input_roles"></a> [roles](#input\_roles) | (Optional) The list of roles to create for GH OIDC<br/><br/>  name: The name of the role to create<br/><br/>  repo\_name: The name of the repo to authenticate<br/>  If you use `*` this will allow this role to be used in any repo in the org identified in `org_name`<br/><br/>  claim: The claim that the token is allowed to be authorized from. <br/>  This allows you to further restrict where this role is allowed to be used.<br/>  If you wanted to restrict to the main branch you could use a value like `ref:refs/heads/main`, if you don't want to restrict you can use `*` | <pre>set(object({<br/>    name : string,<br/>    repo_name : string,<br/>    claim : string<br/>  }))</pre> | `[]` | no |
+| <a name="input_ssc_cbrid_tag_key"></a> [ssc\_cbrid\_tag\_key](#input\_ssc\_cbrid\_tag\_key) | (Optional, default 'ssc_cbrid') The tag key for the SSC CBRID | `string` | `"ssc_cbrid"` | no |
+| <a name="input_ssc_cbrid_tag_value"></a> [ssc\_cbrid\_tag\_value](#input\_ssc\_cbrid\_tag\_value) | (Optional) The value of the SSC CBRID tag | `string` | `"22DH"` | no |
 
 ## Outputs
 
