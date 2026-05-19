@@ -52,8 +52,6 @@ No modules.
 | <a name="input_billing_tag_key"></a> [billing\_tag\_key](#input\_billing\_tag\_key) | (Optional, default 'CostCentre') The name of the billing tag | `string` | `"CostCentre"` | no |
 | <a name="input_billing_tag_value"></a> [billing\_tag\_value](#input\_billing\_tag\_value) | (Required) The value of the billing tag | `string` | n/a | yes |
 | <a name="input_build_timeout"></a> [build\_timeout](#input\_build\_timeout) | (Optional, default '30') Build timeout for the CodeBuild project. | `number` | `30` | no |
-| <a name="input_ssc_cbrid_tag_key"></a> [ssc\_cbrid\_tag\_key](#input\_ssc\_cbrid\_tag\_key) | (Optional) The name of the SSC CBRID tag | `string` | `"ssc_cbrid"` | no |
-| <a name="input_ssc_cbrid_tag_value"></a> [ssc\_cbrid\_tag\_value](#input\_ssc\_cbrid\_tag\_value) | (Optional) The value of the SSC CBRID tag. If empty, the SSC CBRID tag will not be applied. | `string` | `"22DH"` | no |
 | <a name="input_environment_compute_type"></a> [environment\_compute\_type](#input\_environment\_compute\_type) | (Optional, default 'BUILD\_GENERAL1\_SMALL') Compute type for the CodeBuild environment. | `string` | `"BUILD_GENERAL1_SMALL"` | no |
 | <a name="input_environment_image"></a> [environment\_image](#input\_environment\_image) | (Optional, default 'aws/codebuild/amazonlinux2-x86\_64-standard:5.0') Image for the CodeBuild environment. | `string` | `"aws/codebuild/amazonlinux2-x86_64-standard:5.0"` | no |
 | <a name="input_environment_image_pull_credentials_type"></a> [environment\_image\_pull\_credentials\_type](#input\_environment\_image\_pull\_credentials\_type) | (Optional, default 'CODEBUILD') Image pull credentials type for the CodeBuild environment. | `string` | `"CODEBUILD"` | no |
@@ -64,6 +62,8 @@ No modules.
 | <a name="input_github_repository_url"></a> [github\_repository\_url](#input\_github\_repository\_url) | (Required) GitHub repository URL for the CodeBuild source. | `string` | n/a | yes |
 | <a name="input_project_name"></a> [project\_name](#input\_project\_name) | (Required) Name of the CodeBuild project. | `string` | n/a | yes |
 | <a name="input_queued_timeout"></a> [queued\_timeout](#input\_queued\_timeout) | (Optional, default '5') Queued timeout for the CodeBuild project. | `number` | `5` | no |
+| <a name="input_ssc_cbrid_tag_key"></a> [ssc\_cbrid\_tag\_key](#input\_ssc\_cbrid\_tag\_key) | (Optional) The name of the SSC CBRID tag | `string` | `"ssc_cbrid"` | no |
+| <a name="input_ssc_cbrid_tag_value"></a> [ssc\_cbrid\_tag\_value](#input\_ssc\_cbrid\_tag\_value) | (Optional) The value of the SSC CBRID tag. If empty, the SSC CBRID tag will not be applied. | `string` | `"22DH"` | no |
 
 ## Outputs
 
