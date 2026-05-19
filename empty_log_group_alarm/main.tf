@@ -67,6 +67,14 @@ resource "aws_cloudwatch_metric_alarm" "empty_log_group_metric_alarm_using_anoma
       stat        = "Sum"
     }
   }
+  metric_query {
+    expression  = "ANOMALY_DETECTION_BAND(m1, 2)"
+    id          = "ad1"
+    label       = "IncomingLogEvents (expected)"
+    period      = 0
+    return_data = true
+  }
+
   alarm_actions             = [var.alarm_sns_topic_arn]
   insufficient_data_actions = [var.alarm_sns_topic_arn]
   ok_actions                = [var.alarm_sns_topic_arn]
