@@ -49,7 +49,7 @@ variable "roles" {
     claim : string
   }))
   default = []
-  
+
   validation {
     condition     = length(var.roles) > 0 || !var.oidc_exists
     error_message = "You must either provide at least one role in 'roles', or set 'oidc_exists = false' to create only the OIDC provider."
