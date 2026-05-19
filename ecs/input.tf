@@ -438,5 +438,17 @@ variable "billing_tag_value" {
   type        = string
 }
 
+variable "ssc_cbrid_tag_key" {
+  description = "(Optional) The name of the SSC CBRID tag"
+  type        = string
+  default     = "ssc_cbrid"
+}
+
+variable "ssc_cbrid_tag_value" {
+  description = "(Optional) The value of the SSC CBRID tag. If empty, the SSC CBRID tag will not be applied."
+  type        = string
+  default     = "22DH"
+}
+
 
 
