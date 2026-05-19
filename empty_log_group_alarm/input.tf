@@ -30,7 +30,6 @@ variable "ssc_cbrid_tag_value" {
 variable "log_group_names" {
   description = "(Required) The list of log group names to monitor"
   type        = list(string)
-  default     = []
 }
 
 variable "time_period_minutes" {
