@@ -10,7 +10,10 @@ resource "aws_acm_certificate" "cloudfront" {
     create_before_destroy = true
   }
 
-  tags = local.common_tags
+  tags = {
+    (var.billing_tag_key) = var.billing_tag_value
+    Terraform             = "true"
+  }
 }
 
 resource "aws_route53_record" "cloudfront_certificate_validation" {

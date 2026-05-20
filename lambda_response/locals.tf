@@ -7,8 +7,11 @@ locals {
   hosted_zone_id            = local.is_create_hosted_zone ? aws_route53_zone.hosted_zone[0].zone_id : var.hosted_zone_id
   lambda_function_name      = format("%.64s", "redirector-${replace(var.domain_name_source, ".", "-")}")
 
-  common_tags = {
-    (var.billing_tag_key) = var.billing_tag_value
-    Terraform             = "true"
-  }
+  common_tags = merge(
+    {
+      (var.billing_tag_key) = var.billing_tag_value
+      Terraform             = "true"
+    },
+    var.ssc_cbrid_tag_value != "" ? { (var.ssc_cbrid_tag_key) = var.ssc_cbrid_tag_value } : {}
+  )
 }

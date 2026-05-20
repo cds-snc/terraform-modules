@@ -1,7 +1,10 @@
 resource "aws_route53_zone" "hosted_zone" {
   count = local.is_create_hosted_zone ? 1 : 0
   name  = var.domain_name_source
-  tags  = local.common_tags
+  tags = {
+    (var.billing_tag_key) = var.billing_tag_value
+    Terraform             = "true"
+  }
 }
 
 resource "aws_route53_record" "cloudfront_alias" {
