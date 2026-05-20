@@ -67,7 +67,7 @@ variable "dead_letter_queue_arn" {
 
 variable "ecr_arn" {
   type        = string
-  description = "(Optional) The arn of the ecr repository the image resides in the lambda will be given access to pull images and layers from this registry"
+  description = "(Required) The arn of the ecr repository the image resides in the lambda will be given access to pull images and layers from this registry"
 }
 
 variable "enable_lambda_insights" {
