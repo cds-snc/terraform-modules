@@ -8,7 +8,10 @@ resource "aws_ecr_repository" "this" {
     scan_on_push = true
   }
 
-  tags = local.common_tags
+  tags = {
+    (var.billing_tag_key) = var.billing_tag_value
+    Terraform             = "true"
+  }
 }
 
 resource "aws_ecr_lifecycle_policy" "this" {
