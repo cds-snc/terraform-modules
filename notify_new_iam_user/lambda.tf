@@ -45,4 +45,9 @@ resource "aws_lambda_function" "new_iam_user_added_lambda" {
   depends_on = [
     aws_iam_role.new_iam_user_response_role
   ]
+
+  tags = {
+    (var.billing_tag_key) = var.billing_tag_value
+    Terraform             = "true"
+  }
 }
