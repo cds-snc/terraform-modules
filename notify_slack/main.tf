@@ -65,7 +65,5 @@ resource "aws_cloudwatch_log_group" "notify_slack_lambda" {
   name              = "/aws/lambda/${var.function_name}"
   retention_in_days = "14"
 
-  tags = {
-    (var.billing_tag_key) = var.billing_tag_value
-  }
+  tags = local.common_tags
 }
