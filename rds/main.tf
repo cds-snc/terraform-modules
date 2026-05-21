@@ -23,10 +23,11 @@ resource "aws_rds_cluster_instance" "instances" {
 
   performance_insights_enabled = var.performance_insights_enabled
 
-  tags = merge(local.common_tags, {
-    Name = "${var.name}-instance-${count.index}"
-    }
-  )
+  tags = {
+    (var.billing_tag_key) = var.billing_tag_value
+    Terraform             = "true"
+    Name                  = "${var.name}-instance-${count.index}"
+  }
 }
 
 resource "aws_rds_cluster" "cluster" {
@@ -70,9 +71,11 @@ resource "aws_rds_cluster" "cluster" {
     aws_cloudwatch_log_group.log_exports
   ]
 
-  tags = merge(local.common_tags, {
-    Name = "${var.name}-cluster"
-  })
+  tags = {
+    (var.billing_tag_key) = var.billing_tag_value
+    Terraform             = "true"
+    Name                  = "${var.name}-cluster"
+  }
 }
 
 resource "aws_db_subnet_group" "rds" {
@@ -120,9 +123,11 @@ resource "aws_db_proxy" "proxy" {
     }
   }
 
-  tags = merge(local.common_tags, {
-    Name = "${var.name}-rds-proxy"
-  })
+  tags = {
+    (var.billing_tag_key) = var.billing_tag_value
+    Terraform             = "true"
+    Name                  = "${var.name}-rds-proxy"
+  }
 }
 
 resource "aws_db_proxy_default_target_group" "this" {

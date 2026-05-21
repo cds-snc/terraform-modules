@@ -76,6 +76,8 @@ No modules.
 | <a name="input_serverless_min_capacity"></a> [serverless\_min\_capacity](#input\_serverless\_min\_capacity) | (Optional) The minimum capacity of the Aurora serverless cluster (0.5 to 128 in increments of 0.5) | `number` | `0` | no |
 | <a name="input_skip_final_snapshot"></a> [skip\_final\_snapshot](#input\_skip\_final\_snapshot) | (Optional, default 'false') This flag determines if a final database snapshot it taken before the cluster is deleted. | `bool` | `false` | no |
 | <a name="input_snapshot_identifier"></a> [snapshot\_identifier](#input\_snapshot\_identifier) | (Optional, no default) The name or ARN of the DB cluster snapshot to create the cluster from. | `string` | `null` | no |
+| <a name="input_ssc_cbrid_tag_key"></a> [ssc\_cbrid\_tag\_key](#input\_ssc\_cbrid\_tag\_key) | (Optional, default 'ssc\_cbrid') The tag key for the SSC CBRID | `string` | `"ssc_cbrid"` | no |
+| <a name="input_ssc_cbrid_tag_value"></a> [ssc\_cbrid\_tag\_value](#input\_ssc\_cbrid\_tag\_value) | (Optional) The value of the SSC CBRID tag | `string` | `"22DH"` | no |
 | <a name="input_subnet_ids"></a> [subnet\_ids](#input\_subnet\_ids) | (Required) The name of the subnet the DB has to stay in | `set(string)` | n/a | yes |
 | <a name="input_upgrade_immediately"></a> [upgrade\_immediately](#input\_upgrade\_immediately) | (Optional, default false) Apply database engine upgrades immediately. | `bool` | `false` | no |
 | <a name="input_use_proxy"></a> [use\_proxy](#input\_use\_proxy) | (Optional, default 'true') This flag determines if an RDS proxy should be created for the cluster. | `bool` | `true` | no |
