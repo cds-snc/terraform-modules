@@ -5,16 +5,6 @@
 Replacement: use the `sns` module in this repo and add an `aws_sns_topic_subscription` to your Slack webhook.
 Full migration guide: MIGRATION.md
 
-This module creates a Lambda function posts messages to a Slack channel when a CloudWatch alarm changes state.
-
-## Setup
-
-1. Create a [Slack App with an incoming webhook](https://api.slack.com/messaging/webhooks) for the channel you'd like to post in.
-1. Create one or more SNS Topics and subscribe them to this module's Lambda ARN output.
-1. Setup CloudWatch Alarms that send their state changes to the SNS Topics.
-
-The above is shown in the [full setup example](./examples/full).
-
 ## Credit
 
 The Python code that posts the message to Slack was adopted from the [terraform-aws-notify-slack](https://github.com/terraform-aws-modules/terraform-aws-notify-slack) module under the Apache 2.0 license.
@@ -58,6 +48,8 @@ No modules.
 | <a name="input_project_name"></a> [project\_name](#input\_project\_name) | (Required) Name of the project.  This is added to the Slack message's title. | `string` | n/a | yes |
 | <a name="input_slack_webhook_url"></a> [slack\_webhook\_url](#input\_slack\_webhook\_url) | (Required) Slack incoming webhook URL.  This determines where the Slack message is posted. | `string` | n/a | yes |
 | <a name="input_sns_topic_arns"></a> [sns\_topic\_arns](#input\_sns\_topic\_arns) | (Required) SNS topic ARNs that will invoke the Lambda function and cause a Slack message to be posted. | `list(string)` | n/a | yes |
+| <a name="input_ssc_cbrid_tag_key"></a> [ssc\_cbrid\_tag\_key](#input\_ssc\_cbrid\_tag\_key) | (Optional, default 'ssc\_cbrid') The tag key for the SSC CBRID | `string` | `"ssc_cbrid"` | no |
+| <a name="input_ssc_cbrid_tag_value"></a> [ssc\_cbrid\_tag\_value](#input\_ssc\_cbrid\_tag\_value) | (Optional) The value of the SSC CBRID tag | `string` | `"22DH"` | no |
 
 ## Outputs
 
