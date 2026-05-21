@@ -46,6 +46,8 @@ No modules.
 | <a name="input_block_action"></a> [block\_action](#input\_block\_action) | (Optional) Action to take for blocked domains. BLOCK prevents resolution; ALERT only logs the query without blocking. | `string` | `"BLOCK"` | no |
 | <a name="input_firewall_domain_redirection_action"></a> [firewall\_domain\_redirection\_action](#input\_firewall\_domain\_redirection\_action) | (Optional) Controls how CNAME redirection chains are evaluated by the allow rule. INSPECT\_REDIRECTION\_DOMAIN checks every domain in the chain; TRUST\_REDIRECTION\_DOMAIN only checks the originally queried domain. | `string` | `"INSPECT_REDIRECTION_DOMAIN"` | no |
 | <a name="input_firewall_enabled"></a> [firewall\_enabled](#input\_firewall\_enabled) | (Optional) Should the resolver DNS firewall be enabled | `bool` | `false` | no |
+| <a name="input_ssc_cbrid_tag_key"></a> [ssc\_cbrid\_tag\_key](#input\_ssc\_cbrid\_tag\_key) | (Optional, default 'ssc\_cbrid') The tag key for the SSC CBRID | `string` | `"ssc_cbrid"` | no |
+| <a name="input_ssc_cbrid_tag_value"></a> [ssc\_cbrid\_tag\_value](#input\_ssc\_cbrid\_tag\_value) | (Optional) The value of the SSC CBRID tag | `string` | `"22DH"` | no |
 | <a name="input_vpc_id"></a> [vpc\_id](#input\_vpc\_id) | (Required) The ID of the VPC to associate the query log and firewall with | `string` | n/a | yes |
 
 ## Outputs

@@ -61,7 +61,10 @@ resource "aws_route53_resolver_firewall_domain_list" "allowed" {
 
   name    = "AllowedDomains"
   domains = var.allowed_domains
-  tags    = local.common_tags
+  tags = {
+    (var.billing_tag_key) = var.billing_tag_value
+    Terraform             = "true"
+  }
 }
 
 resource "aws_route53_resolver_firewall_domain_list" "blocked" {
@@ -69,14 +72,20 @@ resource "aws_route53_resolver_firewall_domain_list" "blocked" {
 
   name    = "BlockedDomains"
   domains = ["*."]
-  tags    = local.common_tags
+  tags = {
+    (var.billing_tag_key) = var.billing_tag_value
+    Terraform             = "true"
+  }
 }
 
 resource "aws_route53_resolver_firewall_rule_group" "firewall_rules" {
   count = var.firewall_enabled ? 1 : 0
 
   name = "FirewallRules"
-  tags = local.common_tags
+  tags = {
+    (var.billing_tag_key) = var.billing_tag_value
+    Terraform             = "true"
+  }
 }
 
 resource "aws_route53_resolver_firewall_rule" "allowed" {
