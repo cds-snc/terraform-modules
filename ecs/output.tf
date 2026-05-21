@@ -23,12 +23,12 @@ output "cluster_name" {
 
 output "service_id" {
   description = "ARN that identifies the service"
-  value       = aws_ecs_service.this.id
+  value       = local.service_id
 }
 
 output "service_name" {
   description = "Name of the service"
-  value       = aws_ecs_service.this.name
+  value       = local.service_name
 }
 
 output "service_port" {

@@ -43,6 +43,8 @@ data "aws_ecs_cluster" "this" {
 ################################################################################
 
 resource "aws_ecs_service" "this" {
+  count = var.deployment_managed_by_code_deploy ? 0 : 1
+
   name             = var.service_name
   cluster          = var.create_cluster ? aws_ecs_cluster.this[0].name : var.cluster_name
   task_definition  = aws_ecs_task_definition.this.arn
@@ -97,6 +99,71 @@ resource "aws_ecs_service" "this" {
   lifecycle {
     ignore_changes = [
       desired_count, # Always ignored
+    ]
+  }
+
+  tags = local.common_tags
+}
+
+resource "aws_ecs_service" "with_code_deploy" {
+  count = var.deployment_managed_by_code_deploy ? 1 : 0
+
+  name             = var.service_name
+  cluster          = var.create_cluster ? aws_ecs_cluster.this[0].name : var.cluster_name
+  task_definition  = aws_ecs_task_definition.this.arn
+  platform_version = var.platform_version
+  launch_type      = "FARGATE"
+  propagate_tags   = "SERVICE"
+
+  desired_count                      = var.desired_count
+  deployment_minimum_healthy_percent = 50
+  deployment_maximum_percent         = 200
+  health_check_grace_period_seconds  = var.lb_target_group_arn != null ? 60 : null
+  enable_execute_command             = var.enable_execute_command
+
+  deployment_controller {
+    type = "CODE_DEPLOY"
+  }
+
+  network_configuration {
+    subnets          = var.subnet_ids
+    security_groups  = var.security_group_ids
+    assign_public_ip = false
+  }
+
+  # Simple load balancer configuration
+  dynamic "load_balancer" {
+    for_each = var.lb_target_group_arn != null ? [1] : []
+    content {
+      target_group_arn = var.lb_target_group_arn
+      container_name   = local.container_name
+      container_port   = var.container_host_port
+    }
+  }
+
+  # Advanced load balancer configuration
+  dynamic "load_balancer" {
+    for_each = var.lb_target_group_arns
+    content {
+      target_group_arn = load_balancer.value.target_group_arn
+      container_name   = load_balancer.value.container_name
+      container_port   = load_balancer.value.container_port
+    }
+  }
+
+  dynamic "service_registries" {
+    for_each = var.service_discovery_enabled ? [1] : []
+    content {
+      registry_arn   = aws_service_discovery_service.this[0].arn
+      container_name = local.container_name
+    }
+  }
+
+  lifecycle {
+    ignore_changes = [
+      desired_count,   # Always ignored
+      task_definition, # Updated by AWS CodeDeploy
+      load_balancer    # Updated by AWS CodeDeploy
     ]
   }
 
@@ -189,7 +256,7 @@ resource "aws_appautoscaling_target" "this" {
   min_capacity = min(var.autoscaling_min_capacity, var.desired_count)
   max_capacity = max(var.autoscaling_max_capacity, var.desired_count)
 
-  resource_id        = "service/${var.cluster_name}/${aws_ecs_service.this.name}"
+  resource_id        = "service/${var.cluster_name}/${local.service_name}"
   scalable_dimension = "ecs:service:DesiredCount"
   service_namespace  = "ecs"
 

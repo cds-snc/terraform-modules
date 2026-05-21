@@ -55,37 +55,37 @@ run "plan" {
   }
 
   assert {
-    condition     = length(aws_ecs_service.this.load_balancer) == 2
+    condition     = length(aws_ecs_service.this[0].load_balancer) == 2
     error_message = "Unexpected load_balancer length"
   }
 
   assert {
-    condition     = [for lb in aws_ecs_service.this.load_balancer : lb][0].target_group_arn == "arn:aws:elasticloadbalancing:ca-central-1:123456789012:targetgroup/tg1/1234567890"
+    condition     = [for lb in aws_ecs_service.this[0].load_balancer : lb][0].target_group_arn == "arn:aws:elasticloadbalancing:ca-central-1:123456789012:targetgroup/tg1/1234567890"
     error_message = "Unexpected target_group_arn value"
   }
 
   assert {
-    condition     = [for lb in aws_ecs_service.this.load_balancer : lb][0].container_name == "nginx"
+    condition     = [for lb in aws_ecs_service.this[0].load_balancer : lb][0].container_name == "nginx"
     error_message = "Unexpected container_name value"
   }
 
   assert {
-    condition     = [for lb in aws_ecs_service.this.load_balancer : lb][0].container_port == 8080
+    condition     = [for lb in aws_ecs_service.this[0].load_balancer : lb][0].container_port == 8080
     error_message = "Unexpected container_port value"
   }
 
   assert {
-    condition     = [for lb in aws_ecs_service.this.load_balancer : lb][1].target_group_arn == "arn:aws:elasticloadbalancing:ca-central-1:123456789012:targetgroup/tg2/1234567890"
+    condition     = [for lb in aws_ecs_service.this[0].load_balancer : lb][1].target_group_arn == "arn:aws:elasticloadbalancing:ca-central-1:123456789012:targetgroup/tg2/1234567890"
     error_message = "Unexpected target_group_arn value"
   }
 
   assert {
-    condition     = [for lb in aws_ecs_service.this.load_balancer : lb][1].container_name == "nginx-proxy"
+    condition     = [for lb in aws_ecs_service.this[0].load_balancer : lb][1].container_name == "nginx-proxy"
     error_message = "Unexpected container_name value"
   }
 
   assert {
-    condition     = [for lb in aws_ecs_service.this.load_balancer : lb][1].container_port == 8081
+    condition     = [for lb in aws_ecs_service.this[0].load_balancer : lb][1].container_port == 8081
     error_message = "Unexpected container_port value"
   }
 
