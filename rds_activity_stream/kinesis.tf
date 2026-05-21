@@ -32,7 +32,10 @@ resource "aws_kinesis_firehose_delivery_stream" "activity_stream" {
     }
   }
 
-  tags = local.common_tags
+  tags = {
+    Terraform  = "true"
+    CostCentre = var.billing_tag_value
+  }
 }
 
 resource "aws_cloudwatch_log_group" "firehose_activity_stream" {

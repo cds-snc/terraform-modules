@@ -48,7 +48,10 @@ resource "aws_lambda_function" "decrypt" {
     }
   }
 
-  tags = local.common_tags
+  tags = {
+    Terraform  = "true"
+    CostCentre = var.billing_tag_value
+  }
 }
 
 resource "aws_cloudwatch_log_group" "decrypt" {
