@@ -105,6 +105,11 @@ resource "aws_ecs_service" "this" {
   tags = local.common_tags
 }
 
+moved {
+  from = aws_ecs_service.this
+  to   = aws_ecs_service.this[0]
+}
+
 resource "aws_ecs_service" "with_code_deploy" {
   count = var.deployment_managed_by_code_deploy ? 1 : 0
 
