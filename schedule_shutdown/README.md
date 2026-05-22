@@ -57,6 +57,8 @@ No modules.
 | <a name="input_route53_healthcheck_arns"></a> [route53\_healthcheck\_arns](#input\_route53\_healthcheck\_arns) | (Optional) Route53 healthcheck ARNs to enable/disable. | `list(string)` | `[]` | no |
 | <a name="input_schedule_shutdown"></a> [schedule\_shutdown](#input\_schedule\_shutdown) | (Optional, every day at 10pm UTC) The schedule expression for when resources should be stopped. | `string` | `"cron(0 22 * * ? *)"` | no |
 | <a name="input_schedule_startup"></a> [schedule\_startup](#input\_schedule\_startup) | (Optional, Monday-Friday at 10am UTC) The schedule expression for when resources should be started. | `string` | `"cron(0 10 ? * MON-FRI *)"` | no |
+| <a name="input_ssc_cbrid_tag_key"></a> [ssc\_cbrid\_tag\_key](#input\_ssc\_cbrid\_tag\_key) | (Optional, default 'ssc\_cbrid') The tag key for the SSC CBRID | `string` | `"ssc_cbrid"` | no |
+| <a name="input_ssc_cbrid_tag_value"></a> [ssc\_cbrid\_tag\_value](#input\_ssc\_cbrid\_tag\_value) | (Optional) The value of the SSC CBRID tag | `string` | `"22DH"` | no |
 
 ## Outputs
 
