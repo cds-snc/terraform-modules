@@ -53,6 +53,7 @@ resource "aws_cloudwatch_metric_alarm" "alarm_success" {
   threshold           = 1
   treat_missing_data  = "notBreaching"
   alarm_actions       = var.alarm_actions_success
+  tags                = local.common_tags
 }
 
 resource "aws_cloudwatch_log_metric_filter" "user_alarm_failure" {
@@ -83,4 +84,5 @@ resource "aws_cloudwatch_metric_alarm" "alarm_failure" {
   threshold           = var.num_attempts
   treat_missing_data  = "notBreaching"
   alarm_actions       = var.alarm_actions_failure
+  tags                = local.common_tags
 }
