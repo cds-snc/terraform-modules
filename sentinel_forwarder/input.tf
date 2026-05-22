@@ -10,6 +10,18 @@ variable "billing_tag_value" {
   type        = string
 }
 
+variable "ssc_cbrid_tag_key" {
+  description = "(Optional, default 'ssc_cbrid') The tag key for the SSC CBRID"
+  type        = string
+  default     = "ssc_cbrid"
+}
+
+variable "ssc_cbrid_tag_value" {
+  description = "(Optional) The value of the SSC CBRID tag"
+  type        = string
+  default     = "22DH"
+}
+
 variable "cloudwatch_log_arns" {
   description = "(Optional) A list of CloudWatch log ARNs to forward to Sentinel"
   type        = list(string)

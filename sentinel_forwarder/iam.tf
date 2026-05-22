@@ -1,12 +1,16 @@
 resource "aws_iam_role" "sentinel_forwarder_lambda" {
   name               = "SentinelForwarderLambda-${var.function_name}"
   assume_role_policy = data.aws_iam_policy_document.lambda_assume_policy.json
+
+  tags = local.common_tags
 }
 
 resource "aws_iam_policy" "sentinel_forwarder_lambda" {
   name   = "SentinelForwarderLambda-${var.function_name}"
   path   = "/"
   policy = data.aws_iam_policy_document.sentinel_forwarder_lambda.json
+
+  tags = local.common_tags
 }
 
 resource "aws_iam_role_policy_attachment" "sentinel_forwarder_lambda" {
@@ -71,6 +75,8 @@ resource "aws_iam_policy" "sentinel_forwarder_lambda_s3" {
   name   = "SentinelForwarderLambdaS3-${var.function_name}"
   path   = "/"
   policy = data.aws_iam_policy_document.sentinel_forwarder_lambda_s3[0].json
+
+  tags = local.common_tags
 }
 
 resource "aws_iam_role_policy_attachment" "sentinel_forwarder_lambda_s3" {
