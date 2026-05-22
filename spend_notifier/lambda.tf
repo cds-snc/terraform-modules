@@ -26,7 +26,10 @@ resource "aws_lambda_function" "spend_notifier" {
   }
   timeout = 30
 
-  tags = local.common_tags
+  tags = {
+    CostCentre = var.billing_tag_value
+    Terraform  = "true"
+  }
 }
 
 
