@@ -72,6 +72,8 @@ No modules.
 | <a name="input_query_lb"></a> [query\_lb](#input\_query\_lb) | (Optional, default true) Should the Load Balancer logs be queried for 4xx and 5xx responses? | `bool` | `true` | no |
 | <a name="input_query_waf"></a> [query\_waf](#input\_query\_waf) | (Optional, default true) Should the WAF logs be queried for BLOCK responses? | `bool` | `true` | no |
 | <a name="input_service_name"></a> [service\_name](#input\_service\_name) | (Required) The name of the service | `string` | n/a | yes |
+| <a name="input_ssc_cbrid_tag_key"></a> [ssc\_cbrid\_tag\_key](#input\_ssc\_cbrid\_tag\_key) | (Optional, default 'ssc\_cbrid') The tag key for the SSC CBRID | `string` | `"ssc_cbrid"` | no |
+| <a name="input_ssc_cbrid_tag_value"></a> [ssc\_cbrid\_tag\_value](#input\_ssc\_cbrid\_tag\_value) | (Optional) The value of the SSC CBRID tag | `string` | `"22DH"` | no |
 | <a name="input_waf_block_threshold"></a> [waf\_block\_threshold](#input\_waf\_block\_threshold) | (Optional, default 20) The threshold of blocked requests for adding an IP address to the blocklist | `number` | `20` | no |
 | <a name="input_waf_ip_blocklist_update_schedule"></a> [waf\_ip\_blocklist\_update\_schedule](#input\_waf\_ip\_blocklist\_update\_schedule) | (Optional, default 'rate(2 hours)') The schedule expression for updating the WAF IP blocklist | `string` | `"rate(2 hours)"` | no |
 | <a name="input_waf_rule_ids_skip"></a> [waf\_rule\_ids\_skip](#input\_waf\_rule\_ids\_skip) | (Optional, default []) A list of WAF rule IDs to ignore when adding an IP address to the blocklist | `list(string)` | `[]` | no |
