@@ -13,6 +13,7 @@ import urllib.request
 import socket
 import datetime as datetime_module
 from datetime import timedelta, timezone
+import ipaddress
 import boto3
 
 logging.getLogger().setLevel(logging.INFO)
@@ -37,6 +38,11 @@ WAF_SCOPE = os.getenv("WAF_SCOPE", "REGIONAL")
 
 athena_client = boto3.client("athena", region_name=ATHENA_REGION)
 waf_client = boto3.client("wafv2")
+
+GC_RDAP_ENTITIES = [
+    "SSC-299-Z",
+    "SSC-299",
+]
 
 
 def handler(_event, _context):
@@ -192,7 +198,10 @@ def update_waf_ip_set(ip_addresses, waf_ip_set_name, waf_ip_set_id, waf_scope):
 
     # Remove any ip addresses known to be owned by the Government of Canada
     pre_gc_count = len(ip_addresses)
-    ip_addresses = [ip for ip in ip_addresses if not gc_ip(ip)]
+
+    gc_networks = fetch_gc_networks()
+    ip_addresses = filter_out_gc_ips(ip_addresses, gc_networks)
+
     logging.info(
         "Removed %d GC-owned IPs from blocklist; %d IPs remaining.",
         pre_gc_count - len(ip_addresses),
@@ -284,26 +293,6 @@ class _RetryingSession:  # pylint: disable=too-few-public-methods
         raise last_error if last_error else OSError("Request failed")
 
 
-def recursive_entity_search(data):
-    """Recursively search through a list of entities to see if one matches GoC"""
-    if isinstance(data, list):
-        registrants = [d for d in data if "registrant" in d.get("roles", [])]
-        top_level_result = any(
-            entity.get("handle") == "SSC-299" for entity in registrants
-        )
-        if not top_level_result:
-            # Go deeper and see if there are any other entities associated with this record
-            for entity in registrants:
-                top_level_result = top_level_result or recursive_entity_search(entity)
-                # short circuit once we hit a positive identification
-                if top_level_result:
-                    return top_level_result
-        return top_level_result
-    if isinstance(data, dict) and "entities" in data:
-        return recursive_entity_search(data["entities"])
-    return False
-
-
 def create_retrying_request(
     total_retries=3,
     backoff_factor=0.5,
@@ -319,34 +308,72 @@ def create_retrying_request(
     )
 
 
-def gc_ip(ip):
-    """Check if IP is owned by Government of Canada"""
+def fetch_gc_networks():
+    """Fetch list of networks owned by Government of Canada (multiple RDAP entities)."""
     session = create_retrying_request(total_retries=6, backoff_factor=3)
-    try:
-        api_url = f"https://rdap.arin.net/registry/ip/{ip}"
-        logging.info("Checking RDAP ownership for IP %s", ip)
-        is_gc_ip = False
-        response = session.get(api_url, timeout=5)
-        if response.ok:
-            record = response.json().get("entities")
-            if record is None:
-                logging.info("No entities found in RDAP response for IP %s", ip)
-            else:
-                is_gc_ip = recursive_entity_search(record)
-        else:
-            logging.info(
-                "RDAP lookup for IP %s returned non-OK status %s; skipping GC check",
-                ip,
-                response.status,
+
+    networks = []
+    failed_entities = []
+
+    for entity in GC_RDAP_ENTITIES:
+        url = f"https://rdap.arin.net/registry/entity/{entity}"
+
+        try:
+            response = session.get(url, timeout=5)
+            data = response.json()
+
+            # Defensive parsing: ensure structure exists
+            for net in data.get("networks", []):
+                for cidr in net.get("cidr0_cidrs", []):
+                    v4prefix = cidr.get("v4prefix")
+                    length = cidr.get("length")
+
+                    if not v4prefix or not length:
+                        continue
+
+                    try:
+                        network = ipaddress.ip_network(
+                            f"{v4prefix}/{length}",
+                            strict=False,
+                        )
+                        networks.append(network)
+                    except ValueError as ve:
+                        logging.warning(
+                            "Invalid CIDR for entity %s: %s/%s (%s)",
+                            entity,
+                            v4prefix,
+                            length,
+                            ve,
+                        )
+
+        except (urllib.error.URLError, OSError, ValueError) as e:
+            failed_entities.append(entity)
+            logging.warning(
+                "Could not retrieve GC network information for %s: %s",
+                entity,
+                e,
             )
-        logging.info("IP %s identified as GC-owned: %s", ip, is_gc_ip)
-        return is_gc_ip
-    except (urllib.error.URLError, OSError) as e:
-        # Updating to warning as this is not preventing a blocklist update and is being caused
-        # by the registry lookup intermittently failing.
+            continue
+
+    if failed_entities:
         logging.warning(
-            "Could not successfully retrieve information about IP %s: %s",
-            ip,
-            e,
+            "Completed GC network fetch with failures for: %s",
+            ", ".join(failed_entities),
         )
-        return False
+
+    return networks
+
+
+def filter_out_gc_ips(ips, networks):
+    """Filter out IP addresses identified as GC-owned"""
+    result = []
+
+    for ip in ips:
+        ip_obj = ipaddress.ip_address(ip)
+
+        if any(ip_obj in network for network in networks):
+            logging.info("IP %s identified as GC-owned", ip)
+        else:
+            result.append(ip)
+
+    return result
