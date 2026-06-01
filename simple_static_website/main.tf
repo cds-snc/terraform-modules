@@ -31,9 +31,6 @@ terraform {
   }
 }
 
-locals {
-  domain_name_sanitized = replace(var.domain_name_source, ".", "-")
-}
 
 data "aws_iam_policy_document" "s3_policy" {
   statement {
