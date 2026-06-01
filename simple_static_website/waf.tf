@@ -2,7 +2,7 @@
 # Default AWS WAFv2 Web ACL for CloudFront if not provided in vars
 #
 
-resource "aws_wafv2_web_acl" "default" {  
+resource "aws_wafv2_web_acl" "default" {
   name        = "${local.domain_name_sanitized}-cloudfront-waf"
   description = "Default WAF for CloudFront distribution protecting ${var.domain_name_source}"
   scope       = "CLOUDFRONT"
