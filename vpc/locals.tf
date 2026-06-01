@@ -1,8 +1,11 @@
 locals {
-  common_tags = {
-    (var.billing_tag_key) = var.billing_tag_value
-    Terraform             = "true"
-  }
+  common_tags = merge(
+    {
+      (var.billing_tag_key) = var.billing_tag_value
+      Terraform             = "true"
+    },
+    var.ssc_cbrid_tag_value != "" ? { (var.ssc_cbrid_tag_key) = var.ssc_cbrid_tag_value } : {}
+  )
   zone_names        = [for i in range(var.availability_zones) : data.aws_availability_zones.available.names[i]]
   max_subnet_length = length(local.zone_names)
   nat_gateway_count = var.single_nat_gateway ? 1 : local.max_subnet_length
