@@ -1,4 +1,4 @@
 black==26.5.1
-boto3==1.43.10
+boto3==1.43.14
 pylint==4.0.5
 pytest==9.0.3
