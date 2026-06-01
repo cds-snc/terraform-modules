@@ -2,8 +2,8 @@
 # Default AWS WAFv2 Web ACL for CloudFront if not provided in vars
 #
 
-resource "aws_wafv2_web_acl" "default" {
-  name        = "${var.domain_name_source}-cloudfront-waf"
+resource "aws_wafv2_web_acl" "default" {  
+  name        = "${local.domain_name_sanitized}-cloudfront-waf"
   description = "Default WAF for CloudFront distribution protecting ${var.domain_name_source}"
   scope       = "CLOUDFRONT"
   provider    = aws.us-east-1
@@ -83,7 +83,7 @@ resource "aws_wafv2_web_acl" "default" {
   }
   visibility_config {
     cloudwatch_metrics_enabled = true
-    metric_name                = "${var.domain_name_source}-cloudfront-waf"
+    metric_name                = "${local.domain_name_sanitized}-cloudfront-waf"
     sampled_requests_enabled   = true
   }
 
