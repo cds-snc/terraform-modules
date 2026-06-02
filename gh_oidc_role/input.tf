@@ -43,9 +43,11 @@ variable "org_name" {
 
 variable "roles" {
   description = <<EOF
-  (Optional) The list of roles to create for GH OIDC
+  (Optional) The list of roles to create for GH OIDC. Leaving this empty is valid only when `oidc_exists = false`.
+  With the default `oidc_exists = true`, an empty `roles` list results in the module creating no resources.
+  As a result, if the variable `oidc_exists = true`, then you must pass non-empty values to the `roles` list.
 
-  name: The name of the role to create
+  name: The name of the role to create. 
 
   repo_name: The name of the repo to authenticate
   If you use `*` this will allow this role to be used in any repo in the org identified in `org_name`
