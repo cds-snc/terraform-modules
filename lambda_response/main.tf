@@ -5,6 +5,8 @@
 * This can be used to create 301 redirects or block access to a domain with a 403 response.
 */
 
+data "aws_caller_identity" "current" {}
+
 #
 # Redirector function invoked by CloudFront
 #
@@ -62,14 +64,16 @@ resource "aws_lambda_permission" "redirector_invoke_function_url" {
   action                 = "lambda:InvokeFunctionUrl"
   function_name          = aws_lambda_function.redirector.function_name
   function_url_auth_type = "NONE"
-  principal              = "*"
+  principal              = "cloudfront.amazonaws.com"
+  source_arn             = "arn:aws:cloudfront::${data.aws_caller_identity.current.account_id}:distribution/*"
 }
 
 resource "aws_lambda_permission" "redirector_invoke_function" {
   statement_id  = "AllowInvokeFunction-${local.lambda_function_name}"
   action        = "lambda:InvokeFunction"
   function_name = aws_lambda_function.redirector.function_name
-  principal     = "*"
+  principal     = "cloudfront.amazonaws.com"
+  source_arn    = "arn:aws:cloudfront::${data.aws_caller_identity.current.account_id}:distribution/*"
 }
 
 #
