@@ -144,6 +144,12 @@ variable "service_discovery_namespace_id" {
   default     = null
 }
 
+variable "deployment_managed_by_code_deploy" {
+  description = "(Optional, false) Determines whether ECS should let AWS CodeDeploy handle deployments"
+  type        = bool
+  default     = false
+}
+
 ################################################################################
 # Autoscaling
 ################################################################################

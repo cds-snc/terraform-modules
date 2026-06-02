@@ -8,4 +8,6 @@ locals {
   task_definition_family = var.task_name != null ? var.task_name : var.service_name
   task_exec_role_arn     = var.task_exec_role_arn != null ? var.task_exec_role_arn : aws_iam_role.this_task_exec.arn
   task_role_arn          = var.task_role_arn != null ? var.task_role_arn : aws_iam_role.this_task.arn
+  service_id             = var.deployment_managed_by_code_deploy ? aws_ecs_service.with_code_deploy[0].id : aws_ecs_service.this[0].id
+  service_name           = var.deployment_managed_by_code_deploy ? aws_ecs_service.with_code_deploy[0].name : aws_ecs_service.this[0].name
 }
