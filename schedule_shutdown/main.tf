@@ -35,7 +35,10 @@ resource "aws_lambda_function" "schedule" {
     mode = "Active"
   }
 
-  tags = local.common_tags
+  tags = {
+    (var.billing_tag_key) = var.billing_tag_value
+    Terraform             = "true"
+  }
 }
 
 data "archive_file" "schedule" {
