@@ -1,6 +1,7 @@
 resource "aws_iam_role" "this" {
   name               = "CodeBuildRunner-${var.project_name}"
   assume_role_policy = data.aws_iam_policy_document.this_assume.json
+  tags               = local.common_tags
 }
 
 resource "aws_iam_role_policy" "this" {
