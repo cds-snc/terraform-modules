@@ -66,6 +66,8 @@ No requirements.
 | <a name="input_decrypt_lambda_timeout"></a> [decrypt\_lambda\_timeout](#input\_decrypt\_lambda\_timeout) | (Optional, default 10) The maximum amount of time in seconds that the Lambda function will process before timing out. | `number` | `10` | no |
 | <a name="input_rds_cluster_arn"></a> [rds\_cluster\_arn](#input\_rds\_cluster\_arn) | (Required) The ARN of the RDS cluster to enable the activity stream on. | `string` | n/a | yes |
 | <a name="input_rds_stream_name"></a> [rds\_stream\_name](#input\_rds\_stream\_name) | (Required) The name that will be used to represent this activity stream's resources.  It must be unique within the account. | `string` | n/a | yes |
+| <a name="input_ssc_cbrid_tag_key"></a> [ssc\_cbrid\_tag\_key](#input\_ssc\_cbrid\_tag\_key) | (Optional, default 'ssc\_cbrid') The tag key for the SSC CBRID | `string` | `"ssc_cbrid"` | no |
+| <a name="input_ssc_cbrid_tag_value"></a> [ssc\_cbrid\_tag\_value](#input\_ssc\_cbrid\_tag\_value) | (Optional) The value of the SSC CBRID tag | `string` | `"22DH"` | no |
 
 ## Outputs
 
