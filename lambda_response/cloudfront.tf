@@ -52,5 +52,8 @@ resource "aws_cloudfront_distribution" "redirector" {
     minimum_protocol_version = "TLSv1.2_2021"
   }
 
-  tags = local.common_tags
+  tags = {
+    (var.billing_tag_key) = var.billing_tag_value
+    Terraform             = "true"
+  }
 }

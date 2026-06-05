@@ -26,7 +26,10 @@ resource "aws_lambda_function" "redirector" {
     mode = "PassThrough"
   }
 
-  tags = local.common_tags
+  tags = {
+    (var.billing_tag_key) = var.billing_tag_value
+    Terraform             = "true"
+  }
 }
 
 data "archive_file" "redirector_src" {
@@ -100,6 +103,8 @@ resource "aws_iam_policy" "redirector_cloudwatch" {
   name   = "lambda-redirector-cloudwatch"
   path   = "/"
   policy = data.aws_iam_policy_document.redirector_cloudwatch.json
+
+  tags = local.common_tags
 }
 
 data "aws_iam_policy_document" "redirector_cloudwatch" {
