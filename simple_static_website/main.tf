@@ -62,6 +62,8 @@ resource "aws_s3_bucket" "this" {
       tags_all["Version"]
     ]
   }
+
+  tags = local.common_tags
 }
 
 resource "aws_s3_bucket_public_access_block" "this" {

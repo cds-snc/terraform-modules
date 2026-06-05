@@ -95,5 +95,8 @@ resource "aws_cloudfront_distribution" "simple_static_website" {
 
   web_acl_id = local.web_acl_arn
 
-  tags = local.common_tags
+  tags = {
+    (var.billing_tag_key) = var.billing_tag_value
+    Terraform             = "true"
+  }
 }

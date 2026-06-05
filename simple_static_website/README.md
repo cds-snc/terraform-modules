@@ -77,6 +77,8 @@ No modules.
 | <a name="input_lambda_function_association"></a> [lambda\_function\_association](#input\_lambda\_function\_association) | (Optional) Map containing lambda function association configuration. A maximum of 4 can be specified. | `list(map(string))` | `[]` | no |
 | <a name="input_s3_bucket_name"></a> [s3\_bucket\_name](#input\_s3\_bucket\_name) | (Optional, default '') Name of the S3 bucket.  If not specified the domain\_name\_source + a random number will be used. | `string` | `""` | no |
 | <a name="input_single_page_app"></a> [single\_page\_app](#input\_single\_page\_app) | (Optional, default 'false') If true, the index document will be returned for all 403 requests to the origin. | `bool` | `false` | no |
+| <a name="input_ssc_cbrid_tag_key"></a> [ssc\_cbrid\_tag\_key](#input\_ssc\_cbrid\_tag\_key) | (Optional, default 'ssc\_cbrid') The tag key for the SSC CBRID | `string` | `"ssc_cbrid"` | no |
+| <a name="input_ssc_cbrid_tag_value"></a> [ssc\_cbrid\_tag\_value](#input\_ssc\_cbrid\_tag\_value) | (Optional) The value of the SSC CBRID tag | `string` | `"22DH"` | no |
 | <a name="input_web_acl_arn"></a> [web\_acl\_arn](#input\_web\_acl\_arn) | (Optional, default null) ARN of the WAF Web ACL to associate with the CloudFront distribution (using version WAFv2). | `string` | `null` | no |
 
 ## Outputs

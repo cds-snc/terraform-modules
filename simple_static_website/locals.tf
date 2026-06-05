@@ -5,8 +5,11 @@ locals {
   web_acl_arn               = var.web_acl_arn != null && var.web_acl_arn != "" ? var.web_acl_arn : aws_wafv2_web_acl.default.arn
   domain_name_sanitized     = replace(var.domain_name_source, ".", "-")
 
-  common_tags = {
-    (var.billing_tag_key) = var.billing_tag_value
-    Terraform             = "true"
-  }
+  common_tags = merge(
+    {
+      (var.billing_tag_key) = var.billing_tag_value
+      Terraform             = "true"
+    },
+    var.ssc_cbrid_tag_value != "" ? { (var.ssc_cbrid_tag_key) = var.ssc_cbrid_tag_value } : {}
+  )
 }
