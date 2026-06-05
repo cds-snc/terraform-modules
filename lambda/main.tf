@@ -57,7 +57,10 @@ resource "aws_lambda_function" "this" {
     }
   }
 
-  tags = local.common_tags
+  tags = {
+    (var.billing_tag_key) = var.billing_tag_value
+    Terraform             = "true"
+  }
 }
 
 resource "aws_cloudwatch_log_group" "this" {
