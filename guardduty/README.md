@@ -36,6 +36,8 @@ No modules.
 | <a name="input_organization_id"></a> [organization\_id](#input\_organization\_id) | The AWS organization to enable GuardDuty in. | `string` | n/a | yes |
 | <a name="input_publishing_bucket_arn"></a> [publishing\_bucket\_arn](#input\_publishing\_bucket\_arn) | (Required) The ARN of the S3 bucket to publish findings to | `string` | n/a | yes |
 | <a name="input_publishing_frequency"></a> [publishing\_frequency](#input\_publishing\_frequency) | Specifies the frequency of notifications sent for subsequent finding occurrences. | `string` | `"FIFTEEN_MINUTES"` | no |
+| <a name="input_ssc_cbrid_tag_key"></a> [ssc\_cbrid\_tag\_key](#input\_ssc\_cbrid\_tag\_key) | (Optional, default 'ssc\_cbrid') The tag key for the SSC CBRID | `string` | `"ssc_cbrid"` | no |
+| <a name="input_ssc_cbrid_tag_value"></a> [ssc\_cbrid\_tag\_value](#input\_ssc\_cbrid\_tag\_value) | (Optional) The value of the SSC CBRID tag | `string` | `"22DH"` | no |
 | <a name="input_tags"></a> [tags](#input\_tags) | (Optional) Key-value map of resource tags. If configured with a provider default\_tags configuration block present,<br/>  tags with matching keys will overwrite those defined at the provider-level." | `map(string)` | `{}` | no |
 
 ## Outputs
