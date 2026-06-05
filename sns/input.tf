@@ -11,6 +11,18 @@ variable "billing_tag_value" {
   default     = null
 }
 
+variable "ssc_cbrid_tag_key" {
+  description = "(Optional, default 'ssc_cbrid') The tag key for the SSC CBRID"
+  type        = string
+  default     = "ssc_cbrid"
+}
+
+variable "ssc_cbrid_tag_value" {
+  description = "(Optional) The value of the SSC CBRID tag"
+  type        = string
+  default     = "22DH"
+}
+
 variable "name" {
   description = "The name of the topic. Topic names must be made up of only uppercase and lowercase ASCII letters, numbers, underscores, and hyphens, and must be between 1 and 256 characters long. For a FIFO (first-in-first-out) topic, the name must end with the .fifo suffix. If omitted, Terraform will assign a random, unique name. Conflicts with name_prefix"
   type        = string
