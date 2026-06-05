@@ -2,7 +2,7 @@ resource "aws_iam_role" "rds_proxy" {
   count = var.use_proxy ? 1 : 0
 
   name               = "${var.name}_rds_proxy"
-  tags               = local.common_tags
+  tags               = merge(local.common_tags, local.cbrid_tags)
   assume_role_policy = data.aws_iam_policy_document.assume_role[0].json
 }
 
@@ -63,7 +63,7 @@ resource "aws_iam_policy" "read_connection_string" {
   name   = "${var.name}ReadConnectionString"
   path   = "/"
   policy = data.aws_iam_policy_document.read_connection_string[0].json
-  tags   = local.common_tags
+  tags   = merge(local.common_tags, local.cbrid_tags)
 }
 
 resource "aws_iam_role_policy_attachment" "read_connection_string" {

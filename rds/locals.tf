@@ -22,4 +22,9 @@ locals {
 
   # Configure the database logs that are exported to CloudWatch.  Default to none for MySQL and `postgresql` for Postgres if no values are specified
   enabled_cloudwatch_logs_exports = length(var.enabled_cloudwatch_logs_exports) > 0 ? var.enabled_cloudwatch_logs_exports : (local.is_mysql ? [] : ["postgresql"])
+
+  # Tags required on IAM, Secrets Manager, CloudWatch, and VPC resources
+  cbrid_tags = {
+    ssc_cbrid = "22DH"
+  }
 }

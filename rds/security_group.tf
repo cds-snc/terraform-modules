@@ -7,7 +7,7 @@ resource "aws_security_group" "rds" {
 
   description = "The Security group that allows communication between the ${local.security_group_desc_target} and the database"
 
-  tags = merge(local.common_tags, {
+  tags = merge(local.common_tags, local.cbrid_tags, {
     Name = local.security_group_name
   })
 
