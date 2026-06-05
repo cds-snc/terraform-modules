@@ -64,6 +64,7 @@ resource "aws_lambda_function" "sentinel_forwarder" {
 
   tags = {
     (var.billing_tag_key) = var.billing_tag_value
+    Terraform             = "true"
   }
 }
 
@@ -143,9 +144,7 @@ resource "aws_cloudwatch_log_group" "sentinel_forwarder_lambda" {
   name              = "/aws/lambda/${var.function_name}"
   retention_in_days = "14"
 
-  tags = {
-    (var.billing_tag_key) = var.billing_tag_value
-  }
+  tags = local.common_tags
 }
 
 #
@@ -160,7 +159,5 @@ resource "aws_ssm_parameter" "sentinel_forwarder_auth" {
   EOT
   )
 
-  tags = {
-    (var.billing_tag_key) = var.billing_tag_value
-  }
+  tags = local.common_tags
 }

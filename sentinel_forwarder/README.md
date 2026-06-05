@@ -72,6 +72,8 @@ No modules.
 | <a name="input_log_type"></a> [log\_type](#input\_log\_type) | (Optional) The namespace for logs. This only applies if you are sending application logs | `string` | `"ApplicationLog"` | no |
 | <a name="input_s3_sources"></a> [s3\_sources](#input\_s3\_sources) | (Optional) List of s3 buckets to trigger the lambda | <pre>list(object({<br/>    bucket_arn    = string<br/>    bucket_id     = string<br/>    filter_prefix = string<br/>    kms_key_arn   = string<br/>  }))</pre> | `[]` | no |
 | <a name="input_shared_key"></a> [shared\_key](#input\_shared\_key) | (Required) Azure log workspace shared secret | `string` | n/a | yes |
+| <a name="input_ssc_cbrid_tag_key"></a> [ssc\_cbrid\_tag\_key](#input\_ssc\_cbrid\_tag\_key) | (Optional, default 'ssc\_cbrid') The tag key for the SSC CBRID | `string` | `"ssc_cbrid"` | no |
+| <a name="input_ssc_cbrid_tag_value"></a> [ssc\_cbrid\_tag\_value](#input\_ssc\_cbrid\_tag\_value) | (Optional) The value of the SSC CBRID tag | `string` | `"22DH"` | no |
 
 ## Outputs
 
