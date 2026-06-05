@@ -46,6 +46,8 @@ No modules.
 | <a name="input_daily_spend_notifier_hook"></a> [daily\_spend\_notifier\_hook](#input\_daily\_spend\_notifier\_hook) | (Required) The identifier of the webhook to be used by the spend notifier lambda daily | `string` | n/a | yes |
 | <a name="input_enable_daily_spend_notification"></a> [enable\_daily\_spend\_notification](#input\_enable\_daily\_spend\_notification) | (Optional) Enable daily spend notification | `bool` | `true` | no |
 | <a name="input_enable_weekly_spend_notification"></a> [enable\_weekly\_spend\_notification](#input\_enable\_weekly\_spend\_notification) | (Optional) Enable weekly spend notification | `bool` | `true` | no |
+| <a name="input_ssc_cbrid_tag_key"></a> [ssc\_cbrid\_tag\_key](#input\_ssc\_cbrid\_tag\_key) | (Optional, default 'ssc\_cbrid') The tag key for the SSC CBRID | `string` | `"ssc_cbrid"` | no |
+| <a name="input_ssc_cbrid_tag_value"></a> [ssc\_cbrid\_tag\_value](#input\_ssc\_cbrid\_tag\_value) | (Optional) The value of the SSC CBRID tag | `string` | `"22DH"` | no |
 | <a name="input_weekly_schedule_expression"></a> [weekly\_schedule\_expression](#input\_weekly\_schedule\_expression) | (Optional) The schedule expression for the weekly spend notification | `string` | `"0 12 ? * SUN *"` | no |
 | <a name="input_weekly_spend_notifier_hook"></a> [weekly\_spend\_notifier\_hook](#input\_weekly\_spend\_notifier\_hook) | (Required) The identifier of the webhook to be used by the spend notifier lambda weekly | `string` | n/a | yes |
 
