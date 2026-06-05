@@ -13,6 +13,8 @@ resource "aws_cloudwatch_event_rule" "new_iam_user_added_event_rule" {
   }
 }
 EOF
+
+  tags = local.common_tags
 }
 
 resource "aws_cloudwatch_event_target" "new_iam_user_added_event_target" {
@@ -28,4 +30,6 @@ resource "aws_cloudwatch_log_group" "lambda_log_group" {
   lifecycle {
     prevent_destroy = false
   }
+
+  tags = local.common_tags
 }

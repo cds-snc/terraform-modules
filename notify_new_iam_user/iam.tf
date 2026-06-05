@@ -22,6 +22,8 @@ resource "aws_iam_role" "new_iam_user_response_role" {
       },
     ]
   })
+
+  tags = local.common_tags
 }
 
 # IAM Policy for Lambda Function
