@@ -39,6 +39,8 @@ No modules.
 | <a name="input_policy_name"></a> [policy\_name](#input\_policy\_name) | (Optional) The name of the policy that will be attached to the role.<br/>    **Please Note:** This is only needed to be set if the default value conflicts with an existing policy name in this account. | `string` | `"TFPlan"` | no |
 | <a name="input_region"></a> [region](#input\_region) | (Optional) The region the resources are in | `string` | `"ca-central-1"` | no |
 | <a name="input_role_name"></a> [role\_name](#input\_role\_name) | (Required) The name of the role to attach the policy to | `string` | n/a | yes |
+| <a name="input_ssc_cbrid_tag_key"></a> [ssc\_cbrid\_tag\_key](#input\_ssc\_cbrid\_tag\_key) | (Optional) The name of the SSC CBRID tag | `string` | `"ssc_cbrid"` | no |
+| <a name="input_ssc_cbrid_tag_value"></a> [ssc\_cbrid\_tag\_value](#input\_ssc\_cbrid\_tag\_value) | (Optional) The value of the SSC CBRID tag. If empty, the SSC CBRID tag will not be applied. | `string` | `"22DH"` | no |
 
 ## Outputs
 

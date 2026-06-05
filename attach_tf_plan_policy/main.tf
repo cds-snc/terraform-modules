@@ -13,6 +13,7 @@ resource "aws_iam_role_policy_attachment" "this" {
 resource "aws_iam_policy" "this" {
   name   = var.policy_name
   policy = data.aws_iam_policy_document.this.json
+  tags   = local.common_tags
 }
 
 data "aws_iam_policy_document" "this" {
