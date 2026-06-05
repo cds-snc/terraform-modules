@@ -51,6 +51,8 @@ No requirements.
 | <a name="input_lambda_timeout"></a> [lambda\_timeout](#input\_lambda\_timeout) | (Optional, default 15 seconds) The timeout for the Lambda function in seconds | `number` | `15` | no |
 | <a name="input_lambda_vpc_config"></a> [lambda\_vpc\_config](#input\_lambda\_vpc\_config) | (Optional, default null) VPC configuration for the Lambda function | <pre>object({<br/>    subnet_ids         = list(string)<br/>    security_group_ids = list(string)<br/>  })</pre> | <pre>{<br/>  "security_group_ids": [],<br/>  "subnet_ids": []<br/>}</pre> | no |
 | <a name="input_s3_arn_write_path"></a> [s3\_arn\_write\_path](#input\_s3\_arn\_write\_path) | (Optional, default null) The ARN of the S3 bucket path to allow write access to.  This sould be in the format 'arn:aws:s3:::bucket-name/path/*' | `string` | `null` | no |
+| <a name="input_ssc_cbrid_tag_key"></a> [ssc\_cbrid\_tag\_key](#input\_ssc\_cbrid\_tag\_key) | (Optional, default 'ssc\_cbrid') The tag key for the SSC CBRID | `string` | `"ssc_cbrid"` | no |
+| <a name="input_ssc_cbrid_tag_value"></a> [ssc\_cbrid\_tag\_value](#input\_ssc\_cbrid\_tag\_value) | (Optional) The value of the SSC CBRID tag | `string` | `"22DH"` | no |
 
 ## Outputs
 
