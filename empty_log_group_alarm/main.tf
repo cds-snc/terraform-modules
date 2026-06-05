@@ -36,6 +36,8 @@ resource "aws_cloudwatch_metric_alarm" "empty_log_group_metric_alarm" {
 
   alarm_description = "Alarm when there are no incoming log events for ${var.time_period_minutes} minutes"
 
+  tags = local.common_tags
+
   alarm_actions             = [var.alarm_sns_topic_arn]
   insufficient_data_actions = [var.alarm_sns_topic_arn]
   ok_actions                = [var.alarm_sns_topic_arn]
@@ -76,4 +78,6 @@ resource "aws_cloudwatch_metric_alarm" "empty_log_group_metric_alarm_using_anoma
   alarm_actions             = [var.alarm_sns_topic_arn]
   insufficient_data_actions = [var.alarm_sns_topic_arn]
   ok_actions                = [var.alarm_sns_topic_arn]
+
+  tags = local.common_tags
 }
