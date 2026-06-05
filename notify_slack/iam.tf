@@ -1,12 +1,16 @@
 resource "aws_iam_role" "notify_slack_lambda" {
   name               = "NotifySlackLambda-${var.function_name}"
   assume_role_policy = data.aws_iam_policy_document.lambda_assume_policy.json
+
+  tags = local.common_tags
 }
 
 resource "aws_iam_policy" "notify_slack_lambda" {
   name   = "NotifySlackLambda-${var.function_name}"
   path   = "/"
   policy = data.aws_iam_policy_document.notify_slack_lambda.json
+
+  tags = local.common_tags
 }
 
 resource "aws_iam_role_policy_attachment" "notify_slack_lambda" {
