@@ -1,12 +1,16 @@
 resource "aws_iam_role" "disable_exposed_iam_credential_lambda" {
   name               = "DisableExposedIAMCredentialLambda-${var.function_name}"
   assume_role_policy = data.aws_iam_policy_document.lambda_assume_policy.json
+
+  tags = local.common_tags
 }
 
 resource "aws_iam_policy" "disable_exposed_iam_credential_lambda" {
   name   = "DisableExposedIAMCredentialLambda-${var.function_name}"
   path   = "/"
   policy = data.aws_iam_policy_document.disable_exposed_iam_credential_lambda.json
+
+  tags = local.common_tags
 }
 
 resource "aws_iam_role_policy_attachment" "disable_exposed_iam_credential_lambda" {

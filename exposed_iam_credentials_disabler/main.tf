@@ -59,6 +59,8 @@ resource "aws_cloudwatch_event_rule" "exposed_iam_credential_found_rule" {
         }
     }
 PATTERN
+
+  tags = local.common_tags
 }
 
 resource "aws_lambda_permission" "disable_exposed_iam_credential_events" {
@@ -83,7 +85,5 @@ resource "aws_cloudwatch_log_group" "disable_exposed_iam_credential_lambda" {
   name              = "/aws/lambda/${var.function_name}"
   retention_in_days = "14"
 
-  tags = {
-    (var.billing_tag_key) = var.billing_tag_value
-  }
+  tags = local.common_tags
 }
