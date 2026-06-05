@@ -39,6 +39,8 @@ No modules.
 | <a name="input_billing_tag_value"></a> [billing\_tag\_value](#input\_billing\_tag\_value) | (Required) The value of the billing tag | `string` | n/a | yes |
 | <a name="input_function_name"></a> [function\_name](#input\_function\_name) | (Required) Name of the Lambda function. | `string` | `"security_group_change_auto_response"` | no |
 | <a name="input_sns_topic"></a> [sns\_topic](#input\_sns\_topic) | (Optional, default 'internal-sre-alert') The name of the sns topic to send alerts to | `string` | `"internal-sre-alert"` | no |
+| <a name="input_ssc_cbrid_tag_key"></a> [ssc\_cbrid\_tag\_key](#input\_ssc\_cbrid\_tag\_key) | (Optional) The name of the SSC CBRID tag | `string` | `"ssc_cbrid"` | no |
+| <a name="input_ssc_cbrid_tag_value"></a> [ssc\_cbrid\_tag\_value](#input\_ssc\_cbrid\_tag\_value) | (Optional) The value of the SSC CBRID tag. If empty, the SSC CBRID tag will not be applied. | `string` | `"22DH"` | no |
 
 ## Outputs
 

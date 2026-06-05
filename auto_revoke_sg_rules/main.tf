@@ -49,6 +49,7 @@ resource "aws_cloudwatch_event_rule" "sg_change_auto_response_event_rule" {
   name          = "security_group_change_auto_response"
   description   = "Responds to security group change events"
   is_enabled    = true
+  tags          = local.common_tags
   event_pattern = <<PATTERN
     {
         "detail-type": [
