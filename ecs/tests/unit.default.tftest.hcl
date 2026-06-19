@@ -99,12 +99,12 @@ run "plan_service_connect" {
   command = plan
 
   variables {
-    subnet_ids                     = ["subnet-12345678"]
-    security_group_ids             = ["sg-12345678"]
-    container_host_port            = 8080
-    container_port                 = 8080
-    service_connect_enabled        = true
-    service_connect_namespace_arn  = "arn:aws:servicediscovery:ca-central-1:123456789012:namespace/ns-abc123"
+    subnet_ids                    = ["subnet-12345678"]
+    security_group_ids            = ["sg-12345678"]
+    container_host_port           = 8080
+    container_port                = 8080
+    service_connect_enabled       = true
+    service_connect_namespace_arn = "arn:aws:servicediscovery:ca-central-1:123456789012:namespace/ns-abc123"
   }
 
   assert {
