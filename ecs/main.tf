@@ -18,7 +18,7 @@ resource "aws_ecs_cluster" "this" {
   }
 
   dynamic "service_connect_defaults" {
-    for_each = var.service_connect_namespace_arn != null ? [1] : []
+    for_each = var.service_connect_enabled ? [1] : []
     content {
       namespace = var.service_connect_namespace_arn
     }
@@ -76,7 +76,7 @@ resource "aws_ecs_service" "this" {
   }
 
   dynamic "service_connect_configuration" {
-    for_each = var.service_connect_namespace_arn != null ? [1] : []
+    for_each = var.service_connect_enabled ? [1] : []
 
     content {
       enabled   = true
@@ -99,21 +99,6 @@ resource "aws_ecs_service" "this" {
           "awslogs-group"         = aws_cloudwatch_log_group.this_service_connect[0].name
           "awslogs-stream-prefix" = "proxy"
         }
-      }
-    }
-  }
-
-
-  dynamic "service" {
-    for_each = var.service_connect_namespace_arn != null ? [1] : []
-
-    content {
-      port_name      = "${var.service_name}-http"
-      discovery_name = var.service_name
-
-      client_alias {
-        port     = var.container_host_port
-        dns_name = var.service_name
       }
     }
   }

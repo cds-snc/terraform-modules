@@ -9,7 +9,7 @@ resource "aws_cloudwatch_log_group" "this" {
 }
 
 resource "aws_cloudwatch_log_group" "this_service_connect" {
-  count = var.service_connect_namespace_arn != null ? 1 : 0
+  count = var.service_connect_enabled ? 1 : 0
 
   name              = "${local.cloudwatch_log_group_name}-service-connect"
   retention_in_days = var.cloudwatch_log_group_retention_in_days

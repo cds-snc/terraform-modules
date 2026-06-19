@@ -21,7 +21,7 @@ locals {
           containerPort = var.container_port
           protocol      = "tcp"
         },
-        var.service_connect_namespace_arn != null ? {
+        var.service_connect_enabled ? {
           name        = "${var.service_name}-http"
           appProtocol = "http"
         } : {}

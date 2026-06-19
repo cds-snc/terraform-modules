@@ -137,8 +137,14 @@ variable "security_group_ids" {
   type        = list(string)
 }
 
+variable "service_connect_enabled" {
+  description = "(Optional, default `false`) Determines if Service Connect should be enabled for the service. If enabled, you must also provide a `service_connect_namespace_arn`."
+  type        = bool
+  default     = false
+}
+
 variable "service_connect_namespace_arn" {
-  description = "(Optional, no default) The ARN of the Service Connect namespace to associate with the service. This will allow the service to be discovered by other services within the namespace."
+  description = "(Optional, no default) The ARN of the Service Connect namespace to associate with the service."
   type        = string
   default     = null
 }
