@@ -47,6 +47,11 @@ variable "desired_count" {
 variable "service_name" {
   description = "(Required) Name of the service (up to 255 letters, numbers, hyphens, and underscores)"
   type        = string
+
+  validation {
+    condition     = can(regex("^[a-zA-Z0-9_-]+$", var.service_name))
+    error_message = "The service name can only contain letters, numbers, hyphens, and underscores"
+  }
 }
 
 variable "service_use_latest_task_def" {
@@ -130,6 +135,12 @@ variable "subnet_ids" {
 variable "security_group_ids" {
   description = "(Required) List of security groups to associate with the service"
   type        = list(string)
+}
+
+variable "service_connect_namespace_arn" {
+  description = "(Optional, no default) The ARN of the Service Connect namespace to associate with the service. This will allow the service to be discovered by other services within the namespace."
+  type        = string
+  default     = null
 }
 
 variable "service_discovery_enabled" {
