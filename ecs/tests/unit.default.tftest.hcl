@@ -95,6 +95,79 @@ run "plan" {
   }
 }
 
+run "plan_service_connect" {
+  command = plan
+
+  variables {
+    subnet_ids                     = ["subnet-12345678"]
+    security_group_ids             = ["sg-12345678"]
+    container_host_port            = 8080
+    container_port                 = 8080
+    service_connect_enabled        = true
+    service_connect_namespace_arn  = "arn:aws:servicediscovery:ca-central-1:123456789012:namespace/ns-abc123"
+  }
+
+  assert {
+    condition     = length(aws_ecs_cluster.this[0].service_connect_defaults) == 1
+    error_message = "Expected service_connect_defaults to be set on the ECS cluster"
+  }
+
+  assert {
+    condition     = [for d in aws_ecs_cluster.this[0].service_connect_defaults : d][0].namespace == "arn:aws:servicediscovery:ca-central-1:123456789012:namespace/ns-abc123"
+    error_message = "Unexpected service_connect_defaults namespace"
+  }
+
+  assert {
+    condition     = length(aws_ecs_service.this[0].service_connect_configuration) == 1
+    error_message = "Expected service_connect_configuration to be set on the ECS service"
+  }
+
+  assert {
+    condition     = [for cfg in aws_ecs_service.this[0].service_connect_configuration : cfg][0].enabled == true
+    error_message = "Expected service_connect_configuration.enabled to be true"
+  }
+
+  assert {
+    condition     = [for cfg in aws_ecs_service.this[0].service_connect_configuration : cfg][0].namespace == "arn:aws:servicediscovery:ca-central-1:123456789012:namespace/ns-abc123"
+    error_message = "Unexpected service_connect_configuration namespace"
+  }
+
+  assert {
+    condition     = [for s in [for cfg in aws_ecs_service.this[0].service_connect_configuration : cfg][0].service : s][0].port_name == "nginx-http"
+    error_message = "Unexpected service_connect service port_name"
+  }
+
+  assert {
+    condition     = [for a in [for s in [for cfg in aws_ecs_service.this[0].service_connect_configuration : cfg][0].service : s][0].client_alias : a][0].port == 8080
+    error_message = "Unexpected service_connect service client_alias port"
+  }
+
+  assert {
+    condition     = [for a in [for s in [for cfg in aws_ecs_service.this[0].service_connect_configuration : cfg][0].service : s][0].client_alias : a][0].dns_name == "nginx"
+    error_message = "Unexpected service_connect service client_alias dns_name"
+  }
+
+  assert {
+    condition     = length(aws_cloudwatch_log_group.this_service_connect) == 1
+    error_message = "Expected service connect CloudWatch log group to be created"
+  }
+
+  assert {
+    condition     = aws_cloudwatch_log_group.this_service_connect[0].name == "/aws/ecs/simple_cluster/nginx-service-connect"
+    error_message = "Unexpected service connect CloudWatch log group name"
+  }
+
+  assert {
+    condition     = jsondecode(aws_ecs_task_definition.this.container_definitions)[0].portMappings[0].name == "nginx-http"
+    error_message = "Expected service connect port mapping name in container definition"
+  }
+
+  assert {
+    condition     = jsondecode(aws_ecs_task_definition.this.container_definitions)[0].portMappings[0].appProtocol == "http"
+    error_message = "Expected service connect appProtocol in container definition"
+  }
+}
+
 run "apply" {
   # Smoke test to validate that the module can successfully be applied
   variables {
