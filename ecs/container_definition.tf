@@ -22,7 +22,7 @@ locals {
           protocol      = "tcp"
         },
         var.service_connect_namespace_arn != null ? {
-          name        = "${local.service_name}-http"
+          name        = "${var.service_name}-http"
           appProtocol = "http"
         } : {}
       )

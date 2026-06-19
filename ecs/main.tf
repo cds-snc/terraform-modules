@@ -83,12 +83,12 @@ resource "aws_ecs_service" "this" {
       namespace = var.service_connect_namespace_arn
 
       service {
-        port_name      = "${local.service_name}-http"
-        discovery_name = local.service_name
+        port_name      = "${var.service_name}-http"
+        discovery_name = var.service_name
 
         client_alias {
           port     = var.container_host_port
-          dns_name = local.service_name
+          dns_name = var.service_name
         }
       }
 
@@ -108,12 +108,12 @@ resource "aws_ecs_service" "this" {
     for_each = var.service_connect_namespace_arn != null ? [1] : []
 
     content {
-      port_name      = "${local.service_name}-http"
-      discovery_name = local.service_name
+      port_name      = "${var.service_name}-http"
+      discovery_name = var.service_name
 
       client_alias {
         port     = var.container_host_port
-        dns_name = local.service_name
+        dns_name = var.service_name
       }
     }
   }
