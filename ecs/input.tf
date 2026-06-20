@@ -155,8 +155,8 @@ variable "service_connect_app_protocol" {
   default     = "http"
 
   validation {
-    condition     = contains(["http", "https", "grpc"], var.service_connect_app_protocol)
-    error_message = "The service connect app protocol can only be 'http', 'https', or 'grpc'"
+    condition     = contains(["http", "http2", "grpc"], var.service_connect_app_protocol)
+    error_message = "The service connect app protocol can only be 'http', 'http2', or 'grpc'"
   }
 }
 
