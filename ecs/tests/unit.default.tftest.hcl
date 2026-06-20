@@ -158,6 +158,11 @@ run "plan_service_connect" {
   }
 
   assert {
+    condition     = contains(jsondecode(data.aws_iam_policy_document.this_task_exec_logs.json).Statement[1].Resource, "${aws_cloudwatch_log_group.this_service_connect[0].arn}:*")
+    error_message = "Expected task execution role logging policy to include the service connect log group"
+  }
+
+  assert {
     condition     = jsondecode(aws_ecs_task_definition.this.container_definitions)[0].portMappings[0].name == "nginx-http"
     error_message = "Expected service connect port mapping name in container definition"
   }
