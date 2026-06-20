@@ -133,7 +133,7 @@ run "plan_service_connect" {
   }
 
   assert {
-    condition     = [for s in [for cfg in aws_ecs_service.this[0].service_connect_configuration : cfg][0].service : s][0].port_name == "nginx"
+    condition     = [for s in [for cfg in aws_ecs_service.this[0].service_connect_configuration : cfg][0].service : s][0].port_name == "nginx-http"
     error_message = "Unexpected service_connect service port_name"
   }
 
