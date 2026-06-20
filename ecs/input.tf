@@ -149,6 +149,12 @@ variable "service_connect_namespace_arn" {
   default     = null
 }
 
+variable "service_connect_app_protocol" {
+  description = "(Optional, default `http`) The protocol used for Service Connect communication with the service. Defaults to `http`."
+  type        = string
+  default     = "http"
+}
+
 variable "service_discovery_enabled" {
   description = "(Optional, false) Determines if service discovery should be enabled for the ECS service.  If enabled you must also provide a `service_discovery_namespace_id`."
   type        = bool

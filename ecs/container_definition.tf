@@ -23,7 +23,7 @@ locals {
         },
         var.service_connect_enabled ? {
           name        = "${var.service_name}-http"
-          appProtocol = "http"
+          appProtocol = var.service_connect_app_protocol
         } : {}
       )
     ] : null
