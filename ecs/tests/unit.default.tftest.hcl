@@ -158,7 +158,7 @@ run "plan_service_connect" {
   }
 
   assert {
-    condition     = jsondecode(aws_ecs_task_definition.this.container_definitions)[0].portMappings[0].name == "nginx"
+    condition     = jsondecode(aws_ecs_task_definition.this.container_definitions)[0].portMappings[0].name == "nginx-http"
     error_message = "Expected service connect port mapping name in container definition"
   }
 

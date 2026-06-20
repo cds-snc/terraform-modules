@@ -90,18 +90,6 @@ variable "container_port" {
   default     = null
 }
 
-variable "container_port_mappings" {
-  description = "(Optional, no default) A list of port mappings to use in the container definition"
-  type = list(object({
-    appProtocol   = optional(string)
-    containerPort = number
-    hostPort      = optional(number)
-    name          = optional(string)
-    protocol      = optional(string)
-  }))
-  default = []
-}
-
 variable "container_definitions" {
   description = "(Optional, no default) List of JSON encoded container definitions to use in addition to the module provided container definition. This allows for the use of sidecar and init containers."
   type        = list(string)
