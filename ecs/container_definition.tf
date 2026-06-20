@@ -23,7 +23,7 @@ locals {
             protocol      = "tcp"
           },
           var.service_connect_enabled ? {
-            name        = "${var.service_name}-http"
+            name        = "${var.service_name}-${var.service_connect_app_protocol}"
             appProtocol = var.service_connect_app_protocol
           } : {}
         )

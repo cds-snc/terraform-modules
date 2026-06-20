@@ -83,7 +83,7 @@ resource "aws_ecs_service" "this" {
       namespace = var.service_connect_namespace_arn
 
       service {
-        port_name      = "${var.service_name}-http"
+        port_name      = "${var.service_name}-${var.service_connect_app_protocol}"
         discovery_name = var.service_name
 
         client_alias {

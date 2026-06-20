@@ -165,6 +165,11 @@ variable "service_connect_app_protocol" {
   description = "(Optional, default `http`) The protocol used for Service Connect communication with the service. Defaults to `http`."
   type        = string
   default     = "http"
+
+  validation {
+    condition     = contains(["http", "https", "grpc"], var.service_connect_app_protocol)
+    error_message = "The service connect app protocol can only be 'http', 'https', or 'grpc'"
+  }
 }
 
 variable "service_discovery_enabled" {
