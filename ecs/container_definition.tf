@@ -14,19 +14,21 @@ locals {
     systemControls  = length(var.container_system_controls) > 0 ? var.container_system_controls : []
     volumesFrom     = length(var.container_volumes_from) > 0 ? var.container_volumes_from : []
 
-    portMappings = var.container_host_port != null && var.container_port != null ? [
-      merge(
-        {
-          hostPort      = var.container_host_port
-          containerPort = var.container_port
-          protocol      = "tcp"
-        },
-        var.service_connect_enabled ? {
-          name        = "${var.service_name}-http"
-          appProtocol = var.service_connect_app_protocol
-        } : {}
-      )
-    ] : null
+    portMappings = length(var.container_port_mappings) > 0 ? var.container_port_mappings : (
+      var.container_host_port != null && var.container_port != null ? [
+        merge(
+          {
+            hostPort      = var.container_host_port
+            containerPort = var.container_port
+            protocol      = "tcp"
+          },
+          var.service_connect_enabled ? {
+            name        = "${var.service_name}-http"
+            appProtocol = var.service_connect_app_protocol
+          } : {}
+        )
+      ] : null
+    )
 
     logConfiguration = {
       logDriver = "awslogs",

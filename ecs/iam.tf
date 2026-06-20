@@ -64,7 +64,7 @@ data "aws_iam_policy_document" "this_task_exec_logs" {
     ]
     resources = concat([
       "${aws_cloudwatch_log_group.this.arn}:*",
-    ], var.service_connect_enabled ? [
+      ], var.service_connect_enabled ? [
       "${aws_cloudwatch_log_group.this_service_connect[0].arn}:*",
     ] : [])
   }
