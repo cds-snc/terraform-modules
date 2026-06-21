@@ -82,13 +82,17 @@ resource "aws_ecs_service" "this" {
       enabled   = true
       namespace = var.service_connect_namespace_arn
 
-      service {
-        port_name      = "${var.service_name}-${var.service_connect_app_protocol}"
-        discovery_name = var.service_name
+      dynamic "service" {
+        for_each = var.service_connect_client_only ? [] : [1]
 
-        client_alias {
-          port     = var.container_host_port
-          dns_name = var.service_name
+        content {
+          port_name      = "${var.service_name}-${var.service_connect_app_protocol}"
+          discovery_name = var.service_name
+
+          client_alias {
+            port     = var.container_host_port
+            dns_name = var.service_name
+          }
         }
       }
 

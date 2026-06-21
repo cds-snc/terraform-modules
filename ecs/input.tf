@@ -143,6 +143,12 @@ variable "service_connect_enabled" {
   default     = false
 }
 
+variable "service_connect_client_only" {
+  description = "(Optional, default `false`) Determines if the service should be registered as a client-only service in Service Connect. Client-only services are not discoverable by other services, but can make requests to other services in the Service Connect namespace."
+  type        = bool
+  default     = false
+}
+
 variable "service_connect_namespace_arn" {
   description = "(Optional, no default) The ARN of the Service Connect namespace to associate with the service."
   type        = string
