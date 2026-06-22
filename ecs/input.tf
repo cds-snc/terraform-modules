@@ -47,6 +47,11 @@ variable "desired_count" {
 variable "service_name" {
   description = "(Required) Name of the service (up to 255 letters, numbers, hyphens, and underscores)"
   type        = string
+
+  validation {
+    condition     = can(regex("^[a-zA-Z0-9_-]+$", var.service_name))
+    error_message = "The service name can only contain letters, numbers, hyphens, and underscores"
+  }
 }
 
 variable "service_use_latest_task_def" {
@@ -130,6 +135,35 @@ variable "subnet_ids" {
 variable "security_group_ids" {
   description = "(Required) List of security groups to associate with the service"
   type        = list(string)
+}
+
+variable "service_connect_enabled" {
+  description = "(Optional, default `false`) Determines if Service Connect should be enabled for the service. If enabled, you must also provide a `service_connect_namespace_arn`."
+  type        = bool
+  default     = false
+}
+
+variable "service_connect_client_only" {
+  description = "(Optional, default `false`) Determines if the service should be registered as a client-only service in Service Connect. Client-only services are not discoverable by other services, but can make requests to other services in the Service Connect namespace."
+  type        = bool
+  default     = false
+}
+
+variable "service_connect_namespace_arn" {
+  description = "(Optional, no default) The ARN of the Service Connect namespace to associate with the service."
+  type        = string
+  default     = null
+}
+
+variable "service_connect_app_protocol" {
+  description = "(Optional, default `http`) The protocol used for Service Connect communication with the service. Defaults to `http`."
+  type        = string
+  default     = "http"
+
+  validation {
+    condition     = contains(["http", "http2", "grpc"], var.service_connect_app_protocol)
+    error_message = "The service connect app protocol can only be 'http', 'http2', or 'grpc'"
+  }
 }
 
 variable "service_discovery_enabled" {

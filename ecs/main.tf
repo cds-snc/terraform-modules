@@ -17,6 +17,13 @@ resource "aws_ecs_cluster" "this" {
     value = "enabled"
   }
 
+  dynamic "service_connect_defaults" {
+    for_each = var.service_connect_enabled ? [1] : []
+    content {
+      namespace = var.service_connect_namespace_arn
+    }
+  }
+
   tags = local.common_tags
 }
 
@@ -66,6 +73,38 @@ resource "aws_ecs_service" "this" {
     subnets          = var.subnet_ids
     security_groups  = var.security_group_ids
     assign_public_ip = false
+  }
+
+  dynamic "service_connect_configuration" {
+    for_each = var.service_connect_enabled ? [1] : []
+
+    content {
+      enabled   = true
+      namespace = var.service_connect_namespace_arn
+
+      dynamic "service" {
+        for_each = var.service_connect_client_only ? [] : [1]
+
+        content {
+          port_name      = "${var.service_name}-${var.service_connect_app_protocol}"
+          discovery_name = var.service_name
+
+          client_alias {
+            port     = var.container_host_port
+            dns_name = var.service_name
+          }
+        }
+      }
+
+      log_configuration {
+        log_driver = "awslogs"
+        options = {
+          "awslogs-region"        = data.aws_region.current.name
+          "awslogs-group"         = aws_cloudwatch_log_group.this_service_connect[0].name
+          "awslogs-stream-prefix" = "proxy"
+        }
+      }
+    }
   }
 
   # Simple load balancer configuration

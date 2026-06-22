@@ -8,6 +8,14 @@ resource "aws_cloudwatch_log_group" "this" {
   tags              = local.common_tags
 }
 
+resource "aws_cloudwatch_log_group" "this_service_connect" {
+  count = var.service_connect_enabled ? 1 : 0
+
+  name              = "${local.cloudwatch_log_group_name}-service-connect"
+  retention_in_days = var.cloudwatch_log_group_retention_in_days
+  tags              = local.common_tags
+}
+
 # Forward logs to Sentinel
 module "sentinel_forwarder" {
   count             = var.sentinel_forwarder ? 1 : 0
