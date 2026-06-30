@@ -44,4 +44,7 @@ No modules.
 
 ## Outputs
 
-No outputs.
+| Name | Description |
+|------|-------------|
+| <a name="output_athena_database_name"></a> [athena\_database\_name](#output\_athena\_database\_name) | The name of the Athena database |
+| <a name="output_athena_workgroup_name"></a> [athena\_workgroup\_name](#output\_athena\_workgroup\_name) | The name of the Athena workgroup |
