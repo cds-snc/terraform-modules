@@ -17,6 +17,7 @@
 - [AWS Government of Canada password policy](aws_goc_password_policy)
 - [CDS Conformance Pack](cds_conformance_pack)
 - [Client VPN](client_vpn)
+- [CloudWatch Log Storage](cloudwatch_log_storage)
 - [CodeBuild GitHub runner](codebuild_github_runner)
 - [DocumentDB](DocumentDB)
 - [Empty log group alarm](empty_log_group_alarm)
