@@ -46,6 +46,7 @@ No requirements.
 | <a name="input_billing_tag_key"></a> [billing\_tag\_key](#input\_billing\_tag\_key) | (Optional, default 'CostCentre') The name of the billing tag | `string` | `"CostCentre"` | no |
 | <a name="input_billing_tag_value"></a> [billing\_tag\_value](#input\_billing\_tag\_value) | (Required) The value of the billing tag | `string` | n/a | yes |
 | <a name="input_cloudwatch_log_group_names"></a> [cloudwatch\_log\_group\_names](#input\_cloudwatch\_log\_group\_names) | (Required) The names of the CloudWatch log groups to subscribe to | `list(string)` | n/a | yes |
+| <a name="input_log_expiration_days"></a> [log\_expiration\_days](#input\_log\_expiration\_days) | (Optional, default 730) The number of days to retain logs in S3 before they are deleted | `number` | `730` | no |
 | <a name="input_product_name"></a> [product\_name](#input\_product\_name) | (Required) The name of the product | `string` | n/a | yes |
 
 ## Outputs
