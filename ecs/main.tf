@@ -93,6 +93,17 @@ resource "aws_ecs_service" "this" {
             port     = var.container_host_port
             dns_name = var.service_name
           }
+
+          dynamic "tls" {
+            for_each = var.service_connect_tls_enabled ? [1] : []
+
+            content {
+              issuer_cert_authority {
+                aws_pca_authority_arn = var.service_connect_tls_cert_authority_arn
+              }
+              role_arn = aws_iam_role.this_service_connect_tls_cert[0].arn
+            }
+          }
         }
       }
 

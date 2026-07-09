@@ -114,3 +114,52 @@ resource "aws_iam_role_policy_attachment" "this_task" {
   role       = aws_iam_role.this_task.name
   policy_arn = aws_iam_policy.this_task[0].arn
 }
+
+################################################################################
+# Service Connect TLS role: used to receive a certificate from ACM PCA
+################################################################################
+
+resource "aws_iam_role" "this_service_connect_tls_cert" {
+  count              = var.service_connect_tls_enabled ? 1 : 0
+  name               = "${local.task_definition_family}_ecs_service_connect_tls_cert_role"
+  assume_role_policy = data.aws_iam_policy_document.this_service_connect_tls_cert_assume[0].json
+  tags               = local.common_tags
+}
+
+data "aws_iam_policy_document" "this_service_connect_tls_cert_assume" {
+  count = var.service_connect_tls_enabled ? 1 : 0
+  statement {
+    actions = ["sts:AssumeRole"]
+    principals {
+      type        = "Service"
+      identifiers = ["ecs.amazonaws.com"]
+    }
+  }
+}
+
+resource "aws_iam_policy" "this_service_connect_tls_cert" {
+  count  = var.service_connect_tls_enabled ? 1 : 0
+  name   = "${local.task_definition_family}_ecs_service_connect_tls_cert_policy"
+  path   = "/"
+  policy = data.aws_iam_policy_document.this_service_connect_tls_cert[0].json
+  tags   = local.common_tags
+}
+
+data "aws_iam_policy_document" "this_service_connect_tls_cert" {
+  count = var.service_connect_tls_enabled ? 1 : 0
+  statement {
+    effect = "Allow"
+    actions = [
+      "acm-pca:RequestCertificate",
+      "acm-pca:GetCertificate"
+    ]
+    resources = [var.service_connect_tls_cert_authority_arn]
+  }
+}
+
+
+resource "aws_iam_role_policy_attachment" "this_service_connect_tls_cert" {
+  count      = var.service_connect_tls_enabled ? 1 : 0
+  role       = aws_iam_role.this_service_connect_tls_cert[0].name
+  policy_arn = aws_iam_policy.this_service_connect_tls_cert[0].arn
+}

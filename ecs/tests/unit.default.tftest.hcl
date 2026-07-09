@@ -168,6 +168,82 @@ run "plan_service_connect" {
   }
 }
 
+run "plan_service_connect_tls" {
+  command = plan
+
+  variables {
+    subnet_ids                             = ["subnet-12345678"]
+    security_group_ids                     = ["sg-12345678"]
+    container_host_port                    = 8080
+    container_port                         = 8080
+    service_connect_enabled                = true
+    service_connect_namespace_arn          = "arn:aws:servicediscovery:ca-central-1:123456789012:namespace/ns-abc123"
+    service_connect_tls_enabled            = true
+    service_connect_tls_cert_authority_arn = "arn:aws:acm-pca:ca-central-1:123456789012:certificate-authority/abc12345-1234-1234-1234-abc123456789"
+  }
+
+  assert {
+    condition     = length(aws_iam_role.this_service_connect_tls_cert) == 1
+    error_message = "Expected service connect TLS IAM role to be created"
+  }
+
+  assert {
+    condition     = aws_iam_role.this_service_connect_tls_cert[0].name == "nginx_ecs_service_connect_tls_cert_role"
+    error_message = "Unexpected service connect TLS IAM role name"
+  }
+
+  assert {
+    condition     = length(aws_iam_policy.this_service_connect_tls_cert) == 1
+    error_message = "Expected service connect TLS IAM policy to be created"
+  }
+
+  assert {
+    condition     = aws_iam_policy.this_service_connect_tls_cert[0].name == "nginx_ecs_service_connect_tls_cert_policy"
+    error_message = "Unexpected service connect TLS IAM policy name"
+  }
+
+  assert {
+    condition     = length(aws_iam_role_policy_attachment.this_service_connect_tls_cert) == 1
+    error_message = "Expected service connect TLS IAM role policy attachment to be created"
+  }
+
+  assert {
+    condition     = length([for s in [for cfg in aws_ecs_service.this[0].service_connect_configuration : cfg][0].service : s][0].tls) == 1
+    error_message = "Expected TLS block to be set on the service connect service"
+  }
+
+  assert {
+    condition     = [for t in [for s in [for cfg in aws_ecs_service.this[0].service_connect_configuration : cfg][0].service : s][0].tls : t][0].issuer_cert_authority[0].aws_pca_authority_arn == "arn:aws:acm-pca:ca-central-1:123456789012:certificate-authority/abc12345-1234-1234-1234-abc123456789"
+    error_message = "Unexpected service connect TLS certificate authority ARN"
+  }
+}
+
+run "plan_service_connect_tls_disabled" {
+  command = plan
+
+  variables {
+    subnet_ids              = ["subnet-12345678"]
+    security_group_ids      = ["sg-12345678"]
+    container_host_port     = 8080
+    service_connect_enabled = false
+  }
+
+  assert {
+    condition     = length(aws_iam_role.this_service_connect_tls_cert) == 0
+    error_message = "Expected no TLS IAM role when service_connect_tls_enabled is false"
+  }
+
+  assert {
+    condition     = length(aws_iam_policy.this_service_connect_tls_cert) == 0
+    error_message = "Expected no TLS IAM policy when service_connect_tls_enabled is false"
+  }
+
+  assert {
+    condition     = length(aws_iam_role_policy_attachment.this_service_connect_tls_cert) == 0
+    error_message = "Expected no TLS IAM role policy attachment when service_connect_tls_enabled is false"
+  }
+}
+
 run "apply" {
   # Smoke test to validate that the module can successfully be applied
   variables {
