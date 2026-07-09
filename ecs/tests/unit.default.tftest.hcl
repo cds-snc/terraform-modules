@@ -193,18 +193,13 @@ run "plan_service_connect_tls" {
   }
 
   assert {
-    condition     = length(aws_iam_policy.this_service_connect_tls_cert) == 1
-    error_message = "Expected service connect TLS IAM policy to be created"
-  }
-
-  assert {
-    condition     = aws_iam_policy.this_service_connect_tls_cert[0].name == "nginx_ecs_service_connect_tls_cert_policy"
-    error_message = "Unexpected service connect TLS IAM policy name"
-  }
-
-  assert {
     condition     = length(aws_iam_role_policy_attachment.this_service_connect_tls_cert) == 1
     error_message = "Expected service connect TLS IAM role policy attachment to be created"
+  }
+
+  assert {
+    condition     = aws_iam_role_policy_attachment.this_service_connect_tls_cert[0].policy_arn == "arn:aws:iam::aws:policy/service-role/AmazonECSInfrastructureRolePolicyForServiceConnectTransportLayerSecurity"
+    error_message = "Expected service connect TLS role to use the AWS managed infrastructure policy"
   }
 
   assert {
@@ -231,11 +226,6 @@ run "plan_service_connect_tls_disabled" {
   assert {
     condition     = length(aws_iam_role.this_service_connect_tls_cert) == 0
     error_message = "Expected no TLS IAM role when service_connect_tls_enabled is false"
-  }
-
-  assert {
-    condition     = length(aws_iam_policy.this_service_connect_tls_cert) == 0
-    error_message = "Expected no TLS IAM policy when service_connect_tls_enabled is false"
   }
 
   assert {
