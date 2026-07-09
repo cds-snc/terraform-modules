@@ -32,15 +32,20 @@ No requirements.
 | [aws_ecs_service.this](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/ecs_service) | resource |
 | [aws_ecs_service.with_code_deploy](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/ecs_service) | resource |
 | [aws_ecs_task_definition.this](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/ecs_task_definition) | resource |
+| [aws_iam_policy.this_service_connect_tls_cert](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/iam_policy) | resource |
 | [aws_iam_policy.this_task](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/iam_policy) | resource |
 | [aws_iam_policy.this_task_exec](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/iam_policy) | resource |
+| [aws_iam_role.this_service_connect_tls_cert](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/iam_role) | resource |
 | [aws_iam_role.this_task](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/iam_role) | resource |
 | [aws_iam_role.this_task_exec](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/iam_role) | resource |
+| [aws_iam_role_policy_attachment.this_service_connect_tls_cert](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/iam_role_policy_attachment) | resource |
 | [aws_iam_role_policy_attachment.this_task](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/iam_role_policy_attachment) | resource |
 | [aws_iam_role_policy_attachment.this_task_exec](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/iam_role_policy_attachment) | resource |
 | [aws_service_discovery_service.this](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/service_discovery_service) | resource |
 | [aws_ssm_parameter.container_image_deployed](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/ssm_parameter) | resource |
 | [aws_ecs_cluster.this](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/data-sources/ecs_cluster) | data source |
+| [aws_iam_policy_document.this_service_connect_tls_cert](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/data-sources/iam_policy_document) | data source |
+| [aws_iam_policy_document.this_service_connect_tls_cert_assume](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/data-sources/iam_policy_document) | data source |
 | [aws_iam_policy_document.this_task_assume](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/data-sources/iam_policy_document) | data source |
 | [aws_iam_policy_document.this_task_combined](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/data-sources/iam_policy_document) | data source |
 | [aws_iam_policy_document.this_task_exec_assume](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/data-sources/iam_policy_document) | data source |
@@ -107,6 +112,8 @@ No requirements.
 | <a name="input_service_connect_client_only"></a> [service\_connect\_client\_only](#input\_service\_connect\_client\_only) | (Optional, default `false`) Determines if the service should be registered as a client-only service in Service Connect. Client-only services are not discoverable by other services, but can make requests to other services in the Service Connect namespace. | `bool` | `false` | no |
 | <a name="input_service_connect_enabled"></a> [service\_connect\_enabled](#input\_service\_connect\_enabled) | (Optional, default `false`) Determines if Service Connect should be enabled for the service. If enabled, you must also provide a `service_connect_namespace_arn`. | `bool` | `false` | no |
 | <a name="input_service_connect_namespace_arn"></a> [service\_connect\_namespace\_arn](#input\_service\_connect\_namespace\_arn) | (Optional, no default) The ARN of the Service Connect namespace to associate with the service. | `string` | `null` | no |
+| <a name="input_service_connect_tls_cert_authority_arn"></a> [service\_connect\_tls\_cert\_authority\_arn](#input\_service\_connect\_tls\_cert\_authority\_arn) | (Optional, no default) The ARN of the Service Connect TLS certificate authority to use for the service. | `string` | `null` | no |
+| <a name="input_service_connect_tls_enabled"></a> [service\_connect\_tls\_enabled](#input\_service\_connect\_tls\_enabled) | (Optional, default `false`) Determines if Service Connect TLS should be enabled for the service. If enabled, you must also provide a `service_connect_tls_cert_authority_arn`. | `bool` | `false` | no |
 | <a name="input_service_discovery_enabled"></a> [service\_discovery\_enabled](#input\_service\_discovery\_enabled) | (Optional, false) Determines if service discovery should be enabled for the ECS service.  If enabled you must also provide a `service_discovery_namespace_id`. | `bool` | `false` | no |
 | <a name="input_service_discovery_namespace_id"></a> [service\_discovery\_namespace\_id](#input\_service\_discovery\_namespace\_id) | (Optional, no default) Service discovery namespace ID to associate with the service.  This will allow the service to be discovered by other services within the namespace. | `string` | `null` | no |
 | <a name="input_service_name"></a> [service\_name](#input\_service\_name) | (Required) Name of the service (up to 255 letters, numbers, hyphens, and underscores) | `string` | n/a | yes |

@@ -166,6 +166,18 @@ variable "service_connect_app_protocol" {
   }
 }
 
+variable "service_connect_tls_enabled" {
+  description = "(Optional, default `false`) Determines if Service Connect TLS should be enabled for the service. If enabled, you must also provide a `service_connect_tls_cert_authority_arn`."
+  type        = bool
+  default     = false
+}
+
+variable "service_connect_tls_cert_authority_arn" {
+  description = "(Optional, no default) The ARN of the Service Connect TLS certificate authority to use for the service."
+  type        = string
+  default     = null
+}
+
 variable "service_discovery_enabled" {
   description = "(Optional, false) Determines if service discovery should be enabled for the ECS service.  If enabled you must also provide a `service_discovery_namespace_id`."
   type        = bool
