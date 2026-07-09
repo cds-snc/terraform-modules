@@ -1,10 +1,14 @@
 locals {
   cloudwatch_log_group_name = var.cloudwatch_log_group_append_service_name ? "/aws/ecs/${var.cluster_name}/${var.service_name}" : "/aws/ecs/${var.cluster_name}"
-  common_tags = merge(
-    {
-      (var.billing_tag_key) = var.billing_tag_value
-      Terraform             = true
-    },
+  # Base tag set applied to all resources EXCEPT the cbrid tag
+  common_tags = {
+    (var.billing_tag_key) = var.billing_tag_value
+    Terraform             = true
+  }
+  # Tag set that additionally includes the SSC CBRID tag, applied to the
+  # ECS cluster, service, and task definition only
+  common_tags_with_cbrid = merge(
+    local.common_tags,
     var.ssc_cbrid_tag_value != "" ? { (var.ssc_cbrid_tag_key) = var.ssc_cbrid_tag_value } : {}
   )
   container_name         = var.container_name != null ? var.container_name : local.task_definition_family

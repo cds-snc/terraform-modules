@@ -286,7 +286,7 @@ resource "aws_ssm_parameter" "container_image_deployed" {
   name  = "/ecs/${var.cluster_name}/${var.service_name}/container-image"
   type  = "String"
   value = var.container_image
-  tags  = local.common_tags
+  tags  = local.common_tags_with_cbrid
 
   lifecycle {
     ignore_changes = [
