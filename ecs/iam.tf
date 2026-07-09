@@ -137,29 +137,8 @@ data "aws_iam_policy_document" "this_service_connect_tls_cert_assume" {
   }
 }
 
-resource "aws_iam_policy" "this_service_connect_tls_cert" {
-  count  = var.service_connect_tls_enabled ? 1 : 0
-  name   = "${local.task_definition_family}_ecs_service_connect_tls_cert_policy"
-  path   = "/"
-  policy = data.aws_iam_policy_document.this_service_connect_tls_cert[0].json
-  tags   = local.common_tags_with_cbrid
-}
-
-data "aws_iam_policy_document" "this_service_connect_tls_cert" {
-  count = var.service_connect_tls_enabled ? 1 : 0
-  statement {
-    effect = "Allow"
-    actions = [
-      "acm-pca:RequestCertificate",
-      "acm-pca:GetCertificate"
-    ]
-    resources = [var.service_connect_tls_cert_authority_arn]
-  }
-}
-
-
 resource "aws_iam_role_policy_attachment" "this_service_connect_tls_cert" {
   count      = var.service_connect_tls_enabled ? 1 : 0
   role       = aws_iam_role.this_service_connect_tls_cert[0].name
-  policy_arn = aws_iam_policy.this_service_connect_tls_cert[0].arn
+  policy_arn = "arn:aws:iam::aws:policy/service-role/AmazonECSInfrastructureRolePolicyForServiceConnectTransportLayerSecurity"
 }
