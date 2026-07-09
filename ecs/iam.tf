@@ -5,7 +5,7 @@
 resource "aws_iam_role" "this_task_exec" {
   name               = "${local.task_definition_family}_ecs_task_exec_role"
   assume_role_policy = data.aws_iam_policy_document.this_task_exec_assume.json
-  tags               = local.common_tags
+  tags               = local.common_tags_with_cbrid
 }
 
 data "aws_iam_policy_document" "this_task_exec_assume" {
@@ -22,7 +22,7 @@ resource "aws_iam_policy" "this_task_exec" {
   name   = "${local.task_definition_family}_ecs_task_exec_policy"
   path   = "/"
   policy = data.aws_iam_policy_document.this_task_exec_combined.json
-  tags   = local.common_tags
+  tags   = local.common_tags_with_cbrid
 }
 
 data "aws_iam_policy_document" "this_task_exec_combined" {
@@ -83,7 +83,7 @@ resource "aws_iam_role_policy_attachment" "this_task_exec" {
 resource "aws_iam_role" "this_task" {
   name               = "${local.task_definition_family}_ecs_task_role"
   assume_role_policy = data.aws_iam_policy_document.this_task_assume.json
-  tags               = local.common_tags
+  tags               = local.common_tags_with_cbrid
 }
 
 data "aws_iam_policy_document" "this_task_assume" {
@@ -101,7 +101,7 @@ resource "aws_iam_policy" "this_task" {
   name   = "${local.task_definition_family}_ecs_task_policy"
   path   = "/"
   policy = data.aws_iam_policy_document.this_task_combined[0].json
-  tags   = local.common_tags
+  tags   = local.common_tags_with_cbrid
 }
 
 data "aws_iam_policy_document" "this_task_combined" {
@@ -123,7 +123,7 @@ resource "aws_iam_role" "this_service_connect_tls_cert" {
   count              = var.service_connect_tls_enabled ? 1 : 0
   name               = "${local.task_definition_family}_ecs_service_connect_tls_cert_role"
   assume_role_policy = data.aws_iam_policy_document.this_service_connect_tls_cert_assume[0].json
-  tags               = local.common_tags
+  tags               = local.common_tags_with_cbrid
 }
 
 data "aws_iam_policy_document" "this_service_connect_tls_cert_assume" {
@@ -142,7 +142,7 @@ resource "aws_iam_policy" "this_service_connect_tls_cert" {
   name   = "${local.task_definition_family}_ecs_service_connect_tls_cert_policy"
   path   = "/"
   policy = data.aws_iam_policy_document.this_service_connect_tls_cert[0].json
-  tags   = local.common_tags
+  tags   = local.common_tags_with_cbrid
 }
 
 data "aws_iam_policy_document" "this_service_connect_tls_cert" {

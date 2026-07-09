@@ -15,5 +15,5 @@ resource "aws_service_discovery_service" "this" {
     failure_threshold = 1
   }
 
-  tags = local.common_tags
+  tags = local.common_tags_with_cbrid
 }
