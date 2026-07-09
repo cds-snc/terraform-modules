@@ -5,8 +5,7 @@ locals {
     (var.billing_tag_key) = var.billing_tag_value
     Terraform             = true
   }
-  # Tag set that additionally includes the SSC CBRID tag, applied to the
-  # ECS cluster, service, and task definition only
+  # Tag set that additionally includes the SSC CBRID tag
   common_tags_with_cbrid = merge(
     local.common_tags,
     var.ssc_cbrid_tag_value != "" ? { (var.ssc_cbrid_tag_key) = var.ssc_cbrid_tag_value } : {}
