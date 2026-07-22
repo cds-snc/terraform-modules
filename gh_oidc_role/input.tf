@@ -55,14 +55,35 @@ variable "roles" {
   claim: The claim that the token is allowed to be authorized from. 
   This allows you to further restrict where this role is allowed to be used.
   If you wanted to restrict to the main branch you could use a value like `ref:refs/heads/main`, if you don't want to restrict you can use `*`
+
+  claims: (Optional) A list of subject claims to allow, used when a single role needs to be assumable
+  from more than one repo, branch or org. Each entry supports:
+    - repo_name: (Required) The name of the repo to authenticate.
+    - claim:     (Required) The claim that the token is allowed to be authorized from.
+    - org_name:  (Optional) Overrides the module-level `org_name` for this entry. Useful when the same
+                 role must trust more than one org (e.g. `cds-snc` and `cds-snc@30166251`).
+  When `claims` is set it takes precedence over the single `repo_name`/`claim` pair.
   EOF
 
   type = set(object({
     name : string,
-    repo_name : string,
-    claim : string
+    repo_name : optional(string),
+    claim : optional(string),
+    claims : optional(list(object({
+      repo_name : string,
+      claim : string,
+      org_name : optional(string)
+    })), [])
   }))
   default = []
+
+  validation {
+    condition = alltrue([
+      for r in var.roles :
+      length(r.claims) > 0 || (r.repo_name != null && r.claim != null)
+    ])
+    error_message = "Each role must set either `claims` (a non-empty list) or both `repo_name` and `claim`."
+  }
 }
 
 variable "assume_policy" {

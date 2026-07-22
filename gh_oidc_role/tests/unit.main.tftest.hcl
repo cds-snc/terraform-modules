@@ -99,3 +99,56 @@ run "default_inputs" {
     error_message = "IAM read-only role assume policy name did not match expected value"
   }
 }
+
+run "multiple_claims" {
+  command = plan
+
+  variables {
+    roles = [
+      {
+        name = "multi-claim"
+        claims = [
+          {
+            repo_name = "*"
+            claim     = "ref:refs/heads/main"
+          },
+          {
+            org_name  = "cds-snc@11111111"
+            repo_name = "*"
+            claim     = "ref:refs/heads/main"
+          }
+        ]
+      }
+    ]
+  }
+
+  assert {
+    condition     = length(aws_iam_role.this) == 1
+    error_message = "IAM role count did not match expected value"
+  }
+
+  assert {
+    condition = aws_iam_role.this["multi-claim"].assume_role_policy == jsonencode({
+      Statement = [
+        {
+          Action = "sts:AssumeRoleWithWebIdentity"
+          Condition = {
+            StringLike = {
+              "token.actions.githubusercontent.com:sub" = [
+                "repo:cds-snc/*:ref:refs/heads/main",
+                "repo:cds-snc@11111111/*:ref:refs/heads/main",
+              ]
+            }
+          }
+          Effect = "Allow"
+          Principal = {
+            Federated = "arn:aws:iam::${run.setup.account_id}:oidc-provider/token.actions.githubusercontent.com"
+          }
+        },
+      ]
+      Version = "2012-10-17"
+    })
+    error_message = "IAM multi-claim role assume policy did not match expected value"
+  }
+}
+
