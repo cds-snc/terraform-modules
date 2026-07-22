@@ -32,11 +32,13 @@ run "default_inputs" {
         name      = "read-only"
         repo_name = "terraform-modules"
         claim     = "ref:refs/heads/*"
+        claims    = []
       },
       "admin" = {
         name      = "admin"
         repo_name = "platform-core-services"
         claim     = "ref:refs/heads/main"
+        claims    = []
       }
     }
     error_message = "Local roles key-value list did not match expected value"
