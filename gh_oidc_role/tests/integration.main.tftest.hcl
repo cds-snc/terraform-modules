@@ -22,13 +22,13 @@ run "custom_inputs" {
   }
 
   assert {
-    condition = local.roles_kv == {
-      "admin" = {
-        name      = "admin"
-        repo_name = "platform-core-services"
-        claim     = "ref:refs/heads/main"
-      }
-    }
+    condition = alltrue([
+      toset(keys(local.roles_kv)) == toset(["admin"]),
+      local.roles_kv["admin"].name == "admin",
+      local.roles_kv["admin"].repo_name == "platform-core-services",
+      local.roles_kv["admin"].claim == "ref:refs/heads/main",
+      length(local.roles_kv["admin"].claims) == 0,
+    ])
     error_message = "Local roles key-value list did not match expected value"
   }
 

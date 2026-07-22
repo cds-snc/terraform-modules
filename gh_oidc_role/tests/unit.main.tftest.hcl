@@ -27,18 +27,17 @@ run "default_inputs" {
   }
 
   assert {
-    condition = local.roles_kv == {
-      "read-only" = {
-        name      = "read-only"
-        repo_name = "terraform-modules"
-        claim     = "ref:refs/heads/*"
-      },
-      "admin" = {
-        name      = "admin"
-        repo_name = "platform-core-services"
-        claim     = "ref:refs/heads/main"
-      }
-    }
+    condition = alltrue([
+      toset(keys(local.roles_kv)) == toset(["read-only", "admin"]),
+      local.roles_kv["read-only"].name == "read-only",
+      local.roles_kv["read-only"].repo_name == "terraform-modules",
+      local.roles_kv["read-only"].claim == "ref:refs/heads/*",
+      length(local.roles_kv["read-only"].claims) == 0,
+      local.roles_kv["admin"].name == "admin",
+      local.roles_kv["admin"].repo_name == "platform-core-services",
+      local.roles_kv["admin"].claim == "ref:refs/heads/main",
+      length(local.roles_kv["admin"].claims) == 0,
+    ])
     error_message = "Local roles key-value list did not match expected value"
   }
 
@@ -99,3 +98,56 @@ run "default_inputs" {
     error_message = "IAM read-only role assume policy name did not match expected value"
   }
 }
+
+run "multiple_claims" {
+  command = plan
+
+  variables {
+    roles = [
+      {
+        name = "multi-claim"
+        claims = [
+          {
+            repo_name = "*"
+            claim     = "ref:refs/heads/main"
+          },
+          {
+            org_name  = "cds-snc@11111111"
+            repo_name = "*"
+            claim     = "ref:refs/heads/main"
+          }
+        ]
+      }
+    ]
+  }
+
+  assert {
+    condition     = length(aws_iam_role.this) == 1
+    error_message = "IAM role count did not match expected value"
+  }
+
+  assert {
+    condition = aws_iam_role.this["multi-claim"].assume_role_policy == jsonencode({
+      Statement = [
+        {
+          Action = "sts:AssumeRoleWithWebIdentity"
+          Condition = {
+            StringLike = {
+              "token.actions.githubusercontent.com:sub" = [
+                "repo:cds-snc/*:ref:refs/heads/main",
+                "repo:cds-snc@11111111/*:ref:refs/heads/main",
+              ]
+            }
+          }
+          Effect = "Allow"
+          Principal = {
+            Federated = "arn:aws:iam::${run.setup.account_id}:oidc-provider/token.actions.githubusercontent.com"
+          }
+        },
+      ]
+      Version = "2012-10-17"
+    })
+    error_message = "IAM multi-claim role assume policy did not match expected value"
+  }
+}
+
