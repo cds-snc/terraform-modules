@@ -27,20 +27,17 @@ run "default_inputs" {
   }
 
   assert {
-    condition = local.roles_kv == {
-      "read-only" = {
-        name      = "read-only"
-        repo_name = "terraform-modules"
-        claim     = "ref:refs/heads/*"
-        claims    = []
-      },
-      "admin" = {
-        name      = "admin"
-        repo_name = "platform-core-services"
-        claim     = "ref:refs/heads/main"
-        claims    = []
-      }
-    }
+    condition = alltrue([
+      toset(keys(local.roles_kv)) == toset(["read-only", "admin"]),
+      local.roles_kv["read-only"].name == "read-only",
+      local.roles_kv["read-only"].repo_name == "terraform-modules",
+      local.roles_kv["read-only"].claim == "ref:refs/heads/*",
+      length(local.roles_kv["read-only"].claims) == 0,
+      local.roles_kv["admin"].name == "admin",
+      local.roles_kv["admin"].repo_name == "platform-core-services",
+      local.roles_kv["admin"].claim == "ref:refs/heads/main",
+      length(local.roles_kv["admin"].claims) == 0,
+    ])
     error_message = "Local roles key-value list did not match expected value"
   }
 

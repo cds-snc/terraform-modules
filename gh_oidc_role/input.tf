@@ -61,7 +61,7 @@ variable "roles" {
     - repo_name: (Required) The name of the repo to authenticate.
     - claim:     (Required) The claim that the token is allowed to be authorized from.
     - org_name:  (Optional) Overrides the module-level `org_name` for this entry. Useful when the same
-                 role must trust more than one org (e.g. `cds-snc` and `cds-snc@30166251`).
+                 role must trust more than one org (e.g. `cds-snc` and `cds-snc@org_id`).
   When `claims` is set it takes precedence over the single `repo_name`/`claim` pair.
   EOF
 
