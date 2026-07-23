@@ -10,7 +10,7 @@
 # S3 bucket for storing CloudWatch logs
 #
 module "cloudwatch_log_storage" {
-  source            = "github.com/cds-snc/terraform-modules//S3?ref=v11.4.1"
+  source            = "github.com/cds-snc/terraform-modules//S3?ref=v11.4.4"
   bucket_name       = "${var.product_name}-cloudwatch-log-storage"
   billing_tag_value = var.billing_tag_value
 
