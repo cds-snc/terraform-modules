@@ -18,7 +18,7 @@ No requirements.
 
 | Name | Source | Version |
 |------|--------|---------|
-| <a name="module_cloudwatch_log_storage"></a> [cloudwatch\_log\_storage](#module\_cloudwatch\_log\_storage) | github.com/cds-snc/terraform-modules//S3 | v11.4.1 |
+| <a name="module_cloudwatch_log_storage"></a> [cloudwatch\_log\_storage](#module\_cloudwatch\_log\_storage) | github.com/cds-snc/terraform-modules//S3 | v11.4.4 |
 
 ## Resources
 
