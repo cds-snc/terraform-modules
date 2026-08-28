@@ -125,3 +125,16 @@ run "customized" {
     error_message = "aws_cloudwatch_log_group.this.name did not match expected value"
   }
 }
+
+run "add_dns_servers_disabled" {
+  command = plan
+
+  variables {
+    add_dns_servers = false
+  }
+
+  assert {
+    condition     = aws_ec2_client_vpn_endpoint.this.dns_servers == null
+    error_message = "aws_ec2_client_vpn_endpoint.this.dns_servers should be null when add_dns_servers is false"
+  }
+}
