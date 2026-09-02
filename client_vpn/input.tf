@@ -9,6 +9,12 @@ variable "acm_certificate_arn" {
   type        = string
 }
 
+variable "add_dns_servers" {
+  description = "(Optional, default true) Whether to add DNS servers in the VPN endpoint. If left blank, the connecting client will use its own DNS servers."
+  type        = bool
+  default     = true
+}
+
 variable "banner_text" {
   description = "The text to display on the banner page when a user connects to the Client VPN endpoint."
   type        = string

@@ -76,6 +76,11 @@ run "default" {
   }
 
   assert {
+    condition     = length(aws_ec2_client_vpn_endpoint.this.dns_servers) == 2
+    error_message = "aws_ec2_client_vpn_endpoint.this.dns_servers should have 2 entries when add_dns_servers is true (default)"
+  }
+
+  assert {
     condition     = aws_ec2_client_vpn_endpoint.this.client_login_banner_options[0].banner_text == "This is a private network.  Only authorized users may connect and should take care not to cause service disruptions."
     error_message = "aws_ec2_client_vpn_endpoint.this.client_login_banner_options[0].banner_text did not match expected value"
   }

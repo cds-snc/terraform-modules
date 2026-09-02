@@ -47,6 +47,7 @@ No modules.
 |------|-------------|------|---------|:--------:|
 | <a name="input_access_group_id"></a> [access\_group\_id](#input\_access\_group\_id) | (Required) IAM Identity Center access group ID that is authorized to access the private subnets. | `string` | n/a | yes |
 | <a name="input_acm_certificate_arn"></a> [acm\_certificate\_arn](#input\_acm\_certificate\_arn) | (Required) The ARN of the ACM server certificate to use for VPN client connection encryption. | `string` | n/a | yes |
+| <a name="input_add_dns_servers"></a> [add\_dns\_servers](#input\_add\_dns\_servers) | (Optional, default true) Whether to add DNS servers in the VPN endpoint. If left blank, the connecting client will use its own DNS servers. | `bool` | `true` | no |
 | <a name="input_authentication_option"></a> [authentication\_option](#input\_authentication\_option) | (Optional, default 'federated-authentication') The authentication option to use for the VPN endpoint.  Valid values are 'federated-authentication' or 'certificate-authentication'. | `string` | `"federated-authentication"` | no |
 | <a name="input_banner_text"></a> [banner\_text](#input\_banner\_text) | The text to display on the banner page when a user connects to the Client VPN endpoint. | `string` | `"This is a private network.  Only authorized users may connect and should take care not to cause service disruptions."` | no |
 | <a name="input_billing_tag_key"></a> [billing\_tag\_key](#input\_billing\_tag\_key) | (Optional, default 'CostCentre') The name of the billing tag | `string` | `"CostCentre"` | no |

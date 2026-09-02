@@ -21,7 +21,7 @@ resource "aws_ec2_client_vpn_endpoint" "this" {
   split_tunnel          = var.split_tunnel
   transport_protocol    = var.transport_protocol
   security_group_ids    = [aws_security_group.this.id]
-  dns_servers           = concat([local.dns_host], var.public_dns_servers)
+  dns_servers           = var.add_dns_servers ? concat([local.vpc_dns_resolver], var.public_dns_servers) : null
 
   dynamic "authentication_options" {
     for_each = var.authentication_option == "federated-authentication" ? [1] : []
@@ -64,7 +64,7 @@ resource "aws_ec2_client_vpn_network_association" "this_subnets" {
 
 resource "aws_ec2_client_vpn_authorization_rule" "this_internal_dns" {
   client_vpn_endpoint_id = aws_ec2_client_vpn_endpoint.this.id
-  target_network_cidr    = "${local.dns_host}/32"
+  target_network_cidr    = "${local.vpc_dns_resolver}/32"
   authorize_all_groups   = true
   description            = "Authorization for ${var.endpoint_name} to DNS"
 }
