@@ -78,6 +78,7 @@ No modules.
 
 | Name | Description |
 |------|-------------|
+| <a name="output_cloudwatch_log_group_name"></a> [cloudwatch\_log\_group\_name](#output\_cloudwatch\_log\_group\_name) | Name of the CloudWatch log group for the Lambda function. |
 | <a name="output_function_arn"></a> [function\_arn](#output\_function\_arn) | ARN of the Lambda function. |
 | <a name="output_function_name"></a> [function\_name](#output\_function\_name) | Name of the Lambda function. |
 | <a name="output_function_role_arn"></a> [function\_role\_arn](#output\_function\_role\_arn) | ARN of the Lambda function execution role. |
