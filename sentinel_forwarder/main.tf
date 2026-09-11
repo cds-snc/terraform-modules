@@ -50,6 +50,17 @@ data "aws_caller_identity" "current" {}
 data "aws_region" "current" {}
 
 resource "aws_lambda_function" "sentinel_forwarder" {
+  # The same three every Lambda module in this repository skips, and for the
+  # same reasons — see notify_slack and schedule_shutdown, which list them in a
+  # .checkov.yml. Inline here instead, because this module is scanned through
+  # ecs/ rather than a directory of its own, so a suppression in ecs/ would
+  # record the justification in the wrong module and would not follow if
+  # sentinel_forwarder were ever added to the scan matrix itself.
+  #
+  # checkov:skip=CKV_AWS_115:Lambda does not need function-level concurrent execution limit
+  # checkov:skip=CKV_AWS_116:Lambda Dead Letter Queue not required; a failed delivery is retried by the event source
+  # checkov:skip=CKV_AWS_117:Lambda does not need to be in a VPC; it reaches only AWS APIs and the Azure ingestion endpoint
+
   function_name = var.function_name
   description   = "Lambda function to forward AWS logs to Azure Sentinel"
 
