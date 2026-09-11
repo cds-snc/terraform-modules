@@ -475,6 +475,60 @@ variable "sentinel_shared_key" {
   default     = ""
 }
 
+#
+# Sentinel forwarder — Logs Ingestion API (v2)
+#
+# Pass-throughs to the sentinel_forwarder module. Leaving them unset keeps the
+# forwarder on the v1 Data Collector API, which is the default and what every
+# existing caller gets.
+#
+
+variable "sentinel_dce_endpoint" {
+  description = "(Optional, v2) Logs ingestion endpoint of the Azure data collection endpoint. Set together with `sentinel_dcr_config` to move the forwarder to the Logs Ingestion API."
+  type        = string
+  default     = ""
+}
+
+variable "sentinel_dcr_config" {
+  description = "(Optional, v2) Map of the layer's log type to the DCR that accepts it. Feed the `forwarder_v2_aws_dcr_config` output from cds-snc/sentinel verbatim."
+  type = map(object({
+    dcrImmutableId = string
+    streamName     = string
+  }))
+  default = {}
+}
+
+variable "sentinel_azure_client_id" {
+  description = "(Optional, v2) Client ID of the Azure identity the forwarder authenticates as."
+  type        = string
+  default     = ""
+}
+
+variable "sentinel_azure_tenant_id" {
+  description = "(Optional, v2) Azure tenant ID of that identity."
+  type        = string
+  default     = ""
+}
+
+variable "sentinel_azure_client_secret" {
+  description = "(Optional, v2) Client secret for the Azure identity. Supplying one selects the client-secret auth path; leave it unset for the secretless path."
+  sensitive   = true
+  type        = string
+  default     = ""
+}
+
+variable "sentinel_cognito_identity_pool_id" {
+  description = "(Optional, v2) Cognito identity pool that mints the OIDC assertion, in this account. Set with `sentinel_cognito_developer_provider_name` for the secretless auth path."
+  type        = string
+  default     = ""
+}
+
+variable "sentinel_cognito_developer_provider_name" {
+  description = "(Optional, v2) Developer provider name on that identity pool."
+  type        = string
+  default     = ""
+}
+
 ################################################################################
 # Common
 ################################################################################
