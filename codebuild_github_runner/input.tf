@@ -98,3 +98,21 @@ variable "queued_timeout" {
   type        = number
   default     = 5
 }
+
+variable "vpc_id" {
+  description = "(Optional) VPC ID for the CodeBuild project."
+  type        = string
+  default     = ""
+}
+
+variable "subnet_ids" {
+  description = "(Optional) Subnet IDs for the CodeBuild project."
+  type        = list(string)
+  default     = []
+}
+
+variable "security_group_ids" {
+  description = "(Optional) Security group IDs for the CodeBuild project."
+  type        = list(string)
+  default     = []
+}
