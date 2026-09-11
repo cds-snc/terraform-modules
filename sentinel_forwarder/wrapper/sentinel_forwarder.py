@@ -29,8 +29,15 @@ def set_env_vars(params_arn):
         os.environ[key] = value
 
 
-# Env vars are retrieved outside the handler to avoid lookups on every invocation
-set_env_vars(SENTINEL_AUTH_PARAMS_ARN)
+# Env vars are retrieved outside the handler to avoid lookups on every invocation.
+#
+# The ARN is absent on the secretless Logs Ingestion path, where there is no
+# secret to hold and so no SSM parameter: the Lambda's IAM role is the whole
+# credential, and the rest of the configuration arrives as plain Lambda
+# environment variables. Calling this unconditionally would fail the cold start
+# for those forwarders.
+if SENTINEL_AUTH_PARAMS_ARN:
+    set_env_vars(SENTINEL_AUTH_PARAMS_ARN)
 
 
 def lambda_handler(event, _context):

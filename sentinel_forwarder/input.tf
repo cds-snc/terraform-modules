@@ -29,9 +29,10 @@ variable "cloudwatch_log_arns" {
 }
 
 variable "customer_id" {
-  description = "(Required) Azure log workspace customer ID"
+  description = "(Optional, v1 only) Azure log workspace customer ID. Required on the v1 Data Collector API path; leave unset on v2, which authenticates as an Azure identity instead."
   sensitive   = true
   type        = string
+  default     = ""
 }
 
 variable "event_rule_names" {
@@ -78,7 +79,63 @@ variable "s3_sources" {
 }
 
 variable "shared_key" {
-  description = "(Required) Azure log workspace shared secret"
+  description = "(Optional, v1 only) Azure log workspace shared secret. Required on the v1 Data Collector API path; leave unset on v2."
   sensitive   = true
   type        = string
+  default     = ""
+}
+
+#
+# v2 — Logs Ingestion API (DCE/DCR)
+#
+# The layer carries both APIs and picks per-Lambda on the presence of BOTH
+# `DCE_ENDPOINT` and `DCR_CONFIG`. A caller that sets neither of the two inputs
+# below is on v1 and behaves exactly as before, which is what lets the rollout
+# move one consumer at a time rather than as a flag day.
+#
+
+variable "dce_endpoint" {
+  description = "(Optional, v2) Logs ingestion endpoint of the Azure data collection endpoint. Set together with `dcr_config` to put this forwarder on the Logs Ingestion API; leave both unset to stay on the v1 Data Collector API."
+  type        = string
+  default     = ""
+}
+
+variable "dcr_config" {
+  description = "(Optional, v2) Map of the layer's log type to the DCR that accepts it. Feed the `forwarder_v2_aws_dcr_config` output from cds-snc/sentinel verbatim — the attribute names are what the layer reads."
+  type = map(object({
+    dcrImmutableId = string
+    streamName     = string
+  }))
+  default = {}
+}
+
+variable "azure_client_id" {
+  description = "(Optional, v2) Client ID of the Azure identity the forwarder authenticates as. Required on both v2 auth paths."
+  type        = string
+  default     = ""
+}
+
+variable "azure_tenant_id" {
+  description = "(Optional, v2) Azure tenant ID of that identity. Required on both v2 auth paths."
+  type        = string
+  default     = ""
+}
+
+variable "azure_client_secret" {
+  description = "(Optional, v2) Client secret for the Azure identity. Supplying one selects the client-secret auth path and takes precedence over Cognito federation; leave it unset for the secretless path."
+  sensitive   = true
+  type        = string
+  default     = ""
+}
+
+variable "cognito_identity_pool_id" {
+  description = "(Optional, v2) Cognito identity pool that mints the OIDC assertion, in this Lambda's own AWS account. Set with `cognito_developer_provider_name` for the secretless auth path."
+  type        = string
+  default     = ""
+}
+
+variable "cognito_developer_provider_name" {
+  description = "(Optional, v2) Developer provider name on that identity pool. Set with `cognito_identity_pool_id`."
+  type        = string
+  default     = ""
 }

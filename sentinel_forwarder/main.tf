@@ -14,9 +14,27 @@
 * - SecurityHub (via EventHub)
 * - Generic application json logs
 *
-* You will need to add your Log Analytics Workspace Customer ID and Shared Key. AWS logs are automatically assigned a LogType.
-* Custom application logs are given the log type defined through the `var.log_type`. They also need to be nested inside a json
-* object with the key, `application_log`. ex: `{'application_log': {'foo': 'bar'}}` for the layer code to forward it to Azure Sentinel.
+* The layer carries two Azure APIs and picks between them per Lambda, on the presence of the environment variables this
+* module sets. Which one you get is decided by which inputs you supply:
+*
+* * **v1, the Data Collector API.** Set `customer_id` and `shared_key`. They are held in an SSM `SecureString` and loaded
+*   at cold start. Data lands in the legacy `*_CL` tables.
+* * **v2, the Logs Ingestion API.** Set `dce_endpoint` and `dcr_config` — both, or the layer stays on v1 — plus
+*   `azure_client_id` and `azure_tenant_id`. Data lands in the tables behind those DCRs.
+*
+* v2 then takes one of two auth paths. Supplying `azure_client_secret` selects the client-secret path and takes
+* precedence. Supplying `cognito_identity_pool_id` and `cognito_developer_provider_name` instead selects the secretless
+* path: this module grants the Lambda `cognito-identity:GetOpenIdTokenForDeveloperIdentity` on that pool, the layer
+* exchanges the resulting OIDC token for an Entra token as a user-assigned managed identity, and nothing is stored
+* anywhere. The identity pool must be in this Lambda's own AWS account — identity pools have no resource policy, so one
+* cannot be called cross-account.
+*
+* A caller that sets none of the v2 inputs is on v1 and behaves exactly as it did before they existed.
+*
+* AWS logs are automatically assigned a LogType. Custom application logs are given the log type defined through
+* `var.log_type`, which applies on v1 only — under v2 the destination comes from `dcr_config`. They also need to be
+* nested inside a json object with the key, `application_log`. ex: `{'application_log': {'foo': 'bar'}}` for the layer
+* code to forward it to Azure Sentinel.
 */
 
 terraform {
@@ -32,6 +50,17 @@ data "aws_caller_identity" "current" {}
 data "aws_region" "current" {}
 
 resource "aws_lambda_function" "sentinel_forwarder" {
+  # The same three every Lambda module in this repository skips, and for the
+  # same reasons — see notify_slack and schedule_shutdown, which list them in a
+  # .checkov.yml. Inline here instead, because this module is scanned through
+  # ecs/ rather than a directory of its own, so a suppression in ecs/ would
+  # record the justification in the wrong module and would not follow if
+  # sentinel_forwarder were ever added to the scan matrix itself.
+  #
+  # checkov:skip=CKV_AWS_115:Lambda does not need function-level concurrent execution limit
+  # checkov:skip=CKV_AWS_116:Lambda Dead Letter Queue not required; a failed delivery is retried by the event source
+  # checkov:skip=CKV_AWS_117:Lambda does not need to be in a VPC; it reaches only AWS APIs and the Azure ingestion endpoint
+
   function_name = var.function_name
   description   = "Lambda function to forward AWS logs to Azure Sentinel"
 
@@ -45,9 +74,28 @@ resource "aws_lambda_function" "sentinel_forwarder" {
   source_code_hash = filebase64sha256(data.archive_file.sentinel_forwarder.output_path)
 
   environment {
-    variables = {
-      LOG_TYPE                 = var.log_type
-      SENTINEL_AUTH_PARAMS_ARN = aws_ssm_parameter.sentinel_forwarder_auth.arn
+    variables = local.lambda_environment
+  }
+
+  lifecycle {
+    precondition {
+      condition     = (var.dce_endpoint != "") == (length(var.dcr_config) > 0)
+      error_message = "dce_endpoint and dcr_config must be set together. The layer routes to the Logs Ingestion API only when both are present, so setting one alone leaves the forwarder on v1 with no error."
+    }
+
+    precondition {
+      condition     = !local.v2_enabled || (var.azure_client_id != "" && var.azure_tenant_id != "")
+      error_message = "azure_client_id and azure_tenant_id are required when dce_endpoint and dcr_config are set; the v2 path has no other way to name the identity it authenticates as."
+    }
+
+    precondition {
+      condition     = !local.v2_enabled || var.azure_client_secret != "" || (var.cognito_identity_pool_id != "" && var.cognito_developer_provider_name != "")
+      error_message = "The v2 path needs an auth method: either azure_client_secret, or both cognito_identity_pool_id and cognito_developer_provider_name for the secretless path."
+    }
+
+    precondition {
+      condition     = local.v2_enabled || (var.customer_id != "" && var.shared_key != "")
+      error_message = "customer_id and shared_key are required on the v1 Data Collector API path. Set dce_endpoint and dcr_config to move this forwarder to v2 instead."
     }
   }
 
@@ -150,14 +198,16 @@ resource "aws_cloudwatch_log_group" "sentinel_forwarder_lambda" {
 #
 # Lambda function secrets
 #
+# Created only when there is something secret to hold. The secretless v2 path
+# has none — the Lambda's IAM role is the whole credential — and an SSM
+# parameter cannot hold an empty value anyway. The wrapper skips its cold-start
+# read when SENTINEL_AUTH_PARAMS_ARN is absent.
 resource "aws_ssm_parameter" "sentinel_forwarder_auth" {
-  name = "${var.function_name}-auth"
-  type = "SecureString"
-  value = chomp(<<-EOT
-  CUSTOMER_ID=${var.customer_id}
-  SHARED_KEY=${var.shared_key}
-  EOT
-  )
+  count = local.has_secrets ? 1 : 0
+
+  name  = "${var.function_name}-auth"
+  type  = "SecureString"
+  value = local.secrets_body
 
   tags = local.common_tags
 }

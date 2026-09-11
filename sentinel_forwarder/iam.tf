@@ -57,14 +57,50 @@ data "aws_iam_policy_document" "sentinel_forwarder_lambda" {
     ]
   }
 
+  # Only when a parameter exists to read. The secretless v2 path creates none,
+  # and a statement with an empty resource list is invalid.
+  dynamic "statement" {
+    for_each = local.has_secrets ? [1] : []
+
+    content {
+      effect = "Allow"
+      actions = [
+        "ssm:GetParameter",
+        "ssm:GetParameters",
+      ]
+      resources = [
+        aws_ssm_parameter.sentinel_forwarder_auth[0].arn
+      ]
+    }
+  }
+}
+
+# The whole credential on the secretless path: the layer calls this to mint the
+# OIDC token it presents to Entra as a client assertion. Scoped to the one pool,
+# which has to be in this account.
+#
+# Its own role policy rather than another statement in the base document, for
+# two reasons. It shows up in a plan as a named resource instead of a diff
+# inside a policy JSON blob, and it is inline on the role, so it cannot be
+# stripped by — or strip — the attached base policy.
+resource "aws_iam_role_policy" "sentinel_forwarder_cognito" {
+  count = var.cognito_identity_pool_id != "" ? 1 : 0
+
+  name   = "SentinelForwarderCognito-${var.function_name}"
+  role   = aws_iam_role.sentinel_forwarder_lambda.name
+  policy = data.aws_iam_policy_document.sentinel_forwarder_cognito[0].json
+}
+
+data "aws_iam_policy_document" "sentinel_forwarder_cognito" {
+  count = var.cognito_identity_pool_id != "" ? 1 : 0
+
   statement {
     effect = "Allow"
     actions = [
-      "ssm:GetParameter",
-      "ssm:GetParameters",
+      "cognito-identity:GetOpenIdTokenForDeveloperIdentity",
     ]
     resources = [
-      aws_ssm_parameter.sentinel_forwarder_auth.arn
+      local.cognito_pool_arn
     ]
   }
 }

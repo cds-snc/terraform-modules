@@ -16,7 +16,7 @@ No requirements.
 
 | Name | Source | Version |
 |------|--------|---------|
-| <a name="module_sentinel_forwarder"></a> [sentinel\_forwarder](#module\_sentinel\_forwarder) | github.com/cds-snc/terraform-modules//sentinel_forwarder | main |
+| <a name="module_sentinel_forwarder"></a> [sentinel\_forwarder](#module\_sentinel\_forwarder) | ../sentinel_forwarder | n/a |
 
 ## Resources
 
@@ -101,7 +101,14 @@ No requirements.
 | <a name="input_operating_system_family"></a> [operating\_system\_family](#input\_operating\_system\_family) | (Optional, default `LINUX`) The operating system of the task. | `string` | `"LINUX"` | no |
 | <a name="input_platform_version"></a> [platform\_version](#input\_platform\_version) | (Optional, default `LATEST`) Platform version on which to run your service. Defaults to `LATEST` | `string` | `"LATEST"` | no |
 | <a name="input_security_group_ids"></a> [security\_group\_ids](#input\_security\_group\_ids) | (Required) List of security groups to associate with the service | `list(string)` | n/a | yes |
+| <a name="input_sentinel_azure_client_id"></a> [sentinel\_azure\_client\_id](#input\_sentinel\_azure\_client\_id) | (Optional, v2) Client ID of the Azure identity the forwarder authenticates as. | `string` | `""` | no |
+| <a name="input_sentinel_azure_client_secret"></a> [sentinel\_azure\_client\_secret](#input\_sentinel\_azure\_client\_secret) | (Optional, v2) Client secret for the Azure identity. Supplying one selects the client-secret auth path; leave it unset for the secretless path. | `string` | `""` | no |
+| <a name="input_sentinel_azure_tenant_id"></a> [sentinel\_azure\_tenant\_id](#input\_sentinel\_azure\_tenant\_id) | (Optional, v2) Azure tenant ID of that identity. | `string` | `""` | no |
+| <a name="input_sentinel_cognito_developer_provider_name"></a> [sentinel\_cognito\_developer\_provider\_name](#input\_sentinel\_cognito\_developer\_provider\_name) | (Optional, v2) Developer provider name on that identity pool. | `string` | `""` | no |
+| <a name="input_sentinel_cognito_identity_pool_id"></a> [sentinel\_cognito\_identity\_pool\_id](#input\_sentinel\_cognito\_identity\_pool\_id) | (Optional, v2) Cognito identity pool that mints the OIDC assertion, in this account. Set with `sentinel_cognito_developer_provider_name` for the secretless auth path. | `string` | `""` | no |
 | <a name="input_sentinel_customer_id"></a> [sentinel\_customer\_id](#input\_sentinel\_customer\_id) | (Optional, no default) The Sentinel customer ID used to forward logs | `string` | `""` | no |
+| <a name="input_sentinel_dce_endpoint"></a> [sentinel\_dce\_endpoint](#input\_sentinel\_dce\_endpoint) | (Optional, v2) Logs ingestion endpoint of the Azure data collection endpoint. Set together with `sentinel_dcr_config` to move the forwarder to the Logs Ingestion API. | `string` | `""` | no |
+| <a name="input_sentinel_dcr_config"></a> [sentinel\_dcr\_config](#input\_sentinel\_dcr\_config) | (Optional, v2) Map of the layer's log type to the DCR that accepts it. Feed the `forwarder_v2_aws_dcr_config` output from cds-snc/sentinel verbatim. | <pre>map(object({<br/>    dcrImmutableId = string<br/>    streamName     = string<br/>  }))</pre> | `{}` | no |
 | <a name="input_sentinel_forwarder"></a> [sentinel\_forwarder](#input\_sentinel\_forwarder) | (Optional, default `false`) Forward ECS cluster logs to Sentinel | `bool` | `false` | no |
 | <a name="input_sentinel_forwarder_layer_arn"></a> [sentinel\_forwarder\_layer\_arn](#input\_sentinel\_forwarder\_layer\_arn) | (Optional, default is latest layer ARN) ARN of the Sentinel forwarder lambda layer | `string` | `"arn:aws:lambda:ca-central-1:283582579564:layer:aws-sentinel-connector-layer:97"` | no |
 | <a name="input_sentinel_fowarder_filter_pattern"></a> [sentinel\_fowarder\_filter\_pattern](#input\_sentinel\_fowarder\_filter\_pattern) | (Optional, defaults to sending all logs) The filter pattern of logs to forward to Sentinel | `string` | `"[w1=\"*\"]"` | no |
