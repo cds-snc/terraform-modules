@@ -75,6 +75,15 @@ resource "aws_codebuild_project" "this" {
     }
   }
 
+  dynamic "vpc_config" {
+    for_each = local.is_vpc_config ? [1] : []
+    content {
+      vpc_id             = var.vpc_id
+      subnets            = var.subnet_ids
+      security_group_ids = var.security_group_ids
+    }
+  }
+
   tags = local.common_tags
 }
 
