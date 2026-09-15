@@ -74,4 +74,18 @@ data "aws_iam_policy_document" "this" {
       }
     }
   }
+
+  dynamic "statement" {
+    for_each = local.is_github_codeconnection ? [1] : []
+    content {
+      effect = "Allow"
+      actions = [
+        "codeconnections:UseConnection",
+        "codeconnections:GetConnectionToken"
+      ]
+      resources = [
+        data.aws_codestarconnections_connection.github_connection[0].arn
+      ]
+    }
+  }
 }
