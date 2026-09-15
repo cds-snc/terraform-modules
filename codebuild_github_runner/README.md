@@ -63,6 +63,7 @@ No modules.
 | <a name="input_github_codeconnection_name"></a> [github\_codeconnection\_name](#input\_github\_codeconnection\_name) | (Optional) Name of the GitHub Code Star connection to GitHub. | `string` | `""` | no |
 | <a name="input_github_personal_access_token"></a> [github\_personal\_access\_token](#input\_github\_personal\_access\_token) | (Optional) GitHub personal access token to allow the CodeBuild runner access to the target GitHub repository. | `string` | `""` | no |
 | <a name="input_github_repository_url"></a> [github\_repository\_url](#input\_github\_repository\_url) | (Required) GitHub repository URL for the CodeBuild source. | `string` | n/a | yes |
+| <a name="input_privileged_mode"></a> [privileged\_mode](#input\_privileged\_mode) | (Optional, default 'false') Privileged mode for the CodeBuild project. | `bool` | `false` | no |
 | <a name="input_project_name"></a> [project\_name](#input\_project\_name) | (Required) Name of the CodeBuild project. | `string` | n/a | yes |
 | <a name="input_queued_timeout"></a> [queued\_timeout](#input\_queued\_timeout) | (Optional, default '5') Queued timeout for the CodeBuild project. | `number` | `5` | no |
 | <a name="input_security_group_ids"></a> [security\_group\_ids](#input\_security\_group\_ids) | (Optional) Security group IDs for the CodeBuild project. | `list(string)` | `[]` | no |

@@ -46,6 +46,7 @@ resource "aws_codebuild_project" "this" {
     compute_type                = var.environment_compute_type
     image                       = var.environment_image
     type                        = var.environment_type
+    privileged_mode             = var.privileged_mode
     image_pull_credentials_type = var.environment_image_pull_credentials_type
 
     dynamic "environment_variable" {
