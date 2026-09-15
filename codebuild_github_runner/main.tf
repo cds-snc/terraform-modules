@@ -94,6 +94,13 @@ resource "aws_codebuild_source_credential" "this" {
   token       = var.github_personal_access_token
 }
 
+resource "aws_codebuild_source_credential" "this_codeconnections" {
+  count       = local.is_github_codeconnection && !local.is_github_pat ? 1 : 0
+  auth_type   = "CODECONNECTIONS"
+  server_type = "GITHUB"
+  token       = data.aws_codestarconnections_connection.github_connection[0].arn
+}
+
 resource "aws_codebuild_webhook" "this" {
   project_name = aws_codebuild_project.this.name
   build_type   = "BUILD"
