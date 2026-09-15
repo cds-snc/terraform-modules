@@ -34,9 +34,9 @@ variable "environment_compute_type" {
 }
 
 variable "environment_image" {
-  description = "(Optional, default 'aws/codebuild/amazonlinux2-x86_64-standard:5.0') Image for the CodeBuild environment."
+  description = "(Optional, default 'aws/codebuild/amazonlinux-x86_64-standard:6.0') Image for the CodeBuild environment."
   type        = string
-  default     = "aws/codebuild/amazonlinux2-x86_64-standard:5.0"
+  default     = "aws/codebuild/amazonlinux-x86_64-standard:6.0"
 }
 
 variable "environment_image_pull_credentials_type" {
