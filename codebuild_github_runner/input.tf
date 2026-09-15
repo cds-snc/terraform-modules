@@ -83,6 +83,12 @@ variable "github_repository_url" {
   }
 }
 
+variable "privileged_mode" {
+  description = "(Optional, default 'false') Privileged mode for the CodeBuild project."
+  type        = bool
+  default     = false
+}
+
 variable "project_name" {
   description = "(Required) Name of the CodeBuild project."
   type        = string
