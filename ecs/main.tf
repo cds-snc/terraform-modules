@@ -329,6 +329,6 @@ resource "aws_appautoscaling_policy" "this" {
       predefined_metric_type = try(each.value.predefined_metric_type, null)
       resource_label         = try(each.value.resource_label, null)
     }
-    target_value = each.value.predefined_metric_type == "ECSServiceAverageCPUUtilization" ? var.ecs_scale_cpu_threshold : var.ecs_scale_memory_threshold
+    target_value = startswith(try(each.value.predefined_metric_type, ""), "ECSServiceAverageCPUUtilization") ? var.ecs_scale_cpu_threshold : var.ecs_scale_memory_threshold
   }
 }
