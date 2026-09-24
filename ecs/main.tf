@@ -2,6 +2,12 @@
 * # Elastic Container Service Cluster (ECS)
 *
 * This module creates a pre-configured ECS cluster with a single service and task definition using Fargate. 
+*
+* Setting `sentinel_forwarder = true` forwards the service's logs to Microsoft Sentinel through the
+* `sentinel_forwarder` module in this repository. The `sentinel_*` inputs are passed to that module — for example
+* `sentinel_dce_endpoint` becomes `dce_endpoint` and `sentinel_forwarder_layer_arn` becomes `layer_arn`. See its README
+* for choosing between the Data Collector API (v1) and the Logs Ingestion API (v2), and for the one-time Cognito setup
+* that v2 without a stored secret needs.
 */
 
 ################################################################################
