@@ -1,11 +1,19 @@
-variable "sentinel_customer_id" {
-  description = "Customer ID to authenticate with the Sentinel service."
+variable "dce_endpoint" {
+  description = "Logs ingestion endpoint of the Azure data collection endpoint."
   type        = string
-  sensitive   = true
 }
 
-variable "sentinel_shared_key" {
-  description = "Shared key to authenticate with the Sentinel service."
+variable "cloudwatch_dcr_immutable_id" {
+  description = "Immutable id of the DCR that accepts the Custom-AWSCloudWatchLog_v2_Input stream."
   type        = string
-  sensitive   = true
+}
+
+variable "azure_client_id" {
+  description = "Client id of the user-assigned managed identity the forwarder signs in as. Also the developer user identifier used to mint the Cognito identity."
+  type        = string
+}
+
+variable "azure_tenant_id" {
+  description = "Azure tenant id of that identity."
+  type        = string
 }

@@ -57,7 +57,7 @@ variable "function_name" {
 }
 
 variable "layer_arn" {
-  description = "(Optional) ARN of the lambda layer to use"
+  description = "(Optional) ARN of the Lambda layer to use. The v2 Logs Ingestion API needs layer version 270 or later."
   default     = "arn:aws:lambda:ca-central-1:283582579564:layer:aws-sentinel-connector-layer:20"
 }
 
