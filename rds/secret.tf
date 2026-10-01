@@ -1,5 +1,5 @@
 resource "aws_secretsmanager_secret" "connection_string" {
-  count = var.use_proxy ? 1 : 0
+  count = local.use_proxy_secret_auth ? 1 : 0
 
   name = "${var.name}-${random_string.random.result}"
   tags = merge(local.common_tags, local.cbrid_tags)
@@ -9,7 +9,7 @@ resource "aws_secretsmanager_secret" "connection_string" {
 
 // Secret format grabbed from here: https://docs.aws.amazon.com/AmazonRDS/latest/AuroraUserGuide/rds-proxy.html#rds-proxy-secrets-arns
 resource "aws_secretsmanager_secret_version" "connection_string" {
-  count = var.use_proxy ? 1 : 0
+  count = local.use_proxy_secret_auth ? 1 : 0
 
   secret_id = aws_secretsmanager_secret.connection_string[0].id
   secret_string = jsonencode({
@@ -19,14 +19,14 @@ resource "aws_secretsmanager_secret_version" "connection_string" {
 }
 
 resource "aws_secretsmanager_secret" "proxy_connection_string" {
-  count = var.use_proxy ? 1 : 0
+  count = local.use_proxy_secret_auth ? 1 : 0
 
   name = "${var.name}-${random_string.random.result}-proxy-connection-string"
   tags = merge(local.common_tags, local.cbrid_tags)
 }
 
 resource "aws_secretsmanager_secret_version" "proxy_connection_string" {
-  count = var.use_proxy ? 1 : 0
+  count = local.use_proxy_secret_auth ? 1 : 0
 
   secret_id = aws_secretsmanager_secret.proxy_connection_string[0].id
   secret_string = (

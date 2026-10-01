@@ -24,11 +24,16 @@ No modules.
 | [aws_db_event_subscription.rds_sg_events_alerts](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/db_event_subscription) | resource |
 | [aws_db_proxy.proxy](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/db_proxy) | resource |
 | [aws_db_proxy_default_target_group.this](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/db_proxy_default_target_group) | resource |
+| [aws_db_proxy_endpoint.reader](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/db_proxy_endpoint) | resource |
 | [aws_db_proxy_target.target](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/db_proxy_target) | resource |
 | [aws_db_subnet_group.rds](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/db_subnet_group) | resource |
+| [aws_iam_policy.proxy_iam_database_connect](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/iam_policy) | resource |
 | [aws_iam_policy.read_connection_string](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/iam_policy) | resource |
+| [aws_iam_policy.task_iam_database_connect](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/iam_policy) | resource |
 | [aws_iam_role.rds_proxy](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/iam_role) | resource |
+| [aws_iam_role_policy_attachment.proxy_iam_database_connect](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/iam_role_policy_attachment) | resource |
 | [aws_iam_role_policy_attachment.read_connection_string](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/iam_role_policy_attachment) | resource |
+| [aws_iam_role_policy_attachment.task_iam_database_connect](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/iam_role_policy_attachment) | resource |
 | [aws_rds_cluster.cluster](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/rds_cluster) | resource |
 | [aws_rds_cluster_instance.instances](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/rds_cluster_instance) | resource |
 | [aws_secretsmanager_secret.connection_string](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/secretsmanager_secret) | resource |
@@ -40,7 +45,9 @@ No modules.
 | [aws_security_group_rule.rds_ingress](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/security_group_rule) | resource |
 | [random_string.random](https://registry.terraform.io/providers/hashicorp/random/latest/docs/resources/string) | resource |
 | [aws_iam_policy_document.assume_role](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/data-sources/iam_policy_document) | data source |
+| [aws_iam_policy_document.proxy_iam_database_connect](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/data-sources/iam_policy_document) | data source |
 | [aws_iam_policy_document.read_connection_string](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/data-sources/iam_policy_document) | data source |
+| [aws_iam_policy_document.task_iam_database_connect](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/data-sources/iam_policy_document) | data source |
 | [aws_region.current](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/data-sources/region) | data source |
 
 ## Inputs
@@ -68,6 +75,8 @@ No modules.
 | <a name="input_preferred_maintenance_window"></a> [preferred\_maintenance\_window](#input\_preferred\_maintenance\_window) | (Optional) The UTC time you want your DB to be maintained. Takes the format `"wed:06:00-wed:07:00"` | `string` | `"sun:06:00-sun:07:00"` | no |
 | <a name="input_prevent_cluster_deletion"></a> [prevent\_cluster\_deletion](#input\_prevent\_cluster\_deletion) | (Optional, default 'true') This flag prevents deletion of the RDS cluster. <br/> **Please Note:** We cannot prevent deletion of RDS instances in the module, we recommend you add `lifecycle { prevent_deletion = true }` to the module to prevent instance deletion | `bool` | `true` | no |
 | <a name="input_proxy_debug_logging"></a> [proxy\_debug\_logging](#input\_proxy\_debug\_logging) | (Optional, default 'false') Allows the proxy to log debug information. <br/> **Please Note:** This will include all sql commands and potential sensitive information | `bool` | `false` | no |
+| <a name="input_proxy_iam_authentication_enabled"></a> [proxy\_iam\_authentication\_enabled](#input\_proxy\_iam\_authentication\_enabled) | (Optional, default 'false') Configure the proxy to require IAM database authentication instead of Secrets Manager credentials. Requires use\_proxy to be true. | `bool` | `false` | no |
+| <a name="input_proxy_iam_authentication_task_role_arns"></a> [proxy\_iam\_authentication\_task\_role\_arns](#input\_proxy\_iam\_authentication\_task\_role\_arns) | (Optional, default empty) Map of database usernames to ECS task role ARNs allowed to authenticate as that user through the RDS proxy. | `map(set(string))` | `{}` | no |
 | <a name="input_proxy_log_retention_in_days"></a> [proxy\_log\_retention\_in\_days](#input\_proxy\_log\_retention\_in\_days) | (Optional, default '14') The number of days to retain the proxy logs in cloudwatch | `number` | `14` | no |
 | <a name="input_proxy_secret_auth_arns"></a> [proxy\_secret\_auth\_arns](#input\_proxy\_secret\_auth\_arns) | (Optional, default none) A list of secret ARNs that contain authentication credentials for the proxy. View the `aws_secretsmanager_secret_version.connection_string` resource for the secret format. Note that these must be database users that already exist. | `list(string)` | `[]` | no |
 | <a name="input_security_group_ids"></a> [security\_group\_ids](#input\_security\_group\_ids) | (Optional, default '[]') A list of additional security group IDs to associate with the RDS cluster. | `list(string)` | `[]` | no |
@@ -93,8 +102,10 @@ No modules.
 | <a name="output_proxy_connection_string_arn"></a> [proxy\_connection\_string\_arn](#output\_proxy\_connection\_string\_arn) | The ARN for the connection string to the RDS proxy. |
 | <a name="output_proxy_connection_string_value"></a> [proxy\_connection\_string\_value](#output\_proxy\_connection\_string\_value) | The string value of the RDS proxy connection string.  This includes the username and password. |
 | <a name="output_proxy_endpoint"></a> [proxy\_endpoint](#output\_proxy\_endpoint) | The RDS proxy read/write connection endpoint. |
+| <a name="output_proxy_reader_endpoint"></a> [proxy\_reader\_endpoint](#output\_proxy\_reader\_endpoint) | The RDS proxy read-only connection endpoint for IAM authentication. |
 | <a name="output_proxy_security_group_arn"></a> [proxy\_security\_group\_arn](#output\_proxy\_security\_group\_arn) | The RDS proxy security group ARN. |
 | <a name="output_proxy_security_group_id"></a> [proxy\_security\_group\_id](#output\_proxy\_security\_group\_id) | The RDS proxy security group ID. |
+| <a name="output_proxy_writer_endpoint"></a> [proxy\_writer\_endpoint](#output\_proxy\_writer\_endpoint) | The RDS proxy read/write connection endpoint. |
 | <a name="output_rds_cluster_arn"></a> [rds\_cluster\_arn](#output\_rds\_cluster\_arn) | The ARN of the RDS cluster. |
 | <a name="output_rds_cluster_endpoint"></a> [rds\_cluster\_endpoint](#output\_rds\_cluster\_endpoint) | RDS cluster read/write connection endpoint. |
 | <a name="output_rds_cluster_id"></a> [rds\_cluster\_id](#output\_rds\_cluster\_id) | The ID of the RDS cluster. |
