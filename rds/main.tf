@@ -183,6 +183,11 @@ resource "aws_db_proxy_endpoint" "reader" {
   vpc_security_group_ids = local.security_group_ids
   vpc_subnet_ids         = var.subnet_ids
 
+  depends_on = [
+    aws_db_proxy_target.target,
+    aws_rds_cluster_instance.instances,
+  ]
+
   tags = {
     (var.billing_tag_key) = var.billing_tag_value
     Terraform             = "true"
