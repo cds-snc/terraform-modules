@@ -20,19 +20,14 @@ locals {
   use_proxy_secret_auth        = var.use_proxy && !var.proxy_iam_authentication_enabled
 
   proxy_iam_authentication_users = local.use_proxy_iam_authentication ? var.proxy_iam_authentication_task_role_arns : {}
-  proxy_iam_authentication_task_roles = {
-    for task_role in flatten([
-      for database_username, user in local.proxy_iam_authentication_users : [
-        for task_role_arn in user.task_role_arns : {
-          database_username = database_username
-          task_role_arn     = task_role_arn
-        }
-      ]
-      ]) : "${task_role.database_username}:${task_role.task_role_arn}" => {
-      database_username = task_role.database_username
-      task_role_name    = element(reverse(split("/", task_role.task_role_arn)), 0)
-    }
-  }
+  proxy_iam_authentication_task_roles = flatten([
+    for database_username, user in local.proxy_iam_authentication_users : [
+      for task_role_arn in user.task_role_arns : {
+        database_username = database_username
+        task_role_arn     = task_role_arn
+      }
+    ]
+  ])
 
   rds_db_resource_arn_prefix = replace(join(":", slice(split(":", aws_rds_cluster.cluster.arn), 0, 5)), ":rds:", ":rds-db:")
   proxy_resource_id          = var.use_proxy ? element(reverse(split(":", aws_db_proxy.proxy[0].arn)), 0) : null

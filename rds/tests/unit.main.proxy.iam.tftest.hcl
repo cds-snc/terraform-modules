@@ -80,7 +80,7 @@ run "postgres_iam_proxy" {
   }
 
   assert {
-    condition     = length(aws_iam_policy.task_iam_database_connect) == 1 && aws_iam_role_policy_attachment.task_iam_database_connect["app:arn:aws:iam::123456789012:role/test-app-task"].role == "test-app-task"
+    condition     = length(aws_iam_policy.task_iam_database_connect) == 1 && aws_iam_role_policy_attachment.task_iam_database_connect[0].role == "test-app-task"
     error_message = "The application task role should receive the proxy IAM database policy"
   }
 

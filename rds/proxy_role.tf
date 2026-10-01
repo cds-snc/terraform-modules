@@ -122,8 +122,8 @@ resource "aws_iam_policy" "task_iam_database_connect" {
 }
 
 resource "aws_iam_role_policy_attachment" "task_iam_database_connect" {
-  for_each = local.proxy_iam_authentication_task_roles
+  count = length(local.proxy_iam_authentication_task_roles)
 
-  role       = each.value.task_role_name
-  policy_arn = aws_iam_policy.task_iam_database_connect[each.value.database_username].arn
+  role       = element(reverse(split("/", local.proxy_iam_authentication_task_roles[count.index].task_role_arn)), 0)
+  policy_arn = aws_iam_policy.task_iam_database_connect[local.proxy_iam_authentication_task_roles[count.index].database_username].arn
 }
