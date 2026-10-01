@@ -220,7 +220,7 @@ variable "proxy_iam_authentication_task_role_arns" {
   type = map(object({
     task_role_arns = list(string)
   }))
-  description = "(Optional, default empty) IAM proxy authentication bindings. Each map key is a database username and its task_role_arns allow ECS tasks to authenticate as that user through the RDS proxy. Requires proxy_iam_authentication_enabled to be true."
+  description = "(Optional, default empty) IAM proxy authentication bindings. Each map key must identify an existing database user configured for IAM authentication (granted rds_iam for PostgreSQL or using AWSAuthenticationPlugin for MySQL); its task_role_arns allow ECS tasks to authenticate as that user through the RDS proxy. Requires proxy_iam_authentication_enabled to be true."
   default     = {}
 }
 
