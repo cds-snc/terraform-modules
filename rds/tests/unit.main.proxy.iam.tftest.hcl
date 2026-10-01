@@ -20,7 +20,6 @@ variables {
   subnet_ids = ["subnet1234"]
 
   proxy_iam_authentication_enabled = true
-  proxy_reader_endpoint_enabled    = true
   proxy_iam_authentication_task_role_arns = {
     app = ["arn:aws:iam::123456789012:role/test-app-task"]
   }

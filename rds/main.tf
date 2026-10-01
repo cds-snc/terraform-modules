@@ -38,11 +38,6 @@ resource "aws_rds_cluster" "cluster" {
     }
 
     precondition {
-      condition     = !var.proxy_reader_endpoint_enabled || var.use_proxy
-      error_message = "use_proxy must be true when proxy_reader_endpoint_enabled is true."
-    }
-
-    precondition {
       condition     = !var.proxy_iam_authentication_enabled || length(var.proxy_iam_authentication_task_role_arns) > 0
       error_message = "proxy_iam_authentication_task_role_arns must include at least one database user when proxy_iam_authentication_enabled is true."
     }

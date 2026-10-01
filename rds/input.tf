@@ -212,8 +212,8 @@ variable "proxy_secret_auth_arns" {
 
 variable "proxy_reader_endpoint_enabled" {
   type        = bool
-  description = "(Optional, default 'false') Create a read-only RDS proxy endpoint. Requires use_proxy to be true."
-  default     = false
+  description = "(Optional, default 'true') Create a read-only RDS proxy endpoint when use_proxy is true."
+  default     = true
 }
 
 variable "proxy_iam_authentication_enabled" {
