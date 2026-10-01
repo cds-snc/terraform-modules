@@ -68,3 +68,27 @@ run "retention_bounds_are_valid" {
     aws_backup_vault.this,
   ]
 }
+
+run "retention_period_cannot_exceed_three_years" {
+  command = plan
+
+  variables {
+    max_retention_days = 1096
+  }
+
+  expect_failures = [
+    var.max_retention_days,
+  ]
+}
+
+run "minimum_retention_cannot_exceed_three_years" {
+  command = plan
+
+  variables {
+    min_retention_days = 1096
+  }
+
+  expect_failures = [
+    var.min_retention_days,
+  ]
+}

@@ -27,24 +27,24 @@ variable "ssc_cbrid_tag_value" {
 }
 
 variable "min_retention_days" {
-  description = "(Optional) The minimum retention period in days accepted by the vault lock."
+  description = "(Optional) The minimum retention period in days accepted by the vault lock, up to three years."
   type        = number
   default     = null
 
   validation {
-    condition     = var.min_retention_days == null ? true : (var.min_retention_days >= 1 && var.min_retention_days <= 36500 && floor(var.min_retention_days) == var.min_retention_days)
-    error_message = "min_retention_days must be a whole number between 1 and 36500 when set."
+    condition     = var.min_retention_days == null ? true : (var.min_retention_days >= 1 && var.min_retention_days <= 1095 && floor(var.min_retention_days) == var.min_retention_days)
+    error_message = "min_retention_days must be a whole number between 1 and 1095 when set."
   }
 }
 
 variable "max_retention_days" {
-  description = "(Optional) The maximum retention period in days accepted by the vault lock."
+  description = "(Optional) The maximum retention period in days accepted by the vault lock, up to three years."
   type        = number
   default     = null
 
   validation {
-    condition     = var.max_retention_days == null ? true : (var.max_retention_days >= 1 && var.max_retention_days <= 36500 && floor(var.max_retention_days) == var.max_retention_days)
-    error_message = "max_retention_days must be a whole number between 1 and 36500 when set."
+    condition     = var.max_retention_days == null ? true : (var.max_retention_days >= 1 && var.max_retention_days <= 1095 && floor(var.max_retention_days) == var.max_retention_days)
+    error_message = "max_retention_days must be a whole number between 1 and 1095 when set."
   }
 }
 
