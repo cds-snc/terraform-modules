@@ -55,12 +55,12 @@ variable "max_retention_days" {
 }
 
 variable "changeable_for_days" {
-  description = "(Optional) The number of days before a compliance-mode vault lock becomes immutable. Omit to use governance mode."
+  description = "(Optional) The number of days, up to three years, before a compliance-mode vault lock becomes immutable. Omit to use governance mode."
   type        = number
   default     = null
 
   validation {
-    condition     = var.changeable_for_days == null ? true : (var.changeable_for_days >= 3 && var.changeable_for_days <= 36500 && floor(var.changeable_for_days) == var.changeable_for_days)
-    error_message = "changeable_for_days must be a whole number between 3 and 36500 when set."
+    condition     = var.changeable_for_days == null ? true : (var.changeable_for_days >= 3 && var.changeable_for_days <= 1095 && floor(var.changeable_for_days) == var.changeable_for_days)
+    error_message = "changeable_for_days must be a whole number between 3 and 1095 when set."
   }
 }

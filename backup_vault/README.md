@@ -30,7 +30,7 @@ No modules.
 | ---- | ----------- | ---- | ------- | :------: |
 | <a name="input_billing_tag_key"></a> [billing\_tag\_key](#input\_billing\_tag\_key) | (Optional, default 'CostCentre') The name of the billing tag. | `string` | `"CostCentre"` | no |
 | <a name="input_billing_tag_value"></a> [billing\_tag\_value](#input\_billing\_tag\_value) | (Required) The value of the billing tag. | `string` | n/a | yes |
-| <a name="input_changeable_for_days"></a> [changeable\_for\_days](#input\_changeable\_for\_days) | (Optional) The number of days before a compliance-mode vault lock becomes immutable. Omit to use governance mode. | `number` | `null` | no |
+| <a name="input_changeable_for_days"></a> [changeable\_for\_days](#input\_changeable\_for\_days) | (Optional) The number of days, up to three years, before a compliance-mode vault lock becomes immutable. Omit to use governance mode. | `number` | `null` | no |
 | <a name="input_kms_key_arn"></a> [kms\_key\_arn](#input\_kms\_key\_arn) | (Optional) The ARN of a customer-managed KMS key used to encrypt the vault. Required for an Aurora cross-Region copy destination vault. | `string` | `null` | no |
 | <a name="input_max_retention_days"></a> [max\_retention\_days](#input\_max\_retention\_days) | (Optional) The maximum retention period in days accepted by the vault lock, up to three years. | `number` | `null` | no |
 | <a name="input_min_retention_days"></a> [min\_retention\_days](#input\_min\_retention\_days) | (Optional) The minimum retention period in days accepted by the vault lock, up to three years. | `number` | `null` | no |

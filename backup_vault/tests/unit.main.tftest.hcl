@@ -110,3 +110,15 @@ run "minimum_retention_cannot_exceed_three_years" {
     var.min_retention_days,
   ]
 }
+
+run "compliance_grace_period_cannot_exceed_three_years" {
+  command = plan
+
+  variables {
+    changeable_for_days = 1096
+  }
+
+  expect_failures = [
+    var.changeable_for_days,
+  ]
+}
