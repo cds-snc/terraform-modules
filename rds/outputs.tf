@@ -35,8 +35,8 @@ output "proxy_writer_endpoint" {
 }
 
 output "proxy_reader_endpoint" {
-  description = "The RDS proxy read-only connection endpoint."
-  value       = var.use_proxy ? aws_db_proxy_endpoint.reader[0].endpoint : null
+  description = "The RDS proxy read-only connection endpoint, or null when the cluster has no reader instance."
+  value       = var.use_proxy && var.instances > 1 ? aws_db_proxy_endpoint.reader[0].endpoint : null
 }
 
 output "proxy_security_group_id" {

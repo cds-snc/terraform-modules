@@ -70,8 +70,8 @@ run "postgres_iam_proxy" {
   }
 
   assert {
-    condition     = length(aws_db_proxy_endpoint.reader) == 1 && aws_db_proxy_endpoint.reader[0].target_role == "READ_ONLY"
-    error_message = "The proxy should create a read-only endpoint when enabled"
+    condition     = length(aws_db_proxy_endpoint.reader) == 0
+    error_message = "The proxy should not create a read-only endpoint without a reader instance"
   }
 
   assert {

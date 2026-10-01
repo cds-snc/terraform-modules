@@ -2,14 +2,16 @@ This module will create an RDS Cluster with an optional RDS Proxy to manage conn
 
 ## Requirements
 
-No requirements.
+| Name | Version |
+| ---- | ------- |
+| <a name="requirement_aws"></a> [aws](#requirement\_aws) | >= 6.15.0 |
 
 ## Providers
 
 | Name | Version |
-|------|---------|
-| <a name="provider_aws"></a> [aws](#provider\_aws) | n/a |
-| <a name="provider_random"></a> [random](#provider\_random) | n/a |
+| ---- | ------- |
+| <a name="provider_aws"></a> [aws](#provider\_aws) | 6.67.0 |
+| <a name="provider_random"></a> [random](#provider\_random) | 3.9.1 |
 
 ## Modules
 
@@ -18,7 +20,7 @@ No modules.
 ## Resources
 
 | Name | Type |
-|------|------|
+| ---- | ---- |
 | [aws_cloudwatch_log_group.log_exports](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/cloudwatch_log_group) | resource |
 | [aws_cloudwatch_log_group.proxy](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/cloudwatch_log_group) | resource |
 | [aws_db_event_subscription.rds_sg_events_alerts](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/db_event_subscription) | resource |
@@ -53,7 +55,7 @@ No modules.
 ## Inputs
 
 | Name | Description | Type | Default | Required |
-|------|-------------|------|---------|:--------:|
+| ---- | ----------- | ---- | ------- | :------: |
 | <a name="input_allow_major_version_upgrade"></a> [allow\_major\_version\_upgrade](#input\_allow\_major\_version\_upgrade) | (Optional, default 'false') This flag allows RDS to perform a major engine upgrade. <br/> **Please Note:** This could break things so make sure you know that your code is compatible with the new features in this version. | `bool` | `false` | no |
 | <a name="input_backtrack_window"></a> [backtrack\_window](#input\_backtrack\_window) | (Optional, defaults to 72 hours) The number of days to retain a backtrack. Set to 0 to disable backtracking.  This is only valid for the `aurora-mysql` engine type. | `number` | `259200` | no |
 | <a name="input_backup_retention_period"></a> [backup\_retention\_period](#input\_backup\_retention\_period) | (Required) The amount of days to keep backups for. | `number` | n/a | yes |
@@ -76,7 +78,7 @@ No modules.
 | <a name="input_prevent_cluster_deletion"></a> [prevent\_cluster\_deletion](#input\_prevent\_cluster\_deletion) | (Optional, default 'true') This flag prevents deletion of the RDS cluster. <br/> **Please Note:** We cannot prevent deletion of RDS instances in the module, we recommend you add `lifecycle { prevent_deletion = true }` to the module to prevent instance deletion | `bool` | `true` | no |
 | <a name="input_proxy_debug_logging"></a> [proxy\_debug\_logging](#input\_proxy\_debug\_logging) | (Optional, default 'false') Allows the proxy to log debug information. <br/> **Please Note:** This will include all sql commands and potential sensitive information | `bool` | `false` | no |
 | <a name="input_proxy_iam_authentication_enabled"></a> [proxy\_iam\_authentication\_enabled](#input\_proxy\_iam\_authentication\_enabled) | (Optional, default 'false') Configure the proxy to require IAM database authentication instead of Secrets Manager credentials. Requires use\_proxy to be true. | `bool` | `false` | no |
-| <a name="input_proxy_iam_authentication_task_role_arns"></a> [proxy\_iam\_authentication\_task\_role\_arns](#input\_proxy\_iam\_authentication\_task\_role\_arns) | (Optional, default empty) IAM proxy authentication bindings. Each map key is a database username and its task\_role\_arns allow ECS tasks to authenticate as that user through the RDS proxy. Requires proxy\_iam\_authentication\_enabled to be true. | `map(object({ task\_role\_arns = list(string) }))` | `{}` | no |
+| <a name="input_proxy_iam_authentication_task_role_arns"></a> [proxy\_iam\_authentication\_task\_role\_arns](#input\_proxy\_iam\_authentication\_task\_role\_arns) | (Optional, default empty) IAM proxy authentication bindings. Each map key must identify an existing database user configured for IAM authentication (granted rds\_iam for PostgreSQL or using AWSAuthenticationPlugin for MySQL); its task\_role\_arns allow ECS tasks to authenticate as that user through the RDS proxy. Requires proxy\_iam\_authentication\_enabled to be true. | <pre>map(object({<br/>    task_role_arns = list(string)<br/>  }))</pre> | `{}` | no |
 | <a name="input_proxy_log_retention_in_days"></a> [proxy\_log\_retention\_in\_days](#input\_proxy\_log\_retention\_in\_days) | (Optional, default '14') The number of days to retain the proxy logs in cloudwatch | `number` | `14` | no |
 | <a name="input_proxy_secret_auth_arns"></a> [proxy\_secret\_auth\_arns](#input\_proxy\_secret\_auth\_arns) | (Optional, default none) A list of secret ARNs that contain authentication credentials for the proxy. View the `aws_secretsmanager_secret_version.connection_string` resource for the secret format. Note that these must be database users that already exist. | `list(string)` | `[]` | no |
 | <a name="input_security_group_ids"></a> [security\_group\_ids](#input\_security\_group\_ids) | (Optional, default '[]') A list of additional security group IDs to associate with the RDS cluster. | `list(string)` | `[]` | no |
@@ -96,13 +98,13 @@ No modules.
 ## Outputs
 
 | Name | Description |
-|------|-------------|
+| ---- | ----------- |
 | <a name="output_cluster_security_group_arn"></a> [cluster\_security\_group\_arn](#output\_cluster\_security\_group\_arn) | The RDS cluster security group ID. |
 | <a name="output_cluster_security_group_id"></a> [cluster\_security\_group\_id](#output\_cluster\_security\_group\_id) | The RDS cluster security group ID. |
 | <a name="output_proxy_connection_string_arn"></a> [proxy\_connection\_string\_arn](#output\_proxy\_connection\_string\_arn) | The ARN for the connection string to the RDS proxy. |
 | <a name="output_proxy_connection_string_value"></a> [proxy\_connection\_string\_value](#output\_proxy\_connection\_string\_value) | The string value of the RDS proxy connection string.  This includes the username and password. |
 | <a name="output_proxy_endpoint"></a> [proxy\_endpoint](#output\_proxy\_endpoint) | The RDS proxy read/write connection endpoint. |
-| <a name="output_proxy_reader_endpoint"></a> [proxy\_reader\_endpoint](#output\_proxy\_reader\_endpoint) | The RDS proxy read-only connection endpoint. |
+| <a name="output_proxy_reader_endpoint"></a> [proxy\_reader\_endpoint](#output\_proxy\_reader\_endpoint) | The RDS proxy read-only connection endpoint, or null when the cluster has no reader instance. |
 | <a name="output_proxy_security_group_arn"></a> [proxy\_security\_group\_arn](#output\_proxy\_security\_group\_arn) | The RDS proxy security group ARN. |
 | <a name="output_proxy_security_group_id"></a> [proxy\_security\_group\_id](#output\_proxy\_security\_group\_id) | The RDS proxy security group ID. |
 | <a name="output_proxy_writer_endpoint"></a> [proxy\_writer\_endpoint](#output\_proxy\_writer\_endpoint) | The RDS proxy read/write connection endpoint. |

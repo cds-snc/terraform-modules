@@ -178,4 +178,9 @@ run "mysql_cluster" {
     condition     = length(aws_db_proxy.proxy[0].auth) == 1
     error_message = "RDS proxy auth length did not match expected value"
   }
+
+  assert {
+    condition     = length(aws_db_proxy_endpoint.reader) == 1 && aws_db_proxy_endpoint.reader[0].target_role == "READ_ONLY"
+    error_message = "The proxy should create a read-only endpoint when a reader instance exists"
+  }
 }
