@@ -39,6 +39,18 @@ run "task_role_bindings_require_iam_authentication" {
   ]
 }
 
+run "iam_authentication_requires_task_role_bindings" {
+  command = plan
+
+  variables {
+    proxy_iam_authentication_task_role_arns = {}
+  }
+
+  expect_failures = [
+    aws_rds_cluster.cluster,
+  ]
+}
+
 run "postgres_iam_proxy" {
   command = plan
 
