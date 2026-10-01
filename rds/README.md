@@ -3,15 +3,15 @@ This module will create an RDS Cluster with an optional RDS Proxy to manage conn
 ## Requirements
 
 | Name | Version |
-| ---- | ------- |
+|------|---------|
 | <a name="requirement_aws"></a> [aws](#requirement\_aws) | >= 6.15.0 |
 
 ## Providers
 
 | Name | Version |
-| ---- | ------- |
-| <a name="provider_aws"></a> [aws](#provider\_aws) | 6.67.0 |
-| <a name="provider_random"></a> [random](#provider\_random) | 3.9.1 |
+|------|---------|
+| <a name="provider_aws"></a> [aws](#provider\_aws) | >= 6.15.0 |
+| <a name="provider_random"></a> [random](#provider\_random) | n/a |
 
 ## Modules
 
@@ -20,7 +20,7 @@ No modules.
 ## Resources
 
 | Name | Type |
-| ---- | ---- |
+|------|------|
 | [aws_cloudwatch_log_group.log_exports](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/cloudwatch_log_group) | resource |
 | [aws_cloudwatch_log_group.proxy](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/cloudwatch_log_group) | resource |
 | [aws_db_event_subscription.rds_sg_events_alerts](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/db_event_subscription) | resource |
@@ -55,7 +55,7 @@ No modules.
 ## Inputs
 
 | Name | Description | Type | Default | Required |
-| ---- | ----------- | ---- | ------- | :------: |
+|------|-------------|------|---------|:--------:|
 | <a name="input_allow_major_version_upgrade"></a> [allow\_major\_version\_upgrade](#input\_allow\_major\_version\_upgrade) | (Optional, default 'false') This flag allows RDS to perform a major engine upgrade. <br/> **Please Note:** This could break things so make sure you know that your code is compatible with the new features in this version. | `bool` | `false` | no |
 | <a name="input_backtrack_window"></a> [backtrack\_window](#input\_backtrack\_window) | (Optional, defaults to 72 hours) The number of days to retain a backtrack. Set to 0 to disable backtracking.  This is only valid for the `aurora-mysql` engine type. | `number` | `259200` | no |
 | <a name="input_backup_retention_period"></a> [backup\_retention\_period](#input\_backup\_retention\_period) | (Required) The amount of days to keep backups for. | `number` | n/a | yes |
@@ -98,7 +98,7 @@ No modules.
 ## Outputs
 
 | Name | Description |
-| ---- | ----------- |
+|------|-------------|
 | <a name="output_cluster_security_group_arn"></a> [cluster\_security\_group\_arn](#output\_cluster\_security\_group\_arn) | The RDS cluster security group ID. |
 | <a name="output_cluster_security_group_id"></a> [cluster\_security\_group\_id](#output\_cluster\_security\_group\_id) | The RDS cluster security group ID. |
 | <a name="output_proxy_connection_string_arn"></a> [proxy\_connection\_string\_arn](#output\_proxy\_connection\_string\_arn) | The ARN for the connection string to the RDS proxy. |
