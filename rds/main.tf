@@ -31,6 +31,26 @@ resource "aws_rds_cluster_instance" "instances" {
 }
 
 resource "aws_rds_cluster" "cluster" {
+  lifecycle {
+    precondition {
+      condition     = !var.proxy_iam_authentication_enabled || var.use_proxy
+      error_message = "use_proxy must be true when proxy_iam_authentication_enabled is true."
+    }
+
+    precondition {
+      condition = !var.proxy_iam_authentication_enabled || (
+        length(var.proxy_iam_authentication_task_role_arns) > 0 &&
+        alltrue([for user in values(var.proxy_iam_authentication_task_role_arns) : length(user.task_role_arns) > 0])
+      )
+      error_message = "proxy_iam_authentication_task_role_arns must define at least one task role for every database user when proxy_iam_authentication_enabled is true."
+    }
+
+    precondition {
+      condition     = var.proxy_iam_authentication_enabled || length(var.proxy_iam_authentication_task_role_arns) == 0
+      error_message = "proxy_iam_authentication_task_role_arns must be empty when proxy_iam_authentication_enabled is false."
+    }
+  }
+
   cluster_identifier          = local.identifier
   engine                      = var.engine
   engine_version              = var.engine_version
@@ -43,7 +63,7 @@ resource "aws_rds_cluster" "cluster" {
   allow_major_version_upgrade = var.allow_major_version_upgrade
   apply_immediately           = var.upgrade_immediately
 
-  iam_database_authentication_enabled = var.iam_database_authentication_enabled
+  iam_database_authentication_enabled = var.iam_database_authentication_enabled || var.proxy_iam_authentication_enabled
   db_cluster_parameter_group_name     = var.db_cluster_parameter_group_name
   enabled_cloudwatch_logs_exports     = local.enabled_cloudwatch_logs_exports
 
@@ -100,21 +120,31 @@ resource "aws_db_proxy" "proxy" {
   idle_client_timeout = 1800
   require_tls         = true
 
+  default_auth_scheme = local.use_proxy_iam_authentication ? "IAM_AUTH" : null
+
+  depends_on = [
+    aws_iam_role_policy_attachment.read_connection_string,
+    aws_iam_role_policy_attachment.proxy_iam_database_connect,
+  ]
+
   role_arn               = aws_iam_role.rds_proxy[0].arn
   vpc_security_group_ids = local.security_group_ids
   vpc_subnet_ids         = var.subnet_ids
 
   # Default proxy authentication user
-  auth {
-    auth_scheme = "SECRETS"
-    description = "The database connection string"
-    iam_auth    = "DISABLED"
-    secret_arn  = aws_secretsmanager_secret.connection_string[0].arn
+  dynamic "auth" {
+    for_each = local.use_proxy_secret_auth ? [aws_secretsmanager_secret.connection_string[0].arn] : []
+    content {
+      auth_scheme = "SECRETS"
+      description = "The database connection string"
+      iam_auth    = "DISABLED"
+      secret_arn  = auth.value
+    }
   }
 
   # Additional proxy authentication users
   dynamic "auth" {
-    for_each = var.proxy_secret_auth_arns
+    for_each = local.use_proxy_secret_auth ? var.proxy_secret_auth_arns : []
     content {
       auth_scheme = "SECRETS"
       description = "Additional proxy authentication"
@@ -142,6 +172,27 @@ resource "aws_db_proxy_target" "target" {
   db_proxy_name         = aws_db_proxy.proxy[0].name
   target_group_name     = aws_db_proxy_default_target_group.this[0].name
   db_cluster_identifier = aws_rds_cluster.cluster.id
+}
+
+resource "aws_db_proxy_endpoint" "reader" {
+  count = var.use_proxy && var.instances > 1 ? 1 : 0
+
+  db_proxy_endpoint_name = "${local.proxy_name}-reader"
+  db_proxy_name          = aws_db_proxy.proxy[0].name
+  target_role            = "READ_ONLY"
+  vpc_security_group_ids = local.security_group_ids
+  vpc_subnet_ids         = var.subnet_ids
+
+  depends_on = [
+    aws_db_proxy_target.target,
+    aws_rds_cluster_instance.instances,
+  ]
+
+  tags = {
+    (var.billing_tag_key) = var.billing_tag_value
+    Terraform             = "true"
+    Name                  = "${var.name}-rds-proxy-reader"
+  }
 }
 
 ###

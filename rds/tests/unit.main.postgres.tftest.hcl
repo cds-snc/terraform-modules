@@ -205,4 +205,14 @@ run "postgres_cluster" {
     condition     = length(aws_db_proxy.proxy[0].auth) == 1
     error_message = "RDS proxy auth length did not match expected value"
   }
+
+  assert {
+    condition     = length(aws_db_proxy_endpoint.reader) == 0
+    error_message = "The proxy should not create a read-only endpoint without a reader instance"
+  }
+
+  assert {
+    condition     = output.proxy_reader_endpoint == null
+    error_message = "The reader endpoint output should be null without a reader instance"
+  }
 }

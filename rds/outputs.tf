@@ -15,18 +15,28 @@ output "rds_cluster_endpoint" {
 
 output "proxy_connection_string_arn" {
   description = "The ARN for the connection string to the RDS proxy."
-  value       = var.use_proxy ? aws_secretsmanager_secret.proxy_connection_string[0].arn : null
+  value       = local.use_proxy_secret_auth ? aws_secretsmanager_secret.proxy_connection_string[0].arn : null
 }
 
 output "proxy_connection_string_value" {
   description = "The string value of the RDS proxy connection string.  This includes the username and password."
-  value       = var.use_proxy ? aws_secretsmanager_secret_version.proxy_connection_string[0].secret_string : null
+  value       = local.use_proxy_secret_auth ? aws_secretsmanager_secret_version.proxy_connection_string[0].secret_string : null
   sensitive   = true
 }
 
 output "proxy_endpoint" {
   description = "The RDS proxy read/write connection endpoint."
   value       = var.use_proxy ? aws_db_proxy.proxy[0].endpoint : null
+}
+
+output "proxy_writer_endpoint" {
+  description = "The RDS proxy read/write connection endpoint."
+  value       = var.use_proxy ? aws_db_proxy.proxy[0].endpoint : null
+}
+
+output "proxy_reader_endpoint" {
+  description = "The RDS proxy read-only connection endpoint, or null when the cluster has no reader instance."
+  value       = var.use_proxy && var.instances > 1 ? aws_db_proxy_endpoint.reader[0].endpoint : null
 }
 
 output "proxy_security_group_id" {

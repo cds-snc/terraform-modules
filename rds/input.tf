@@ -210,6 +210,20 @@ variable "proxy_secret_auth_arns" {
   default     = []
 }
 
+variable "proxy_iam_authentication_enabled" {
+  type        = bool
+  description = "(Optional, default 'false') Configure the proxy to require IAM database authentication instead of Secrets Manager credentials. Requires use_proxy to be true."
+  default     = false
+}
+
+variable "proxy_iam_authentication_task_role_arns" {
+  type = map(object({
+    task_role_arns = list(string)
+  }))
+  description = "(Optional, default empty) IAM proxy authentication bindings. Each map key must identify an existing database user configured for IAM authentication (granted rds_iam for PostgreSQL or using AWSAuthenticationPlugin for MySQL); its task_role_arns allow ECS tasks to authenticate as that user through the RDS proxy. Requires proxy_iam_authentication_enabled to be true."
+  default     = {}
+}
+
 variable "proxy_log_retention_in_days" {
   type        = number
   description = "(Optional, default '14') The number of days to retain the proxy logs in cloudwatch"
