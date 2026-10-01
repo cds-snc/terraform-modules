@@ -38,6 +38,11 @@ resource "aws_rds_cluster" "cluster" {
     }
 
     precondition {
+      condition     = !var.proxy_reader_endpoint_enabled || var.use_proxy
+      error_message = "use_proxy must be true when proxy_reader_endpoint_enabled is true."
+    }
+
+    precondition {
       condition     = !var.proxy_iam_authentication_enabled || length(var.proxy_iam_authentication_task_role_arns) > 0
       error_message = "proxy_iam_authentication_task_role_arns must include at least one database user when proxy_iam_authentication_enabled is true."
     }
@@ -162,7 +167,7 @@ resource "aws_db_proxy_target" "target" {
 }
 
 resource "aws_db_proxy_endpoint" "reader" {
-  count = local.use_proxy_iam_authentication ? 1 : 0
+  count = var.use_proxy && var.proxy_reader_endpoint_enabled ? 1 : 0
 
   db_proxy_endpoint_name = "${local.proxy_name}-reader"
   db_proxy_name          = aws_db_proxy.proxy[0].name

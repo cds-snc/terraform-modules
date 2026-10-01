@@ -210,6 +210,12 @@ variable "proxy_secret_auth_arns" {
   default     = []
 }
 
+variable "proxy_reader_endpoint_enabled" {
+  type        = bool
+  description = "(Optional, default 'false') Create a read-only RDS proxy endpoint. Requires use_proxy to be true."
+  default     = false
+}
+
 variable "proxy_iam_authentication_enabled" {
   type        = bool
   description = "(Optional, default 'false') Configure the proxy to require IAM database authentication instead of Secrets Manager credentials. Requires use_proxy to be true."

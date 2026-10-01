@@ -20,6 +20,7 @@ variables {
   subnet_ids = ["subnet1234"]
 
   proxy_iam_authentication_enabled = true
+  proxy_reader_endpoint_enabled    = true
   proxy_iam_authentication_task_role_arns = {
     app = ["arn:aws:iam::123456789012:role/test-app-task"]
   }
@@ -45,7 +46,7 @@ run "postgres_iam_proxy" {
 
   assert {
     condition     = length(aws_db_proxy_endpoint.reader) == 1 && aws_db_proxy_endpoint.reader[0].target_role == "READ_ONLY"
-    error_message = "The IAM-authenticated proxy should create a read-only endpoint"
+    error_message = "The proxy should create a read-only endpoint when enabled"
   }
 
   assert {
