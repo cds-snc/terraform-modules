@@ -75,6 +75,7 @@ jobs:
       matrix:
         module:
           - athena_access_logs
+          - backup_vault
           - client_vpn
           - codebuild_github_runner
           - ecs
