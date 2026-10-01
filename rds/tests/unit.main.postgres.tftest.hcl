@@ -208,19 +208,6 @@ run "postgres_cluster" {
 
   assert {
     condition     = length(aws_db_proxy_endpoint.reader) == 1 && aws_db_proxy_endpoint.reader[0].target_role == "READ_ONLY"
-    error_message = "The proxy should create a read-only endpoint when enabled"
-  }
-}
-
-run "postgres_cluster_without_reader" {
-  command = plan
-
-  variables {
-    proxy_reader_endpoint_enabled = false
-  }
-
-  assert {
-    condition     = length(aws_db_proxy_endpoint.reader) == 0
-    error_message = "The proxy should not create a read-only endpoint when disabled"
+    error_message = "The proxy should create a read-only endpoint"
   }
 }

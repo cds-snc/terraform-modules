@@ -36,7 +36,7 @@ output "proxy_writer_endpoint" {
 
 output "proxy_reader_endpoint" {
   description = "The RDS proxy read-only connection endpoint."
-  value       = var.use_proxy && var.proxy_reader_endpoint_enabled ? aws_db_proxy_endpoint.reader[0].endpoint : null
+  value       = var.use_proxy ? aws_db_proxy_endpoint.reader[0].endpoint : null
 }
 
 output "proxy_security_group_id" {

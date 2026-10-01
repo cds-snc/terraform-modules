@@ -162,7 +162,7 @@ resource "aws_db_proxy_target" "target" {
 }
 
 resource "aws_db_proxy_endpoint" "reader" {
-  count = var.use_proxy && var.proxy_reader_endpoint_enabled ? 1 : 0
+  count = var.use_proxy ? 1 : 0
 
   db_proxy_endpoint_name = "${local.proxy_name}-reader"
   db_proxy_name          = aws_db_proxy.proxy[0].name
