@@ -122,6 +122,11 @@ resource "aws_db_proxy" "proxy" {
 
   default_auth_scheme = local.use_proxy_iam_authentication ? "IAM_AUTH" : null
 
+  depends_on = [
+    aws_iam_role_policy_attachment.read_connection_string,
+    aws_iam_role_policy_attachment.proxy_iam_database_connect,
+  ]
+
   role_arn               = aws_iam_role.rds_proxy[0].arn
   vpc_security_group_ids = local.security_group_ids
   vpc_subnet_ids         = var.subnet_ids
