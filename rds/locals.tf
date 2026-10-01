@@ -22,8 +22,8 @@ locals {
   proxy_iam_authentication_users = local.use_proxy_iam_authentication ? var.proxy_iam_authentication_task_role_arns : {}
   proxy_iam_authentication_task_roles = {
     for task_role in flatten([
-      for database_username, task_role_arns in local.proxy_iam_authentication_users : [
-        for task_role_arn in task_role_arns : {
+      for database_username, user in local.proxy_iam_authentication_users : [
+        for task_role_arn in user.task_role_arns : {
           database_username = database_username
           task_role_arn     = task_role_arn
         }

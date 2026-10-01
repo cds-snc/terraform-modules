@@ -21,8 +21,22 @@ variables {
 
   proxy_iam_authentication_enabled = true
   proxy_iam_authentication_task_role_arns = {
-    app = ["arn:aws:iam::123456789012:role/test-app-task"]
+    app = {
+      task_role_arns = ["arn:aws:iam::123456789012:role/test-app-task"]
+    }
   }
+}
+
+run "task_role_bindings_require_iam_authentication" {
+  command = plan
+
+  variables {
+    proxy_iam_authentication_enabled = false
+  }
+
+  expect_failures = [
+    aws_rds_cluster.cluster,
+  ]
 }
 
 run "postgres_iam_proxy" {

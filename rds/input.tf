@@ -217,8 +217,10 @@ variable "proxy_iam_authentication_enabled" {
 }
 
 variable "proxy_iam_authentication_task_role_arns" {
-  type        = map(set(string))
-  description = "(Optional, default empty) Map of database usernames to ECS task role ARNs allowed to authenticate as that user through the RDS proxy."
+  type = map(object({
+    task_role_arns = set(string)
+  }))
+  description = "(Optional, default empty) IAM proxy authentication bindings. Each map key is a database username and its task_role_arns allow ECS tasks to authenticate as that user through the RDS proxy. Requires proxy_iam_authentication_enabled to be true."
   default     = {}
 }
 

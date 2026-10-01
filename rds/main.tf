@@ -38,8 +38,11 @@ resource "aws_rds_cluster" "cluster" {
     }
 
     precondition {
-      condition     = !var.proxy_iam_authentication_enabled || length(var.proxy_iam_authentication_task_role_arns) > 0
-      error_message = "proxy_iam_authentication_task_role_arns must include at least one database user when proxy_iam_authentication_enabled is true."
+      condition = var.proxy_iam_authentication_enabled ? (
+        length(var.proxy_iam_authentication_task_role_arns) > 0 &&
+        alltrue([for user in values(var.proxy_iam_authentication_task_role_arns) : length(user.task_role_arns) > 0])
+      ) : length(var.proxy_iam_authentication_task_role_arns) == 0
+      error_message = "proxy_iam_authentication_task_role_arns must define at least one task role for every database user when proxy_iam_authentication_enabled is true, and must be empty otherwise."
     }
   }
 
