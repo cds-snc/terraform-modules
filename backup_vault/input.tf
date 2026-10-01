@@ -26,6 +26,12 @@ variable "ssc_cbrid_tag_value" {
   default     = "22DH"
 }
 
+variable "kms_key_arn" {
+  description = "(Optional) The ARN of a customer-managed KMS key used to encrypt the vault. Required for an Aurora cross-Region copy destination vault."
+  type        = string
+  default     = null
+}
+
 variable "min_retention_days" {
   description = "(Optional) The minimum retention period in days accepted by the vault lock, up to three years."
   type        = number

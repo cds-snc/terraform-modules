@@ -1,10 +1,12 @@
 /* # AWS Backup Vault
-* This module creates an AWS Backup vault that uses the AWS-managed AWS Backup KMS key.
+* This module creates an AWS Backup vault using the AWS Backup managed key by default.
+* A caller may provide a customer-managed KMS key for an Aurora cross-Region copy destination vault.
 */
 
 resource "aws_backup_vault" "this" {
-  name = var.name
-  tags = local.common_tags
+  name        = var.name
+  kms_key_arn = var.kms_key_arn
+  tags        = local.common_tags
 
   lifecycle {
     precondition {

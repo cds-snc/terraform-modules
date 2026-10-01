@@ -56,6 +56,24 @@ run "vault_with_compliance_lock" {
   }
 }
 
+run "vault_with_customer_managed_kms_key" {
+  command = plan
+
+  variables {
+    kms_key_arn = "arn:aws:kms:ca-west-1:123456789012:key/12345678-1234-1234-1234-123456789012"
+  }
+
+  assert {
+    condition     = aws_backup_vault.this.kms_key_arn == "arn:aws:kms:ca-west-1:123456789012:key/12345678-1234-1234-1234-123456789012"
+    error_message = "Backup vault KMS key ARN did not match expected value."
+  }
+
+  assert {
+    condition     = output.backup_vault_kms_key_arn == "arn:aws:kms:ca-west-1:123456789012:key/12345678-1234-1234-1234-123456789012"
+    error_message = "Backup vault KMS key ARN output did not match expected value."
+  }
+}
+
 run "retention_bounds_are_valid" {
   command = plan
 
