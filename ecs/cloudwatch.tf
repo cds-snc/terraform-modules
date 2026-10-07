@@ -42,6 +42,7 @@ module "sentinel_forwarder" {
   azure_client_secret             = var.sentinel_azure_client_secret
   cognito_identity_pool_id        = var.sentinel_cognito_identity_pool_id
   cognito_developer_provider_name = var.sentinel_cognito_developer_provider_name
+  hub_role_arn                    = var.sentinel_hub_role_arn
 
   cloudwatch_log_arns = [
     aws_cloudwatch_log_group.this.arn,

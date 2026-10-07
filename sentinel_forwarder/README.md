@@ -14,7 +14,7 @@ The layer carries both Azure ingestion APIs and picks one per Lambda, from the i
 * **v1, the Data Collector API.** Set `customer_id` and `shared_key`. Microsoft ended support for this API on
   2026-09-14. Data lands in the legacy `*_CL` tables.
 * **v2, the Logs Ingestion API.** Set `dce_endpoint` and `dcr_config` — both, or the layer stays on v1 — plus
-  `azure_client_id` and `azure_tenant_id`, and one of the two sign-in methods below. Data lands in the tables behind
+  `azure_client_id` and `azure_tenant_id`, and one of the three sign-in methods below. Data lands in the tables behind
   those data collection rules (DCRs).
 
 v2 needs layer version **270 or later**. Earlier versions are built for CPython 3.12, and this module runs the Lambda
@@ -39,8 +39,34 @@ dcr_config = {
 * **No stored secret (Cognito).** Set `cognito_identity_pool_id` and `cognito_developer_provider_name`. The Lambda's
   IAM role asks a Cognito identity pool for an OpenID token and presents it to Microsoft Entra ID as a client
   assertion for a user-assigned managed identity. Nothing is stored anywhere. It needs the one-time setup below.
+* **No stored secret (hub).** Set `hub_role_arn`. The Lambda's IAM role assumes a hub role, usually in another AWS
+  account, and uses IAM outbound identity federation there to mint a token it presents to Entra as a client assertion.
+  One hub serves every account, so there is nothing to set up per account. Needs layer version **273 or later**.
 
-If both are set, the client secret is used.
+If more than one is set, the client secret is used first, then the hub, then Cognito.
+
+### Hub setup
+
+Done once, in the hub account and in Azure; a forwarder only sets `hub_role_arn`.
+
+1. **Enable IAM outbound identity federation** in the hub account (`aws_iam_outbound_web_identity_federation`). It
+   exports the account's issuer URL.
+2. **Create the hub role.** Its trust policy must admit the forwarders' roles, which this module names
+   `SentinelForwarderLambda-<function_name>`; its only permission is `sts:GetWebIdentityToken` for the audience
+   `api://AzureADTokenExchange`, with `sts:DurationSeconds` no more than 300. The trust policy is the only control
+   on which accounts can send data, so restrict it, for example by organization and OU.
+3. **Trust it in Azure.** On the user-assigned managed identity, add one federated credential:
+
+   | Field | Value |
+   | --- | --- |
+   | Issuer | the hub account's issuer URL |
+   | Audience | `api://AzureADTokenExchange` |
+   | Subject | the hub role's ARN |
+
+   Give the identity **Monitoring Metrics Publisher** on each DCR it writes to.
+
+This module grants the Lambda's role `sts:AssumeRole` on `hub_role_arn`; a cross-account assume needs that grant and
+the hub's trust policy both.
 
 ### Cognito setup
 
@@ -123,6 +149,7 @@ No modules.
 | [aws_iam_policy.sentinel_forwarder_lambda_s3](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/iam_policy) | resource |
 | [aws_iam_role.sentinel_forwarder_lambda](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/iam_role) | resource |
 | [aws_iam_role_policy.sentinel_forwarder_cognito](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/iam_role_policy) | resource |
+| [aws_iam_role_policy.sentinel_forwarder_hub](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/iam_role_policy) | resource |
 | [aws_iam_role_policy_attachment.sentinel_forwarder_lambda](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/iam_role_policy_attachment) | resource |
 | [aws_iam_role_policy_attachment.sentinel_forwarder_lambda_s3](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/iam_role_policy_attachment) | resource |
 | [aws_lambda_function.sentinel_forwarder](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/lambda_function) | resource |
@@ -135,6 +162,7 @@ No modules.
 | [aws_caller_identity.current](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/data-sources/caller_identity) | data source |
 | [aws_iam_policy_document.lambda_assume_policy](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/data-sources/iam_policy_document) | data source |
 | [aws_iam_policy_document.sentinel_forwarder_cognito](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/data-sources/iam_policy_document) | data source |
+| [aws_iam_policy_document.sentinel_forwarder_hub](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/data-sources/iam_policy_document) | data source |
 | [aws_iam_policy_document.sentinel_forwarder_lambda](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/data-sources/iam_policy_document) | data source |
 | [aws_iam_policy_document.sentinel_forwarder_lambda_s3](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/data-sources/iam_policy_document) | data source |
 | [aws_region.current](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/data-sources/region) | data source |
@@ -156,7 +184,8 @@ No modules.
 | <a name="input_dcr_config"></a> [dcr\_config](#input\_dcr\_config) | (Optional, v2) Map of the layer's log type to the DCR that accepts it. Feed the `forwarder_v2_aws_dcr_config` output from cds-snc/sentinel verbatim — the attribute names are what the layer reads. | <pre>map(object({<br/>    dcrImmutableId = string<br/>    streamName     = string<br/>  }))</pre> | `{}` | no |
 | <a name="input_event_rule_names"></a> [event\_rule\_names](#input\_event\_rule\_names) | (Optional) List of names for event rules to trigger the lambda | `list(string)` | `[]` | no |
 | <a name="input_function_name"></a> [function\_name](#input\_function\_name) | (Required) Name of the Lambda function. | `string` | n/a | yes |
-| <a name="input_layer_arn"></a> [layer\_arn](#input\_layer\_arn) | (Optional) ARN of the Lambda layer to use. The v2 Logs Ingestion API needs layer version 270 or later. | `string` | `"arn:aws:lambda:ca-central-1:283582579564:layer:aws-sentinel-connector-layer:20"` | no |
+| <a name="input_hub_role_arn"></a> [hub\_role\_arn](#input\_hub\_role\_arn) | (Optional, v2) ARN of a hub role, usually in another AWS account, that this forwarder assumes to mint its Entra client assertion with IAM outbound identity federation. Selects the secretless hub auth path, which needs no per-account setup; takes precedence over Cognito, but not over `azure_client_secret`. Needs layer version 273 or later. | `string` | `""` | no |
+| <a name="input_layer_arn"></a> [layer\_arn](#input\_layer\_arn) | (Optional) ARN of the Lambda layer to use. The v2 Logs Ingestion API needs layer version 270 or later, and `hub_role_arn` needs 273 or later. | `string` | `"arn:aws:lambda:ca-central-1:283582579564:layer:aws-sentinel-connector-layer:20"` | no |
 | <a name="input_log_type"></a> [log\_type](#input\_log\_type) | (Optional) The namespace for logs. This only applies if you are sending application logs | `string` | `"ApplicationLog"` | no |
 | <a name="input_s3_sources"></a> [s3\_sources](#input\_s3\_sources) | (Optional) List of s3 buckets to trigger the lambda | <pre>list(object({<br/>    bucket_arn    = string<br/>    bucket_id     = string<br/>    filter_prefix = string<br/>    kms_key_arn   = string<br/>  }))</pre> | `[]` | no |
 | <a name="input_shared_key"></a> [shared\_key](#input\_shared\_key) | (Optional, v1 only) Azure log workspace shared secret. Required on the v1 Data Collector API path; leave unset on v2. | `string` | `""` | no |
