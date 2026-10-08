@@ -45,5 +45,6 @@ locals {
     var.azure_tenant_id != "" ? { AZURE_TENANT_ID = var.azure_tenant_id } : {},
     var.cognito_identity_pool_id != "" ? { COGNITO_IDENTITY_POOL_ID = var.cognito_identity_pool_id } : {},
     var.cognito_developer_provider_name != "" ? { COGNITO_DEVELOPER_PROVIDER_NAME = var.cognito_developer_provider_name } : {},
+    var.hub_role_arn != "" ? { SENTINEL_HUB_ROLE_ARN = var.hub_role_arn } : {},
   )
 }

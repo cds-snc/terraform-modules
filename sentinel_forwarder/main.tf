@@ -15,7 +15,7 @@
 * * **v1, the Data Collector API.** Set `customer_id` and `shared_key`. Microsoft ended support for this API on
 *   2026-09-14. Data lands in the legacy `*_CL` tables.
 * * **v2, the Logs Ingestion API.** Set `dce_endpoint` and `dcr_config` — both, or the layer stays on v1 — plus
-*   `azure_client_id` and `azure_tenant_id`, and one of the two sign-in methods below. Data lands in the tables behind
+*   `azure_client_id` and `azure_tenant_id`, and one of the three sign-in methods below. Data lands in the tables behind
 *   those data collection rules (DCRs).
 *
 * v2 needs layer version **270 or later**. Earlier versions are built for CPython 3.12, and this module runs the Lambda
@@ -40,8 +40,34 @@
 * * **No stored secret (Cognito).** Set `cognito_identity_pool_id` and `cognito_developer_provider_name`. The Lambda's
 *   IAM role asks a Cognito identity pool for an OpenID token and presents it to Microsoft Entra ID as a client
 *   assertion for a user-assigned managed identity. Nothing is stored anywhere. It needs the one-time setup below.
+* * **No stored secret (hub).** Set `hub_role_arn`. The Lambda's IAM role assumes a hub role, usually in another AWS
+*   account, and uses IAM outbound identity federation there to mint a token it presents to Entra as a client assertion.
+*   One hub serves every account, so there is nothing to set up per account. Needs layer version **273 or later**.
 *
-* If both are set, the client secret is used.
+* If more than one is set, the client secret is used first, then the hub, then Cognito.
+*
+* ### Hub setup
+*
+* Done once, in the hub account and in Azure; a forwarder only sets `hub_role_arn`.
+*
+* 1. **Enable IAM outbound identity federation** in the hub account (`aws_iam_outbound_web_identity_federation`). It
+*    exports the account's issuer URL.
+* 2. **Create the hub role.** Its trust policy must admit the forwarders' roles, which this module names
+*    `SentinelForwarderLambda-<function_name>`; its only permission is `sts:GetWebIdentityToken` for the audience
+*    `api://AzureADTokenExchange`, with `sts:DurationSeconds` no more than 300. The trust policy is the only control
+*    on which accounts can send data, so restrict it, for example by organization and OU.
+* 3. **Trust it in Azure.** On the user-assigned managed identity, add one federated credential:
+*
+*    | Field | Value |
+*    | --- | --- |
+*    | Issuer | the hub account's issuer URL |
+*    | Audience | `api://AzureADTokenExchange` |
+*    | Subject | the hub role's ARN |
+*
+*    Give the identity **Monitoring Metrics Publisher** on each DCR it writes to.
+*
+* This module grants the Lambda's role `sts:AssumeRole` on `hub_role_arn`; a cross-account assume needs that grant and
+* the hub's trust policy both.
 *
 * ### Cognito setup
 *
@@ -150,8 +176,8 @@ resource "aws_lambda_function" "sentinel_forwarder" {
     }
 
     precondition {
-      condition     = !local.v2_enabled || var.azure_client_secret != "" || (var.cognito_identity_pool_id != "" && var.cognito_developer_provider_name != "")
-      error_message = "The v2 path needs an auth method: either azure_client_secret, or both cognito_identity_pool_id and cognito_developer_provider_name for the secretless path."
+      condition     = !local.v2_enabled || var.azure_client_secret != "" || var.hub_role_arn != "" || (var.cognito_identity_pool_id != "" && var.cognito_developer_provider_name != "")
+      error_message = "The v2 path needs an auth method: azure_client_secret, hub_role_arn, or both cognito_identity_pool_id and cognito_developer_provider_name."
     }
 
     precondition {

@@ -57,7 +57,7 @@ variable "function_name" {
 }
 
 variable "layer_arn" {
-  description = "(Optional) ARN of the Lambda layer to use. The v2 Logs Ingestion API needs layer version 270 or later."
+  description = "(Optional) ARN of the Lambda layer to use. The v2 Logs Ingestion API needs layer version 270 or later, and `hub_role_arn` needs 273 or later."
   default     = "arn:aws:lambda:ca-central-1:283582579564:layer:aws-sentinel-connector-layer:20"
 }
 
@@ -138,4 +138,15 @@ variable "cognito_developer_provider_name" {
   description = "(Optional, v2) Developer provider name on that identity pool. Set with `cognito_identity_pool_id`."
   type        = string
   default     = ""
+}
+
+variable "hub_role_arn" {
+  description = "(Optional, v2) ARN of a hub role, usually in another AWS account, that this forwarder assumes to mint its Entra client assertion with IAM outbound identity federation. Selects the secretless hub auth path, which needs no per-account setup; takes precedence over Cognito, but not over `azure_client_secret`. Needs layer version 273 or later."
+  type        = string
+  default     = ""
+
+  validation {
+    condition     = var.hub_role_arn == "" || can(regex("^arn:aws:iam::[0-9]{12}:role/.+$", var.hub_role_arn))
+    error_message = "hub_role_arn must be an IAM role ARN, arn:aws:iam::<account>:role/<name>."
+  }
 }

@@ -529,6 +529,12 @@ variable "sentinel_cognito_developer_provider_name" {
   default     = ""
 }
 
+variable "sentinel_hub_role_arn" {
+  description = "(Optional, v2) ARN of the hub role the forwarder assumes to mint its Entra client assertion. Selects the secretless hub auth path, which needs no per-account setup; set `sentinel_forwarder_layer_arn` to layer version 273 or later."
+  type        = string
+  default     = ""
+}
+
 ################################################################################
 # Common
 ################################################################################

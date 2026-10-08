@@ -105,6 +105,32 @@ data "aws_iam_policy_document" "sentinel_forwarder_cognito" {
   }
 }
 
+# The whole credential on the hub path: the layer assumes this role to mint the
+# token it presents to Entra. Scoped to the one role. The hub's own trust policy
+# decides whether this role is let in; this grant is the half the caller's
+# account has to give for a cross-account AssumeRole.
+resource "aws_iam_role_policy" "sentinel_forwarder_hub" {
+  count = var.hub_role_arn != "" ? 1 : 0
+
+  name   = "SentinelForwarderHub-${var.function_name}"
+  role   = aws_iam_role.sentinel_forwarder_lambda.name
+  policy = data.aws_iam_policy_document.sentinel_forwarder_hub[0].json
+}
+
+data "aws_iam_policy_document" "sentinel_forwarder_hub" {
+  count = var.hub_role_arn != "" ? 1 : 0
+
+  statement {
+    effect = "Allow"
+    actions = [
+      "sts:AssumeRole",
+    ]
+    resources = [
+      var.hub_role_arn
+    ]
+  }
+}
+
 resource "aws_iam_policy" "sentinel_forwarder_lambda_s3" {
   count = length(var.s3_sources) == 0 ? 0 : 1
 

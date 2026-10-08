@@ -79,6 +79,11 @@ run "v1_carries_no_v2_variables" {
     condition     = length(aws_iam_role_policy.sentinel_forwarder_cognito) == 0
     error_message = "A v1 forwarder configures no identity pool and must be granted nothing on one"
   }
+
+  assert {
+    condition     = length(aws_iam_role_policy.sentinel_forwarder_hub) == 0
+    error_message = "A v1 forwarder configures no hub and must be granted nothing on one"
+  }
 }
 
 # The secretless Logs Ingestion path: no SSM parameter at all, and therefore no
@@ -233,5 +238,103 @@ run "no_configuration_at_all_is_refused" {
 
   expect_failures = [
     aws_lambda_function.sentinel_forwarder,
+  ]
+}
+
+# The hub path: secretless like Cognito, but with nothing to create in this
+# account. The forwarder only needs the hub's ARN and the right to assume it.
+run "v2_hub_is_secretless" {
+  command = plan
+
+  variables {
+    customer_id  = ""
+    shared_key   = ""
+    dce_endpoint = "https://example.canadacentral-1.ingest.monitor.azure.com"
+    dcr_config = {
+      AWSCloudWatchLog = {
+        dcrImmutableId = "dcr-cloudwatch"
+        streamName     = "Custom-AWSCloudWatchLog_v2_CL"
+      }
+    }
+    azure_client_id = "00000000-0000-0000-0000-000000000001"
+    azure_tenant_id = "00000000-0000-0000-0000-000000000002"
+    hub_role_arn    = "arn:aws:iam::111111111111:role/sentinel-forwarder-hub"
+  }
+
+  assert {
+    condition     = length(aws_ssm_parameter.sentinel_forwarder_auth) == 0
+    error_message = "The hub path must create no SSM parameter"
+  }
+
+  assert {
+    condition = tomap(aws_lambda_function.sentinel_forwarder.environment[0].variables) == tomap({
+      LOG_TYPE              = "ApplicationLog"
+      DCE_ENDPOINT          = "https://example.canadacentral-1.ingest.monitor.azure.com"
+      DCR_CONFIG            = "{\"AWSCloudWatchLog\":{\"dcrImmutableId\":\"dcr-cloudwatch\",\"streamName\":\"Custom-AWSCloudWatchLog_v2_CL\"}}"
+      AZURE_CLIENT_ID       = "00000000-0000-0000-0000-000000000001"
+      AZURE_TENANT_ID       = "00000000-0000-0000-0000-000000000002"
+      SENTINEL_HUB_ROLE_ARN = "arn:aws:iam::111111111111:role/sentinel-forwarder-hub"
+    })
+    error_message = "The hub environment must carry SENTINEL_HUB_ROLE_ARN, the name the layer reads"
+  }
+
+  assert {
+    condition     = length(aws_iam_role_policy.sentinel_forwarder_hub) == 1
+    error_message = "The hub path needs the AssumeRole grant; it is the Lambda's only credential"
+  }
+
+  assert {
+    condition     = data.aws_iam_policy_document.sentinel_forwarder_hub[0].statement[0].resources == toset(["arn:aws:iam::111111111111:role/sentinel-forwarder-hub"])
+    error_message = "The hub grant must be scoped to the configured hub role"
+  }
+
+  assert {
+    condition     = length(aws_iam_role_policy.sentinel_forwarder_cognito) == 0
+    error_message = "No pool is configured, so nothing should be granted on one"
+  }
+}
+
+# A consumer switching from Cognito to the hub may carry both for one apply. The
+# layer prefers the hub, and both grants must exist so either path works.
+run "v2_hub_and_cognito_together" {
+  command = plan
+
+  variables {
+    customer_id  = ""
+    shared_key   = ""
+    dce_endpoint = "https://example.canadacentral-1.ingest.monitor.azure.com"
+    dcr_config = {
+      AWSCloudWatchLog = {
+        dcrImmutableId = "dcr-cloudwatch"
+        streamName     = "Custom-AWSCloudWatchLog_v2_CL"
+      }
+    }
+    azure_client_id                 = "00000000-0000-0000-0000-000000000001"
+    azure_tenant_id                 = "00000000-0000-0000-0000-000000000002"
+    cognito_identity_pool_id        = "ca-central-1:00000000-0000-0000-0000-000000000003"
+    cognito_developer_provider_name = "azure-sentinel-access"
+    hub_role_arn                    = "arn:aws:iam::111111111111:role/sentinel-forwarder-hub"
+  }
+
+  assert {
+    condition     = length(aws_iam_role_policy.sentinel_forwarder_hub) == 1 && length(aws_iam_role_policy.sentinel_forwarder_cognito) == 1
+    error_message = "Both grants must exist while a consumer carries both inputs"
+  }
+
+  assert {
+    condition     = contains(keys(aws_lambda_function.sentinel_forwarder.environment[0].variables), "SENTINEL_HUB_ROLE_ARN") && contains(keys(aws_lambda_function.sentinel_forwarder.environment[0].variables), "COGNITO_IDENTITY_POOL_ID")
+    error_message = "Both sets of variables must reach the layer, which chooses the hub"
+  }
+}
+
+run "hub_role_arn_must_be_a_role_arn" {
+  command = plan
+
+  variables {
+    hub_role_arn = "sentinel-forwarder-hub"
+  }
+
+  expect_failures = [
+    var.hub_role_arn,
   ]
 }
