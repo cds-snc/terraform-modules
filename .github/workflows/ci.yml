@@ -19,7 +19,7 @@ jobs:
       - name: Setup Python
         uses: actions/setup-python@ece7cb06caefa5fff74198d8649806c4678c61a1 # v6.3.0
         with:
-          python-version: "3.14"
+          python-version: "3.15"
 
       - name: Check Lambda Python functions for unbundled 3rd party dependencies
         run: python3 .github/workflows/scripts/check-lambda-python-deps.py .
@@ -53,7 +53,7 @@ jobs:
         if: steps.changes.outputs.module == 'true'
         uses: actions/setup-python@ece7cb06caefa5fff74198d8649806c4678c61a1 # v6.3.0
         with:
-          python-version: "3.14"
+          python-version: "3.15"
 
       - name: Python tests
         if: steps.changes.outputs.module == 'true'
