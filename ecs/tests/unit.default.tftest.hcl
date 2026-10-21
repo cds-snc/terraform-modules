@@ -234,6 +234,54 @@ run "plan_service_connect_tls_disabled" {
   }
 }
 
+run "plan_deployment_circuit_breaker" {
+  command = plan
+
+  variables {
+    subnet_ids         = ["subnet-12345678"]
+    security_group_ids = ["sg-12345678"]
+    deployment_circuit_breaker = {
+      enable   = true
+      rollback = true
+    }
+    wait_for_steady_state = true
+  }
+
+  assert {
+    condition     = aws_ecs_service.this[0].deployment_circuit_breaker[0].enable == true
+    error_message = "Expected deployment circuit breaker to be enabled"
+  }
+
+  assert {
+    condition     = aws_ecs_service.this[0].deployment_circuit_breaker[0].rollback == true
+    error_message = "Expected deployment circuit breaker rollback to be enabled"
+  }
+
+  assert {
+    condition     = aws_ecs_service.this[0].wait_for_steady_state == true
+    error_message = "Expected wait_for_steady_state to be true"
+  }
+}
+
+run "plan_deployment_circuit_breaker_default" {
+  command = plan
+
+  variables {
+    subnet_ids         = ["subnet-12345678"]
+    security_group_ids = ["sg-12345678"]
+  }
+
+  assert {
+    condition     = length(aws_ecs_service.this[0].deployment_circuit_breaker) == 0
+    error_message = "Expected no deployment circuit breaker by default"
+  }
+
+  assert {
+    condition     = aws_ecs_service.this[0].wait_for_steady_state == false
+    error_message = "Expected wait_for_steady_state to be false by default"
+  }
+}
+
 run "apply" {
   # Smoke test to validate that the module can successfully be applied
   variables {

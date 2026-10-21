@@ -70,9 +70,18 @@ resource "aws_ecs_service" "this" {
   deployment_maximum_percent         = 200
   health_check_grace_period_seconds  = var.lb_target_group_arn != null ? 60 : null
   enable_execute_command             = var.enable_execute_command
+  wait_for_steady_state              = var.wait_for_steady_state
 
   deployment_controller {
     type = "ECS"
+  }
+
+  dynamic "deployment_circuit_breaker" {
+    for_each = var.deployment_circuit_breaker != null ? [var.deployment_circuit_breaker] : []
+    content {
+      enable   = deployment_circuit_breaker.value.enable
+      rollback = deployment_circuit_breaker.value.rollback
+    }
   }
 
   network_configuration {
