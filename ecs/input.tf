@@ -196,6 +196,21 @@ variable "deployment_managed_by_code_deploy" {
   default     = false
 }
 
+variable "deployment_circuit_breaker" {
+  description = "(Optional, default `null`) Deployment circuit breaker configuration. When `enable` is `true`, ECS stops a deployment after repeated task launch or health check failures instead of retrying indefinitely. When `rollback` is also `true`, the service is rolled back to the last completed deployment. Ignored when `deployment_managed_by_code_deploy` is `true`."
+  type = object({
+    enable   = bool
+    rollback = bool
+  })
+  default = null
+}
+
+variable "wait_for_steady_state" {
+  description = "(Optional, default `false`) Should Terraform wait for the ECS service deployment to reach a steady state before continuing? When combined with `deployment_circuit_breaker`, a failed or rolled back deployment causes the Terraform apply to fail. Ignored when `deployment_managed_by_code_deploy` is `true`."
+  type        = bool
+  default     = false
+}
+
 ################################################################################
 # Autoscaling
 ################################################################################
