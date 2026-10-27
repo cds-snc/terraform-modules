@@ -1,11 +1,14 @@
 /* 
 * # athena_access_logs
 * Creates an Athena database, work group and saved queries for examining WAF ACL and Load Balancer access logs.
+*
+* When `athena_managed_query_results_enabled` is `true`, the workgroup stores query results in Athena managed storage instead of S3.
 */
 
 resource "aws_athena_database" "logs" {
   name          = var.athena_database_name
   bucket        = var.athena_bucket_name
+  workgroup     = aws_athena_workgroup.logs.name
   force_destroy = true
 
   encryption_configuration {
@@ -21,11 +24,23 @@ resource "aws_athena_workgroup" "logs" {
     enforce_workgroup_configuration    = true
     publish_cloudwatch_metrics_enabled = true
 
-    result_configuration {
-      output_location = "s3://${var.athena_bucket_name}/logs/"
+    dynamic "result_configuration" {
+      for_each = var.athena_managed_query_results_enabled ? [] : [1]
 
-      encryption_configuration {
-        encryption_option = "SSE_S3"
+      content {
+        output_location = "s3://${var.athena_bucket_name}/logs/"
+
+        encryption_configuration {
+          encryption_option = "SSE_S3"
+        }
+      }
+    }
+
+    dynamic "managed_query_results_configuration" {
+      for_each = var.athena_managed_query_results_enabled ? [1] : []
+
+      content {
+        enabled = true
       }
     }
   }
