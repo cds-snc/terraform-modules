@@ -8,7 +8,6 @@
 resource "aws_athena_database" "logs" {
   name          = var.athena_database_name
   bucket        = var.athena_bucket_name
-  workgroup     = aws_athena_workgroup.logs.name
   force_destroy = true
 
   encryption_configuration {
