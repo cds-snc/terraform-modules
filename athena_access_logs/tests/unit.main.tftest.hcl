@@ -2,12 +2,12 @@ provider "aws" {
   region = "ca-central-1"
 }
 
+variables {
+  athena_bucket_name = "athena-logs"
+}
+
 run "default_inputs" {
   command = plan
-
-  variables {
-    athena_bucket_name = "athena-logs"
-  }
 
   assert {
     condition     = aws_athena_database.logs.name == "access_logs"
@@ -87,7 +87,6 @@ run "custom_inputs" {
   command = plan
 
   variables {
-    athena_bucket_name    = "athena-logs"
     athena_database_name  = "mmm_databasey"
     athena_workgroup_name = "its_big_its_heavy_its_wood"
 

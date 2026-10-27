@@ -37,6 +37,7 @@ resource "aws_athena_workgroup" "logs" {
     }
 
     dynamic "managed_query_results_configuration" {
+      # checkov:skip=CKV_AWS_159:AWS service key encryption is sufficient
       for_each = var.athena_managed_query_results_enabled ? [1] : []
 
       content {
