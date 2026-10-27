@@ -1,15 +1,19 @@
 # athena\_access\_logs
 Creates an Athena database, work group and saved queries for examining WAF ACL and Load Balancer access logs.
 
+When `athena_managed_query_results_enabled` is `true`, the workgroup stores query results in Athena managed storage instead of S3.
+
 ## Requirements
 
-No requirements.
+| Name | Version |
+|------|---------|
+| <a name="requirement_aws"></a> [aws](#requirement\_aws) | >= 6.25.0 |
 
 ## Providers
 
 | Name | Version |
 |------|---------|
-| <a name="provider_aws"></a> [aws](#provider\_aws) | n/a |
+| <a name="provider_aws"></a> [aws](#provider\_aws) | >= 6.25.0 |
 
 ## Modules
 
@@ -32,8 +36,9 @@ No modules.
 
 | Name | Description | Type | Default | Required |
 |------|-------------|------|---------|:--------:|
-| <a name="input_athena_bucket_name"></a> [athena\_bucket\_name](#input\_athena\_bucket\_name) | (Required) The name of the S3 bucket Athena will use to hold its data. | `string` | n/a | yes |
+| <a name="input_athena_bucket_name"></a> [athena\_bucket\_name](#input\_athena\_bucket\_name) | (Required) The name of the S3 bucket Athena will use for query results. If `athena_managed_query_results_enabled` is `true`, this bucket is not used. | `string` | n/a | yes |
 | <a name="input_athena_database_name"></a> [athena\_database\_name](#input\_athena\_database\_name) | (Optional, default `access_logs`) The name Athena database to create. | `string` | `"access_logs"` | no |
+| <a name="input_athena_managed_query_results_enabled"></a> [athena\_managed\_query\_results\_enabled](#input\_athena\_managed\_query\_results\_enabled) | (Optional, default `false`) Store query results in Athena managed storage instead of the S3 bucket. | `bool` | `false` | no |
 | <a name="input_athena_workgroup_name"></a> [athena\_workgroup\_name](#input\_athena\_workgroup\_name) | (Optional, default `logs`) The name Athena workgroup to create. | `string` | `"logs"` | no |
 | <a name="input_billing_tag_key"></a> [billing\_tag\_key](#input\_billing\_tag\_key) | (Optional, default `CostCentre`) The name of the billing tag | `string` | `"CostCentre"` | no |
 | <a name="input_billing_tag_value"></a> [billing\_tag\_value](#input\_billing\_tag\_value) | (Required) The value of the billing tag | `string` | n/a | yes |

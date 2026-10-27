@@ -35,6 +35,16 @@ run "default_inputs" {
   }
 
   assert {
+    condition     = aws_athena_workgroup.logs.configuration[0].result_configuration[0].encryption_configuration[0].encryption_option == "SSE_S3"
+    error_message = "Athena workgroup result encryption option did not match expected value"
+  }
+
+  assert {
+    condition     = length(aws_athena_workgroup.logs.configuration[0].managed_query_results_configuration) == 0
+    error_message = "Athena managed query results configuration should be omitted by default"
+  }
+
+  assert {
     condition     = length(aws_athena_named_query.lb_create_table) == 0
     error_message = "Athena name query LB create table count did not match expected value"
   }
@@ -52,6 +62,24 @@ run "default_inputs" {
   assert {
     condition     = length(aws_athena_named_query.waf_blocked_requests) == 0
     error_message = "Athena name query WAF blocked requests count did not match expected value"
+  }
+}
+
+run "managed_query_results_enabled" {
+  command = plan
+
+  variables {
+    athena_managed_query_results_enabled = true
+  }
+
+  assert {
+    condition     = aws_athena_workgroup.logs.configuration[0].managed_query_results_configuration[0].enabled == true
+    error_message = "Athena managed query results should be enabled"
+  }
+
+  assert {
+    condition     = length(aws_athena_workgroup.logs.configuration[0].result_configuration) == 0
+    error_message = "Athena S3 result configuration should be omitted when managed query results are enabled"
   }
 }
 

@@ -1,5 +1,5 @@
 variable "athena_bucket_name" {
-  description = "(Required) The name of the S3 bucket Athena will use to hold its data."
+  description = "(Required) The name of the S3 bucket Athena will use for query results. If `athena_managed_query_results_enabled` is `true`, this bucket is not used."
   type        = string
 }
 
@@ -7,6 +7,12 @@ variable "athena_database_name" {
   description = "(Optional, default `access_logs`) The name Athena database to create."
   type        = string
   default     = "access_logs"
+}
+
+variable "athena_managed_query_results_enabled" {
+  description = "(Optional, default `false`) Store query results in Athena managed storage instead of the S3 bucket."
+  type        = bool
+  default     = false
 }
 
 variable "athena_workgroup_name" {
