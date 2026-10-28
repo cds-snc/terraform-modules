@@ -76,82 +76,8 @@ run "v1_carries_no_v2_variables" {
   }
 
   assert {
-    condition     = length(aws_iam_role_policy.sentinel_forwarder_cognito) == 0
-    error_message = "A v1 forwarder configures no identity pool and must be granted nothing on one"
-  }
-
-  assert {
     condition     = length(aws_iam_role_policy.sentinel_forwarder_hub) == 0
     error_message = "A v1 forwarder configures no hub and must be granted nothing on one"
-  }
-}
-
-# The secretless Logs Ingestion path: no SSM parameter at all, and therefore no
-# SENTINEL_AUTH_PARAMS_ARN for the wrapper to read at cold start.
-run "v2_cognito_is_secretless" {
-  command = plan
-
-  variables {
-    customer_id  = ""
-    shared_key   = ""
-    dce_endpoint = "https://sentinel-forwarder-v2.canadacentral-1.ingest.monitor.azure.com"
-    dcr_config = {
-      AWSSecurityHub = {
-        dcrImmutableId = "dcr-securityhub"
-        streamName     = "Custom-AWSSecurityHub_v2_CL"
-      }
-      AWSCloudWatchLog = {
-        dcrImmutableId = "dcr-cloudwatch"
-        streamName     = "Custom-AWSCloudWatchLog_v2_CL"
-      }
-    }
-    azure_client_id                 = "9fd2a8dc-1698-4291-a71f-19ddc3cef71f"
-    azure_tenant_id                 = "8c1a4d93-d828-4d0e-9303-fd3bd611c822"
-    cognito_identity_pool_id        = "ca-central-1:754cc6c0-afac-48e9-8f0e-10abe6aa1270"
-    cognito_developer_provider_name = "azure-sentinel-access"
-  }
-
-  assert {
-    condition     = length(aws_ssm_parameter.sentinel_forwarder_auth) == 0
-    error_message = "The secretless path must create no SSM parameter"
-  }
-
-  assert {
-    condition     = !contains(keys(aws_lambda_function.sentinel_forwarder.environment[0].variables), "SENTINEL_AUTH_PARAMS_ARN")
-    error_message = "Without an SSM parameter the wrapper must not be handed an ARN to read"
-  }
-
-  assert {
-    condition = tomap(aws_lambda_function.sentinel_forwarder.environment[0].variables) == tomap({
-      LOG_TYPE                        = "ApplicationLog"
-      DCE_ENDPOINT                    = "https://sentinel-forwarder-v2.canadacentral-1.ingest.monitor.azure.com"
-      DCR_CONFIG                      = "{\"AWSCloudWatchLog\":{\"dcrImmutableId\":\"dcr-cloudwatch\",\"streamName\":\"Custom-AWSCloudWatchLog_v2_CL\"},\"AWSSecurityHub\":{\"dcrImmutableId\":\"dcr-securityhub\",\"streamName\":\"Custom-AWSSecurityHub_v2_CL\"}}"
-      AZURE_CLIENT_ID                 = "9fd2a8dc-1698-4291-a71f-19ddc3cef71f"
-      AZURE_TENANT_ID                 = "8c1a4d93-d828-4d0e-9303-fd3bd611c822"
-      COGNITO_IDENTITY_POOL_ID        = "ca-central-1:754cc6c0-afac-48e9-8f0e-10abe6aa1270"
-      COGNITO_DEVELOPER_PROVIDER_NAME = "azure-sentinel-access"
-    })
-    error_message = "The v2 environment must carry the exact keys the layer reads, with the DCR config as JSON"
-  }
-
-  # The layer keys DCR_CONFIG by log type and reads dcrImmutableId/streamName
-  # verbatim. Renaming either here breaks ingestion with a log line, not a plan
-  # error, so assert the shape survived jsonencode.
-  assert {
-    condition     = jsondecode(aws_lambda_function.sentinel_forwarder.environment[0].variables["DCR_CONFIG"])["AWSSecurityHub"]["dcrImmutableId"] == "dcr-securityhub"
-    error_message = "DCR_CONFIG must keep the attribute names the layer reads"
-  }
-
-  assert {
-    condition     = length(aws_iam_role_policy.sentinel_forwarder_cognito) == 1
-    error_message = "The secretless path needs the Cognito grant; it is the Lambda's only credential"
-  }
-
-  # Derived from the caller's own account, because an identity pool has no
-  # resource policy and so can never be called cross-account.
-  assert {
-    condition     = data.aws_iam_policy_document.sentinel_forwarder_cognito[0].statement[0].resources == toset(["arn:aws:cognito-identity:${data.aws_region.current.name}:${data.aws_caller_identity.current.account_id}:identitypool/ca-central-1:754cc6c0-afac-48e9-8f0e-10abe6aa1270"])
-    error_message = "The Cognito grant must be scoped to the configured pool in this account"
   }
 }
 
@@ -182,13 +108,13 @@ run "v2_client_secret_uses_ssm" {
   }
 
   # That the secret is not ALSO a Lambda variable cannot be asserted here — this
-  # run has an SSM parameter, so the environment map is unknown at plan. The
-  # secretless run above asserts its key set exactly, and AZURE_CLIENT_SECRET is
-  # absent from the single expression that builds the map for both.
+  # run has an SSM parameter, so the environment map is unknown at plan. The hub
+  # run below asserts its key set exactly, and AZURE_CLIENT_SECRET is absent
+  # from the single expression that builds the map for both.
 
   assert {
-    condition     = length(aws_iam_role_policy.sentinel_forwarder_cognito) == 0
-    error_message = "No pool is configured, so nothing should be granted on one"
+    condition     = length(aws_iam_role_policy.sentinel_forwarder_hub) == 0
+    error_message = "No hub is configured, so nothing should be granted on one"
   }
 }
 
@@ -241,8 +167,9 @@ run "no_configuration_at_all_is_refused" {
   ]
 }
 
-# The hub path: secretless like Cognito, but with nothing to create in this
-# account. The forwarder only needs the hub's ARN and the right to assume it.
+# The secretless Logs Ingestion path, through the hub: no SSM parameter at all,
+# and therefore no SENTINEL_AUTH_PARAMS_ARN for the wrapper to read at cold
+# start. Nothing is created in this account beyond the right to assume the hub.
 run "v2_hub_is_secretless" {
   command = plan
 
@@ -251,6 +178,10 @@ run "v2_hub_is_secretless" {
     shared_key   = ""
     dce_endpoint = "https://example.canadacentral-1.ingest.monitor.azure.com"
     dcr_config = {
+      AWSSecurityHub = {
+        dcrImmutableId = "dcr-securityhub"
+        streamName     = "Custom-AWSSecurityHub_v2_CL"
+      }
       AWSCloudWatchLog = {
         dcrImmutableId = "dcr-cloudwatch"
         streamName     = "Custom-AWSCloudWatchLog_v2_CL"
@@ -267,15 +198,28 @@ run "v2_hub_is_secretless" {
   }
 
   assert {
+    condition     = !contains(keys(aws_lambda_function.sentinel_forwarder.environment[0].variables), "SENTINEL_AUTH_PARAMS_ARN")
+    error_message = "Without an SSM parameter the wrapper must not be handed an ARN to read"
+  }
+
+  assert {
     condition = tomap(aws_lambda_function.sentinel_forwarder.environment[0].variables) == tomap({
       LOG_TYPE              = "ApplicationLog"
       DCE_ENDPOINT          = "https://example.canadacentral-1.ingest.monitor.azure.com"
-      DCR_CONFIG            = "{\"AWSCloudWatchLog\":{\"dcrImmutableId\":\"dcr-cloudwatch\",\"streamName\":\"Custom-AWSCloudWatchLog_v2_CL\"}}"
+      DCR_CONFIG            = "{\"AWSCloudWatchLog\":{\"dcrImmutableId\":\"dcr-cloudwatch\",\"streamName\":\"Custom-AWSCloudWatchLog_v2_CL\"},\"AWSSecurityHub\":{\"dcrImmutableId\":\"dcr-securityhub\",\"streamName\":\"Custom-AWSSecurityHub_v2_CL\"}}"
       AZURE_CLIENT_ID       = "00000000-0000-0000-0000-000000000001"
       AZURE_TENANT_ID       = "00000000-0000-0000-0000-000000000002"
       SENTINEL_HUB_ROLE_ARN = "arn:aws:iam::111111111111:role/sentinel-forwarder-hub"
     })
-    error_message = "The hub environment must carry SENTINEL_HUB_ROLE_ARN, the name the layer reads"
+    error_message = "The hub environment must carry exactly the keys the layer reads, with the DCR config as JSON"
+  }
+
+  # The layer keys DCR_CONFIG by log type and reads dcrImmutableId/streamName
+  # verbatim. Renaming either here breaks ingestion with a log line, not a plan
+  # error, so assert the shape survived jsonencode.
+  assert {
+    condition     = jsondecode(aws_lambda_function.sentinel_forwarder.environment[0].variables["DCR_CONFIG"])["AWSSecurityHub"]["dcrImmutableId"] == "dcr-securityhub"
+    error_message = "DCR_CONFIG must keep the attribute names the layer reads"
   }
 
   assert {
@@ -286,44 +230,6 @@ run "v2_hub_is_secretless" {
   assert {
     condition     = data.aws_iam_policy_document.sentinel_forwarder_hub[0].statement[0].resources == toset(["arn:aws:iam::111111111111:role/sentinel-forwarder-hub"])
     error_message = "The hub grant must be scoped to the configured hub role"
-  }
-
-  assert {
-    condition     = length(aws_iam_role_policy.sentinel_forwarder_cognito) == 0
-    error_message = "No pool is configured, so nothing should be granted on one"
-  }
-}
-
-# A consumer switching from Cognito to the hub may carry both for one apply. The
-# layer prefers the hub, and both grants must exist so either path works.
-run "v2_hub_and_cognito_together" {
-  command = plan
-
-  variables {
-    customer_id  = ""
-    shared_key   = ""
-    dce_endpoint = "https://example.canadacentral-1.ingest.monitor.azure.com"
-    dcr_config = {
-      AWSCloudWatchLog = {
-        dcrImmutableId = "dcr-cloudwatch"
-        streamName     = "Custom-AWSCloudWatchLog_v2_CL"
-      }
-    }
-    azure_client_id                 = "00000000-0000-0000-0000-000000000001"
-    azure_tenant_id                 = "00000000-0000-0000-0000-000000000002"
-    cognito_identity_pool_id        = "ca-central-1:00000000-0000-0000-0000-000000000003"
-    cognito_developer_provider_name = "azure-sentinel-access"
-    hub_role_arn                    = "arn:aws:iam::111111111111:role/sentinel-forwarder-hub"
-  }
-
-  assert {
-    condition     = length(aws_iam_role_policy.sentinel_forwarder_hub) == 1 && length(aws_iam_role_policy.sentinel_forwarder_cognito) == 1
-    error_message = "Both grants must exist while a consumer carries both inputs"
-  }
-
-  assert {
-    condition     = contains(keys(aws_lambda_function.sentinel_forwarder.environment[0].variables), "SENTINEL_HUB_ROLE_ARN") && contains(keys(aws_lambda_function.sentinel_forwarder.environment[0].variables), "COGNITO_IDENTITY_POOL_ID")
-    error_message = "Both sets of variables must reach the layer, which chooses the hub"
   }
 }
 

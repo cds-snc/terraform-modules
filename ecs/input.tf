@@ -532,18 +532,6 @@ variable "sentinel_azure_client_secret" {
   default     = ""
 }
 
-variable "sentinel_cognito_identity_pool_id" {
-  description = "(Optional, v2) Cognito identity pool that mints the OIDC assertion, in this account. Set with `sentinel_cognito_developer_provider_name` for the secretless auth path."
-  type        = string
-  default     = ""
-}
-
-variable "sentinel_cognito_developer_provider_name" {
-  description = "(Optional, v2) Developer provider name on that identity pool."
-  type        = string
-  default     = ""
-}
-
 variable "sentinel_hub_role_arn" {
   description = "(Optional, v2) ARN of the hub role the forwarder assumes to mint its Entra client assertion. Selects the secretless hub auth path, which needs no per-account setup; set `sentinel_forwarder_layer_arn` to layer version 273 or later."
   type        = string

@@ -9,11 +9,16 @@ variable "cloudwatch_dcr_immutable_id" {
 }
 
 variable "azure_client_id" {
-  description = "Client id of the user-assigned managed identity the forwarder signs in as. Also the developer user identifier used to mint the Cognito identity."
+  description = "Client id of the user-assigned managed identity the forwarder signs in as."
   type        = string
 }
 
 variable "azure_tenant_id" {
   description = "Azure tenant id of that identity."
+  type        = string
+}
+
+variable "hub_role_arn" {
+  description = "ARN of the hub role the forwarder assumes to mint its Entra client assertion."
   type        = string
 }

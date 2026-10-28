@@ -35,14 +35,12 @@ module "sentinel_forwarder" {
 
   # Logs Ingestion API (v2). Unset by default, which leaves the forwarder on the
   # v1 Data Collector API exactly as before.
-  dce_endpoint                    = var.sentinel_dce_endpoint
-  dcr_config                      = var.sentinel_dcr_config
-  azure_client_id                 = var.sentinel_azure_client_id
-  azure_tenant_id                 = var.sentinel_azure_tenant_id
-  azure_client_secret             = var.sentinel_azure_client_secret
-  cognito_identity_pool_id        = var.sentinel_cognito_identity_pool_id
-  cognito_developer_provider_name = var.sentinel_cognito_developer_provider_name
-  hub_role_arn                    = var.sentinel_hub_role_arn
+  dce_endpoint        = var.sentinel_dce_endpoint
+  dcr_config          = var.sentinel_dcr_config
+  azure_client_id     = var.sentinel_azure_client_id
+  azure_tenant_id     = var.sentinel_azure_tenant_id
+  azure_client_secret = var.sentinel_azure_client_secret
+  hub_role_arn        = var.sentinel_hub_role_arn
 
   cloudwatch_log_arns = [
     aws_cloudwatch_log_group.this.arn,

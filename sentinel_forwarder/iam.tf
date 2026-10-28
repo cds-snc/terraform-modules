@@ -75,40 +75,15 @@ data "aws_iam_policy_document" "sentinel_forwarder_lambda" {
   }
 }
 
-# The whole credential on the secretless path: the layer calls this to mint the
-# OIDC token it presents to Entra as a client assertion. Scoped to the one pool,
-# which has to be in this account.
+# The whole credential on the hub path: the layer assumes this role to mint the
+# token it presents to Entra. Scoped to the one role. The hub's own trust policy
+# decides whether this role is let in; this grant is the half the caller's
+# account has to give for a cross-account AssumeRole.
 #
 # Its own role policy rather than another statement in the base document, for
 # two reasons. It shows up in a plan as a named resource instead of a diff
 # inside a policy JSON blob, and it is inline on the role, so it cannot be
 # stripped by — or strip — the attached base policy.
-resource "aws_iam_role_policy" "sentinel_forwarder_cognito" {
-  count = var.cognito_identity_pool_id != "" ? 1 : 0
-
-  name   = "SentinelForwarderCognito-${var.function_name}"
-  role   = aws_iam_role.sentinel_forwarder_lambda.name
-  policy = data.aws_iam_policy_document.sentinel_forwarder_cognito[0].json
-}
-
-data "aws_iam_policy_document" "sentinel_forwarder_cognito" {
-  count = var.cognito_identity_pool_id != "" ? 1 : 0
-
-  statement {
-    effect = "Allow"
-    actions = [
-      "cognito-identity:GetOpenIdTokenForDeveloperIdentity",
-    ]
-    resources = [
-      local.cognito_pool_arn
-    ]
-  }
-}
-
-# The whole credential on the hub path: the layer assumes this role to mint the
-# token it presents to Entra. Scoped to the one role. The hub's own trust policy
-# decides whether this role is let in; this grant is the half the caller's
-# account has to give for a cross-account AssumeRole.
 resource "aws_iam_role_policy" "sentinel_forwarder_hub" {
   count = var.hub_role_arn != "" ? 1 : 0
 

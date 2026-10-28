@@ -5,8 +5,8 @@ This module creates a pre-configured ECS cluster with a single service and task 
 Setting `sentinel_forwarder = true` forwards the service's logs to Microsoft Sentinel through the
 `sentinel_forwarder` module in this repository. The `sentinel_*` inputs are passed to that module — for example
 `sentinel_dce_endpoint` becomes `dce_endpoint` and `sentinel_forwarder_layer_arn` becomes `layer_arn`. See its README
-for choosing between the Data Collector API (v1) and the Logs Ingestion API (v2), and for the one-time Cognito setup
-that v2 without a stored secret needs.
+for choosing between the Data Collector API (v1) and the Logs Ingestion API (v2), and for the hub that v2 without a
+stored secret uses.
 
 ## Requirements
 
@@ -111,8 +111,6 @@ No requirements.
 | <a name="input_sentinel_azure_client_id"></a> [sentinel\_azure\_client\_id](#input\_sentinel\_azure\_client\_id) | (Optional, v2) Client ID of the Azure identity the forwarder authenticates as. | `string` | `""` | no |
 | <a name="input_sentinel_azure_client_secret"></a> [sentinel\_azure\_client\_secret](#input\_sentinel\_azure\_client\_secret) | (Optional, v2) Client secret for the Azure identity. Supplying one selects the client-secret auth path; leave it unset for the secretless path. | `string` | `""` | no |
 | <a name="input_sentinel_azure_tenant_id"></a> [sentinel\_azure\_tenant\_id](#input\_sentinel\_azure\_tenant\_id) | (Optional, v2) Azure tenant ID of that identity. | `string` | `""` | no |
-| <a name="input_sentinel_cognito_developer_provider_name"></a> [sentinel\_cognito\_developer\_provider\_name](#input\_sentinel\_cognito\_developer\_provider\_name) | (Optional, v2) Developer provider name on that identity pool. | `string` | `""` | no |
-| <a name="input_sentinel_cognito_identity_pool_id"></a> [sentinel\_cognito\_identity\_pool\_id](#input\_sentinel\_cognito\_identity\_pool\_id) | (Optional, v2) Cognito identity pool that mints the OIDC assertion, in this account. Set with `sentinel_cognito_developer_provider_name` for the secretless auth path. | `string` | `""` | no |
 | <a name="input_sentinel_customer_id"></a> [sentinel\_customer\_id](#input\_sentinel\_customer\_id) | (Optional, no default) The Sentinel customer ID used to forward logs | `string` | `""` | no |
 | <a name="input_sentinel_dce_endpoint"></a> [sentinel\_dce\_endpoint](#input\_sentinel\_dce\_endpoint) | (Optional, v2) Logs ingestion endpoint of the Azure data collection endpoint. Set together with `sentinel_dcr_config` to move the forwarder to the Logs Ingestion API. | `string` | `""` | no |
 | <a name="input_sentinel_dcr_config"></a> [sentinel\_dcr\_config](#input\_sentinel\_dcr\_config) | (Optional, v2) Map of the layer's log type to the DCR that accepts it. Feed the `forwarder_v2_aws_dcr_config` output from cds-snc/sentinel verbatim. | <pre>map(object({<br/>    dcrImmutableId = string<br/>    streamName     = string<br/>  }))</pre> | `{}` | no |
