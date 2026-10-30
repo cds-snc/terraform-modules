@@ -15,7 +15,7 @@
 * * **v1, the Data Collector API.** Set `customer_id` and `shared_key`. Microsoft ended support for this API on
 *   2026-09-14. Data lands in the legacy `*_CL` tables.
 * * **v2, the Logs Ingestion API.** Set `dce_endpoint` and `dcr_config` — both, or the layer stays on v1 — plus
-*   `azure_client_id` and `azure_tenant_id`, and one of the three sign-in methods below. Data lands in the tables behind
+*   `azure_client_id` and `azure_tenant_id`, and one of the two sign-in methods below. Data lands in the tables behind
 *   those data collection rules (DCRs).
 *
 * v2 needs layer version **270 or later**. Earlier versions are built for CPython 3.12, and this module runs the Lambda
@@ -37,14 +37,13 @@
 *
 * * **Client secret.** Set `azure_client_secret` for an Entra app registration. It is the simplest setup: the secret is
 *   held in SSM. You then own a secret that expires and has to be rotated.
-* * **No stored secret (Cognito).** Set `cognito_identity_pool_id` and `cognito_developer_provider_name`. The Lambda's
-*   IAM role asks a Cognito identity pool for an OpenID token and presents it to Microsoft Entra ID as a client
-*   assertion for a user-assigned managed identity. Nothing is stored anywhere. It needs the one-time setup below.
 * * **No stored secret (hub).** Set `hub_role_arn`. The Lambda's IAM role assumes a hub role, usually in another AWS
-*   account, and uses IAM outbound identity federation there to mint a token it presents to Entra as a client assertion.
-*   One hub serves every account, so there is nothing to set up per account. Needs layer version **273 or later**.
+*   account, and uses IAM outbound identity federation there to mint a token it presents to Microsoft Entra ID as a
+*   client assertion for a user-assigned managed identity. Nothing is stored anywhere, and one hub serves every account,
+*   so there is nothing to set up per account. Needs layer version **273 or later**.
 *
-* If more than one is set, the client secret is used first, then the hub, then Cognito.
+* If both are set, the client secret is used. Cognito federation (`cognito_identity_pool_id`,
+* `cognito_developer_provider_name`) was removed in v14.0.0, after every forwarder had moved to a hub.
 *
 * ### Hub setup
 *
@@ -64,59 +63,15 @@
 *    | Audience | `api://AzureADTokenExchange` |
 *    | Subject | the hub role's ARN |
 *
-*    Give the identity **Monitoring Metrics Publisher** on each DCR it writes to.
+*    Give the identity **Monitoring Metrics Publisher** on each DCR it writes to. `Owner` is not enough: ingestion is a
+*    data action, and `Owner` grants none.
 *
 * This module grants the Lambda's role `sts:AssumeRole` on `hub_role_arn`; a cross-account assume needs that grant and
 * the hub's trust policy both.
 *
-* ### Cognito setup
-*
-* Do these in order. The pool has to be in the same AWS account as the Lambda — identity pools have no resource policy,
-* so one cannot be called from another account. One pool serves every forwarder in an account, so skip steps 1 and 2 if
-* the account already has one.
-*
-* 1. **Create the pool** in the Lambda's account, and apply:
-*
-*    ```hcl
-*    resource "aws_cognito_identity_pool" "sentinel_forwarder" {
-*      identity_pool_name               = "sentinel-forwarder"
-*      allow_unauthenticated_identities = false
-*      developer_provider_name          = "azure-sentinel-access"
-*    }
-*    ```
-*
-*    Changing `developer_provider_name` later replaces the pool, which gives it a new id and breaks step 3.
-*
-* 2. **Mint the identity**, once, with credentials in that account:
-*
-*    ```sh
-*    aws cognito-identity get-open-id-token-for-developer-identity \
-*      --identity-pool-id <pool id> \
-*      --logins azure-sentinel-access=<managed identity client id> \
-*      --query IdentityId --output text
-*    ```
-*
-*    The value after `azure-sentinel-access=` must be the managed identity's **client id**, because that is what the
-*    Lambda sends; any other value creates an identity the Lambda never uses. The output is the `IdentityId`. Running
-*    the command again returns the same one.
-*
-* 3. **Trust it in Azure.** On the user-assigned managed identity, add a federated credential:
-*
-*    | Field | Value |
-*    | --- | --- |
-*    | Issuer | `https://cognito-identity.amazonaws.com` |
-*    | Audience | the pool id |
-*    | Subject | the `IdentityId` from step 2 |
-*
-*    Give the identity **Monitoring Metrics Publisher** on each DCR it writes to. `Owner` is not enough: ingestion is a
-*    data action, and `Owner` grants none.
-*
-* 4. **Cut over.** Set `dce_endpoint`, `dcr_config`, `azure_client_id`, `azure_tenant_id`, `cognito_identity_pool_id`
-*    (the pool's `id`) and `cognito_developer_provider_name`, and bump `layer_arn` to 270 or later. You can leave
-*    `customer_id` and `shared_key` in place during the cutover: the layer ignores them on v2, so rolling back means
-*    removing the v2 inputs. Remove them once v2 is confirmed.
-*
-*    Do not do this before step 3 — until Azure trusts the pool, every delivery fails.
+* To cut a forwarder over, set `dce_endpoint`, `dcr_config`, `azure_client_id`, `azure_tenant_id` and `hub_role_arn`,
+* and bump `layer_arn` to 273 or later, in one apply. You can leave `customer_id` and `shared_key` in place: the layer
+* ignores them on v2, so rolling back means removing the v2 inputs.
 *
 * ## Checking that it delivers
 *
@@ -176,8 +131,8 @@ resource "aws_lambda_function" "sentinel_forwarder" {
     }
 
     precondition {
-      condition     = !local.v2_enabled || var.azure_client_secret != "" || var.hub_role_arn != "" || (var.cognito_identity_pool_id != "" && var.cognito_developer_provider_name != "")
-      error_message = "The v2 path needs an auth method: azure_client_secret, hub_role_arn, or both cognito_identity_pool_id and cognito_developer_provider_name."
+      condition     = !local.v2_enabled || var.azure_client_secret != "" || var.hub_role_arn != ""
+      error_message = "The v2 path needs an auth method: azure_client_secret or hub_role_arn."
     }
 
     precondition {

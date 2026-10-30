@@ -122,26 +122,14 @@ variable "azure_tenant_id" {
 }
 
 variable "azure_client_secret" {
-  description = "(Optional, v2) Client secret for the Azure identity. Supplying one selects the client-secret auth path and takes precedence over Cognito federation; leave it unset for the secretless path."
+  description = "(Optional, v2) Client secret for the Azure identity. Supplying one selects the client-secret auth path and takes precedence over the hub; leave it unset for the secretless path."
   sensitive   = true
   type        = string
   default     = ""
 }
 
-variable "cognito_identity_pool_id" {
-  description = "(Optional, v2) Cognito identity pool that mints the OIDC assertion, in this Lambda's own AWS account. Set with `cognito_developer_provider_name` for the secretless auth path."
-  type        = string
-  default     = ""
-}
-
-variable "cognito_developer_provider_name" {
-  description = "(Optional, v2) Developer provider name on that identity pool. Set with `cognito_identity_pool_id`."
-  type        = string
-  default     = ""
-}
-
 variable "hub_role_arn" {
-  description = "(Optional, v2) ARN of a hub role, usually in another AWS account, that this forwarder assumes to mint its Entra client assertion with IAM outbound identity federation. Selects the secretless hub auth path, which needs no per-account setup; takes precedence over Cognito, but not over `azure_client_secret`. Needs layer version 273 or later."
+  description = "(Optional, v2) ARN of a hub role, usually in another AWS account, that this forwarder assumes to mint its Entra client assertion with IAM outbound identity federation. Selects the secretless hub auth path, which needs no per-account setup; `azure_client_secret` takes precedence over it. Needs layer version 273 or later."
   type        = string
   default     = ""
 

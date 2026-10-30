@@ -28,10 +28,6 @@ locals {
   has_secrets  = length(local.secrets) > 0
   secrets_body = join("\n", [for key in sort(keys(local.secrets)) : "${key}=${local.secrets[key]}"])
 
-  # Pools carry no resource policy, so one cannot be called cross-account: the
-  # pool is always in this Lambda's own account and the ARN follows from it.
-  cognito_pool_arn = var.cognito_identity_pool_id == "" ? "" : "arn:aws:cognito-identity:${data.aws_region.current.name}:${data.aws_caller_identity.current.account_id}:identitypool/${var.cognito_identity_pool_id}"
-
   # Every variable is omitted rather than set empty. The layer and the wrapper
   # both test presence, not value, so an empty string would read as configured.
   lambda_environment = merge(
@@ -43,8 +39,6 @@ locals {
     length(var.dcr_config) > 0 ? { DCR_CONFIG = jsonencode(var.dcr_config) } : {},
     var.azure_client_id != "" ? { AZURE_CLIENT_ID = var.azure_client_id } : {},
     var.azure_tenant_id != "" ? { AZURE_TENANT_ID = var.azure_tenant_id } : {},
-    var.cognito_identity_pool_id != "" ? { COGNITO_IDENTITY_POOL_ID = var.cognito_identity_pool_id } : {},
-    var.cognito_developer_provider_name != "" ? { COGNITO_DEVELOPER_PROVIDER_NAME = var.cognito_developer_provider_name } : {},
     var.hub_role_arn != "" ? { SENTINEL_HUB_ROLE_ARN = var.hub_role_arn } : {},
   )
 }
