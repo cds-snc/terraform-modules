@@ -126,7 +126,7 @@ def start_athena_query(query, athena_database, athena_output_bucket, athena_work
 
 
 def get_query_results(query_execution_id):
-    """Poll Athena query and retrieve results when available"""
+    """Poll Athena query and retrieve all result pages when available"""
     status = "RUNNING"
     timeout = 120
     while status in ["RUNNING", "QUEUED"]:
@@ -163,16 +163,29 @@ def get_query_results(query_execution_id):
             raise RuntimeError("Athena query timed out")
 
     # Fetch results
-    try:
-        result = athena_client.get_query_results(QueryExecutionId=query_execution_id)
-    except Exception as e:
-        logging.error(
-            "Failed to retrieve Athena query results for %s: %s", query_execution_id, e
-        )
-        raise
     ip_addresses = []
-    for row in result["ResultSet"]["Rows"][1:]:  # Skip header
-        ip_addresses.append(row["Data"][0]["VarCharValue"])
+    request = {"QueryExecutionId": query_execution_id}
+    while True:
+        try:
+            result = athena_client.get_query_results(**request)
+        except Exception as e:
+            logging.error(
+                "Failed to retrieve Athena query results for %s: %s",
+                query_execution_id,
+                e,
+            )
+            raise
+
+        rows = result["ResultSet"]["Rows"]
+        if "NextToken" not in request:
+            rows = rows[1:]  # Only the first page contains a header.
+        for row in rows:
+            ip_addresses.append(row["Data"][0]["VarCharValue"])
+
+        next_token = result.get("NextToken")
+        if not next_token:
+            break
+        request["NextToken"] = next_token
 
     return ip_addresses
 

@@ -18,7 +18,7 @@ resource "aws_lambda_function" "disable_exposed_iam_credential" {
   filename    = data.archive_file.disable_exposed_iam_credential.output_path
   handler     = "disable_exposed_iam_credential.lambda_handler"
   runtime     = "python3.9"
-  timeout     = 30
+  timeout     = 120
   memory_size = 128
 
   role             = aws_iam_role.disable_exposed_iam_credential_lambda.arn
