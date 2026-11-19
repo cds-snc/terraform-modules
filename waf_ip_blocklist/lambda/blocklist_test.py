@@ -7,6 +7,8 @@ import socket
 from datetime import datetime, timezone
 import ipaddress
 
+import pytest
+
 from unittest.mock import call, patch, Mock, MagicMock, ANY
 
 os.environ["AWS_DEFAULT_REGION"] = "ca-central-1"
@@ -227,6 +229,74 @@ def test_handler_athena_query_failure(mock_waf_client, mock_athena_client):
     mock_athena_client.get_query_execution.assert_called_once()
     mock_athena_client.get_query_results.assert_not_called()
     mock_waf_client.update_ip_set.assert_not_called()
+
+
+@patch("blocklist.athena_client")
+def test_get_query_results_with_multiple_pages(mock_athena_client):
+    mock_athena_client.get_query_execution.return_value = {
+        "QueryExecution": {"Status": {"State": "SUCCEEDED"}}
+    }
+    mock_athena_client.get_query_results.side_effect = [
+        {
+            "ResultSet": {
+                "Rows": [
+                    {"Data": [{"VarCharValue": "header"}]},
+                    {"Data": [{"VarCharValue": "192.168.1.1"}]},
+                ]
+            },
+            "NextToken": "page-2",
+        },
+        {
+            "ResultSet": {
+                "Rows": [
+                    {"Data": [{"VarCharValue": "192.168.1.2"}]},
+                    {"Data": [{"VarCharValue": "192.168.1.3"}]},
+                ]
+            },
+            "NextToken": "page-3",
+        },
+        {
+            "ResultSet": {
+                "Rows": [{"Data": [{"VarCharValue": "192.168.1.4"}]}]
+            }
+        },
+    ]
+
+    assert blocklist.get_query_results("test_query_id") == [
+        "192.168.1.1",
+        "192.168.1.2",
+        "192.168.1.3",
+        "192.168.1.4",
+    ]
+    assert mock_athena_client.get_query_results.call_args_list == [
+        call(QueryExecutionId="test_query_id"),
+        call(QueryExecutionId="test_query_id", NextToken="page-2"),
+        call(QueryExecutionId="test_query_id", NextToken="page-3"),
+    ]
+
+
+@patch("blocklist.athena_client")
+def test_get_query_results_later_page_failure(mock_athena_client, caplog):
+    mock_athena_client.get_query_execution.return_value = {
+        "QueryExecution": {"Status": {"State": "SUCCEEDED"}}
+    }
+    mock_athena_client.get_query_results.side_effect = [
+        {
+            "ResultSet": {
+                "Rows": [
+                    {"Data": [{"VarCharValue": "header"}]},
+                    {"Data": [{"VarCharValue": "192.168.1.1"}]},
+                ]
+            },
+            "NextToken": "page-2",
+        },
+        RuntimeError("Failed to fetch next page"),
+    ]
+
+    with pytest.raises(RuntimeError, match="Failed to fetch next page"):
+        blocklist.get_query_results("test_query_id")
+
+    assert "Failed to retrieve Athena query results for test_query_id" in caplog.text
 
 
 def test_get_query_from_file_with_multiple_rule_ids():

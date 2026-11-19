@@ -6,17 +6,30 @@ iam = boto3.client('iam')
 def lambda_handler(event, context):
     account_id = event['account']
     time_discovered = event['time']
-    details = event['detail']
-    access_key_id = details['affectedEntities'][0]['entityValue']
-    print('Looking up username for access key pair...')
-    username = get_username_from_key(access_key_id)
-    print('Disabling exposed access key pair...')
-    disable_exposed_key_pair(username, access_key_id)
+    access_key_ids = [entity['entityValue'] for entity in event['detail']['affectedEntities']]
+    if not access_key_ids:
+        raise ValueError('No affected entities found in event.')
+
+    disabled_keys = []
+    failed_keys = []
+    # Attempt every key before failing so one bad key does not leave the others active.
+    for access_key_id in access_key_ids:
+        try:
+            print('Looking up username for access key pair "{}"...'.format(access_key_id))
+            username = get_username_from_key(access_key_id)
+            print('Disabling exposed access key pair "{}"...'.format(access_key_id))
+            disable_exposed_key_pair(username, access_key_id)
+            disabled_keys.append({"username": username, "access_key_id": access_key_id})
+        except Exception:
+            failed_keys.append(access_key_id)
+
+    if failed_keys:
+        raise RuntimeError('Failed to disable access keys: {}'.format(', '.join(failed_keys)))
+
     return {
         "account_id": account_id,
         "time_discovered": time_discovered,
-        "username": username,
-        "deleted_key": access_key_id
+        "disabled_keys": disabled_keys
     }
 
 
