@@ -170,7 +170,9 @@ def get_query_results(query_execution_id):
             result = athena_client.get_query_results(**request)
         except Exception as e:
             logging.error(
-                "Failed to retrieve Athena query results for %s: %s", query_execution_id, e
+                "Failed to retrieve Athena query results for %s: %s",
+                query_execution_id,
+                e,
             )
             raise
 

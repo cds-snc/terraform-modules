@@ -255,11 +255,7 @@ def test_get_query_results_with_multiple_pages(mock_athena_client):
             },
             "NextToken": "page-3",
         },
-        {
-            "ResultSet": {
-                "Rows": [{"Data": [{"VarCharValue": "192.168.1.4"}]}]
-            }
-        },
+        {"ResultSet": {"Rows": [{"Data": [{"VarCharValue": "192.168.1.4"}]}]}},
     ]
 
     assert blocklist.get_query_results("test_query_id") == [
