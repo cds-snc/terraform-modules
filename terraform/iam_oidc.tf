@@ -148,7 +148,6 @@ data "aws_iam_policy_document" "test_role_write" {
       "ec2:RevokeSecurityGroupIngress",
       "ec2:UpdateSecurityGroupRuleDescriptionsEgress",
       "ec2:UpdateSecurityGroupRuleDescriptionsIngress",
-
       "athena:CreateNamedQuery",
       "athena:CreateWorkGroup",
       "athena:DeleteNamedQuery",
