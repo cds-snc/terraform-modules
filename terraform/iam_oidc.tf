@@ -342,6 +342,20 @@ data "aws_iam_policy_document" "test_role_iam" {
   }
 
   statement {
+    sid    = "DenyChangesToCiPolicies"
+    effect = "Deny"
+    actions = [
+      "iam:CreatePolicyVersion",
+      "iam:DeletePolicy",
+      "iam:DeletePolicyVersion",
+      "iam:SetDefaultPolicyVersion",
+      "iam:TagPolicy",
+      "iam:UntagPolicy",
+    ]
+    resources = ["arn:aws:iam::${var.account_id}:policy/${local.test_role_name}-*"]
+  }
+
+  statement {
     sid       = "DenyPrivilegedManagedPolicies"
     effect    = "Deny"
     actions   = ["iam:AttachRolePolicy"]
